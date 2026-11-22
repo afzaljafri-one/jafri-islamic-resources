@@ -1,0 +1,80 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Dependencies & Build Outputs
+node_modules
+dist
+dist-ssr
+
+# Environment Variables & Secrets (STRICTLY FORBIDDEN FROM VERSION CONTROL)
+.env
+.env.local
+.env.*.local
+*.env
+*.pem
+
+# Editor & OS files
+.DS_Store
+.vscode
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ==============================================================================
+# Jafri Islamic Resources — Release Safety Exclusions
+# ==============================================================================
+
+# Critical: Prevent GitHub 100 MB push rejection
+*.litertlm
+bud_maha_piritha.ogg
+public/kokoro_spanish_poc/
+
+# Heavy Internal Ingestion & Audit Archives
+JAFRI_AUDIO_LIBRARY/
+audio_audit/
+screenshots/
+quran-15-line/
+
+# Intermediate Milestones & Ephemeral Scrapers
+build_phase*.py
+generate_*.py
+fetch_*.py
+download_*.py
+update_*.py
+test_*.mjs
+run_*.mjs
+verify_*.mjs
+run_*.ts
+test_*.ts
+*.backup*
+*.tsbuildinfo
+
+# Ephemeral Audit Dumps & Transient Test Data
+batch1b_*.json
+blocked_146_*.json
+bukhari_*.json
+catalogue_651_export.json
+gated_112_*.json
+oembed_114_*.json
+phase*.json
+phase*.html
+quransurf_*.json
+unverified_112_*.json
+verified_13line_114_page_map.json
+youtube_28_*.json
+*.csv
+
+# Unreferenced Development Assets
+public/mushaf-reviews/
+public/neural_tts_samples/
+public/browser_speech_poc*.html
+public/neural_tts_review.html
+public/voice_listening_evaluation.html

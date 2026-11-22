@@ -1,0 +1,86 @@
+name: Jafri Sacred Audio Library — Build & Gated Deployment
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      deploy_approval:
+        description: 'Type "APPROVE_RELEASE" to authorize live deployment to GitHub Pages'
+        required: true
+        default: 'DRY_RUN'
+
+# Workflow-level least-privilege default
+permissions:
+  contents: read
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
+
+jobs:
+  # ============================================================================
+  # STAGE 1: AUTOMATED VALIDATION (Runs on ALL pushes & PRs)
+  # Scoped strictly to contents: read. Cannot publish or access Pages API.
+  # ============================================================================
+  validate-build:
+    name: Type-Check & Build Verification
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20 LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Locked Dependencies
+        run: npm ci
+
+      - name: Run TypeScript Type-Check (tsc -b)
+        run: npx tsc -b
+
+      - name: Compile Vite Production Bundle
+        run: npx vite build
+        env:
+          VITE_BASE_PATH: '/jafri-islamic-resources/'
+
+      # upload-pages-artifact creates the static tarball without needing configure-pages
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist'
+
+  # ============================================================================
+  # STAGE 2: PRODUCTION DEPLOYMENT (STRICTLY MANUALLY GATED)
+  # Ordinary pushes and PRs NEVER execute this job
+  # ============================================================================
+  deploy-production:
+    name: Deploy to GitHub Pages (Manual Release Gate)
+    needs: validate-build
+    # Gate 1: Manual dispatch + exact passphrase check
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.deploy_approval == 'APPROVE_RELEASE'
+    # Gate 2: GitHub Environment required reviewer sign-off
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    # Elevated permissions restricted solely to the deploy job
+    permissions:
+      pages: write
+      id-token: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Pages Configuration
+        uses: actions/configure-pages@v5
+
+      - name: Publish Artifact to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

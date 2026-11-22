@@ -1,0 +1,180 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #030814;
+    color: #f1f5f9;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #071124;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #18325e;
+  border-radius: 4px;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d4af37;
+}
+
+/* Regal Gold Gradient Utilities */
+.gold-gradient-text {
+  background: linear-gradient(135deg, #f4df8a 0%, #d4af37 50%, #aa820a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gold-gradient-border {
+  border-image: linear-gradient(to right, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.6), rgba(212, 175, 55, 0.1)) 1;
+}
+
+/* Subtle Seljuk Star Ambient Background */
+.islamic-pattern-bg {
+  background-color: #030814;
+  background-image: radial-gradient(rgba(212, 175, 55, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* ==============================================================================
+   Quran Typography & Font Declarations
+   ============================================================================== */
+
+/* Official Quran Foundation IndoPak Nastaleeq Font (with PUA Waqf glyphs U+E01A-U+E022) */
+@font-face {
+  font-family: 'IndoPakQuran';
+  src: url('/fonts/indopak-nastaleeq.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Base Quran Container Typography */
+.arabic-quran-text {
+  direction: rtl;
+  text-align: right;
+  font-feature-settings: 'liga' 1, 'calt' 1;
+}
+
+/* 1. Medina / King Fahd Complex Uthmani Script */
+.quran-script-uthmani {
+  font-family: 'Amiri Quran', 'Amiri', serif;
+  line-height: 2.3;
+  direction: rtl;
+  text-align: right;
+  font-feature-settings: 'liga' 1, 'calt' 1;
+}
+
+/* 2. Subcontinental IndoPak Script (Full Nastaleeq shaping & PUA Waqf glyph support) */
+.quran-script-indopak {
+  font-family: 'IndoPakQuran', 'Noto Nastaliq Urdu', serif;
+  line-height: 2.7;
+  direction: rtl;
+  text-align: right;
+  font-feature-settings: 'liga' 1, 'calt' 1;
+  letter-spacing: 0px;
+}
+
+/* 3. Color-Coded Tajweed Script */
+.quran-script-tajweed {
+  font-family: 'Amiri Quran', 'Amiri', serif;
+  line-height: 2.3;
+  direction: rtl;
+  text-align: right;
+  font-feature-settings: 'liga' 1, 'calt' 1;
+}
+
+/* ==============================================================================
+   Semantic Tajweed Color Coding Rules (High Contrast on Royal Navy Background)
+   ============================================================================== */
+tajweed {
+  display: inline;
+}
+
+/* Hamzat al-Wasl: Soft Slate Gray (silent in continuous recitation) */
+.ham_wasl {
+  color: #94a3b8 !important;
+}
+
+/* Solar Laam (Laam Shamsiyah) & Silent Letters: Dimmed Slate */
+.laam_shamsiyah,
+.slnt {
+  color: #64748b !important;
+}
+
+/* Madd Rules: Soft Violet to Vivid Rose */
+.madda_normal {
+  color: #c084fc !important; /* Normal Madd (2 Harakat) - Light Violet */
+}
+
+.madda_permissible {
+  color: #e879f9 !important; /* Permissible Madd (2-4-6 Harakat) - Fuchsia */
+}
+
+.madda_necessary {
+  color: #f43f5e !important; /* Necessary Madd (6 Harakat) - Vivid Rose */
+}
+
+.madda_obligatory {
+  color: #fb7185 !important; /* Obligatory Madd (4-5 Harakat) - Coral Rose */
+}
+
+/* Qalqalah (Echoing / Bouncing): Emerald Green */
+.qalaqah {
+  color: #34d399 !important;
+  font-weight: 600;
+}
+
+/* Ikhfa (Concealment): Warm Coral / Crimson */
+.ikhafa {
+  color: #f87171 !important;
+  font-weight: 600;
+}
+
+/* Iqlab (Conversion of Nun/Tanween to Meem): Sky Blue */
+.iqlab {
+  color: #60a5fa !important;
+  font-weight: 600;
+}
+
+/* Ghunnah (2-Count Nasalization): Warm Amber / Orange */
+.ghunnah {
+  color: #fb923c !important;
+  font-weight: 600;
+}
+
+/* Idgham with Ghunnah: Teal Cyan */
+.idgham_ghunnah {
+  color: #2dd4bf !important;
+  font-weight: 600;
+}
+
+/* Idgham without Ghunnah: Soft Cool Gray */
+.idgham_wo_ghunnah {
+  color: #94a3b8 !important;
+}
+
+/* Idgham Shafawi (Labial Idgham): Soft Lavender */
+.idgham_shafawi {
+  color: #a78bfa !important;
+}
+
+/* Ayah End Medallion in Tajweed */
+.end {
+  color: #d4af37 !important;
+  font-family: 'Amiri Quran', serif;
+  display: inline-block;
+  margin: 0 6px;
+  font-weight: bold;
+}
