@@ -84,9 +84,24 @@ export const App: React.FC = () => {
   // Platform Universal Bookmarks Drawer State
   const [isPlatformBookmarksOpen, setIsPlatformBookmarksOpen] = useState(false);
   const [isQuranMultilingualAudioOpen, setIsQuranMultilingualAudioOpen] = useState(false);
-  const [isSpanishPilotOpen, setIsSpanishPilotOpen] = useState(false);
-  const [isMultilingualStudioOpen, setIsMultilingualStudioOpen] = useState(false);
+  const [isSpanishPilotOpen, setIsSpanishPilotOpen] = useState(() => {
+    if (typeof window !== 'undefined' && window.location?.search) {
+      return Boolean(new URLSearchParams(window.location.search).get('pilot'));
+    }
+    return false;
+  });
+  const [isMultilingualStudioOpen, setIsMultilingualStudioOpen] = useState(() => {
+    if (typeof window !== 'undefined' && window.location?.search) {
+      return Boolean(new URLSearchParams(window.location.search).get('studio'));
+    }
+    return false;
+  });
   const [bookmarks, setBookmarks] = useState(() => platformStorageService.getBookmarks());
+
+  const handleOpenPlatformBookmarks = () => {
+    setBookmarks(platformStorageService.getBookmarks());
+    setIsPlatformBookmarksOpen(true);
+  };
 
   // Sync religion in URL without reloading
   useEffect(() => {
@@ -126,7 +141,7 @@ export const App: React.FC = () => {
           <PlatformNavbar
             activeReligion="home"
             onSelectReligion={handleSelectReligion}
-            onOpenBookmarks={() => setIsPlatformBookmarksOpen(true)}
+            onOpenBookmarks={handleOpenPlatformBookmarks}
             onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
             onOpenStudio={() => setIsMultilingualStudioOpen(true)}
             bookmarksCount={bookmarks.length}
@@ -144,8 +159,18 @@ export const App: React.FC = () => {
           ========================================================================= */}
       {currentReligion === 'islam' && (
         <>
-          {/* Universal Platform Top Strip to allow seamless switching back to 7 Religions */}
-          <div className="bg-navy-950 border-b border-gold-500/20 px-3 sm:px-6 lg:px-8 py-1.5 text-xs flex items-center justify-between">
+          {/* Universal Platform Top Navbar */}
+          <PlatformNavbar
+            activeReligion="islam"
+            onSelectReligion={handleSelectReligion}
+            onOpenBookmarks={handleOpenPlatformBookmarks}
+            onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
+            onOpenStudio={() => setIsMultilingualStudioOpen(true)}
+            bookmarksCount={bookmarks.length}
+          />
+
+          {/* Universal Platform Top Sub-Strip to allow quick Multilingual Quran Audio & Status */}
+          <div className="bg-navy-950/80 border-b border-gold-500/20 px-3 sm:px-6 lg:px-8 py-1.5 text-xs flex items-center justify-between">
             <button
               onClick={() => handleSelectReligion('home')}
               className="inline-flex items-center space-x-1.5 text-gold-400 hover:text-gold-300 font-semibold transition"
@@ -392,14 +417,16 @@ export const App: React.FC = () => {
       )}
 
       {/* =========================================================================
-          VIEW 3: HINDUISM MODULE (Phase 0 Development Placeholder)
+          VIEW 3: HINDUISM MODULE (Bhagavad Gita, Upanishads, Vedas, Stotras)
           ========================================================================= */}
       {currentReligion === 'hinduism' && (
         <>
           <PlatformNavbar
             activeReligion="hinduism"
             onSelectReligion={handleSelectReligion}
-            onOpenBookmarks={() => setIsPlatformBookmarksOpen(true)}
+            onOpenBookmarks={handleOpenPlatformBookmarks}
+            onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
+            onOpenStudio={() => setIsMultilingualStudioOpen(true)}
             bookmarksCount={bookmarks.length}
           />
           <HinduismModule onReturnToHome={() => handleSelectReligion('home')} />
@@ -407,14 +434,16 @@ export const App: React.FC = () => {
       )}
 
       {/* =========================================================================
-          VIEW 4: CHRISTIANITY MODULE (Phase 0 Development Placeholder)
+          VIEW 4: CHRISTIANITY MODULE (Holy Bible: KJV, WEB, ASV, YLT)
           ========================================================================= */}
       {currentReligion === 'christianity' && (
         <>
           <PlatformNavbar
             activeReligion="christianity"
             onSelectReligion={handleSelectReligion}
-            onOpenBookmarks={() => setIsPlatformBookmarksOpen(true)}
+            onOpenBookmarks={handleOpenPlatformBookmarks}
+            onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
+            onOpenStudio={() => setIsMultilingualStudioOpen(true)}
             bookmarksCount={bookmarks.length}
           />
           <ChristianityModule onReturnToHome={() => handleSelectReligion('home')} />
@@ -422,14 +451,16 @@ export const App: React.FC = () => {
       )}
 
       {/* =========================================================================
-          VIEW 5: JUDAISM MODULE (Phase 0 Development Placeholder)
+          VIEW 5: JUDAISM MODULE (The Tanakh: Torah, Nevi'im, Ketuvim)
           ========================================================================= */}
       {currentReligion === 'judaism' && (
         <>
           <PlatformNavbar
             activeReligion="judaism"
             onSelectReligion={handleSelectReligion}
-            onOpenBookmarks={() => setIsPlatformBookmarksOpen(true)}
+            onOpenBookmarks={handleOpenPlatformBookmarks}
+            onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
+            onOpenStudio={() => setIsMultilingualStudioOpen(true)}
             bookmarksCount={bookmarks.length}
           />
           <JudaismModule onReturnToHome={() => handleSelectReligion('home')} />
@@ -437,14 +468,16 @@ export const App: React.FC = () => {
       )}
 
       {/* =========================================================================
-          VIEW 6: SIKHISM MODULE (Phase 0 Development Placeholder)
+          VIEW 6: SIKHISM MODULE (Sri Guru Granth Sahib Ji — 1,430 Angs)
           ========================================================================= */}
       {currentReligion === 'sikhism' && (
         <>
           <PlatformNavbar
             activeReligion="sikhism"
             onSelectReligion={handleSelectReligion}
-            onOpenBookmarks={() => setIsPlatformBookmarksOpen(true)}
+            onOpenBookmarks={handleOpenPlatformBookmarks}
+            onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
+            onOpenStudio={() => setIsMultilingualStudioOpen(true)}
             bookmarksCount={bookmarks.length}
           />
           <SikhismModule onReturnToHome={() => handleSelectReligion('home')} />
@@ -452,14 +485,16 @@ export const App: React.FC = () => {
       )}
 
       {/* =========================================================================
-          VIEW 7: BUDDHISM MODULE (Phase 0 Development Placeholder)
+          VIEW 7: BUDDHISM MODULE (Early Buddhist Texts — Pali Canon Tipitaka)
           ========================================================================= */}
       {currentReligion === 'buddhism' && (
         <>
           <PlatformNavbar
             activeReligion="buddhism"
             onSelectReligion={handleSelectReligion}
-            onOpenBookmarks={() => setIsPlatformBookmarksOpen(true)}
+            onOpenBookmarks={handleOpenPlatformBookmarks}
+            onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
+            onOpenStudio={() => setIsMultilingualStudioOpen(true)}
             bookmarksCount={bookmarks.length}
           />
           <BuddhismModule onReturnToHome={() => handleSelectReligion('home')} />
@@ -467,14 +502,16 @@ export const App: React.FC = () => {
       )}
 
       {/* =========================================================================
-          VIEW 8: JAINISM MODULE (Phase 0 Development Placeholder)
+          VIEW 8: JAINISM MODULE (Classical Jain Agamas & Tattvartha Sutra)
           ========================================================================= */}
       {currentReligion === 'jainism' && (
         <>
           <PlatformNavbar
             activeReligion="jainism"
             onSelectReligion={handleSelectReligion}
-            onOpenBookmarks={() => setIsPlatformBookmarksOpen(true)}
+            onOpenBookmarks={handleOpenPlatformBookmarks}
+            onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
+            onOpenStudio={() => setIsMultilingualStudioOpen(true)}
             bookmarksCount={bookmarks.length}
           />
           <JainismModule onReturnToHome={() => handleSelectReligion('home')} />
@@ -489,7 +526,7 @@ export const App: React.FC = () => {
           <PlatformNavbar
             activeReligion="sacred-audio"
             onSelectReligion={handleSelectReligion}
-            onOpenBookmarks={() => setIsPlatformBookmarksOpen(true)}
+            onOpenBookmarks={handleOpenPlatformBookmarks}
             onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
             onOpenStudio={() => setIsMultilingualStudioOpen(true)}
             bookmarksCount={bookmarks.length}
