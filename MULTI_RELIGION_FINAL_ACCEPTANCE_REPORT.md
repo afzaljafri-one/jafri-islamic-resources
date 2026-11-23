@@ -1,288 +1,257 @@
 # Multi-Religion Platform: Final Functional & Content Acceptance Report
 
-**Project:** Jafri Islamic Resources (Unified Multi-Religion Platform)
-**Branch:** `feature/multi-religion-platform`
-**Base URL:** `http://localhost:5173/`
-**Production URL on Main:** `https://afzaljafri-one.github.io/jafri-islamic-resources/` (Preserved & Untouched)
-**Verification Date:** November 23, 2026
-**Status:** **ACCEPTED — FULL VERIFICATION PASSED**
+- **Project:** Jafri Islamic Resources (Unified Multi-Religion Platform Expansion)
+- **Branch:** `feature/multi-religion-platform`
+- **Parent Production Release Commit:** `fb4d170debc6f86f68c9fd888d66f77ede452764` (Preserved & Untouched)
+- **Feature Branch Commits:**
+  1. `c559fa3aa58d13e3d765b6cc6b25fb453857ca54` (`c559fa3`) — Initial release commit
+  2. `c9c1295b7937a6e8c6a9c1667f814f87bf5420fc` (`c9c1295`) — Test portability, tiering, and governance commit
+- **Remote Synchronization:** `origin/feature/multi-religion-platform` synchronized at `c9c1295`
+- **Pull Request:** PR #1 (`feature/multi-religion-platform` -> `main`) — **Open & Draft Status**
+- **Production URL on Main:** `https://afzaljafri-one.github.io/jafri-islamic-resources/` (Active, Unmodified)
+- **Base Dev Server URL:** `http://localhost:5173/`
+- **Reconciliation Date:** November 23, 2026
+- **Status:** **ACCEPTED — TECHNICAL ACCEPTANCE COMPLETED (DRAFT PR)**
 
 ---
 
 ## 1. Executive Acceptance Summary
 
-This report establishes the final functional, content, architectural, and visual acceptance of the seven-religion platform expansion on branch `feature/multi-religion-platform`.
+This reconciled report establishes the final functional, content, architectural, and visual acceptance of the seven-religion platform expansion on branch `feature/multi-religion-platform`. All metrics reflect the actual repository and remote GitHub state following the push of commit `c9c1295`.
 
 | Acceptance Dimension | Status | Verification Result |
-| :--- | :--- | :--- |
-| **Git Hygiene & Containment** | **PASS** | Branch `feature/multi-religion-platform`; 0 staged files, 0 commits, 0 pushes, 0 merges to `main`. `origin/main` remains at initial production release `fb4d170`. |
-| **Preservation of Live Islam** | **PASS** | 100% of live Quran reader (114 Surahs, 6,236 Ayahs, Dual Mushaf 15-line & 13-line, 4 Canonical PDFs, 14 local audios, Qibla/Prayer tools) fully preserved. |
-| **TypeScript Compilation** | **PASS** | `npx tsc -b` exited `0` with zero diagnostic errors. |
-| **Vite Production Build** | **PASS** | `npm run build` exited `0` (1,706 modules transformed, `dist/` bundle created in 14.49s). |
-| **Automated Test Suites** | **PASS** | **65 / 65 Tests Passed (100% Pass Rate)** across all 3 independent test suites. |
-| **Browser Console Errors** | **PASS** | Headless Chrome audit of all 11 core routes reported **0 runtime JavaScript errors / uncaught exceptions**. |
-| **Mobile Responsiveness** | **PASS** | Verified across 375x667 viewport with mobile screenshot evidence across all 7 traditions. |
-| **Storage Isolation** | **PASS** | New platform bookmarks, progress, and preferences are namespaced under `jafri_platform_*`, guaranteeing zero collision with live Islamic keys. |
+| :--- | :---: | :--- |
+| **Git Hygiene & Containment** | **PASS** | Branch `feature/multi-religion-platform` contains exactly 2 commits (`c559fa3`, `c9c1295`) pushed to remote. PR #1 is open as a draft. `main` and `origin/main` remain untouched at `fb4d170`. Zero production deployments executed. |
+| **Preservation of Live Islam** | **PASS** | 100% of live Quran reader (114 Surahs, 6,236 Ayahs, Dual Mushaf 15-line & 13-line, 4 Canonical PDFs, 14 local audios, Qibla/Prayer tools) fully preserved with zero regressions. |
+| **TypeScript Compilation** | **PASS** | `npx tsc -b` exited `0` with zero diagnostic errors across all modules. |
+| **Vite Production Build** | **PASS** | `npm run build` exited `0` (1,706 modules transformed, `dist/` bundle created in 7.54s). |
+| **Automated Test Suites** | **PASS** | **68 / 68 Tests Passed (100% Pass Rate)** across all 3 independent test suites. |
+| **Live Browser UI Smoke Tests** | **PASS** | Headless Chrome audit of all 9 core routes reported **0 runtime JavaScript errors** and confirmed initial DOM mounting. |
+| **Storage Isolation** | **PASS** | New platform bookmarks, progress, and preferences are namespaced under `jafri_platform_*`, guaranteeing zero collision with live Islamic production storage keys. |
 
 ---
 
 ## 2. Scripture Content Coverage & Categorization by Religion
 
-To maintain complete scholarly, liturgical, and technical integrity, every religious tradition is audited below and categorized into:
-1. **Fully Integrated Content** (Bundled, verified, or dynamic full-canon coverage)
-2. **Partially Integrated Content** (Dynamic API dependency or subset of books/chapters)
-3. **Sample/Demo Content** (Curated foundational selections of vast corpora)
-4. **Unavailable or Restricted Content** (Quarantined due to copyright, licensing, or theological governance)
+To maintain complete scholarly, liturgical, and technical integrity, navigation metadata is strictly decoupled from actual scripture text availability. Every tradition is audited below and categorized into:
+1. **Complete Canonical Metadata:** Structural navigation hierarchy (books, chapters, sections).
+2. **Complete Text Corpus:** Full canonical textual content available in the application.
+3. **Curated Liturgical Selections:** High-significance foundational text units bundled locally.
+4. **Dynamic API-Dependent Content:** Verses loaded on demand requiring external connectivity.
+5. **Offline Bundled Content:** Text available with zero network connection.
+6. **Missing or Unavailable Content:** Canonical material omitted, restricted, or awaiting integration.
 
 ---
 
 ### Tradition 1: Islam (Preserved Production Standard)
 
-* **Source Configuration:** Local high-resolution Mushaf facsimiles, AlQuranCloud API v1, UmmahAPI, EveryAyah CDN.
-* **Fully Integrated Content:**
-  * Complete 114 Surahs metadata (revelation location, ayah count, juz assignment, Arabic & English names).
-  * Complete **Dual Mushaf Facsimile Reproduction**:
-    * **15-Line Madinah Mushaf:** All 612 printed pages (Pages 1 to 612) rendered via high-resolution WebP images.
-    * **13-Line Indo-Pak Mushaf:** All 849 printed pages (Pages 1 to 849) rendered in authentic South Asian IndoPak Nastaleeq script layout with ornate page borders.
-  * Page-bounded EveryAyah audio streaming across multiple reciters (Sheikh Mahmoud Khalil Al-Husary, Mishary Rashid Alafasy, Abu Bakr Ash-Shatree, Abdul Basit Abdul Samad).
-  * 4 Canonical Vector PDFs: Surah Al-Kahf (018), Surah Ya-Sin (036), Surah Al-Waqi'ah (056), Surah Al-Mulk (067).
-  * 14 Approved locally bundled audio files in `public/audio/approved/`.
-  * Islamic Services & Tools: Hijri calendar calculator, offline prayer times engine, interactive Qibla compass, Zakat calculator.
-* **Partially Integrated Content:**
-  * Ayah-by-ayah digital text mode for all 6,236 verses is served dynamically via `quranRouter.ts` / AlQuranCloud / UmmahAPI rather than a single monolithic static JSON file.
-* **Sample/Demo Content:**
-  * None. Full 114 Surahs and complete dual Mushaf pages are 100% available.
-* **Unavailable or Restricted Content:**
-  * AI-generated synthetic recitations of the Holy Quran are strictly prohibited and quarantined by theological governance rules.
+- **Source Configuration:** Local high-resolution Mushaf facsimiles, AlQuranCloud API v1, UmmahAPI, EveryAyah CDN.
+- **Complete Canonical Metadata:** All 114 Surahs (Surah number, Arabic name, transliterated English name, revelation type, ayah count, juz mapping).
+- **Complete Text Corpus:** Complete Dual Mushaf high-resolution facsimile reproductions:
+  - **15-Line Madinah Mushaf:** All 612 printed pages (Pages 1 to 612) rendered via high-resolution WebP images.
+  - **13-Line Indo-Pak Mushaf:** All 849 printed pages (Pages 1 to 849) rendered in authentic South Asian IndoPak Nastaleeq script layout with ornate page borders.
+- **Curated Liturgical Selections:** 4 Canonical Vector PDFs (Surahs 018 Al-Kahf, 036 Ya-Sin, 056 Al-Waqi'ah, 067 Al-Mulk), Asma-ul-Husna (99 Names), Daily Duas, Six Kalimas, Selected Hadith.
+- **Dynamic API-Dependent Content:** Ayah-by-ayah digital text mode for all 6,236 verses is served dynamically via `quranRouter.ts` / AlQuranCloud / UmmahAPI.
+- **Offline Bundled Content:** All 1,461 Mushaf facsimile pages, 4 vector PDFs, 14 approved local recitation audios, offline prayer times engine, and Hijri calendar calculator.
+- **Missing or Unavailable Content:** AI-generated synthetic recitations of the Holy Quran are strictly prohibited and quarantined by theological governance rules.
 
 ---
 
 ### Tradition 2: Hinduism
 
-* **Source Configuration:** Local curated text units (`hinduismTextData.ts`), VedicScriptures API (`vedicscriptures.github.io`).
-* **Fully Integrated Content:**
-  * Complete 18 Adhyayas (Chapters) metadata of the **Bhagavad Gita** (all 700 Shlokas scope, Sanskrit Devanagari titles, IAST transliterations, and thematic English summaries).
-  * Foundational offline verses: Chapter 1:1, 1:2, and Chapter 2:47 pre-cached with authentic Sanskrit Devanagari, IAST romanization, and 4 classical scholar commentaries:
-    1. Swami Sivananda (English)
-    2. Swami Gambhirananda — Ramakrishna Math (English)
-    3. Shri Purohit Swami (English)
-    4. Swami Ramsukhdas — Gita Press (Hindi)
-    5. Adi Shankaracharya (Shankara Bhashya reference)
-  * 11 Extended Canonical Collections metadata: Valmiki Ramayana, Ramcharitmanas, Principal Upanishads, Vedas, Puranas, Hanuman Chalisa, Aartis, Bhajans, Mantras, Stotras, Puja & Festivals.
-  * 55 Curated Foundational Text Units bundled locally offline in `hinduismTextData.ts` (e.g. Gayatri Mantra, Mahamrityunjaya Mantra, Purusha Suktam, Hanuman Chalisa, Om Jai Jagdish Hare Aarti, Mahishasura Mardini Stotra).
-* **Partially Integrated Content:**
-  * Remaining Bhagavad Gita verses (across all 18 chapters) are fetched dynamically per verse from `vedicscriptures.github.io`.
-* **Sample/Demo Content:**
-  * The 55 bundled text units represent foundational liturgical selections of multi-volume epics (e.g., Valmiki Ramayana contains 24,000 verses; only key foundational verses are locally stored).
-* **Unavailable or Restricted Content:**
-  * Full Sanskrit text of the 18 Mahapuranas and 4 Samhitas is not bundled locally.
-  * Audio recitations for all 700 Gita verses are quarantined pending commercial rights clearance.
+- **Source Configuration:** Local curated text units (`hinduismTextData.ts`), VedicScriptures API (`vedicscriptures.github.io`).
+- **Complete Canonical Metadata:**
+  - Complete 18 Adhyayas (Chapters) metadata of the **Bhagavad Gita** (701 Shlokas scope, Sanskrit Devanagari titles, IAST transliterations, thematic English summaries).
+  - 11 Extended Canonical Collections metadata: Valmiki Ramayana, Ramcharitmanas, Principal Upanishads, Vedas, Puranas, Hanuman Chalisa, Aartis, Bhajans, Mantras, Stotras, Puja & Festivals.
+- **Complete Text Corpus:** None. Full multi-volume epics and Vedas are not bundled in their entirety.
+- **Curated Liturgical Selections:** **55 Curated Foundational Text Units** bundled locally offline in `hinduismTextData.ts` (e.g. Gayatri Mantra, Mahamrityunjaya Mantra, Purusha Suktam, Hanuman Chalisa, Om Jai Jagdish Hare Aarti, Mahishasura Mardini Stotra).
+- **Dynamic API-Dependent Content:** 698 verses of the Bhagavad Gita (verses 1:3 through 18:78) are fetched dynamically per verse from `vedicscriptures.github.io`.
+- **Offline Bundled Content:** Exactly **3 verses** of the Bhagavad Gita:
+  1. Chapter 1:1 (Devanagari, IAST, 4 commentaries)
+  2. Chapter 1:2 (Devanagari, IAST, 4 commentaries)
+  3. Chapter 2:47 (Devanagari, IAST, 4 commentaries)
+  Plus the 55 curated liturgical units.
+- **Missing or Unavailable Content:**
+  - If offline, Bhagavad Gita verses 1:3–18:78 return `null`. There is **no full offline fallback** for the remaining 698 verses.
+  - Complete Sanskrit text of the 18 Mahapuranas, 4 Vedas, and Valmiki Ramayana (24,000 verses).
+  - Audio recitations for Gita verses are quarantined pending commercial rights clearance.
 
 ---
 
 ### Tradition 3: Christianity
 
-* **Source Configuration:** Bolls Life API (`bolls.life`), Public Domain Bibles.
-* **Fully Integrated Content:**
-  * Complete 66-Book Canonical Bible Navigation Hierarchy:
-    * **Old Testament:** 39 Books (Genesis through Malachi).
-    * **New Testament:** 27 Books (Matthew through Revelation).
-  * 4 Configured Public Domain Translations:
-    1. King James Version (KJV 1611/1769 Authorized Version)
-    2. World English Bible (WEB — Creative Commons Zero / CC0)
-    3. American Standard Version (ASV 1901)
-    4. Young's Literal Translation (YLT 1898)
-  * Dynamic chapter-by-chapter verse reader with verse-level rendering, Strong's concordance tag stripping, and full cross-testament search via Bolls API.
-* **Partially Integrated Content:**
-  * Bible chapter text is dynamically loaded on demand via Bolls Life API.
-  * Offline fallback contains metadata for 9 foundational books (Genesis, Exodus, Psalms, Matthew, John, Romans, Galatians, Ephesians, Revelation); verse text requires connectivity.
-* **Sample/Demo Content:**
-  * None. When connected, all 66 books and 31,102 verses are accessible.
-* **Unavailable or Restricted Content:**
-  * Apocrypha / Deuterocanonical books (Tobit, Judith, 1 & 2 Maccabees, Sirach, Wisdom) are excluded from the Protestant 66-book canon.
-  * DBP v4 (Bible Brain) audio playback controls are hidden pending institutional API key provisioning.
+- **Source Configuration:** Bolls Life API (`bolls.life`), Public Domain Bibles.
+- **Complete Canonical Metadata:** Complete 66-Book Protestant Canon Directory:
+  - **Old Testament:** 39 Books (Genesis through Malachi).
+  - **New Testament:** 27 Books (Matthew through Revelation).
+  - Note: Dynamically retrieved via `https://bolls.life/get-books/KJV/`. When offline, falls back to metadata for 9 foundational books (Genesis, Exodus, Psalms, Matthew, John, Romans, Galatians, Ephesians, Revelation).
+- **Complete Text Corpus:** None bundled locally.
+- **Curated Liturgical Selections:** None bundled as static verse units.
+- **Dynamic API-Dependent Content:** **All 31,102 verses across all 66 books** are loaded dynamically on demand via Bolls Life API across 4 public domain translations:
+  1. King James Version (KJV 1611/1769)
+  2. World English Bible (WEB / CC0)
+  3. American Standard Version (ASV 1901)
+  4. Young's Literal Translation (YLT 1898)
+- **Offline Bundled Content:** **Zero verses.** If the network is unavailable, `getChapterVerses()` catches the error and returns `[]`.
+- **Missing or Unavailable Content:**
+  - Roman Catholic and Eastern Orthodox Deuterocanonical books / Apocrypha (Tobit, Judith, 1 & 2 Maccabees, Sirach, Wisdom, Baruch).
+  - Complete offline verse cache.
+  - DBP v4 (Bible Brain) audio playback controls (quarantined pending institutional API keys).
 
 ---
 
 ### Tradition 4: Judaism
 
-* **Source Configuration:** Sefaria API v3 (`sefaria.org`), Mechon Mamre Audio Archive (`mechon-mamre.org`).
-* **Fully Integrated Content:**
-  * Tanakh Canonical Structure categorized across the three ancient divisions:
-    1. **Torah** (The Law / Pentateuch)
-    2. **Nevi'im** (Prophets)
-    3. **Ketuvim** (Writings)
-  * 11 Major Books metadata configured in `TANAKH_BOOKS` (Genesis, Exodus, Leviticus, Numbers, Deuteronomy, Joshua, Judges, I Samuel, Isaiah, Psalms, Proverbs).
-  * Dynamic bilingual reader rendering vocalized Hebrew Masoretic text with full Niqqud diacritics side-by-side with JPS 1917 English translation.
-  * Foundational offline verses: Bereshit (Genesis) 1:1 and 1:2.
-* **Partially Integrated Content:**
-  * Chapters are dynamically retrieved on demand from Sefaria API v3.
-  * Currently 11 of the 24 books of the Hebrew Tanakh are registered in the metadata array.
-* **Sample/Demo Content:**
-  * Offline reading is limited to Genesis 1:1-2.
-* **Unavailable or Restricted Content:**
-  * The remaining 13 books of the Tanakh (Jeremiah, Ezekiel, 12 Minor Prophets, Song of Songs, Ruth, Lamentations, Ecclesiastes, Esther, Daniel, Ezra-Nehemiah, Chronicles) await metadata mapping.
-  * Mechon Mamre spoken Hebrew audio streams (`t0101.mp3`, etc.) are formally classified as **Permission Required / Licensing Restricted**.
+- **Source Configuration:** Sefaria API v3 (`sefaria.org`), Mechon Mamre Audio Archive (`mechon-mamre.org`).
+- **Complete Canonical Metadata:** **Partial Metadata Coverage:** Exactly **11 of the 24 canonical books** of the Hebrew Tanakh are registered in `TANAKH_BOOKS`:
+  - **Torah (5 of 5):** Genesis (Bereshit), Exodus (Shemot), Leviticus (Vayikra), Numbers (Bamidbar), Deuteronomy (Devarim).
+  - **Nevi'im (4 of 8):** Joshua (Yehoshua), Judges (Shoftim), I Samuel (Shmuel I), Isaiah (Yeshayahu).
+  - **Ketuvim (2 of 11):** Psalms (Tehillim), Proverbs (Mishlei).
+- **Complete Text Corpus:** None bundled locally.
+- **Curated Liturgical Selections:** None beyond foundational verses.
+- **Dynamic API-Dependent Content:** All chapters of the 11 registered books are retrieved dynamically from Sefaria API v3 (rendering bilingual vocalized Hebrew with Niqqud diacritics and JPS 1917 English translation).
+- **Offline Bundled Content:** Exactly **2 verses** bundled locally as offline fallback:
+  1. Bereshit (Genesis) 1:1
+  2. Bereshit (Genesis) 1:2
+- **Missing or Unavailable Content:**
+  - **13 Canonical Books Omitted from Metadata:** II Samuel, I & II Kings, Jeremiah, Ezekiel, the Twelve Minor Prophets (Hosea through Malachi), Song of Songs, Ruth, Lamentations, Ecclesiastes, Esther, Daniel, Ezra-Nehemiah, I & II Chronicles.
+  - Mechon Mamre spoken Hebrew audio streams (`t0101.mp3`, etc.) are classified as **Permission Required / Licensing Restricted** and quarantined.
 
 ---
 
 ### Tradition 5: Sikhism
 
-* **Source Configuration:** BaniDB API v2 (`api.banidb.com`), GurbaniNow API v2 (`api.gurbaninow.com`).
-* **Fully Integrated Content:**
-  * Complete 1,430 Ang canonical architecture and navigation of **Sri Guru Granth Sahib Ji**.
-  * Ang 1 (Japji Sahib / Mool Mantar) pre-cached offline with authentic Gurmukhi Unicode script, Romanized IAST transliteration, and English translation by Sant Singh Khalsa.
-  * Interactive **Larivaar Continuous Script Mode** toggle (switches between standard word-spaced *Pad Chhed* and traditional continuous unbroken *Larivaar* text).
-  * Dual-API resilience: Primary fetch against BaniDB API v2 with automatic seamless failover to GurbaniNow API v2.
-* **Partially Integrated Content:**
-  * Angs 2 through 1,430 are dynamically fetched via BaniDB / GurbaniNow APIs.
-* **Sample/Demo Content:**
-  * None. Complete 1,430 Angs are retrievable when connected.
-* **Unavailable or restricted Content:**
-  * Full offline storage for Angs 2–1,430 (requires active connection or browser cache).
-  * Live Damdami Taksal audio streaming feeds require backend proxying to bypass CORS restrictions.
+- **Source Configuration:** BaniDB API v2 (`api.banidb.com`), GurbaniNow API v2 (`api.gurbaninow.com`).
+- **Complete Canonical Metadata:** Complete **1,430 Ang navigation framework** of Sri Guru Granth Sahib Ji with input boundary clamping (`Math.max(1, Math.min(1430, pageNumber))`).
+- **Complete Text Corpus:** None bundled locally.
+- **Curated Liturgical Selections:** Ang 1 Jap Ji Sahib / Mool Mantar.
+- **Dynamic API-Dependent Content:** Angs 2 through 1,430 are dynamically fetched via BaniDB API v2 with automatic fallback to GurbaniNow API v2 (retrieving Gurmukhi Unicode, transliteration, Sant Singh Khalsa English translation, and Larivaar continuous script representation).
+- **Offline Bundled Content:** Exactly **Ang 1** (`OFFLINE_ANG_1`) bundled locally offline with Gurmukhi, Pad Chhed, Larivaar, IAST transliteration, and English translation.
+- **Missing or Unavailable Content:**
+  - Offline text for Angs 2–1,430 (requires active network connectivity).
+  - Dasam Granth and Bhai Gurdas Vaaran collections are not included in the primary reader.
+  - Live Damdami Taksal audio streams require server-side proxying to bypass CORS restrictions.
 
 ---
 
 ### Tradition 6: Buddhism
 
-* **Source Configuration:** Local curated text units (`buddhismTextData.ts`), SuttaCentral Bilara API (`suttacentral.net`).
-* **Fully Integrated Content:**
-  * 9 Canonical Collections metadata: Tipitaka Overview, The Dhammapada, Suttas & Sutras, Karaniya Metta Sutta, Maha Mangala Sutta, Chants & Parittas, Meditation Instructions (Anapanasati), Guided Contemplations, Buddhist Prayers & Festivals.
-  * 24 Curated Canonical Text Units bundled locally offline in `buddhismTextData.ts` (e.g. Dhammapada Yamakavagga Verses 1–2, Dhammacakkappavattana Sutta — First Sermon, Heart Sutra, Metta Sutta, Mangala Sutta, Ti-Sarana, Five Precepts).
-  * Authentic Romanized Pali with diacritics and Bhikkhu Sujato's CC0 translations.
-  * Dynamic integration with SuttaCentral Bilara API for individual Sutta UIDs (`sn`, `mn`, `dn`, `dhp`).
-* **Partially Integrated Content:**
-  * SuttaCentral dynamic fetch operates for specific Sutta UIDs; broader navigation utilizes local curated collections.
-* **Sample/Demo Content:**
-  * The 24 bundled text units represent a curated selection of the vast Pali Canon (which contains over 10,000 suttas across 5 Nikayas).
-* **Unavailable or Restricted Content:**
-  * Complete bulk text of the entire Vinaya Pitaka, Abhidhamma Pitaka, and lengthy Nikayas is not bundled locally.
-  * Full audio chanting for the entire Tipitaka is unavailable.
+- **Source Configuration:** Local curated text units (`buddhismTextData.ts`), SuttaCentral Bilara API (`suttacentral.net`).
+- **Complete Canonical Metadata:** 9 Canonical Collections metadata: Tipitaka Overview, The Dhammapada, Suttas & Sutras, Karaniya Metta Sutta, Maha Mangala Sutta, Chants & Parittas, Meditation Instructions (Anapanasati), Guided Contemplations, Buddhist Prayers & Festivals.
+- **Complete Text Corpus:** None. The Pali Tipitaka comprises tens of thousands of suttas across 5 Nikayas; full corpus is not bundled.
+- **Curated Liturgical Selections:** **24 Curated Foundational Text Units** bundled locally offline in `buddhismTextData.ts` (e.g. Dhammapada vv. 1, 2, 5, 21; Dhammacakkappavattana Sutta excerpt; Heart Sutra excerpt; Metta Sutta vv. 1, 7, 8; Mangala Sutta vv. 1, 11; Ti-Sarana; Five Precepts) with authentic Pali diacritics and Bhikkhu Sujato CC0 translations.
+- **Dynamic API-Dependent Content:** Individual Suttas can be fetched dynamically by UID from SuttaCentral Bilara API (`sn`, `mn`, `dn`, `dhp`).
+- **Offline Bundled Content:** All 24 curated text units across all 9 collections.
+- **Missing or Unavailable Content:** Bulk text of the full Vinaya Pitaka, Abhidhamma Pitaka, and complete Nikayas is not stored offline.
 
 ---
 
 ### Tradition 7: Jainism
 
-* **Source Configuration:** Local curated text units (`jainismTextData.ts`), Hermann Jacobi translations (Sacred Books of the East Vols. 22 & 45 — Public Domain).
-* **Fully Integrated Content:**
-  * 9 Canonical Collections metadata: Navkar Mantra, Bhaktamar Stotra, Classical Jain Agamas, Uttaradhyayana Sutra, Kalpa Sutra, Pratikraman, Samayik, Jain Devotional Hymns (Meri Bhavana), Tirthankar Teachings (Tattvartha Sutra).
-  * 29 Curated Foundational Text Units bundled locally offline in `jainismTextData.ts` with Ardhamagadhi Prakrit / Sanskrit text, Romanized transliteration, and Hermann Jacobi's canonical translations. **Zero AI-generated translations.**
-* **Partially Integrated Content:**
-  * All 29 text units are completely bundled locally offline.
-* **Sample/Demo Content:**
-  * The 29 text units represent core selections of the 45 traditional Shvetambara Agamas and Digambara canonical texts (e.g., Acaranga Sutra Book 1 Lecture 5 on Ahimsa, Uttaradhyayana Chapter 1, Kalpa Sutra Lives of the Jinas, Tattvartha Sutra Chapter 1).
-* **Unavailable or Restricted Content:**
-  * Full textual corpus of all 45 Agamas in Prakrit with English translation is unavailable worldwide in open public domain.
-  * Spoken audio recitations for Agamas are currently unverified and classified as Pending Discovery.
+- **Source Configuration:** Local curated text units (`jainismTextData.ts`), Hermann Jacobi translations (Sacred Books of the East Vols. 22 & 45 — Public Domain).
+- **Complete Canonical Metadata:** 9 Canonical Collections metadata: Navkar Mantra, Bhaktamar Stotra, Classical Jain Agamas, Uttaradhyayana Sutra, Kalpa Sutra, Pratikraman, Samayik, Jain Devotional Hymns (Meri Bhavana), Tirthankar Teachings (Tattvartha Sutra).
+- **Complete Text Corpus:** None. Full 45 Agamas are not bundled in their entirety.
+- **Curated Liturgical Selections:** **29 Curated Foundational Text Units** bundled locally offline in `jainismTextData.ts` with Ardhamagadhi Prakrit / Sanskrit text, Romanized transliteration, and Hermann Jacobi's canonical translations. **Zero AI-generated translations.**
+- **Dynamic API-Dependent Content:** None. Jainism module is self-contained.
+- **Offline Bundled Content:** All 29 curated text units across all 9 collections are 100% bundled locally offline.
+- **Missing or Unavailable Content:**
+  - Full textual corpus of all 45 Agamas (Angas, Upangas, Prakirnakas, Chedasutras, Mulasutras).
+  - Spoken audio recitations for Agamas (classified as Pending Discovery).
 
 ---
 
-## 3. Audio Hub & Rights Governance
+## 3. Audio Hub & Rights Governance Reconciliation
 
-The Sacred Audio Library (`src/platform/components/audio/SacredAudioLibraryHub.tsx`) manages **651 liturgical audio requirements** across all seven sacred traditions under strict copyright and theological governance:
+The Sacred Audio Library (`src/platform/components/audio/SacredAudioLibraryHub.tsx`) tracks **651 liturgical audio requirements** across all seven sacred traditions. An exhaustive audit of `src/platform/data/sacredAudioMasterCatalogue.ts` reconciles the exact status of all 651 entries:
 
 ```text
-SACRED AUDIO MASTER CATALOGUE BREAKDOWN (651 Total Requirements)
-├── 14 Playable Now (Locally Bundled HTML5 Audio in public/audio/approved/)
-├── 140 YouTube Streaming Tracks
-│   ├── 28 Approved with Human Review PASS
-│   └── 112 Pending Human Review
-├── 144 Permission Required (Mechon Mamre Spoken Hebrew Tanakh)
-├── 2 Rights Blocked (LibriVox Preserved Recordings)
-└── 347 Pending Discovery (Unlicensed or Unverified)
+SACRED AUDIO MASTER CATALOGUE AUDIT (651 Total Requirements)
+├── 14 Playable Locally Bundled Audio (isPlayable: true, in public/audio/approved/)
+│   └── 100% human-reviewed Islamic recitations and liturgical tracks (Review PASS)
+├── 2 Rights-Blocked Audio Recordings (isPlayable: false)
+│   └── LibriVox public domain recordings awaiting licensing review
+├── 140 YouTube Streaming Tracks (isPlayable: false in HTML5; streamable in modal embed)
+│   └── 140 Approved with User Attestation Human Review PASS (100% checked against text)
+├── 144 Permission-Required Recordings (isPlayable: false)
+│   └── Mechon Mamre spoken Hebrew Tanakh audio (Awaiting institutional licensing agreement)
+├── 4 Text Cards (isPlayable: false)
+│   └── Liturgical entries configured as reading cards without dedicated audio tracks
+└── 347 Pending Discovery (isPlayable: false)
+    └── Unlicensed, unverified, or pending recording discovery
 ```
 
-### Playback Capabilities Verified:
-1. **HTML5 Audio Engine:** Sticky bottom audio player with seekbar, duration/elapsed time (`00:00 / 04:08`), volume slider, speed adjustments (0.75x–2.0x), and license attribution badges. Verified with *Rigveda 10.90 Purusha Suktam*.
-2. **YouTube Streaming Player:** Modal video/audio streaming with *Human Review PASS* verification badge. Verified with *Surah 1 Al-Fatihah* (Sheikh Mahmoud Khalil Al-Husary).
-3. **EveryAyah Murattal CDN:** Verse-by-verse and page-bounded continuous Quranic audio streaming integrated with both 15-line and 13-line Mushaf views.
+### Distinction Between Catalogue Requirements and Playable Media
+- **Requirement != Playable File:** The 651 catalogue entries represent liturgical requirements.
+- **Actually Playable Offline:** Exactly **14 tracks** have physical local files (`isPlayable: true`) playable via the HTML5 sticky player.
+- **Streamable Online:** **140 YouTube tracks** are playable via official modal player embeds under standard platform terms.
+- **Quarantined / Non-Playable:** **497 requirements** (144 Mechon Mamre + 2 LibriVox + 347 Pending Discovery + 4 Text Cards) are strictly blocked from playback in compliance with project copyright and theological governance rules.
 
 ---
 
 ## 4. Bookmarks Persistence & Storage Isolation
 
-The platform storage service (`src/platform/services/storageService.ts`) implements namespaced, local-first storage:
-* `jafri_platform_bookmarks_v1`: Universal bookmarks across all 7 traditions with `CanonicalAddress` indexing.
-* `jafri_platform_progress_v1`: Reading progress trackers.
-* `jafri_platform_preferences_v1`: Typography sizing, theme, and display preferences.
-* `jafri_platform_active_religion_v1`: Active tradition state.
+The platform storage service (`src/platform/services/storageService.ts`) implements local-first, namespaced storage:
+- `jafri_platform_bookmarks_v1`: Universal bookmarks across all 7 traditions with `CanonicalAddress` schema indexing.
+- `jafri_platform_progress_v1`: Reading progress trackers.
+- `jafri_platform_preferences_v1`: Typography sizing, theme, and display preferences.
+- `jafri_platform_active_religion_v1`: Active tradition state.
 
-**Isolation Verification:** Zero collision with live Islamic production keys (`jafri_bookmarks`, `jafri_last_read`). Bookmarks sliding drawer confirmed functional with tradition category filtering.
-
----
-
-## 5. Cross-Tradition Scripture Search
-
-Search capabilities are configured per tradition:
-* **Christianity:** Real-time search across 66 books via Bolls Life API (verified with term `"light"`, returning 128 canonical matches).
-* **Judaism:** Search against Tanakh texts via Sefaria API.
-* **Sikhism:** Search against Sri Guru Granth Sahib Ji via BaniDB API.
-* **Hinduism, Buddhism, Jainism:** Client-side full-text search against bundled collections, titles, summaries, and verse units.
+**Isolation Verification:** Zero collision with live Islamic production keys (`jafri_bookmarks`, `jafri_last_read`). Verified by automated tests and source code isolation scans.
 
 ---
 
-## 6. Mobile Responsiveness & Browser Diagnostics
+## 5. Verification Test Suites & Evidence Taxonomy
 
-### Mobile Viewport Verification (375x667 — iPhone SE Standard):
-All routes render without horizontal overflow. Platform navigation collapses into responsive headers, typography controls adjust gracefully, and sliding drawers (Bookmarks, Books Navigator, Audio Player) adapt to mobile screen boundaries.
-
-* **Mobile Homepage:** [mobile_homepage.png](file:///Users/afzaljafri/.gemini/antigravity/brain/2e0a8a09-f40f-4cdb-bc60-d11e0de6618b/screenshots/acceptance/mobile_homepage.png)
-* **Mobile Islam (Mushaf):** [mobile_islam.png](file:///Users/afzaljafri/.gemini/antigravity/brain/2e0a8a09-f40f-4cdb-bc60-d11e0de6618b/screenshots/acceptance/mobile_islam.png)
-* **Mobile Hinduism (Gita):** [mobile_hinduism.png](file:///Users/afzaljafri/.gemini/antigravity/brain/2e0a8a09-f40f-4cdb-bc60-d11e0de6618b/screenshots/acceptance/mobile_hinduism.png)
-* **Mobile Christianity (Bible):** [mobile_christianity.png](file:///Users/afzaljafri/.gemini/antigravity/brain/2e0a8a09-f40f-4cdb-bc60-d11e0de6618b/screenshots/acceptance/mobile_christianity.png)
-* **Mobile Judaism (Tanakh):** [mobile_judaism.png](file:///Users/afzaljafri/.gemini/antigravity/brain/2e0a8a09-f40f-4cdb-bc60-d11e0de6618b/screenshots/acceptance/mobile_judaism.png)
-* **Mobile Sikhism (SGGS):** [mobile_sikhism.png](file:///Users/afzaljafri/.gemini/antigravity/brain/2e0a8a09-f40f-4cdb-bc60-d11e0de6618b/screenshots/acceptance/mobile_sikhism.png)
-* **Mobile Buddhism (Tipitaka):** [mobile_buddhism.png](file:///Users/afzaljafri/.gemini/antigravity/brain/2e0a8a09-f40f-4cdb-bc60-d11e0de6618b/screenshots/acceptance/mobile_buddhism.png)
-* **Mobile Jainism (Agamas):** [mobile_jainism.png](file:///Users/afzaljafri/.gemini/antigravity/brain/2e0a8a09-f40f-4cdb-bc60-d11e0de6618b/screenshots/acceptance/mobile_jainism.png)
-* **Mobile Sacred Audio Hub:** [mobile_sacred_audio.png](file:///Users/afzaljafri/.gemini/antigravity/brain/2e0a8a09-f40f-4cdb-bc60-d11e0de6618b/screenshots/acceptance/mobile_sacred_audio.png)
-
-### Browser Console Diagnostics:
-Headless Chrome execution across all 11 routes confirmed **0 console errors, 0 runtime exceptions, and 0 missing asset 404s**.
-
----
-
-## 7. Verification Test Suites Summary (65 / 65 Tests Passed)
+### 5.1 Reconciled Test Execution Results
 
 ```text
 ================================================================================
-ALL THREE TEST SUITES PASSED (65 / 65 TESTS, 100% PASS RATE)
+ALL THREE TEST SUITES PASSED (68 / 68 TESTS, 100% PASS RATE)
 ================================================================================
-1. test_m3_suite.py (Islamic Core Reader & Audio Integration):
+1. test_multi_religion_platform.py (Unified Multi-Religion Platform Suite):
+   - Total Tests: 25 | Passed: 25 | Failed: 0 | Skipped: 0
+   - Exit Code: 0 (100% PASS)
+
+2. test_m3_suite.py (Islamic Core Reader & Audio Integration):
    - Total Tests: 23 | Passed: 23 | Failed: 0 | Skipped: 0
    - Exit Code: 0 (100% PASS)
 
-2. test_m3_dual_mushaf_integration.py (Dual Mushaf Cases 1-7 Verification):
+3. test_m3_dual_mushaf_integration.py (Dual Mushaf Cases 1-7 Verification):
    - Total Tests: 20 | Passed: 20 | Failed: 0 | Skipped: 0
    - Exit Code: 0 (100% PASS)
-
-3. test_multi_religion_platform.py (Multi-Religion Platform Acceptance):
-   - Total Tests: 22 | Passed: 22 | Failed: 0 | Skipped: 0
-   - Exit Code: 0 (100% PASS)
 ================================================================================
-COMPILATION & BUILD VERIFICATION:
+TOTAL AUTOMATED TESTS: 68 / 68 PASSED (100.0% Pass Rate)
+================================================================================
+COMPILATION & PRODUCTION BUILD:
 - npx tsc -b: 0 errors (Exit code 0)
-- npm run build: 0 errors (Exit code 0, 1,706 modules transformed, 14.49s)
+- npm run build: 0 errors (Exit code 0, 1,706 modules transformed, 7.54s)
 ================================================================================
 ```
 
+### 5.2 Test Count Evolution (65 vs 68 Tests)
+- **Initial Feature Commit (`c559fa3`):** Totaled **65 tests** (23 M3 + 20 Dual Mushaf + 22 multi-religion acceptance tests).
+- **Follow-up Commit (`c9c1295`):** Restructured `test_multi_religion_platform.py` from 22 flat tests into a portable 4-tier suite of **25 tests** (+3 net tests), bringing the total to **68 tests**.
+
+### 5.3 Evidence Classification Taxonomy
+
+| Evidence Category | Tests / Methods Included | What is Proven | What is NOT Proven |
+| :--- | :--- | :--- | :--- |
+| **Static Source-Code Checks** | Tier 1 (9 tests: `HINDU-1.1` to `JAIN-6.1`) & Tier 2 (3 tests: `STORAGE-7.1` to `7.3`) | Code structure, constant names, regex patterns, interface definitions exist in TypeScript files. | Does not prove dynamic runtime execution, error handling on network failure, or method return values. |
+| **Catalogue & Governance Scans** | Tier 3 (4 tests: `AUDIO-8.1` to `STUDIO-8.4`) | Catalogue volume (651 entries), cohort enum presence, negative scan for synthetic Quran recitations, 30 language configurations. | Does not prove audio URL accessibility or speech synthesizer audio generation. |
+| **Live Browser UI Smoke Tests** | Tier 4 (9 tests: `UI-SMOKE-9.1` to `9.9`) | Real Headless Chrome DOM rendering; pages mount without crashing; expected text strings appear in initial DOM. | Does not prove deep user interactive flows (pagination clicks, translation dropdown changes, bookmark deletion). |
+| **Automated Integration Tests** | `test_m3_suite.py` (23 tests) & `test_m3_dual_mushaf_integration.py` (20 tests) | 114 Surahs directory completeness, EveryAyah CDN HTTP 200 streaming, 15-line & 13-line leaf sharing, dual mushaf switching, MD5 index freeze. | Does not test non-Islamic religions. |
+| **Manual Verification** | Visual inspection of sticky player, YouTube modal embed, mobile viewport resizing (375x667). | Visual layout, audio playback in browser, responsive UI adaptation. | Not automated; requires periodic human re-verification. |
+
 ---
 
-## 8. Outstanding Issues & Operational Roadmap
+## 6. Git Status and PR State Reconciliation
 
-1. **External API Connectivity Dependency:**
-   * Dynamic reading for Christian Bible, Jewish Tanakh, and Sikh Gurbani depends on external APIs (`bolls.life`, `sefaria.org`, `api.banidb.com`). While offline fallback verses are bundled for core chapters (Genesis 1, Ang 1, Gita 1), full offline caching across all 66 Bible books and 1,430 Angs would require IndexedDB pre-caching.
-2. **Audio Rights & Licensing Expansion:**
-   * 347 requirements remain classified as *Pending Discovery*.
-   * Mechon Mamre Tanakh audio (144 recordings) requires institutional licensing agreement.
-   * Bhagavad Gita audio requires rights clearance for public redistribution.
-3. **Tanakh Book Metadata Scope:**
-   * 11 of 24 canonical books of the Tanakh are registered in `TANAKH_BOOKS`. The remaining 13 books can be added in a future update without altering the underlying Sefaria integration.
-
----
-
-## 9. Final Acceptance Sign-off
-
-The multi-religion platform on branch `feature/multi-religion-platform` meets all requirements for functional integrity, content authenticity, licensing transparency, and preservation of the existing Islamic production release.
-
-No commits, pushes, merges, or deployments have been executed.
+- **Local Branch:** `feature/multi-religion-platform`
+- **HEAD Commit:** `c9c1295b7937a6e8c6a9c1667f814f87bf5420fc`
+- **Remote Branch:** `origin/feature/multi-religion-platform` (Synchronized at `c9c1295`)
+- **Production `main` & `origin/main`:** Pointing to `fb4d170debc6f86f68c9fd888d66f77ede452764` (Clean, Untouched)
+- **Pull Request #1:**
+  - Status: **Open**
+  - Mode: **Draft**
+  - Included Commits: Exactly 2 (`c559fa3` and `c9c1295`)
+- **Production Safety:** GitHub Actions CI workflow completed `validate-build` successfully; `deploy-production` was **automatically skipped**. Live production site is 100% protected.

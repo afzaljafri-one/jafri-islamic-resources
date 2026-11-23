@@ -4,7 +4,7 @@
 // ==============================================================================
 
 import React from 'react';
-import { Home, Bookmark, Globe, ChevronDown, Headphones } from 'lucide-react';
+import { Home, Bookmark, Globe, ChevronDown, Headphones, BookOpen } from 'lucide-react';
 import { ReligionId } from '../types/religion';
 import { RELIGIONS_REGISTRY, ALL_RELIGION_IDS } from '../config/religionsRegistry';
 
@@ -12,6 +12,7 @@ interface PlatformNavbarProps {
   activeReligion: ReligionId | 'home' | 'sacred-audio';
   onSelectReligion: (rel: ReligionId | 'home' | 'sacred-audio') => void;
   onOpenBookmarks?: () => void;
+  onOpenCoverage?: () => void;
   onOpenSpanishPilot?: () => void;
   onOpenStudio?: () => void;
   onOpenSacredAudio?: () => void;
@@ -22,6 +23,7 @@ export const PlatformNavbar: React.FC<PlatformNavbarProps> = ({
   activeReligion,
   onSelectReligion,
   onOpenBookmarks,
+  onOpenCoverage,
   onOpenSpanishPilot,
   onOpenStudio,
   bookmarksCount = 0,
@@ -126,6 +128,19 @@ export const PlatformNavbar: React.FC<PlatformNavbarProps> = ({
             >
               <span className="text-xs">🇪🇸</span>
               <span className="hidden md:inline">Piloto Español (ef_dora)</span>
+            </button>
+          )}
+
+          {/* Scripture Coverage Disclosure Button */}
+          {onOpenCoverage && (
+            <button
+              id="platform-nav-coverage-btn"
+              onClick={onOpenCoverage}
+              title="Scripture Content Coverage & Availability Disclosure"
+              className="flex items-center space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-navy-950 border border-slate-700 hover:border-gold-500 text-slate-300 hover:text-gold-400 text-xs font-semibold transition cursor-pointer"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-gold-400" />
+              <span className="hidden lg:inline">Coverage</span>
             </button>
           )}
 

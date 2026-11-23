@@ -18,6 +18,10 @@ import {
   Info,
   Layers,
   Play,
+  WifiOff,
+  RotateCcw,
+  AlertTriangle,
+  BookOpen,
 } from 'lucide-react';
 import {
   sikhismProvider,
@@ -28,6 +32,7 @@ import { ScriptureNavigationDrawer } from '../../platform/components/ScriptureNa
 import { UniversalSearchModal } from '../../platform/components/UniversalSearchModal';
 import { UniversalBookmarksDrawer } from '../../platform/components/UniversalBookmarksDrawer';
 import { AudioNoticeModal } from '../../platform/components/AudioNoticeModal';
+import { ScriptureCoverageModal } from '../../platform/components/ScriptureCoverageModal';
 import { MultilingualAudioPlayerBar } from '../../platform/components/MultilingualAudioPlayerBar';
 import { TypographyControls } from '../../platform/components/TypographyControls';
 import { AttributionFooter } from '../../platform/components/AttributionFooter';
@@ -98,6 +103,8 @@ export const SikhismModule: React.FC<SikhismModuleProps> = ({
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const [isBookmarksOpen, setIsBookmarksOpen] = useState<boolean>(false);
   const [isAudioNoticeOpen, setIsAudioNoticeOpen] = useState<boolean>(false);
+  const [isCoverageOpen, setIsCoverageOpen] = useState<boolean>(false);
+  const [retryTrigger, setRetryTrigger] = useState<number>(0);
   const [isAudioPlayerVisible, setIsAudioPlayerVisible] = useState<boolean>(false);
   const [activeAudioUnitId, setActiveAudioUnitId] = useState<string | null>(null);
   const [isAudioPlaying, setIsAudioPlaying] = useState<boolean>(false);
@@ -108,6 +115,11 @@ export const SikhismModule: React.FC<SikhismModuleProps> = ({
   const [bookmarks, setBookmarks] = useState<UniversalBookmark[]>(() =>
     platformStorageService.getBookmarks('sikhism')
   );
+
+  const handleRetryAng = () => {
+    setLoading(true);
+    setRetryTrigger((prev) => prev + 1);
+  };
 
   useEffect(() => {
     const unsub = multilingualAudioEngine.subscribe((st) => {
@@ -175,29 +187,36 @@ export const SikhismModule: React.FC<SikhismModuleProps> = ({
       if (mounted) {
         setAngData(data);
         setLoading(false);
-        // Save reading progress
-        platformStorageService.saveProgress({
-          religionId: 'sikhism',
-          collectionId: 'sggs',
-          lastAddress: {
+        // Save reading progress if lines exist
+        if (data.lines && data.lines.length > 0) {
+          platformStorageService.saveProgress({
             religionId: 'sikhism',
             collectionId: 'sggs',
-            path: [
-              { levelName: 'Raag', identifier: data.raag, label: data.raag },
-              { levelName: 'Ang', identifier: currentAng, label: `Ang ${currentAng}` },
-            ],
-            unitIdentifier: 1,
-          },
-          displayLocation: `Sri Guru Granth Sahib Ji — Ang ${currentAng} (${data.raag})`,
-          updatedAtTimestamp: Date.now(),
-        });
+            lastAddress: {
+              religionId: 'sikhism',
+              collectionId: 'sggs',
+              path: [
+                { levelName: 'Raag', identifier: data.raag, label: data.raag },
+                { levelName: 'Ang', identifier: currentAng, label: `Ang ${currentAng}` },
+              ],
+              unitIdentifier: 1,
+            },
+            displayLocation: `Sri Guru Granth Sahib Ji — Ang ${currentAng} (${data.raag})`,
+            updatedAtTimestamp: Date.now(),
+          });
+        }
+      }
+    }).catch(() => {
+      if (mounted) {
+        setAngData({ pageNo: currentAng, raag: 'Gurbani', writer: 'Sikh Gurus', lines: [] });
+        setLoading(false);
       }
     });
 
     return () => {
       mounted = false;
     };
-  }, [currentAng]);
+  }, [currentAng, retryTrigger]);
 
   const handleNextAng = () => {
     if (currentAng < 1430) {
@@ -347,6 +366,17 @@ export const SikhismModule: React.FC<SikhismModuleProps> = ({
             <span className="hidden sm:inline">Audio</span>
           </button>
 
+          {/* Scripture Coverage Disclosure Button */}
+          <button
+            onClick={() => setIsCoverageOpen(true)}
+            title="Scripture Coverage & Availability Disclosure"
+            className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-xl bg-navy-950 border border-slate-700 hover:border-gold-500 text-slate-300 hover:text-gold-400 text-xs font-semibold transition cursor-pointer"
+            data-testid="sikhism-coverage-btn"
+          >
+            <BookOpen className="w-3.5 h-3.5 text-gold-400" />
+            <span className="hidden sm:inline">Coverage</span>
+          </button>
+
           <button
             onClick={() => setIsSearchOpen(true)}
             title="Search Gurbani"
@@ -455,9 +485,54 @@ export const SikhismModule: React.FC<SikhismModuleProps> = ({
             <p>Loading Ang {currentAng} from BaniDB...</p>
           </div>
         ) : !angData || angData.lines.length === 0 ? (
-          <div className="py-24 text-center text-slate-500 text-xs space-y-2">
-            <Info className="w-8 h-8 mx-auto text-slate-600" />
-            <p>Ang text currently unavailable from API. Please try again.</p>
+          <div
+            className="py-12 px-6 rounded-3xl bg-navy-950/80 border border-amber-500/30 text-center space-y-4 max-w-xl mx-auto my-8 animate-in fade-in-50 duration-200"
+            data-testid="sikhism-error-card"
+          >
+            <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center mx-auto">
+              <WifiOff className="w-6 h-6" />
+            </div>
+            <div className="space-y-1">
+              <h3 className="font-serif text-base sm:text-lg font-bold text-slate-100">
+                Gurbani Retrieval Unavailable (Network / API Outage)
+              </h3>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                Unable to retrieve <strong>Ang {currentAng}</strong> of Sri Guru Granth Sahib Ji from the BaniDB and GurbaniNow public APIs.
+              </p>
+            </div>
+            <div className="p-3.5 rounded-xl bg-navy-900/90 border border-slate-800 text-[11px] text-slate-400 text-left space-y-1.5">
+              <div className="flex items-center space-x-1.5 text-amber-400 font-semibold">
+                <AlertTriangle className="w-3.5 h-3.5" />
+                <span>Scripture Architecture Notice</span>
+              </div>
+              <p>
+                Only <strong>Ang 1 (Japji Sahib / Mool Mantar)</strong> is bundled locally offline. Angs 2 through 1,430 require active internet connectivity to stream Gurmukhi Unicode, Larivaar continuous script, transliteration, and English translations.
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+              <button
+                onClick={handleRetryAng}
+                data-testid="sikhism-retry-btn"
+                className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-gold-500 hover:bg-gold-400 text-navy-950 font-bold text-xs transition shadow-gold-sm"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Retry Ang {currentAng}</span>
+              </button>
+              <button
+                onClick={() => setCurrentAng(1)}
+                className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-navy-900 hover:bg-navy-800 border border-gold-500/30 text-gold-400 text-xs font-semibold transition"
+              >
+                <BookOpen className="w-3.5 h-3.5" />
+                <span>Open Ang 1 (Offline Available)</span>
+              </button>
+              <button
+                onClick={() => setIsCoverageOpen(true)}
+                className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-navy-900 hover:bg-navy-800 border border-slate-700 text-slate-300 hover:text-gold-400 text-xs font-semibold transition"
+              >
+                <Info className="w-3.5 h-3.5" />
+                <span>View Coverage Disclosure</span>
+              </button>
+            </div>
           </div>
         ) : (
           angData.lines.map((line) => {
@@ -671,6 +746,13 @@ export const SikhismModule: React.FC<SikhismModuleProps> = ({
         isOpen={isAudioNoticeOpen}
         onClose={() => setIsAudioNoticeOpen(false)}
         religionId="sikhism"
+      />
+
+      {/* Scripture Coverage & Availability Transparency Modal */}
+      <ScriptureCoverageModal
+        isOpen={isCoverageOpen}
+        onClose={() => setIsCoverageOpen(false)}
+        initialReligionId="sikhism"
       />
 
       {/* Multilingual Audio Player Bar */}

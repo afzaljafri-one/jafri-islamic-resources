@@ -263,7 +263,7 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
             <div className="font-mono text-xl font-bold text-slate-100 mt-0.5">
               {metrics.playableLocal}
             </div>
-            <div className="text-[10px] text-slate-500">Rights Cleared (HTML5)</div>
+            <div className="text-[10px] text-slate-500">14 Local Audio (HTML5)</div>
           </div>
 
           <div className="p-3 rounded-2xl bg-navy-950/80 border border-purple-500/30">
@@ -273,7 +273,7 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
             <div className="font-mono text-xl font-bold text-slate-100 mt-0.5">
               {metrics.youtubeAccepted}
             </div>
-            <div className="text-[10px] text-slate-500">28 Approved • 112 Pending</div>
+            <div className="text-[10px] text-slate-500">140 Approved Streams (Embed)</div>
           </div>
 
           <div className="p-3 rounded-2xl bg-navy-950/80 border border-rose-500/30">
@@ -283,7 +283,7 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
             <div className="font-mono text-xl font-bold text-slate-100 mt-0.5">
               {metrics.blockedLocal}
             </div>
-            <div className="text-[10px] text-slate-500">LibriVox Preserved on Disk</div>
+            <div className="text-[10px] text-slate-500">2 LibriVox Quarantined</div>
           </div>
 
           <div className="p-3 rounded-2xl bg-navy-950/80 border border-amber-500/30">
@@ -293,7 +293,7 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
             <div className="font-mono text-xl font-bold text-slate-100 mt-0.5">
               {metrics.permissionRequired}
             </div>
-            <div className="text-[10px] text-slate-500">Mechon Mamre Tanakh</div>
+            <div className="text-[10px] text-slate-500">144 Mechon Mamre Tanakh</div>
           </div>
 
           <div className="p-3 rounded-2xl bg-navy-950/80 border border-slate-700">
@@ -303,7 +303,7 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
             <div className="font-mono text-xl font-bold text-slate-100 mt-0.5">
               {metrics.pendingDiscovery}
             </div>
-            <div className="text-[10px] text-slate-500">Awaiting Discovery</div>
+            <div className="text-[10px] text-slate-500">347 Awaiting Discovery</div>
           </div>
 
           <div className="p-3 rounded-2xl bg-navy-950/80 border border-indigo-500/30">
@@ -313,7 +313,7 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
             <div className="font-mono text-xl font-bold text-slate-100 mt-0.5">
               {metrics.textCards}
             </div>
-            <div className="text-[10px] text-slate-500">Non-Audio Reference</div>
+            <div className="text-[10px] text-slate-500">4 Reading Text Cards</div>
           </div>
 
           <div className="p-3 rounded-2xl bg-navy-950/80 border border-gold-500/30">

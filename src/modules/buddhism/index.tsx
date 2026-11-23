@@ -18,6 +18,7 @@ import {
   ShieldCheck,
   Play,
   Pause,
+  BookOpen,
 } from 'lucide-react';
 import {
   buddhismProvider,
@@ -29,6 +30,7 @@ import { ScriptureNavigationDrawer } from '../../platform/components/ScriptureNa
 import { UniversalSearchModal } from '../../platform/components/UniversalSearchModal';
 import { UniversalBookmarksDrawer } from '../../platform/components/UniversalBookmarksDrawer';
 import { AudioNoticeModal } from '../../platform/components/AudioNoticeModal';
+import { ScriptureCoverageModal } from '../../platform/components/ScriptureCoverageModal';
 import { MultilingualAudioPlayerBar } from '../../platform/components/MultilingualAudioPlayerBar';
 import { TypographyControls } from '../../platform/components/TypographyControls';
 import { AttributionFooter } from '../../platform/components/AttributionFooter';
@@ -105,6 +107,7 @@ export const BuddhismModule: React.FC<BuddhismModuleProps> = ({
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const [isBookmarksOpen, setIsBookmarksOpen] = useState<boolean>(false);
   const [isAudioNoticeOpen, setIsAudioNoticeOpen] = useState<boolean>(false);
+  const [isCoverageOpen, setIsCoverageOpen] = useState<boolean>(false);
   const [isAudioPlayerVisible, setIsAudioPlayerVisible] = useState<boolean>(false);
   const [activeAudioUnitId, setActiveAudioUnitId] = useState<string | null>(null);
   const [isAudioPlaying, setIsAudioPlaying] = useState<boolean>(false);
@@ -345,6 +348,17 @@ export const BuddhismModule: React.FC<BuddhismModuleProps> = ({
           >
             <Volume2 className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Audio</span>
+          </button>
+
+          {/* Scripture Coverage Disclosure Button */}
+          <button
+            onClick={() => setIsCoverageOpen(true)}
+            title="Scripture Coverage & Availability Disclosure"
+            className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-xl bg-navy-950 border border-slate-700 hover:border-gold-500 text-slate-300 hover:text-gold-400 text-xs font-semibold transition cursor-pointer"
+            data-testid="buddhism-coverage-btn"
+          >
+            <BookOpen className="w-3.5 h-3.5 text-gold-400" />
+            <span className="hidden sm:inline">Coverage</span>
           </button>
 
           <button
@@ -706,6 +720,13 @@ export const BuddhismModule: React.FC<BuddhismModuleProps> = ({
         isOpen={isAudioNoticeOpen}
         onClose={() => setIsAudioNoticeOpen(false)}
         religionId="buddhism"
+      />
+
+      {/* Scripture Coverage & Availability Transparency Modal */}
+      <ScriptureCoverageModal
+        isOpen={isCoverageOpen}
+        onClose={() => setIsCoverageOpen(false)}
+        initialReligionId="buddhism"
       />
 
       {/* Multilingual Audio Player Bar */}

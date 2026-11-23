@@ -91,7 +91,7 @@ export const PlatformHomepage: React.FC<PlatformHomepageProps> = ({
               Jafri Sacred Audio Library
             </h2>
             <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
-              Explore authentic liturgical audio across all seven world traditions: 9 verified local recordings, 28 accepted YouTube recitations with full platform attribution, 4 preserved text cards, 24 permission-quarantined sources, and transparent progress on 584 pending requirements.
+              Explore authentic liturgical audio across all seven world traditions: 14 verified local recordings (HTML5), 140 approved YouTube streams with human attestation, 4 preserved text cards, 144 permission-quarantined recordings (Mechon Mamre Hebrew Tanakh), 2 rights-blocked recordings (LibriVox), and transparent progress on 347 pending requirements.
             </p>
           </div>
         </div>
@@ -178,6 +178,20 @@ export const PlatformHomepage: React.FC<PlatformHomepageProps> = ({
                   <p className="text-xs text-slate-300 line-clamp-3 leading-relaxed">
                     {rel.shortDescription}
                   </p>
+                </div>
+
+                {/* Scripture Coverage & Availability Badge */}
+                <div className="mb-3 px-2.5 py-1.5 rounded-xl bg-navy-900/90 border border-gold-500/20 text-[11px] text-slate-300 flex items-center justify-between">
+                  <span className="font-semibold text-gold-400">Coverage:</span>
+                  <span className="truncate max-w-[220px] text-right font-medium">
+                    {id === 'islam' && 'Complete Mushaf Facsimiles • 100% Offline'}
+                    {id === 'hinduism' && '55 Curated Texts Offline • 698 Verses via API'}
+                    {id === 'christianity' && '66 Books Metadata • 31,102 Verses Dynamic'}
+                    {id === 'judaism' && '11 of 24 Books • Sefaria Dynamic API'}
+                    {id === 'sikhism' && '1,430 Angs • Ang 1 Offline • Angs 2–1430 API'}
+                    {id === 'buddhism' && '24 Curated Pali Sutta Units • CC0'}
+                    {id === 'jainism' && '29 Curated Texts • 100% Offline (Zero AI)'}
+                  </span>
                 </div>
 
                 {/* Meta Details: Language, Era, Traditions */}

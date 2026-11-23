@@ -28,6 +28,7 @@ import { UniversalBookmarksDrawer } from './platform/components/UniversalBookmar
 import { MultilingualQuranAudioDrawer } from './platform/components/MultilingualQuranAudioDrawer';
 import { SpanishNarrationPilotModal } from './platform/components/SpanishNarrationPilotModal';
 import { MultilingualReadingStudio } from './platform/components/MultilingualReadingStudio';
+import { ScriptureCoverageModal } from './platform/components/ScriptureCoverageModal';
 import { platformStorageService } from './platform/services/storageService';
 import { ALL_RELIGION_IDS } from './platform/config/religionsRegistry';
 
@@ -97,10 +98,23 @@ export const App: React.FC = () => {
     return false;
   });
   const [bookmarks, setBookmarks] = useState(() => platformStorageService.getBookmarks());
+  const [isCoverageModalOpen, setIsCoverageModalOpen] = useState(false);
+  const [coverageModalReligion, setCoverageModalReligion] = useState<ReligionId>('islam');
 
   const handleOpenPlatformBookmarks = () => {
     setBookmarks(platformStorageService.getBookmarks());
     setIsPlatformBookmarksOpen(true);
+  };
+
+  const handleOpenCoverage = (religionId?: ReligionId) => {
+    if (religionId && ALL_RELIGION_IDS.includes(religionId)) {
+      setCoverageModalReligion(religionId);
+    } else if (ALL_RELIGION_IDS.includes(currentReligion as ReligionId)) {
+      setCoverageModalReligion(currentReligion as ReligionId);
+    } else {
+      setCoverageModalReligion('islam');
+    }
+    setIsCoverageModalOpen(true);
   };
 
   // Sync religion in URL without reloading
@@ -142,6 +156,7 @@ export const App: React.FC = () => {
             activeReligion="home"
             onSelectReligion={handleSelectReligion}
             onOpenBookmarks={handleOpenPlatformBookmarks}
+            onOpenCoverage={handleOpenCoverage}
             onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
             onOpenStudio={() => setIsMultilingualStudioOpen(true)}
             bookmarksCount={bookmarks.length}
@@ -164,6 +179,7 @@ export const App: React.FC = () => {
             activeReligion="islam"
             onSelectReligion={handleSelectReligion}
             onOpenBookmarks={handleOpenPlatformBookmarks}
+            onOpenCoverage={handleOpenCoverage}
             onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
             onOpenStudio={() => setIsMultilingualStudioOpen(true)}
             bookmarksCount={bookmarks.length}
@@ -425,6 +441,7 @@ export const App: React.FC = () => {
             activeReligion="hinduism"
             onSelectReligion={handleSelectReligion}
             onOpenBookmarks={handleOpenPlatformBookmarks}
+            onOpenCoverage={handleOpenCoverage}
             onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
             onOpenStudio={() => setIsMultilingualStudioOpen(true)}
             bookmarksCount={bookmarks.length}
@@ -442,6 +459,7 @@ export const App: React.FC = () => {
             activeReligion="christianity"
             onSelectReligion={handleSelectReligion}
             onOpenBookmarks={handleOpenPlatformBookmarks}
+            onOpenCoverage={handleOpenCoverage}
             onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
             onOpenStudio={() => setIsMultilingualStudioOpen(true)}
             bookmarksCount={bookmarks.length}
@@ -459,6 +477,7 @@ export const App: React.FC = () => {
             activeReligion="judaism"
             onSelectReligion={handleSelectReligion}
             onOpenBookmarks={handleOpenPlatformBookmarks}
+            onOpenCoverage={handleOpenCoverage}
             onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
             onOpenStudio={() => setIsMultilingualStudioOpen(true)}
             bookmarksCount={bookmarks.length}
@@ -476,6 +495,7 @@ export const App: React.FC = () => {
             activeReligion="sikhism"
             onSelectReligion={handleSelectReligion}
             onOpenBookmarks={handleOpenPlatformBookmarks}
+            onOpenCoverage={handleOpenCoverage}
             onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
             onOpenStudio={() => setIsMultilingualStudioOpen(true)}
             bookmarksCount={bookmarks.length}
@@ -493,6 +513,7 @@ export const App: React.FC = () => {
             activeReligion="buddhism"
             onSelectReligion={handleSelectReligion}
             onOpenBookmarks={handleOpenPlatformBookmarks}
+            onOpenCoverage={handleOpenCoverage}
             onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
             onOpenStudio={() => setIsMultilingualStudioOpen(true)}
             bookmarksCount={bookmarks.length}
@@ -510,6 +531,7 @@ export const App: React.FC = () => {
             activeReligion="jainism"
             onSelectReligion={handleSelectReligion}
             onOpenBookmarks={handleOpenPlatformBookmarks}
+            onOpenCoverage={handleOpenCoverage}
             onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
             onOpenStudio={() => setIsMultilingualStudioOpen(true)}
             bookmarksCount={bookmarks.length}
@@ -527,6 +549,7 @@ export const App: React.FC = () => {
             activeReligion="sacred-audio"
             onSelectReligion={handleSelectReligion}
             onOpenBookmarks={handleOpenPlatformBookmarks}
+            onOpenCoverage={handleOpenCoverage}
             onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
             onOpenStudio={() => setIsMultilingualStudioOpen(true)}
             bookmarksCount={bookmarks.length}
@@ -569,6 +592,15 @@ export const App: React.FC = () => {
       <MultilingualReadingStudio
         isOpen={isMultilingualStudioOpen}
         onClose={() => setIsMultilingualStudioOpen(false)}
+      />
+
+      {/* =========================================================================
+          SCRIPTURE COVERAGE & AVAILABILITY TRANSPARENCY MODAL
+          ========================================================================= */}
+      <ScriptureCoverageModal
+        isOpen={isCoverageModalOpen}
+        onClose={() => setIsCoverageModalOpen(false)}
+        initialReligionId={coverageModalReligion}
       />
     </div>
   );

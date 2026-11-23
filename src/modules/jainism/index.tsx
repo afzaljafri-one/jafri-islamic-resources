@@ -18,6 +18,7 @@ import {
   Info,
   ShieldCheck,
   Youtube,
+  BookOpen,
 } from 'lucide-react';
 import {
   jainismProvider,
@@ -29,6 +30,7 @@ import { ScriptureNavigationDrawer } from '../../platform/components/ScriptureNa
 import { UniversalSearchModal } from '../../platform/components/UniversalSearchModal';
 import { UniversalBookmarksDrawer } from '../../platform/components/UniversalBookmarksDrawer';
 import { AudioNoticeModal } from '../../platform/components/AudioNoticeModal';
+import { ScriptureCoverageModal } from '../../platform/components/ScriptureCoverageModal';
 import { YouTubeEmbedModal } from '../../platform/components/audio/YouTubeEmbedModal';
 import { SACRED_AUDIO_MASTER_CATALOGUE } from '../../platform/data/sacredAudioMasterCatalogue';
 import { MultilingualAudioPlayerBar } from '../../platform/components/MultilingualAudioPlayerBar';
@@ -85,6 +87,7 @@ export const JainismModule: React.FC<JainismModuleProps> = ({
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const [isBookmarksOpen, setIsBookmarksOpen] = useState<boolean>(false);
   const [isAudioNoticeOpen, setIsAudioNoticeOpen] = useState<boolean>(false);
+  const [isCoverageOpen, setIsCoverageOpen] = useState<boolean>(false);
   const [isYouTubeModalOpen, setIsYouTubeModalOpen] = useState<boolean>(false);
   const navkarReq = SACRED_AUDIO_MASTER_CATALOGUE.find((r) => r.id === 'REQ-JAI-007') || null;
   const [isAudioPlayerVisible, setIsAudioPlayerVisible] = useState<boolean>(false);
@@ -296,6 +299,17 @@ export const JainismModule: React.FC<JainismModuleProps> = ({
           >
             <Volume2 className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Audio</span>
+          </button>
+
+          {/* Scripture Coverage Disclosure Button */}
+          <button
+            onClick={() => setIsCoverageOpen(true)}
+            title="Scripture Coverage & Availability Disclosure"
+            className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-xl bg-navy-950 border border-slate-700 hover:border-gold-500 text-slate-300 hover:text-gold-400 text-xs font-semibold transition cursor-pointer"
+            data-testid="jainism-coverage-btn"
+          >
+            <BookOpen className="w-3.5 h-3.5 text-gold-400" />
+            <span className="hidden sm:inline">Coverage</span>
           </button>
 
           <button
@@ -616,6 +630,13 @@ export const JainismModule: React.FC<JainismModuleProps> = ({
         isOpen={isAudioNoticeOpen}
         onClose={() => setIsAudioNoticeOpen(false)}
         religionId="jainism"
+      />
+
+      {/* Scripture Coverage & Availability Transparency Modal */}
+      <ScriptureCoverageModal
+        isOpen={isCoverageOpen}
+        onClose={() => setIsCoverageOpen(false)}
+        initialReligionId="jainism"
       />
 
       {/* Multilingual Audio Player Bar */}

@@ -24,6 +24,12 @@ import {
   ShieldCheck,
   ExternalLink,
   Youtube,
+  Wifi,
+  WifiOff,
+  RotateCcw,
+  AlertTriangle,
+  BookOpen,
+  CheckCircle2,
 } from 'lucide-react';
 import {
   hinduismProvider,
@@ -38,6 +44,7 @@ import { ScriptureNavigationDrawer } from '../../platform/components/ScriptureNa
 import { UniversalSearchModal } from '../../platform/components/UniversalSearchModal';
 import { UniversalBookmarksDrawer } from '../../platform/components/UniversalBookmarksDrawer';
 import { AudioNoticeModal } from '../../platform/components/AudioNoticeModal';
+import { ScriptureCoverageModal } from '../../platform/components/ScriptureCoverageModal';
 import { YouTubeEmbedModal } from '../../platform/components/audio/YouTubeEmbedModal';
 import { SACRED_AUDIO_MASTER_CATALOGUE } from '../../platform/data/sacredAudioMasterCatalogue';
 import { MultilingualAudioPlayerBar } from '../../platform/components/MultilingualAudioPlayerBar';
@@ -232,9 +239,15 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
   const [activeAudioUnitId, setActiveAudioUnitId] = useState<string | null>(null);
   const [isAudioPlaying, setIsAudioPlaying] = useState<boolean>(false);
   const [showTypography, setShowTypography] = useState<boolean>(false);
+  const [isCoverageOpen, setIsCoverageOpen] = useState<boolean>(false);
+  const [retryTrigger, setRetryTrigger] = useState<number>(0);
   const [preferences, setPreferences] = useState(() =>
     platformStorageService.getPreferences()
   );
+
+  const isOfflineGitaVerse = (chapter: number, verse: number): boolean => {
+    return (chapter === 1 && (verse === 1 || verse === 2)) || (chapter === 2 && verse === 47);
+  };
   const [bookmarks, setBookmarks] = useState<UniversalBookmark[]>(() =>
     platformStorageService.getBookmarks('hinduism')
   );
@@ -378,32 +391,39 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
       if (mounted) {
         setVerses(data);
         setLoading(false);
-        // Save reading progress
-        platformStorageService.saveProgress({
-          religionId: 'hinduism',
-          collectionId: 'gita',
-          lastAddress: {
+        // Save reading progress if verses exist
+        if (data.length > 0) {
+          platformStorageService.saveProgress({
             religionId: 'hinduism',
             collectionId: 'gita',
-            path: [
-              {
-                levelName: 'Chapter',
-                identifier: currentChapterNum,
-                label: currentChapter.translation,
-              },
-            ],
-            unitIdentifier: 1,
-          },
-          displayLocation: `Bhagavad Gita ${currentChapterNum}: ${currentChapter.translation}`,
-          updatedAtTimestamp: Date.now(),
-        });
+            lastAddress: {
+              religionId: 'hinduism',
+              collectionId: 'gita',
+              path: [
+                {
+                  levelName: 'Chapter',
+                  identifier: currentChapterNum,
+                  label: currentChapter.translation,
+                },
+              ],
+              unitIdentifier: 1,
+            },
+            displayLocation: `Bhagavad Gita ${currentChapterNum}: ${currentChapter.translation}`,
+            updatedAtTimestamp: Date.now(),
+          });
+        }
+      }
+    }).catch(() => {
+      if (mounted) {
+        setVerses([]);
+        setLoading(false);
       }
     });
 
     return () => {
       mounted = false;
     };
-  }, [currentChapterNum, currentChapter, selectedCollectionId]);
+  }, [currentChapterNum, currentChapter, selectedCollectionId, retryTrigger]);
 
   const handleNextChapter = () => {
     if (currentChapterNum < 18) {
@@ -647,6 +667,17 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
             <span className="hidden sm:inline">Audio</span>
           </button>
 
+          {/* Scripture Coverage Disclosure Button */}
+          <button
+            onClick={() => setIsCoverageOpen(true)}
+            title="Scripture Coverage & Availability Disclosure"
+            className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-xl bg-navy-950 border border-slate-700 hover:border-gold-500 text-slate-300 hover:text-gold-400 text-xs font-semibold transition cursor-pointer"
+            data-testid="hinduism-coverage-btn"
+          >
+            <BookOpen className="w-3.5 h-3.5 text-gold-400" />
+            <span className="hidden sm:inline">Coverage</span>
+          </button>
+
           <button
             onClick={() => setIsSearchOpen(true)}
             title="Search Hindu Scriptures"
@@ -848,57 +879,152 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
           /* =========================================================================
              VIEW 1: BHAGAVAD GITA (18 CHAPTERS & 700 SHLOKAS)
              ========================================================================= */
-          loading ? (
-            <div className="py-24 text-center text-slate-400 text-xs space-y-2">
-              <div className="w-6 h-6 border-2 border-gold-400 border-t-transparent rounded-full animate-spin mx-auto" />
-              <p>Loading Shlokas from Chapter {currentChapterNum}...</p>
+          <>
+            {/* Gita Chapter Availability & Offline Notice */}
+            <div className="p-3.5 rounded-2xl bg-navy-950/70 border border-slate-800 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div className="flex items-center space-x-2 text-slate-300">
+                <span className="font-semibold text-gold-400">Availability:</span>
+                <span>
+                  {currentChapterNum === 1 && 'Shlokas 1.1 & 1.2 are bundled locally offline. Verses 1.3–1.47 are retrieved dynamically from VedicScriptures API.'}
+                  {currentChapterNum === 2 && 'Shloka 2.47 is bundled locally offline. Remaining Shlokas are retrieved dynamically from VedicScriptures API.'}
+                  {currentChapterNum > 2 && `Chapter ${currentChapterNum} has no offline-bundled verses. All ${currentChapter.verses_count} Shlokas are fetched dynamically via VedicScriptures API.`}
+                </span>
+              </div>
+              <button
+                onClick={() => setIsCoverageOpen(true)}
+                className="inline-flex items-center space-x-1 text-gold-400 hover:text-gold-300 font-semibold text-[11px] whitespace-nowrap self-start sm:self-auto"
+              >
+                <Info className="w-3.5 h-3.5" />
+                <span>Coverage Details &rarr;</span>
+              </button>
             </div>
-          ) : verses.length === 0 ? (
-            <div className="py-24 text-center text-slate-500 text-xs space-y-2">
-              <Info className="w-8 h-8 mx-auto text-slate-600" />
-              <p>Shlokas currently unavailable from API. Please retry.</p>
-            </div>
-          ) : (
-            verses.map((v) => {
-              const unitId = `${currentChapterNum}.${v.verse}`;
-              const isPlayingThisShloka = activeAudioUnitId === unitId && isAudioPlaying;
-              const isBookmarked = bookmarks.some(
-                (b) => b.id === `hin:gita:${v.chapter}:${v.verse}`
-              );
-              const translationText =
-                selectedCommentary === 'gambir'
-                  ? v.gambhiranandaEn
-                  : selectedCommentary === 'purohit'
-                  ? v.purohitEn
-                  : selectedCommentary === 'rams'
-                  ? v.ramsukhdasHi
-                  : v.sivanandaEn;
 
-              return (
-                <div
-                  key={v.verse}
-                  id={`shloka-${v.verse}`}
-                  className={`p-5 rounded-2xl border transition space-y-3 group ${
-                    isPlayingThisShloka
-                      ? 'bg-gold-500/15 border-gold-500/60 shadow-lg ring-1 ring-gold-500/50'
-                      : 'bg-navy-950/70 hover:bg-navy-900/80 border-slate-800/80 hover:border-slate-700'
-                  }`}
+            {/* Offline Partial Verses Banner */}
+            {verses.length > 0 && verses.length < currentChapter.verses_count && (
+              <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div className="flex items-center space-x-2">
+                  <AlertTriangle className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                  <span>
+                    <strong>Offline Partial Display:</strong> Displaying {verses.length} of {currentChapter.verses_count} Shlokas stored locally offline. Remaining {currentChapter.verses_count - verses.length} Shlokas could not be retrieved from the network.
+                  </span>
+                </div>
+                <button
+                  onClick={() => setRetryTrigger((prev) => prev + 1)}
+                  className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-xs whitespace-nowrap transition self-start sm:self-auto"
                 >
-                  {/* Header: Shloka Number & Actions */}
-                  <div className="flex items-center justify-between text-xs border-b border-slate-800/60 pb-2">
-                    <div className="flex items-center space-x-2">
-                      <button
-                        disabled={true}
-                        data-testid={`play-shloka-${v.verse}-btn`}
-                        className="p-1 rounded text-slate-600 cursor-not-allowed opacity-40 transition"
-                        title="Continuous chapter recitation (T.S. Ranganathan). Individual verse synchronization is unavailable to prevent fabricated timestamps."
-                      >
-                        <VolumeX className="w-3.5 h-3.5" />
-                      </button>
-                      <span className="font-mono font-bold text-gold-400 px-2 py-0.5 rounded bg-gold-500/10 border border-gold-500/20 text-[11px]">
-                        Shloka {v.chapter}.{v.verse}
-                      </span>
-                    </div>
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>Retry Network Stream</span>
+                </button>
+              </div>
+            )}
+
+            {loading ? (
+              <div className="py-24 text-center text-slate-400 text-xs space-y-2">
+                <div className="w-6 h-6 border-2 border-gold-400 border-t-transparent rounded-full animate-spin mx-auto" />
+                <p>Loading Shlokas from Chapter {currentChapterNum}...</p>
+              </div>
+            ) : verses.length === 0 ? (
+              <div
+                className="py-12 px-6 rounded-3xl bg-navy-950/80 border border-amber-500/30 text-center space-y-4 max-w-xl mx-auto my-8 animate-in fade-in-50 duration-200"
+                data-testid="hinduism-error-card"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center mx-auto">
+                  <WifiOff className="w-6 h-6" />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="font-serif text-base sm:text-lg font-bold text-slate-100">
+                    Bhagavad Gita Shlokas Unavailable (Network / API Outage)
+                  </h3>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    Unable to retrieve Shlokas for <strong>Chapter {currentChapterNum}: {currentChapter.translation}</strong> from the VedicScriptures API (`vedicscriptures.github.io`).
+                  </p>
+                </div>
+                <div className="p-3.5 rounded-xl bg-navy-900/90 border border-slate-800 text-[11px] text-slate-400 text-left space-y-1.5">
+                  <div className="flex items-center space-x-1.5 text-amber-400 font-semibold">
+                    <AlertTriangle className="w-3.5 h-3.5" />
+                    <span>Scripture Architecture Notice</span>
+                  </div>
+                  <p>
+                    Chapter {currentChapterNum} has no offline-bundled verses. Only <strong>Shlokas 1.1, 1.2, and 2.47</strong> are stored locally offline in the application. All other 698 verses require active internet connectivity to stream.
+                  </p>
+                </div>
+                <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+                  <button
+                    onClick={() => setRetryTrigger((prev) => prev + 1)}
+                    data-testid="hinduism-retry-btn"
+                    className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-gold-500 hover:bg-gold-400 text-navy-950 font-bold text-xs transition shadow-gold-sm"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>Retry Chapter {currentChapterNum}</span>
+                  </button>
+                  <button
+                    onClick={() => setCurrentChapterNum(1)}
+                    className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-navy-900 hover:bg-navy-800 border border-gold-500/30 text-gold-400 text-xs font-semibold transition"
+                  >
+                    <BookOpen className="w-3.5 h-3.5" />
+                    <span>Go to Chapter 1 (Offline Available)</span>
+                  </button>
+                  <button
+                    onClick={() => setIsCoverageOpen(true)}
+                    className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-navy-900 hover:bg-navy-800 border border-slate-700 text-slate-300 hover:text-gold-400 text-xs font-semibold transition"
+                  >
+                    <Info className="w-3.5 h-3.5" />
+                    <span>View Coverage Disclosure</span>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              verses.map((v) => {
+                const unitId = `${currentChapterNum}.${v.verse}`;
+                const isPlayingThisShloka = activeAudioUnitId === unitId && isAudioPlaying;
+                const isBookmarked = bookmarks.some(
+                  (b) => b.id === `hin:gita:${v.chapter}:${v.verse}`
+                );
+                const translationText =
+                  selectedCommentary === 'gambir'
+                    ? v.gambhiranandaEn
+                    : selectedCommentary === 'purohit'
+                    ? v.purohitEn
+                    : selectedCommentary === 'rams'
+                    ? v.ramsukhdasHi
+                    : v.sivanandaEn;
+
+                return (
+                  <div
+                    key={v.verse}
+                    id={`shloka-${v.verse}`}
+                    className={`p-5 rounded-2xl border transition space-y-3 group ${
+                      isPlayingThisShloka
+                        ? 'bg-gold-500/15 border-gold-500/60 shadow-lg ring-1 ring-gold-500/50'
+                        : 'bg-navy-950/70 hover:bg-navy-900/80 border-slate-800/80 hover:border-slate-700'
+                    }`}
+                  >
+                    {/* Header: Shloka Number & Actions */}
+                    <div className="flex items-center justify-between text-xs border-b border-slate-800/60 pb-2">
+                      <div className="flex items-center space-x-2">
+                        <button
+                          disabled={true}
+                          data-testid={`play-shloka-${v.verse}-btn`}
+                          className="p-1 rounded text-slate-600 cursor-not-allowed opacity-40 transition"
+                          title="Continuous chapter recitation (T.S. Ranganathan). Individual verse synchronization is unavailable to prevent fabricated timestamps."
+                        >
+                          <VolumeX className="w-3.5 h-3.5" />
+                        </button>
+                        <span className="font-mono font-bold text-gold-400 px-2 py-0.5 rounded bg-gold-500/10 border border-gold-500/20 text-[11px]">
+                          Shloka {v.chapter}.{v.verse}
+                        </span>
+                        {isOfflineGitaVerse(v.chapter, v.verse) ? (
+                          <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                            <CheckCircle2 className="w-3 h-3" />
+                            <span>Offline Bundled</span>
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-500/15 text-sky-400 border border-sky-500/30">
+                            <Wifi className="w-3 h-3" />
+                            <span>Network Streamed</span>
+                          </span>
+                        )}
+                      </div>
 
                     <div className="flex items-center space-x-1 opacity-80 group-hover:opacity-100 transition">
                       <button
@@ -964,7 +1090,8 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
                 </div>
               );
             })
-          )
+          )}
+          </>
         ) : (
           /* =========================================================================
              VIEW 2: EXPANDED 11 HINDUISM COLLECTIONS & TEXTS
@@ -1190,6 +1317,13 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
         isOpen={isAudioNoticeOpen}
         onClose={() => setIsAudioNoticeOpen(false)}
         religionId="hinduism"
+      />
+
+      {/* Scripture Coverage & Availability Transparency Modal */}
+      <ScriptureCoverageModal
+        isOpen={isCoverageOpen}
+        onClose={() => setIsCoverageOpen(false)}
+        initialReligionId="hinduism"
       />
 
       {/* Multilingual Audio Player Bar */}
