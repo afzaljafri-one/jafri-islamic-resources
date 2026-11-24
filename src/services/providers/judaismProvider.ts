@@ -1,19 +1,23 @@
 // ==============================================================================
 // Judaism Scripture Provider (Sefaria API v3 & Mechon Mamre Integration)
-// Tanakh: Torah, Nevi'im, Ketuvim (Masoretic Hebrew Text & English)
-// Jafri Religious Books & Audio Platform
+// Complete 24-Book Jewish Tanakh (39 Physical Scrolls / 929 Chapters)
+// Torah (5), Nevi'im (8 canonical / 21 scrolls), Ketuvim (11 canonical / 13 scrolls)
+// Masoretic Hebrew Text with Niqqud & JPS 1917 English Translation
+// Jafri Sacred Library — Religious Readings & Sacred Audio
 // ==============================================================================
 
 import { SearchResultMatch } from '../../platform/types';
 import { cacheService } from '../cacheService';
 
 export interface TanakhBookMeta {
-  id: string; // e.g. 'Genesis'
-  heTitle: string; // e.g. 'בְּרֵאשִׁית'
-  enTitle: string;
+  id: string; // Sefaria book slug e.g. 'Genesis', 'I_Samuel', 'Song_of_Songs'
+  heTitle: string; // Vocalized Hebrew title e.g. 'בְּרֵאשִׁית'
+  enTitle: string; // e.g. 'Genesis (Bereshit)'
   category: 'Torah' | 'Nevi\'im' | 'Ketuvim';
-  chapters: number;
-  mechonMamreCode: string; // e.g. '01' for Genesis (producing t0101.mp3)
+  canonicalBookNumber: number; // 1 to 24 in traditional Hebrew canon
+  canonicalBookName: string; // Traditional grouping name
+  chapters: number; // Total chapters
+  mechonMamreCode: string; // Mechon Mamre recording code
 }
 
 export interface TanakhVerseData {
@@ -23,27 +27,425 @@ export interface TanakhVerseData {
 }
 
 export const TANAKH_BOOKS: TanakhBookMeta[] = [
-  // Torah (Law / Pentateuch)
-  { id: 'Genesis', enTitle: 'Genesis (Bereshit)', heTitle: 'בְּרֵאשִׁית', category: 'Torah', chapters: 50, mechonMamreCode: '01' },
-  { id: 'Exodus', enTitle: 'Exodus (Shemot)', heTitle: 'שְׁמוֹת', category: 'Torah', chapters: 40, mechonMamreCode: '02' },
-  { id: 'Leviticus', enTitle: 'Leviticus (Vayikra)', heTitle: 'וַיִּקְרָא', category: 'Torah', chapters: 27, mechonMamreCode: '03' },
-  { id: 'Numbers', enTitle: 'Numbers (Bamidbar)', heTitle: 'בְּמִדְבַּר', category: 'Torah', chapters: 36, mechonMamreCode: '04' },
-  { id: 'Deuteronomy', enTitle: 'Deuteronomy (Devarim)', heTitle: 'דְּבָרִים', category: 'Torah', chapters: 34, mechonMamreCode: '05' },
+  // ============================================================================
+  // TORAH (The Law / Pentateuch) — 5 Books, 187 Chapters
+  // ============================================================================
+  {
+    id: 'Genesis',
+    enTitle: 'Genesis (Bereshit)',
+    heTitle: 'בְּרֵאשִׁית',
+    category: 'Torah',
+    canonicalBookNumber: 1,
+    canonicalBookName: 'Genesis',
+    chapters: 50,
+    mechonMamreCode: '01',
+  },
+  {
+    id: 'Exodus',
+    enTitle: 'Exodus (Shemot)',
+    heTitle: 'שְׁמוֹת',
+    category: 'Torah',
+    canonicalBookNumber: 2,
+    canonicalBookName: 'Exodus',
+    chapters: 40,
+    mechonMamreCode: '02',
+  },
+  {
+    id: 'Leviticus',
+    enTitle: 'Leviticus (Vayikra)',
+    heTitle: 'וַיִּקְרָא',
+    category: 'Torah',
+    canonicalBookNumber: 3,
+    canonicalBookName: 'Leviticus',
+    chapters: 27,
+    mechonMamreCode: '03',
+  },
+  {
+    id: 'Numbers',
+    enTitle: 'Numbers (Bamidbar)',
+    heTitle: 'בְּמִדְבַּר',
+    category: 'Torah',
+    canonicalBookNumber: 4,
+    canonicalBookName: 'Numbers',
+    chapters: 36,
+    mechonMamreCode: '04',
+  },
+  {
+    id: 'Deuteronomy',
+    enTitle: 'Deuteronomy (Devarim)',
+    heTitle: 'דְּבָרִים',
+    category: 'Torah',
+    canonicalBookNumber: 5,
+    canonicalBookName: 'Deuteronomy',
+    chapters: 34,
+    mechonMamreCode: '05',
+  },
 
-  // Nevi'im (Prophets)
-  { id: 'Joshua', enTitle: 'Joshua (Yehoshua)', heTitle: 'יְהוֹשֻׁעַ', category: 'Nevi\'im', chapters: 24, mechonMamreCode: '06' },
-  { id: 'Judges', enTitle: 'Judges (Shoftim)', heTitle: 'שֹׁפְטִים', category: 'Nevi\'im', chapters: 21, mechonMamreCode: '07' },
-  { id: 'I_Samuel', enTitle: 'I Samuel (Shmuel I)', heTitle: 'שְׁמוּאֵל א', category: 'Nevi\'im', chapters: 31, mechonMamreCode: '08a' },
-  { id: 'Isaiah', enTitle: 'Isaiah (Yeshayahu)', heTitle: 'יְשַׁעְיָהוּ', category: 'Nevi\'im', chapters: 66, mechonMamreCode: '10' },
+  // ============================================================================
+  // NEVI'IM (The Prophets) — 8 Canonical Books / 21 Scrolls, 373 Chapters
+  // ============================================================================
+  // Former Prophets (Nevi'im Rishonim)
+  {
+    id: 'Joshua',
+    enTitle: 'Joshua (Yehoshua)',
+    heTitle: 'יְהוֹשֻׁעַ',
+    category: 'Nevi\'im',
+    canonicalBookNumber: 6,
+    canonicalBookName: 'Joshua',
+    chapters: 24,
+    mechonMamreCode: '06',
+  },
+  {
+    id: 'Judges',
+    enTitle: 'Judges (Shoftim)',
+    heTitle: 'שֹׁפְטִים',
+    category: 'Nevi\'im',
+    canonicalBookNumber: 7,
+    canonicalBookName: 'Judges',
+    chapters: 21,
+    mechonMamreCode: '07',
+  },
+  {
+    id: 'I_Samuel',
+    enTitle: 'I Samuel (Shmuel I)',
+    heTitle: 'שְׁמוּאֵל א',
+    category: 'Nevi\'im',
+    canonicalBookNumber: 8,
+    canonicalBookName: 'Samuel',
+    chapters: 31,
+    mechonMamreCode: '08a',
+  },
+  {
+    id: 'II_Samuel',
+    enTitle: 'II Samuel (Shmuel II)',
+    heTitle: 'שְׁמוּאֵל ב',
+    category: 'Nevi\'im',
+    canonicalBookNumber: 8,
+    canonicalBookName: 'Samuel',
+    chapters: 24,
+    mechonMamreCode: '08b',
+  },
+  {
+    id: 'I_Kings',
+    enTitle: 'I Kings (Melakhim I)',
+    heTitle: 'מְלָכִים א',
+    category: 'Nevi\'im',
+    canonicalBookNumber: 9,
+    canonicalBookName: 'Kings',
+    chapters: 22,
+    mechonMamreCode: '09a',
+  },
+  {
+    id: 'II_Kings',
+    enTitle: 'II Kings (Melakhim II)',
+    heTitle: 'מְלָכִים ב',
+    category: 'Nevi\'im',
+    canonicalBookNumber: 9,
+    canonicalBookName: 'Kings',
+    chapters: 25,
+    mechonMamreCode: '09b',
+  },
 
-  // Ketuvim (Writings)
-  { id: 'Psalms', enTitle: 'Psalms (Tehillim)', heTitle: 'תְּהִלִּים', category: 'Ketuvim', chapters: 150, mechonMamreCode: '26' },
-  { id: 'Proverbs', enTitle: 'Proverbs (Mishlei)', heTitle: 'מִשְׁלֵי', category: 'Ketuvim', chapters: 31, mechonMamreCode: '28' },
+  // Latter Prophets (Nevi'im Acharonim) — Major Prophets
+  {
+    id: 'Isaiah',
+    enTitle: 'Isaiah (Yeshayahu)',
+    heTitle: 'יְשַׁעְיָהוּ',
+    category: 'Nevi\'im',
+    canonicalBookNumber: 10,
+    canonicalBookName: 'Isaiah',
+    chapters: 66,
+    mechonMamreCode: '10',
+  },
+  {
+    id: 'Jeremiah',
+    enTitle: 'Jeremiah (Yirmeyahu)',
+    heTitle: 'יִרְמְיָהוּ',
+    category: 'Nevi\'im',
+    canonicalBookNumber: 11,
+    canonicalBookName: 'Jeremiah',
+    chapters: 52,
+    mechonMamreCode: '11',
+  },
+  {
+    id: 'Ezekiel',
+    enTitle: 'Ezekiel (Yechezkel)',
+    heTitle: 'יְחֶזְקֵאל',
+    category: 'Nevi\'im',
+    canonicalBookNumber: 12,
+    canonicalBookName: 'Ezekiel',
+    chapters: 48,
+    mechonMamreCode: '12',
+  },
+
+  // Latter Prophets — The Twelve Minor Prophets (Trei Asar)
+  {
+    id: 'Hosea',
+    enTitle: 'Hosea (Hoshea)',
+    heTitle: 'הוֹשֵׁעַ',
+    category: 'Nevi\'im',
+    canonicalBookNumber: 13,
+    canonicalBookName: 'The Twelve (Trei Asar)',
+    chapters: 14,
+    mechonMamreCode: '13',
+  },
+  {
+    id: 'Joel',
+    enTitle: 'Joel (Yoel)',
+    heTitle: 'יוֹאֵל',
+    category: 'Nevi\'im',
+    canonicalBookNumber: 13,
+    canonicalBookName: 'The Twelve (Trei Asar)',
+    chapters: 4,
+    mechonMamreCode: '14',
+  },
+  {
+    id: 'Amos',
+    enTitle: 'Amos',
+    heTitle: 'עָמוֹס',
+    category: 'Nevi\'im',
+    canonicalBookNumber: 13,
+    canonicalBookName: 'The Twelve (Trei Asar)',
+    chapters: 9,
+    mechonMamreCode: '15',
+  },
+  {
+    id: 'Obadiah',
+    enTitle: 'Obadiah (Ovadiah)',
+    heTitle: 'עֹבַדְיָה',
+    category: 'Nevi\'im',
+    canonicalBookNumber: 13,
+    canonicalBookName: 'The Twelve (Trei Asar)',
+    chapters: 1,
+    mechonMamreCode: '16',
+  },
+  {
+    id: 'Jonah',
+    enTitle: 'Jonah (Yonah)',
+    heTitle: 'יוֹנָה',
+    category: 'Nevi\'im',
+    canonicalBookNumber: 13,
+    canonicalBookName: 'The Twelve (Trei Asar)',
+    chapters: 4,
+    mechonMamreCode: '17',
+  },
+  {
+    id: 'Micah',
+    enTitle: 'Micah (Mikhah)',
+    heTitle: 'מִיכָה',
+    category: 'Nevi\'im',
+    canonicalBookNumber: 13,
+    canonicalBookName: 'The Twelve (Trei Asar)',
+    chapters: 7,
+    mechonMamreCode: '18',
+  },
+  {
+    id: 'Nahum',
+    enTitle: 'Nahum (Nachum)',
+    heTitle: 'נַחוּם',
+    category: 'Nevi\'im',
+    canonicalBookNumber: 13,
+    canonicalBookName: 'The Twelve (Trei Asar)',
+    chapters: 3,
+    mechonMamreCode: '19',
+  },
+  {
+    id: 'Habakkuk',
+    enTitle: 'Habakkuk (Chavakuk)',
+    heTitle: 'חֲבַקּוּק',
+    category: 'Nevi\'im',
+    canonicalBookNumber: 13,
+    canonicalBookName: 'The Twelve (Trei Asar)',
+    chapters: 3,
+    mechonMamreCode: '20',
+  },
+  {
+    id: 'Zephaniah',
+    enTitle: 'Zephaniah (Tzefanyah)',
+    heTitle: 'צְפַנְיָה',
+    category: 'Nevi\'im',
+    canonicalBookNumber: 13,
+    canonicalBookName: 'The Twelve (Trei Asar)',
+    chapters: 3,
+    mechonMamreCode: '21',
+  },
+  {
+    id: 'Haggai',
+    enTitle: 'Haggai (Chaggai)',
+    heTitle: 'חַגַּי',
+    category: 'Nevi\'im',
+    canonicalBookNumber: 13,
+    canonicalBookName: 'The Twelve (Trei Asar)',
+    chapters: 2,
+    mechonMamreCode: '22',
+  },
+  {
+    id: 'Zechariah',
+    enTitle: 'Zechariah (Zekharyah)',
+    heTitle: 'זְכַרְיָה',
+    category: 'Nevi\'im',
+    canonicalBookNumber: 13,
+    canonicalBookName: 'The Twelve (Trei Asar)',
+    chapters: 14,
+    mechonMamreCode: '23',
+  },
+  {
+    id: 'Malachi',
+    enTitle: 'Malachi (Malakhi)',
+    heTitle: 'מַלְאָכִי',
+    category: 'Nevi\'im',
+    canonicalBookNumber: 13,
+    canonicalBookName: 'The Twelve (Trei Asar)',
+    chapters: 3,
+    mechonMamreCode: '24',
+  },
+
+  // ============================================================================
+  // KETUVIM (The Writings) — 11 Canonical Books / 13 Scrolls, 369 Chapters
+  // ============================================================================
+  // Three Poetic Books (Sifrei Emet)
+  {
+    id: 'Psalms',
+    enTitle: 'Psalms (Tehillim)',
+    heTitle: 'תְּהִלִּים',
+    category: 'Ketuvim',
+    canonicalBookNumber: 14,
+    canonicalBookName: 'Psalms',
+    chapters: 150,
+    mechonMamreCode: '26',
+  },
+  {
+    id: 'Proverbs',
+    enTitle: 'Proverbs (Mishlei)',
+    heTitle: 'מִשְׁלֵי',
+    category: 'Ketuvim',
+    canonicalBookNumber: 15,
+    canonicalBookName: 'Proverbs',
+    chapters: 31,
+    mechonMamreCode: '28',
+  },
+  {
+    id: 'Job',
+    enTitle: 'Job (Iyov)',
+    heTitle: 'אִיּוֹב',
+    category: 'Ketuvim',
+    canonicalBookNumber: 16,
+    canonicalBookName: 'Job',
+    chapters: 42,
+    mechonMamreCode: '27',
+  },
+
+  // Five Scrolls (Hamesh Megillot)
+  {
+    id: 'Song_of_Songs',
+    enTitle: 'Song of Songs (Shir HaShirim)',
+    heTitle: 'שִׁיר הַשִּׁירִים',
+    category: 'Ketuvim',
+    canonicalBookNumber: 17,
+    canonicalBookName: 'Song of Songs',
+    chapters: 8,
+    mechonMamreCode: '30',
+  },
+  {
+    id: 'Ruth',
+    enTitle: 'Ruth (Rut)',
+    heTitle: 'רוּת',
+    category: 'Ketuvim',
+    canonicalBookNumber: 18,
+    canonicalBookName: 'Ruth',
+    chapters: 4,
+    mechonMamreCode: '29',
+  },
+  {
+    id: 'Lamentations',
+    enTitle: 'Lamentations (Eikhah)',
+    heTitle: 'אֵיכָה',
+    category: 'Ketuvim',
+    canonicalBookNumber: 19,
+    canonicalBookName: 'Lamentations',
+    chapters: 5,
+    mechonMamreCode: '31',
+  },
+  {
+    id: 'Ecclesiastes',
+    enTitle: 'Ecclesiastes (Kohelet)',
+    heTitle: 'קֹהֶלֶת',
+    category: 'Ketuvim',
+    canonicalBookNumber: 20,
+    canonicalBookName: 'Ecclesiastes',
+    chapters: 12,
+    mechonMamreCode: '32',
+  },
+  {
+    id: 'Esther',
+    enTitle: 'Esther',
+    heTitle: 'אֶסְתֵּר',
+    category: 'Ketuvim',
+    canonicalBookNumber: 21,
+    canonicalBookName: 'Esther',
+    chapters: 10,
+    mechonMamreCode: '33',
+  },
+
+  // Other Writings
+  {
+    id: 'Daniel',
+    enTitle: 'Daniel',
+    heTitle: 'דָּנִיֵּאל',
+    category: 'Ketuvim',
+    canonicalBookNumber: 22,
+    canonicalBookName: 'Daniel',
+    chapters: 12,
+    mechonMamreCode: '34',
+  },
+  {
+    id: 'Ezra',
+    enTitle: 'Ezra',
+    heTitle: 'עֶזְרָא',
+    category: 'Ketuvim',
+    canonicalBookNumber: 23,
+    canonicalBookName: 'Ezra–Nehemiah',
+    chapters: 10,
+    mechonMamreCode: '35a',
+  },
+  {
+    id: 'Nehemiah',
+    enTitle: 'Nehemiah (Nechemyah)',
+    heTitle: 'נְחֶמְיָה',
+    category: 'Ketuvim',
+    canonicalBookNumber: 23,
+    canonicalBookName: 'Ezra–Nehemiah',
+    chapters: 13,
+    mechonMamreCode: '35b',
+  },
+  {
+    id: 'I_Chronicles',
+    enTitle: 'I Chronicles (Divrei HaYamim I)',
+    heTitle: 'דִּבְרֵי הַיָּמִים א',
+    category: 'Ketuvim',
+    canonicalBookNumber: 24,
+    canonicalBookName: 'Chronicles',
+    chapters: 29,
+    mechonMamreCode: '25a',
+  },
+  {
+    id: 'II_Chronicles',
+    enTitle: 'II Chronicles (Divrei HaYamim II)',
+    heTitle: 'דִּבְרֵי הַיָּמִים ב',
+    category: 'Ketuvim',
+    canonicalBookNumber: 24,
+    canonicalBookName: 'Chronicles',
+    chapters: 36,
+    mechonMamreCode: '25b',
+  },
 ];
 
-export function cleanHebrewHtml(raw: string): string {
+export function cleanHebrewHtml(raw: any): string {
   if (!raw) return '';
-  return raw.replace(/<[^>]+>/g, '').trim();
+  if (Array.isArray(raw)) {
+    return raw.map(cleanHebrewHtml).join(' ');
+  }
+  return String(raw).replace(/<[^>]+>/g, '').trim();
 }
 
 class JudaismProvider {
@@ -76,8 +478,8 @@ class JudaismProvider {
       const hebrewVersion = versions.find((v) => v.language === 'he');
       const englishVersion = versions.find((v) => v.language === 'en');
 
-      const hebrewTexts: string[] = hebrewVersion?.text || [];
-      const englishTexts: string[] = englishVersion?.text || [];
+      const hebrewTexts: any[] = hebrewVersion?.text || [];
+      const englishTexts: any[] = englishVersion?.text || [];
 
       const count = Math.max(hebrewTexts.length, englishTexts.length);
       const verses: TanakhVerseData[] = [];

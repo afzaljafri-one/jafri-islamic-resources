@@ -332,8 +332,47 @@ export const JudaismModule: React.FC<JudaismModuleProps> = ({
             className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-navy-950 border border-slate-700 hover:border-gold-500 text-slate-200 hover:text-gold-400 text-xs font-semibold transition"
           >
             <Layers className="w-4 h-4" />
-            <span>Tanakh Books</span>
+            <span className="hidden md:inline">Tanakh Books</span>
           </button>
+
+          {/* Fast Book Selector Dropdown across all 24 Canonical Books / 39 Scrolls */}
+          <select
+            id="tanakh-book-select"
+            data-testid="tanakh-book-select"
+            value={currentBook.id}
+            onChange={(e) => {
+              const selected = TANAKH_BOOKS.find((b) => b.id === e.target.value);
+              if (selected) {
+                setCurrentBook(selected);
+                setCurrentChapter(1);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }
+            }}
+            className="px-2.5 py-1.5 rounded-xl bg-navy-950 border border-slate-700 hover:border-gold-500 text-slate-200 text-xs font-medium focus:outline-none focus:ring-1 focus:ring-gold-500 transition cursor-pointer max-w-[170px] sm:max-w-[210px]"
+            title="Select Tanakh Book"
+          >
+            <optgroup label="Torah (The Law — 5 Books)">
+              {TANAKH_BOOKS.filter((b) => b.category === 'Torah').map((b) => (
+                <option key={b.id} value={b.id}>
+                  {b.enTitle} ({b.heTitle})
+                </option>
+              ))}
+            </optgroup>
+            <optgroup label="Nevi'im (The Prophets — 21 Books)">
+              {TANAKH_BOOKS.filter((b) => b.category === "Nevi'im").map((b) => (
+                <option key={b.id} value={b.id}>
+                  {b.enTitle} ({b.heTitle})
+                </option>
+              ))}
+            </optgroup>
+            <optgroup label="Ketuvim (The Writings — 13 Books)">
+              {TANAKH_BOOKS.filter((b) => b.category === 'Ketuvim').map((b) => (
+                <option key={b.id} value={b.id}>
+                  {b.enTitle} ({b.heTitle})
+                </option>
+              ))}
+            </optgroup>
+          </select>
 
           <div className="h-4 w-px bg-slate-700 hidden sm:block" />
 
