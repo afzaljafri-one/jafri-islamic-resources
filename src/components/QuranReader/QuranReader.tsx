@@ -370,6 +370,7 @@ export const QuranReader: React.FC = () => {
 
   const readingContext: ReadingContext = {
     religionId: 'islam',
+    categoryId: 'quran',
     collectionId: 'quran_surahs_arabic',
     chapterId: currentSurahNumber,
     bookName: currentSurah?.englishName || `Surah ${currentSurahNumber}`,

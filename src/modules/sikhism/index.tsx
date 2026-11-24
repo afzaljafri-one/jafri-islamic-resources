@@ -483,6 +483,7 @@ export const SikhismModule: React.FC<SikhismModuleProps> = ({
       {(() => {
         const readingContext: ReadingContext = {
           religionId: 'sikhism',
+          categoryId: 'Sri Guru Granth Sahib Ji',
           collectionId: 'sggs',
           bookName: 'Sri Guru Granth Sahib Ji',
           chapterId: currentAng,

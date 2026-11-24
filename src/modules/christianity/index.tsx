@@ -371,6 +371,7 @@ export const ChristianityModule: React.FC<ChristianityModuleProps> = ({
 
   const readingContext: ReadingContext = {
     religionId: 'christianity',
+    categoryId: currentBook.bookid <= 39 ? 'Old Testament' : 'New Testament',
     collectionId: `bible-${selectedTranslation.toLowerCase()}`,
     bookId: currentBookId,
     bookName: currentBook.name,

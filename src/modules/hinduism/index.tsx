@@ -48,6 +48,7 @@ import { ScriptureCoverageModal } from '../../platform/components/ScriptureCover
 import { YouTubeEmbedModal } from '../../platform/components/audio/YouTubeEmbedModal';
 import { TwoColumnReadingLayout } from '../../platform/components/layout/TwoColumnReadingLayout';
 import type { ReadingContext } from '../../platform/services/contextualAudioMatcher';
+import { unifiedSacredAudioService } from '../../platform/services/unifiedSacredAudioService';
 import { SACRED_AUDIO_MASTER_CATALOGUE } from '../../platform/data/sacredAudioMasterCatalogue';
 import { MultilingualAudioPlayerBar } from '../../platform/components/MultilingualAudioPlayerBar';
 import { TypographyControls } from '../../platform/components/TypographyControls';
@@ -281,6 +282,7 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
   const handleSelectCollection = (colId: string, chapterNum?: number) => {
     // Immediately stop active audio and unload media to prevent any cross-collection leakage
     multilingualAudioEngine.stop();
+    unifiedSacredAudioService.stop();
     setIsAudioPlayerVisible(false);
     setActiveAudioUnitId(null);
     setSelectedCollectionId(colId);
@@ -552,8 +554,19 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
     return col.category === activeCategoryFilter;
   });
 
+  const handleSelectCategory = (cat: string) => {
+    setActiveCategoryFilter(cat);
+    if (cat !== 'All') {
+      const firstInCat = HINDUISM_COLLECTIONS.find((col) => col.category === cat);
+      if (firstInCat) {
+        handleSelectCollection(firstInCat.id);
+      }
+    }
+  };
+
   const readingContext: ReadingContext = {
     religionId: 'hinduism',
+    categoryId: selectedCollection.category,
     collectionId: selectedCollectionId,
     chapterId: selectedCollectionId === 'gita' ? currentChapterNum : undefined,
     bookName: selectedCollectionId === 'gita' ? 'Bhagavad Gita' : selectedCollection.title,
@@ -747,7 +760,7 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
           {CATEGORIES.map((cat) => (
             <button
               key={cat}
-              onClick={() => setActiveCategoryFilter(cat)}
+              onClick={() => handleSelectCategory(cat)}
               className={`px-2.5 py-1 rounded-lg text-xs font-medium whitespace-nowrap transition ${
                 activeCategoryFilter === cat
                   ? 'bg-gold-500 text-navy-950 font-bold shadow'

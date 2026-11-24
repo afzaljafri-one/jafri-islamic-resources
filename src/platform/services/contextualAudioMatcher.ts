@@ -15,6 +15,7 @@ import type { SacredAudioRequirement, TraditionId } from '../types/sacredAudio';
 
 export interface ReadingContext {
   religionId: TraditionId | string;
+  categoryId?: string;
   collectionId?: string;
   bookId?: string | number;
   bookName?: string;
@@ -80,6 +81,7 @@ export function matchContextualAudio(context: ReadingContext): ContextualAudioRe
   const allTraditionRecordings = getApprovedRecordingsForTradition(traditionId);
   const totalAvailableForTradition = allTraditionRecordings.length;
 
+  const categoryId = normalize(context.categoryId);
   const collectionId = normalize(context.collectionId);
   const bookName = normalize(context.bookName);
   const chapterNum =
@@ -117,15 +119,27 @@ export function matchContextualAudio(context: ReadingContext): ContextualAudioRe
     }
 
     // ------------------------------------------------------------------------
-    // 2. HINDUISM (Bhagavad Gita Chapters 1-18, Vedas, Upanishads, Stotras, Mantras)
+    // 2. HINDUISM (12 Collections across All 10 Categories)
     // ------------------------------------------------------------------------
     case 'hinduism': {
       const isGita =
+        collectionId === 'gita' ||
         collectionId.includes('gita') ||
-        bookName.includes('gita') ||
-        title.includes('gita');
+        bookName.includes('bhagavad gita') ||
+        title.includes('bhagavad gita');
 
-      if (isGita && !isNaN(chapterNum) && chapterNum >= 1 && chapterNum <= 18) {
+      const isPuranas =
+        collectionId === 'puranas' ||
+        categoryId.includes('purana') ||
+        title.includes('mahapurana') ||
+        title.includes('puranas');
+
+      if (isPuranas) {
+        scopeLabel = 'The 18 Mahapuranas';
+        primaryMatches = allTraditionRecordings.filter(
+          (req) => req.collectionId === 'puranas'
+        );
+      } else if (isGita && !isNaN(chapterNum) && chapterNum >= 1 && chapterNum <= 18) {
         scopeLabel = `Bhagavad Gita — Chapter ${chapterNum}`;
         const chPattern = `chapter ${chapterNum}:`;
         primaryMatches = allTraditionRecordings.filter((req) => {
@@ -140,50 +154,138 @@ export function matchContextualAudio(context: ReadingContext): ContextualAudioRe
         primaryMatches = allTraditionRecordings.filter(
           (req) => req.collectionId === 'gita'
         );
-      } else if (collectionId.includes('veda') || title.includes('suktam') || title.includes('purusha') || title.includes('sri suktam')) {
-        scopeLabel = 'Vedic Suktams';
+      } else if (
+        collectionId === 'bhajans' ||
+        collectionId.includes('bhajan') ||
+        categoryId.includes('bhajan') ||
+        title.includes('bhajan') ||
+        title.includes('mirabai') ||
+        title.includes('surdas') ||
+        title.includes('kabir')
+      ) {
+        scopeLabel = 'Devotional Bhajans';
+        primaryMatches = allTraditionRecordings.filter(
+          (req) =>
+            req.collectionId === 'bhajans' ||
+            normalize(req.requirementTitle).includes('bhajan') ||
+            normalize(req.requirementTitle).includes('payoji') ||
+            normalize(req.requirementTitle).includes('vaishnava jana') ||
+            normalize(req.requirementTitle).includes('chadariya')
+        );
+      } else if (
+        collectionId === 'hanuman_chalisas' ||
+        collectionId.includes('chalisa') ||
+        categoryId.includes('chalisa') ||
+        title.includes('chalisa') ||
+        title.includes('hanuman')
+      ) {
+        scopeLabel = 'Sri Hanuman Chalisa & Chalisas';
+        primaryMatches = allTraditionRecordings.filter(
+          (req) =>
+            req.collectionId === 'hanuman_chalisas' ||
+            normalize(req.requirementTitle).includes('chalisa') ||
+            normalize(req.requirementTitle).includes('hanuman')
+        );
+      } else if (
+        collectionId === 'mantras' ||
+        collectionId.includes('mantra') ||
+        categoryId.includes('mantra') ||
+        title.includes('gayatri')
+      ) {
+        scopeLabel = 'Sacred Mantras';
+        primaryMatches = allTraditionRecordings.filter(
+          (req) => req.collectionId === 'mantras'
+        );
+      } else if (
+        collectionId === 'vedas' ||
+        collectionId.includes('veda') ||
+        categoryId.includes('veda') ||
+        categoryId.includes('shruti') ||
+        title.includes('suktam') ||
+        title.includes('purusha') ||
+        title.includes('sri suktam')
+      ) {
+        scopeLabel = 'The Vedas & Vedic Suktams';
         primaryMatches = allTraditionRecordings.filter(
           (req) =>
             req.collectionId === 'vedas' ||
             normalize(req.requirementTitle).includes('suktam')
         );
-      } else if (collectionId.includes('mantra') || title.includes('gayatri')) {
-        scopeLabel = 'Sacred Mantras';
-        primaryMatches = allTraditionRecordings.filter(
-          (req) =>
-            req.collectionId === 'mantras' ||
-            normalize(req.requirementTitle).includes('mantra')
-        );
-      } else if (collectionId.includes('stotra') || title.includes('stotram') || title.includes('guru') || title.includes('devi')) {
-        scopeLabel = 'Stotras & Chants';
-        primaryMatches = allTraditionRecordings.filter(
-          (req) =>
-            req.collectionId === 'stotras' ||
-            normalize(req.requirementTitle).includes('stotram') ||
-            normalize(req.requirementTitle).includes('suktam')
-        );
-      } else if (collectionId.includes('aarti') || title.includes('aarti')) {
-        scopeLabel = 'Aartis';
+      } else if (
+        collectionId === 'aartis' ||
+        collectionId.includes('aarti') ||
+        categoryId.includes('aarti') ||
+        title.includes('aarti')
+      ) {
+        scopeLabel = 'Traditional Aartis';
         primaryMatches = allTraditionRecordings.filter(
           (req) =>
             req.collectionId === 'aartis' ||
             normalize(req.requirementTitle).includes('aarti')
         );
-      } else if (collectionId.includes('upanishad') || title.includes('upanishad')) {
+      } else if (
+        collectionId === 'stotras' ||
+        collectionId.includes('stotra') ||
+        categoryId.includes('stotra')
+      ) {
+        scopeLabel = 'Sacred Stotras & Chants';
+        primaryMatches = allTraditionRecordings.filter(
+          (req) => req.collectionId === 'stotras'
+        );
+      } else if (
+        collectionId === 'principal_upanishads' ||
+        collectionId.includes('upanishad') ||
+        categoryId.includes('upanishad') ||
+        title.includes('upanishad')
+      ) {
         scopeLabel = 'Principal Upanishads';
         primaryMatches = allTraditionRecordings.filter(
           (req) =>
+            req.collectionId === 'principal_upanishads' ||
             req.collectionId === 'upanishads' ||
             normalize(req.requirementTitle).includes('upanishad')
         );
-      } else if (collectionId.includes('ramayan') || title.includes('ramayan') || title.includes('hanuman')) {
-        scopeLabel = 'Ramayana & Hanuman Chalisa';
+      } else if (
+        collectionId === 'valmiki_ramayana' ||
+        collectionId.includes('valmiki') ||
+        (collectionId.includes('ramayan') && !collectionId.includes('ramcharit')) ||
+        title.includes('aditya hridaya')
+      ) {
+        scopeLabel = 'Valmiki Ramayana';
         primaryMatches = allTraditionRecordings.filter(
           (req) =>
-            req.collectionId === 'ramayana' ||
-            normalize(req.requirementTitle).includes('hanuman') ||
-            normalize(req.requirementTitle).includes('sundarkand')
+            req.collectionId === 'valmiki_ramayana' ||
+            req.id === 'REQ-HIN-020'
         );
+      } else if (
+        collectionId === 'ramcharitmanas' ||
+        collectionId.includes('ramcharit') ||
+        title.includes('ramcharitmanas') ||
+        title.includes('kripalu')
+      ) {
+        scopeLabel = 'Ramcharitmanas';
+        primaryMatches = allTraditionRecordings.filter(
+          (req) =>
+            req.collectionId === 'ramcharitmanas' ||
+            req.id === 'REQ-HIN-027'
+        );
+      } else if (
+        collectionId === 'puja_festivals' ||
+        collectionId.includes('puja') ||
+        categoryId.includes('puja') ||
+        title.includes('puja') ||
+        title.includes('deepa') ||
+        title.includes('lakshmi')
+      ) {
+        scopeLabel = 'Puja Procedures & Festival Prayers';
+        primaryMatches = allTraditionRecordings.filter(
+          (req) =>
+            req.collectionId === 'puja_festivals' ||
+            req.id === 'REQ-HIN-084' ||
+            req.id === 'REQ-HIN-089'
+        );
+      } else {
+        scopeLabel = context.title || context.bookName || 'Sacred Scripture';
       }
       break;
     }

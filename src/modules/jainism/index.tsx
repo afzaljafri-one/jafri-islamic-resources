@@ -445,6 +445,7 @@ export const JainismModule: React.FC<JainismModuleProps> = ({
       {(() => {
         const readingContext: ReadingContext = {
           religionId: 'jainism',
+          categoryId: selectedText.category || 'Agamas & Stotras',
           collectionId: selectedText.id,
           bookName: selectedText.titleEn,
           title: selectedText.titlePrakrit ? `${selectedText.titleEn} (${selectedText.titlePrakrit})` : selectedText.titleEn,

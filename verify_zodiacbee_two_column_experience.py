@@ -19,33 +19,39 @@ PROJECT_DIR = Path("/Users/afzaljafri/.gemini/antigravity/scratch/jafri-islamic-
 ARTIFACT_DIR = Path("/Users/afzaljafri/.gemini/antigravity/brain/2e0a8a09-f40f-4cdb-bc60-d11e0de6618b")
 CHROME_BIN = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 
+import tempfile
+
 def dump_dom(url: str, wait_ms: int = 3000) -> str:
-    cmd = [
-        CHROME_BIN,
-        "--headless=new",
-        "--disable-gpu",
-        "--no-sandbox",
-        "--window-size=1280,900",
-        f"--virtual-time-budget={wait_ms}",
-        "--dump-dom",
-        url
-    ]
-    res = subprocess.run(cmd, capture_output=True, text=True, timeout=20)
-    return res.stdout
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        cmd = [
+            CHROME_BIN,
+            "--headless=new",
+            "--disable-gpu",
+            "--no-sandbox",
+            f"--user-data-dir={tmp_dir}",
+            "--window-size=1280,900",
+            f"--virtual-time-budget={wait_ms}",
+            "--dump-dom",
+            url
+        ]
+        res = subprocess.run(cmd, capture_output=True, text=True, timeout=25)
+        return res.stdout
 
 def capture_screenshot(url: str, output_path: Path, width: int = 1280, height: int = 900, wait_ms: int = 3000) -> bool:
-    cmd = [
-        CHROME_BIN,
-        "--headless=new",
-        "--disable-gpu",
-        "--no-sandbox",
-        f"--window-size={width},{height}",
-        f"--virtual-time-budget={wait_ms}",
-        f"--screenshot={str(output_path)}",
-        url
-    ]
-    res = subprocess.run(cmd, capture_output=True, text=True, timeout=20)
-    return output_path.exists() and output_path.stat().st_size > 5000
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        cmd = [
+            CHROME_BIN,
+            "--headless=new",
+            "--disable-gpu",
+            "--no-sandbox",
+            f"--user-data-dir={tmp_dir}",
+            f"--window-size={width},{height}",
+            f"--virtual-time-budget={wait_ms}",
+            f"--screenshot={str(output_path)}",
+            url
+        ]
+        res = subprocess.run(cmd, capture_output=True, text=True, timeout=25)
+        return output_path.exists() and output_path.stat().st_size > 5000
 
 def run_suite():
     print("=" * 80)

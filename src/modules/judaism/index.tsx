@@ -501,6 +501,7 @@ export const JudaismModule: React.FC<JudaismModuleProps> = ({
       {(() => {
         const readingContext: ReadingContext = {
           religionId: 'judaism',
+          categoryId: currentBook.category,
           collectionId: 'tanakh',
           bookId: currentBook.id,
           bookName: currentBook.enTitle,

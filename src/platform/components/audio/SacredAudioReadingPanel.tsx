@@ -6,7 +6,7 @@
  * ============================================================================
  */
 
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import {
   Play,
   Pause,
@@ -64,6 +64,7 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
     return matchContextualAudio(context);
   }, [
     context.religionId,
+    context.categoryId,
     context.collectionId,
     context.bookId,
     context.bookName,
@@ -87,45 +88,74 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
   }, [primaryMatches, additionalRecordings]);
 
   // Selected requirement for display/interaction
-  const [selectedReq, setSelectedReq] = useState<SacredAudioRequirement | null>(null);
+  const [selectedReq, setSelectedReq] = useState<SacredAudioRequirement | null>(() => {
+    return primaryMatches.length > 0 ? primaryMatches[0] : null;
+  });
 
-  // Synchronize selection when reading context or playlist changes
+  // Track canonical reading context key to detect genuine navigation transitions
+  const contextKey = [
+    context.religionId || '',
+    context.categoryId || '',
+    context.collectionId || '',
+    context.bookId || '',
+    context.bookName || '',
+    context.chapterId ?? '',
+    context.sectionId || '',
+    context.title || '',
+  ].join('::');
+
+  const prevContextKeyRef = useRef<string>(contextKey);
+
+  // Synchronize selection and stop previous playback when reading context changes
   useEffect(() => {
-    const isCurrentPlayingInTradition =
-      playbackState.currentRequirement &&
-      playbackState.currentRequirement.tradition.toLowerCase() ===
-        (context.religionId || '').toLowerCase();
+    const isContextChanged = prevContextKeyRef.current !== contextKey;
 
-    if (isCurrentPlayingInTradition) {
-      // Keep playing requirement selected
-      setSelectedReq(playbackState.currentRequirement);
-    } else if (primaryMatches.length > 0) {
-      // Default to primary match for this reading
-      setSelectedReq(primaryMatches[0]);
-    } else if (additionalRecordings.length > 0) {
-      // No direct match for chapter, but pick first additional recording for reference
-      setSelectedReq(additionalRecordings[0]);
+    if (isContextChanged) {
+      prevContextKeyRef.current = contextKey;
+
+      // Check if active playback belongs to the new reading
+      const isCurrentPlayingInNewMatches =
+        playbackState.currentRequirement &&
+        primaryMatches.some((r) => r.id === playbackState.currentRequirement?.id);
+
+      // Stop previous playback immediately if it belonged to previous reading
+      if (playbackState.status !== 'IDLE' && !isCurrentPlayingInNewMatches) {
+        unifiedSacredAudioService.stop();
+      }
+
+      // Immediately select the matching track for the new reading, or clear if no direct match
+      if (primaryMatches.length > 0) {
+        setSelectedReq(primaryMatches[0]);
+      } else {
+        // Clear selection to ensure previous scripture track is NEVER displayed
+        setSelectedReq(null);
+      }
     } else {
-      setSelectedReq(null);
+      // Keep selectedReq valid on mount or after direct matches update
+      if (!selectedReq && primaryMatches.length > 0) {
+        setSelectedReq(primaryMatches[0]);
+      }
     }
   }, [
-    context.religionId,
-    context.chapterId,
-    context.bookName,
-    context.collectionId,
+    contextKey,
     primaryMatches,
-    additionalRecordings,
     playbackState.currentRequirement,
+    playbackState.status,
+    selectedReq,
   ]);
 
-  // Determine currently active requirement (playing or previewing)
-  const activeReq =
-    playbackState.currentRequirement &&
-    playbackState.currentRequirement.tradition.toLowerCase() ===
-      (context.religionId || '').toLowerCase() &&
-    (playbackState.status === 'PLAYING' || playbackState.status === 'PAUSED' || playbackState.status === 'LOADING')
-      ? playbackState.currentRequirement
-      : selectedReq || (activePlaylist.length > 0 ? activePlaylist[0] : null);
+  // Determine currently active requirement (playing or matching selection)
+  const isPlaybackActiveInCurrentContext =
+    Boolean(playbackState.currentRequirement) &&
+    (playbackState.status === 'PLAYING' ||
+      playbackState.status === 'PAUSED' ||
+      playbackState.status === 'LOADING') &&
+    (primaryMatches.some((r) => r.id === playbackState.currentRequirement?.id) ||
+      (selectedReq && selectedReq.id === playbackState.currentRequirement?.id));
+
+  const activeReq = isPlaybackActiveInCurrentContext
+    ? playbackState.currentRequirement
+    : selectedReq;
 
   const isCurrentActivePlaying =
     Boolean(activeReq) &&
@@ -459,9 +489,21 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
           </div>
         </div>
       ) : (
-        <div className="p-6 text-center text-slate-400 bg-navy-900/50 border border-slate-800 rounded-2xl">
-          <Headphones className="w-8 h-8 text-slate-600 mx-auto mb-2" />
-          <p className="text-xs">No recording selected.</p>
+        <div
+          data-testid="no-audio-card"
+          className="p-6 text-center bg-navy-900/60 border border-amber-500/30 rounded-2xl space-y-3 shadow-lg"
+        >
+          <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center mx-auto">
+            <VolumeX className="w-6 h-6" />
+          </div>
+          <div className="space-y-1">
+            <h3 className="font-serif text-sm font-bold text-slate-100">
+              No approved recording currently available for this reading.
+            </h3>
+            <p className="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
+              This scripture text is available for authentic study. You may browse and play approved liturgical recordings from the broader tradition catalogue below.
+            </p>
+          </div>
         </div>
       )}
 

@@ -494,6 +494,7 @@ export const BuddhismModule: React.FC<BuddhismModuleProps> = ({
       {(() => {
         const readingContext: ReadingContext = {
           religionId: 'buddhism',
+          categoryId: selectedSutta.nikaya ? `${selectedSutta.nikaya} Nikaya` : 'Tipitaka',
           collectionId: selectedSutta.id || selectedSutta.uid,
           bookName: selectedSutta.titleEn || selectedSutta.title,
           title: `${selectedSutta.titleEn || selectedSutta.title} ${selectedSutta.titlePali || selectedSutta.nativeTitle || ''}`.trim(),
