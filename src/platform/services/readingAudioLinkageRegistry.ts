@@ -1686,6 +1686,41 @@ export function resolveReadingAudioMatches(
       link.requirementId === 'REQ-HIN-038'
     ) {
       isExact = true;
+    } else if (
+      (normCollectionId === 'suttas_sutras' || normReadingId === 'suttas_sutras' || normReadingId.includes('sn56.11') || (normTitle && normTitle.includes('dhammacakka'))) &&
+      link.requirementId === 'REQ-BUD-008'
+    ) {
+      isExact = true;
+    } else if (
+      (normCollectionId === 'suttas_sutras' || normReadingId.includes('heart') || (normTitle && normTitle.includes('heart sutra'))) &&
+      link.requirementId === 'REQ-BUD-010'
+    ) {
+      isExact = true;
+    } else if (
+      (normCollectionId === 'suttas_sutras' || normReadingId.includes('diamond') || (normTitle && normTitle.includes('diamond sutra'))) &&
+      link.requirementId === 'REQ-BUD-011'
+    ) {
+      isExact = true;
+    } else if (
+      (normCollectionId === 'metta_sutta' || normReadingId === 'metta_sutta' || (normTitle && normTitle.includes('metta'))) &&
+      link.requirementId === 'REQ-BUD-016'
+    ) {
+      isExact = true;
+    } else if (
+      (normCollectionId === 'mangala_sutta' || normReadingId === 'mangala_sutta' || (normTitle && normTitle.includes('mangala'))) &&
+      link.requirementId === 'REQ-BUD-019'
+    ) {
+      isExact = true;
+    } else if (
+      (normCollectionId === 'chants_parittas' || normReadingId.includes('ti_sarana') || (normTitle && (normTitle.includes('refuge') || normTitle.includes('ti sarana')))) &&
+      link.requirementId === 'REQ-BUD-020'
+    ) {
+      isExact = true;
+    } else if (
+      (normCollectionId === 'chants_parittas' || normReadingId.includes('ratana') || (normTitle && normTitle.includes('ratana'))) &&
+      link.requirementId === 'REQ-BUD-025'
+    ) {
+      isExact = true;
     }
 
     // Helper to verify if linkage book or collection matches context

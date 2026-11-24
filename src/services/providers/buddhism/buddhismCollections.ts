@@ -89,25 +89,25 @@ export const BUDDHISM_COLLECTIONS: BuddhismCollectionMeta[] = [
   },
   {
     id: 'suttas_sutras',
-    title: 'Core Suttas & Mahayana Sutras (First Sermon & Heart Sutra)',
-    nativeTitle: 'मूल सुत्त एवं महायान सूत्र (धम्मचक्कप्पवत्तन सुत्त, प्रज्ञापारमिता हृदय सूत्र)',
+    title: 'Core Suttas & Mahayana Sutras (Pali Nikayas, Heart & Diamond Sutras)',
+    nativeTitle: 'मूल सुत्त एवं महायान सूत्र (धम्मचक्कप्पवत्तन, अनत्तलक्खण, सतिपट्ठान, प्रज्ञापारमिता)',
     category: 'Suttas & Sutras',
     tradition: 'Universal Buddhism (All Vehicles)',
     originalLanguage: 'Pali & Classical Sanskrit',
     authorOrCompiler:
       'Shakyamuni Buddha / Prajnaparamita Transmissions (Bodhisattva Avalokiteshvara & Shariputra)',
     translatorOrCommentator:
-      'Bhikkhu Sujato (SN 56.11, CC0) / Edward Conze (1958) / Max Müller (1884)',
-    sourceEdition: 'SuttaCentral (sn56.11) / Anecdota Oxoniensia Aryan Series',
+      'Bhikkhu Sujato (SuttaCentral Bilara CC0) / Edward Conze (1958) / Max Müller (1884)',
+    sourceEdition: 'SuttaCentral Bilara Corpus / Sacred Books of the East',
     sourceUrl: 'https://suttacentral.net/sn56.11',
     copyrightStatus: 'CC0 / Public Domain',
     licensingStatus: 'Creative Commons Zero (CC0)',
     availableFormats: ['original_text', 'translation'],
     contentStatus: 'verified_available',
     summary:
-      'The central doctrinal discourses of both vehicles: The Dhammacakkappavattana Sutta (SN 56.11) delivering the First Sermon at Sarnath on the Four Noble Truths and the Noble Eightfold Path; and the Prajnaparamita Hridaya (Heart Sutra) expounding the profound emptiness (Shunyata) of all phenomena: "Form is emptiness, emptiness is form."',
+      'The central doctrinal discourses of both vehicles: The Dhammacakkappavattana Sutta (SN 56.11 on the Four Noble Truths), Anattalakkhana Sutta (SN 22.59 on Non-Self), Maha-satipatthana Sutta (DN 22 / MN 10 on the Four Foundations of Mindfulness), Kalama Sutta (AN 3.65 on Free Inquiry), Prajnaparamita Hridaya (Heart Sutra on Emptiness), Vajracchedika (Diamond Sutra on Conditioned Phenomena), and Saddharmapundarika (Lotus Sutra Ch 25 on Avalokiteshvara).',
     traditionNote:
-      'Dhammacakkappavattana is fundamental to Theravada; the Heart Sutra is the daily chant of Zen, Chan, and Tibetan Mahayana temples.',
+      'Pali Nikayas form the foundation of Theravada; the Heart, Diamond, and Lotus Sutras are foundational to Chan, Zen, Pure Land, and Vajrayana.',
   },
   {
     id: 'metta_sutta',

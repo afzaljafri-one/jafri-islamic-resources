@@ -67,6 +67,45 @@ export const BUDDHISM_TEXT_DATA: Record<string, BuddhismVerseUnit[]> = {
         '“ऐसा मैंने सुना है”—प्रथम बौद्ध संगीति में आनंद स्थविर द्वारा उच्चारित यह वाक्य सभी बौद्ध सूत्रों का प्रामाणिक आरंभिक उद्घोष है।',
       sectionTitle: 'Canonical Authentication (Evam Me Sutam)',
     },
+    {
+      id: 'tipitaka:vinaya',
+      unitNumber: '1. Vinaya Pitaka (Discipline)',
+      originalText:
+        'विनयपिटकं नाम—सुत्तविभङ्ग (महाविभङ्ग, भिक्खुनीविभङ्ग), खन्धक (महावग्ग, चुल्लवग्ग), परिवारो चेति ।\nपातिमोक्खं सिक्खापदानि संवरत्थाय संवत्तन्ति ॥',
+      transliteration:
+        'vinayapiṭakaṁ nāma—suttavibhaṅga (mahāvibhaṅga, bhikkhunīvibhaṅga), khandhaka (mahāvagga, cullavagga), parivāro ceti |\npātimokkhaṁ sikkhāpadāni saṁvaratthāya saṁvattanti ||',
+      translationEn:
+        'The Vinaya Pitaka (The Basket of Monastic Discipline) governs ethical conduct and Sangha harmony. It comprises three divisions: 1. Suttavibhanga (The Bhikkhu Patimokkha of 227 rules and Bhikkhuni Patimokkha of 311 rules with origins and case law), 2. Khandhaka (Mahavagga: ordination, Uposatha, vassa retreat; Cullavagga: monastic dwellings, schisms, and councils), and 3. Parivara (Analytical summaries and examination protocols).',
+      translationHi:
+        'विनयपिटक संघ के आचार और अनुशासन का नियमन करता है। इसके तीन मुख्य भाग हैं: १. सुत्तविभंग (भिक्षु एवं भिक्षुणी पातिमोक्ख नियम), २. खंधक (महावग्ग एवं चुल्लवग्ग — प्रव्रज्या, उपोसथ, वर्षावास आदि), और ३. परिवार (अनुशासन का विश्लेषणात्मक संकलन)।',
+      sectionTitle: 'Vinaya Pitaka — The Foundations of Monastic Discipline',
+    },
+    {
+      id: 'tipitaka:sutta',
+      unitNumber: '2. Sutta Pitaka (The Five Nikayas)',
+      originalText:
+        'सुत्तपिटकं नाम—दीघनिकायो, मज्झिमनिकायो, संयुत्तनिकायो, अङ्गुत्तरनिकायो, खुद्दकनिकायो चेति पञ्चविधं होति ।\nसब्बधम्मदेसना एत्थ विथारिता ॥',
+      transliteration:
+        'suttapiṭakaṁ nāma—dīghanikāyo, majjhimanikāyo, saṁyuttanikāyo, aṅguttaranikāyo, khuddakanikāyo ceti pañcavidhaṁ hoti |\nsabbadhammadesanā ettha vitthāritā ||',
+      translationEn:
+        'The Sutta Pitaka (The Basket of Discourses) contains the Buddha\'s dialogues across five Nikayas: 1. Digha Nikaya (34 Long Discourses: Brahmajala, Mahaparinibbana, Mahasatipatthana), 2. Majjhima Nikaya (152 Middle-Length Discourses: Satipatthana, Ariyapariyesana, Anapanasati), 3. Samyutta Nikaya (2,889 Connected Discourses: Dhammacakkappavattana, Anattalakkhana), 4. Anguttara Nikaya (9,557 Numerical Discourses: Kalama Sutta), and 5. Khuddaka Nikaya (15 collections including Dhammapada, Udana, Itivuttaka, Sutta Nipata, Jataka).',
+      translationHi:
+        'सुत्तपिटक में भगवान बुद्ध के उपदेश पाँच निकायों में संकलित हैं: १. दीघनिकाय (३४ दीर्घ सूत्र), २. मज्झिमनिकाय (१५२ मध्यम सूत्र), ३. संयुत्तनिकाय (२,८८९ संयुक्त सूत्र), ४. अंगुत्तरनिकाय (९,५५७ संख्यात्मक सूत्र), और ५. खुद्दकनिकाय (धम्मपद, जातक, सुत्तनिपात सहित १५ ग्रंथ)।',
+      sectionTitle: 'Sutta Pitaka — The Five Great Nikayas',
+    },
+    {
+      id: 'tipitaka:abhidhamma',
+      unitNumber: '3. Abhidhamma Pitaka (Higher Realities)',
+      originalText:
+        'अभिधम्मपिटकं नाम—धम्मसंगणि, विभङ्ग, धातुकथा, पुग्गलपञ्ञत्ति, कथावत्थु, यमक, पट्ठानं चेति सत्तप्पकरणा ।\nचित्तं, चेतसिकं, रूपं, निब्बाणं चेति चत्तारो परमत्था ॥',
+      transliteration:
+        'abhidhammapiṭakaṁ nāma—dhammasaṅgaṇi, vibhaṅga, dhātukathā, puggalapaññatti, kathāvatthu, yamaka, paṭṭhānaṁ ceti sattappakaraṇā |\ncittaṁ, cetasikaṁ, rūpaṁ, nibbāṇaṁ ceti cattāro paramatthā ||',
+      translationEn:
+        'The Abhidhamma Pitaka (The Basket of Ultimate Realities) systematizes Buddhist phenomenology and metaphysics into Seven Treatises (Satta-ppakarana): Dhammasangani, Vibhanga, Dhatukatha, Puggalapannatti, Kathavatthu, Yamaka, and Patthana (The Book of Conditional Relations analyzing the 24 causal conditions / Paccayas). It examines reality through four ultimate entities (Paramatthas): Consciousness (Citta), Mental Factors (Cetasika), Material Form (Rupa), and Unconditioned Liberation (Nibbana).',
+      translationHi:
+        'अभिधम्मपिटक में बौद्ध दर्शन और चित्त-विज्ञान का गहन सूक्ष्म विश्लेषण सात ग्रंथों (धम्मसंगणि, विभंग, धातुकथा, पुग्गलपञ्ञत्ति, कथावत्थु, यमक और पट्ठान) में किया गया है। यह चार परमार्थ तत्वों—चित्त, चैतसिक, रूप और निर्वाण—का प्रतिपादन करता है।',
+      sectionTitle: 'Abhidhamma Pitaka — The Seven Treatises of Ultimate Reality',
+    },
   ],
 
   // ----------------------------------------------------------------------------
@@ -125,6 +164,45 @@ export const BUDDHISM_TEXT_DATA: Record<string, BuddhismVerseUnit[]> = {
         'अप्रमाद (जागरूकता) अमृत का मार्ग है, और प्रमाद मृत्यु का मार्ग है। जो अप्रमादी (जागरूक) हैं वे मरते नहीं, और जो प्रमादी हैं वे मरे हुए के समान हैं।',
       sectionTitle: 'Dhammapada — Appamadavagga (Heedfulness)',
     },
+    {
+      id: 'dhp:33',
+      unitNumber: 'Cittavagga Verse 33',
+      originalText:
+        'फन्दनं चपलं चित्तं दुरक्खं दुन्निवारयं ।\nउजुं करोति मेधावी उसुकारोव तेजनं ॥ ३३ ॥',
+      transliteration:
+        'phandanaṁ capalaṁ cittaṁ durakkhaṁ dunnivārayaṁ |\nujuṁ karoti medhāvī usukārova tejanaṁ || 33 ||',
+      translationEn:
+        'The mind is wavering, fickle, difficult to guard, and hard to restrain. The wise person straightens it, just as a fletcher straightens an arrow shaft.',
+      translationHi:
+        'मन चंचल, अस्थिर, बड़ी कठिनाई से रक्षित होने वाला और कठिनता से वश में आने वाला है। बुद्धिमान मनुष्य इसे वैसे ही सीधा करता है जैसे तीर बनाने वाला बाण को सीधा करता है।',
+      sectionTitle: 'Dhammapada — Cittavagga (The Mastery of Mind)',
+    },
+    {
+      id: 'dhp:197',
+      unitNumber: 'Sukhavagga Verse 197',
+      originalText:
+        'सुसुखं वत जीवाम वेरिनेसु अवेरिनो ।\nवेरिनेसु मनुस्सेसु विहराम अवेरिनो ॥ १९७ ॥',
+      transliteration:
+        'susukhaṁ vata jīvāma verinesu averino |\nverinesu manussesu viharāma averino || 197 ||',
+      translationEn:
+        'Ah, so happily do we live, free from hatred among the hateful; among people full of hatred, we dwell free from enmity and malice.',
+      translationHi:
+        'अहो! हम वैर करने वालों के बीच भी निर्वैर होकर कितने सुखपूर्वक जीते हैं। वैर-भाव से भरे लोगों के मध्य हम द्वेषरहित होकर रहते हैं।',
+      sectionTitle: 'Dhammapada — Sukhavagga (True Happiness)',
+    },
+    {
+      id: 'dhp:277',
+      unitNumber: 'Maggavagga Verse 277',
+      originalText:
+        '"सब्बे संखारा अनिच्चा"ति यदा पञ्ञाय पस्सति ।\nअथ निब्बिन्दति दुक्खे एस मग्गो विसुद्धिया ॥ २७७ ॥',
+      transliteration:
+        '"sabbe saṅkhārā aniccā"ti yadā paññāya passati |\natha nibbindati dukkhe esa maggo visuddhiyā || 277 ||',
+      translationEn:
+        '"All conditioned things are impermanent" (Sabbe Saṅkhārā Aniccā). When one sees this with intuitive wisdom, one turns away from suffering. This is the direct path of purification.',
+      translationHi:
+        'जब प्रज्ञा से यह अनुभव होता है कि "समस्त संस्कार (उत्पन्न होने वाली वस्तुएं) अनित्य हैं", तब मनुष्य दुःख से विरक्त हो जाता है। यही शुद्धि का मार्ग है।',
+      sectionTitle: 'Dhammapada — Maggavagga (The Path to Purity)',
+    },
   ],
 
   // ----------------------------------------------------------------------------
@@ -180,6 +258,71 @@ export const BUDDHISM_TEXT_DATA: Record<string, BuddhismVerseUnit[]> = {
         licensingTerms:
           'Public Domain Dedication. Authentic human recitation of the Heart Sutra in Mandarin; unrestricted free streaming and redistribution.',
       },
+    },
+    {
+      id: 'sn22.59:anattalakkhana',
+      unitNumber: 'SN 22.59 (Anattalakkhana Sutta)',
+      originalText:
+        'रूपं, भिक्खवे, अनत्ता । रूपं च हिदं, भिक्खवे, अत्ता अभविस्स, नयिदं रूपं आबाधाय संवत्तेय्य... तस्मातिह, भिक्खवे, यं किञ्चि रूपं अतीतानागतपच्चुप्पन्नं... "नेतं मम, नेसोहमस्मि, न मेसो अत्ता"ति—एवमेतं यथाभूतं सम्मप्पञ्ञाय दट्ठब्बं ॥\nएवं पस्सं, भिक्खवे, सुतवा अरियसावको रूपस्मिम्पि निब्बिन्दति, वेदनायपि निब्बिन्दति, सञ्ञायपि निब्बिन्दति, संखासुपि निब्बिन्दति, विञ्ञाणस्मिम्पि निब्बिन्दति । निब्बिन्दं विरज्जति, विरागा विमुच्चति ॥',
+      transliteration:
+        'rūpaṁ, bhikkhave, anattā. rūpañca hidaṁ, bhikkhave, attā abhavissa, nayidaṁ rūpaṁ ābādhāya saṁvatteyya... tasmātiha, bhikkhave, yaṁ kiñci rūpaṁ atītānāgatapaccuppannaṁ... "netaṁ mama, nesohamasmi, na meso attā"ti—evametaṁ yathābhūtaṁ sammappaññāya daṭṭhabbaṁ ||\nevaṁ passaṁ, bhikkhave, sutavā ariyasāvako rūpasmimpi nibbindati, vedanāyapi nibbindati, saññāyapi nibbindati, saṅkhāresupi nibbindati, viññāṇasmimpi nibbindati. nibbindaṁ virajjati, virāgā vimuccati ||',
+      translationEn:
+        'The Second Sermon at Sarnath: "Form, monks, is not-self (Anatta). If form were self, this form would not lead to affliction... Therefore, monks, any kind of form whatsoever—whether past, future, or present; internal or external; gross or subtle; inferior or superior; far or near—all form should be seen as it really is with correct wisdom: \'This is not mine, this I am not, this is not my self.\' The same is true of feelings, perceptions, mental formations, and consciousness. Seeing thus, the instructed noble disciple becomes disenchanted with form, feelings, perceptions, mental formations, and consciousness; through disenchantment passion fades; through the fading of passion he is liberated."',
+      translationHi:
+        'सारनाथ में दिया गया द्वितीय धर्मोपदेश: "भिक्षुओं! रूप (शरीर) अनात्म है। यदि यह रूप आत्मा होता, तो यह व्याधि का कारण न बनता... अतः चाहे जो भी रूप हो—भूत, भविष्य या वर्तमान—उसका सम्यक् प्रज्ञा से यथार्थ दर्शन करना चाहिए: \'यह मेरा नहीं है, यह मैं नहीं हूँ, यह मेरी आत्मा नहीं है।\' इसी प्रकार वेदना, संज्ञा, संस्कार और विज्ञान भी अनात्म हैं। ऐसा देखने पर आर्य श्रावक विरक्त होता है, और विरक्त होकर विमुक्त हो जाता है।"',
+      sectionTitle: 'Anattalakkhana Sutta (SN 22.59) — The Characteristic of Non-Self',
+    },
+    {
+      id: 'dn22:satipatthana',
+      unitNumber: 'DN 22 / MN 10 (Maha-satipatthana Sutta)',
+      originalText:
+        'एकायनो अयं, भिक्खवे, मग्गो सत्तानं विसुद्धिया, सोकपरिदेवानं समतिक्कमाय, दुक्खदोमनस्सानं अत्थङ्गमाय, ञायस्स अधिगमाय, निब्बाणस्स सच्छिकिरियाय, यदिदं चत्तारो सतिपट्ठाना ।\nकतमे चत्तारो? इध, भिक्खवे, भिक्खु काये कायानुपस्सी विहरति आतापी सम्पजानो सतिमा, विनेय्य लोके अभिज्झादोमनस्सं । वेदनासु वेदनानुपस्सी... चित्ते चित्तानुपस्सी... धम्मेसु धम्मानुपस्सी विहरति ॥',
+      transliteration:
+        'ekāyano ayaṁ, bhikkhave, maggo sattānaṁ visuddhiyā, sokaparidevānaṁ samatikkamāya, dukkhadomanassānaṁ atthaṅgamāya, ñāyassa adhigamāya, nibbāṇassa sacchikiriyāya, yadidaṁ cattāro satipaṭṭhānā |\nkatame cattāro? idha, bhikkhave, bhikkhu kāye kāyānupassī viharati ātāpī sampajāno satimā, vineyya loke abhijjhādomanassaṁ. vedanāsu vedanānupassī... citte cittānupassī... dhammesu dhammānupassī viharati ||',
+      translationEn:
+        'The Great Discourse on the Foundations of Mindfulness: "This is the direct path, monks, for the purification of beings, for the overcoming of sorrow and lamentation, for the disappearance of pain and grief, for the attainment of the true method, for the realization of Nibbana: that is, the Four Foundations of Mindfulness (Satipatthana). What four? Here, a practitioner dwells contemplating the body in the body, ardent, clearly comprehending, mindful, having put away covetousness and grief concerning the world; dwells contemplating feelings in feelings; dwells contemplating mind in mind; dwells contemplating mental phenomena in mental phenomena."',
+      translationHi:
+        'महास्मृतिप्रस्थान सूत्र: "भिक्षुओं! प्राणियों की शुद्धि के लिए, शोक-विलाप के निवारण के लिए, दुःख-दौर्मनस्य के अंत के लिए और निर्वाण के साक्षात्कार के लिए यह एक ही सीधा मार्ग है—अर्थात् चार स्मृति-प्रस्थान: १. कायानुपश्यना (शरीर का सम्यक् बोध), २. वेदनानुपश्यना (संवेदनाओं का बोध), ३. चित्तानुपश्यना (चित्त की अवस्थाओं का बोध), और ४. धम्मानुपश्यना (मानसिक तत्वों का बोध)।"',
+      sectionTitle: 'Maha-satipatthana Sutta (DN 22 / MN 10) — The Direct Path of Mindfulness',
+    },
+    {
+      id: 'an3.65:kalama_sutta',
+      unitNumber: 'AN 3.65 (Kalama Sutta / Kesamutti)',
+      originalText:
+        'एथ तुम्हे, कालामा, मा अनुस्सवेन, मा परम्पराय, मा इतिकिराय, मा पिटकसम्पदानेन, मा तक्कहेतु, मा नयहेतु, मा आकारपरिवितक्केन, मा दिट्ठिनिज्झानक्खन्तिया, मा भब्बरूपताय, मा समणो नो गरूति ।\nयदा तुम्हे, कालामा, अत्तनाव जानेय्याथ—"इमे धम्मा कुसला, इमे धम्मा अनवज्जा, इमे धम्मा विञ्ञुपसत्था, इमे धम्मा समत्ता समादिन्ना हिताय सुखाय संवत्तन्ती"ति, अथ तुम्हे, कालामा, उपसम्पज्ज विहरेय्याथ ॥',
+      transliteration:
+        'etha tumhe, kālāmā, mā anussavena, mā paramparāya, mā itikirāya, mā piṭakasampadānena, mā takkahetu, mā nayahetu, mā ākāraparivitakkena, mā diṭṭhinijjhānakkhantiyā, mā bhabbarūpatāya, mā samaṇo no garūti |\nyadā tumhe, kālāmā, attanāva jāneyyātha—"ime dhammā kusalā, ime dhammā anavajjā, ime dhammā viññuppasatthā, ime dhammā samattā samādinnā hitāya sukhāya saṁvattantī"ti, atha tumhe, kālāmā, upasampajja vihareyyātha ||',
+      translationEn:
+        'The Charter of Free Inquiry: "Come, O Kalamas! Do not go by oral tradition, by lineage of teaching, by hearsay, by scriptural authority, by logical reasoning, by philosophical inferences, by ponderings on appearances, by delighting in speculative opinions, by seeming competence, or by the thought: \'This contemplative ascetic is our guru.\' But when you know for yourselves: \'These qualities are wholesome; these qualities are blameless; these qualities are praised by the wise; these qualities, when undertaken and practiced, lead to genuine welfare and happiness\'—then you should abide in them and practice them."',
+      translationHi:
+        'कालाम सूत्र: "हे कालामों! किसी बात को केवल इसलिए मत मानो कि वह परंपरा से सुनी गई है, या धर्मग्रंथों में लिखी है, या तर्कसंगत लगती है, या हमारे गुरु ने कही है। अपितु जब तुम स्वयं जानो कि: \'ये बातें कल्याणकारी हैं, निष्पाप हैं, ज्ञानियों द्वारा प्रशंसित हैं, और इनके आचरण से सुख और शांति मिलती है\'—तभी उन्हें स्वीकार करो और उनका आचरण करो।"',
+      sectionTitle: 'Kalama Sutta (AN 3.65) — Freedom of Mind & Empirical Inquiry',
+    },
+    {
+      id: 'diamond_sutra:gatha',
+      unitNumber: 'Diamond Sutra (Vajracchedika Ch 32)',
+      originalText:
+        'तारका तिमिरं दीपो मायावश्यायकं बुद्बुदम् ।\nस्वप्नं च विद्युदभ्रं च एवं द्रष्टव्य संस्कृतम् ॥\nसर्वे धर्मा अनभिनिवेश्या अद्वयप्रवेशाः ॥',
+      transliteration:
+        'tārakā timiraṁ dīpo māyāvaśyāyakaṁ budbudam |\nsvapnaṁ ca vidyudabhraṁ ca evaṁ draṣṭavya saṁskṛtam ||\nsarve dharmā anabhiniveśyā advayapraveśāḥ ||',
+      translationEn:
+        'The Diamond Sutra Concluding Gatha: "Like a falling star, a clouding of the vision, a lamp in the wind, a phantom illusion, a dewdrop, a floating bubble on water, a dream, a flash of lightning, or a passing summer cloud—thus should all conditioned things be contemplated." Realizing the ungraspable, non-dual nature of all phenomena.',
+      translationHi:
+        'वज्रच्छेदिका प्रज्ञापारमिता सूत्र (अध्याय ३२): "तारों के टूटने, दृष्टि के तिमिर, हवा में दीपक, मायावी भ्रम, ओस की बूँद, पानी के बुलबुले, स्वप्न, बिजली की चमक और आकाश के मेघ के समान ही समस्त संस्कृत (उत्पन्न होने वाली) वस्तुओं को जानना चाहिए।"',
+      sectionTitle: 'Vajracchedika Prajnaparamita — The Diamond Sutra (Impermanence & Emptiness)',
+    },
+    {
+      id: 'lotus_sutra:avalokiteshvara',
+      unitNumber: 'Lotus Sutra (Saddharmapundarika Ch 25)',
+      originalText:
+        'श्रुण्वथ तस्य प्रभावां बोधिसत्त्वस्य विचिन्तयेत् ।\nसर्वदुःखप्रमोक्षाय लोके अवलोकितेश्वरः ॥\nशून्यता करुणामैत्री सर्वसत्त्वेषु संधृता ।\nनमोऽवलोकितेश्वराय बोधिसत्त्वाय महासत्त्वाय ॥',
+      transliteration:
+        'śruṇvatha tasya prabhāvāṁ bodhisattvasya vicintayet |\nsarvaduḥkhapramokṣāya loke avalokiteśvaraḥ ||\nśūnyatā karuṇāmaitrī sarvasattveṣu saṁdhṛtā |\nnamo\'valokiteśvarāya bodhisattvāya mahāsattvāya ||',
+      translationEn:
+        'The Universal Gate of Bodhisattva Avalokiteshvara: "Listen to the wondrous deeds and boundless compassion of Bodhisattva Avalokiteshvara, who responds to every voice in the world. For the deliverance of all living beings from distress, terror, and suffering, Avalokiteshvara radiates unconditional mercy, wisdom, and universal protection. Homage to Bodhisattva Avalokiteshvara, the Great Being!"',
+      translationHi:
+        'सद्धर्मपुण्डरीक सूत्र (अध्याय २५ — अवलोकितेश्वर समन्तमुख परिवर्त): "संसार के समस्त दुःखों से मुक्ति दिलाने के लिए अवलोकितेश्वर बोधिसत्त्व करुणा, मैत्री और प्रज्ञा का अवतार हैं। जो भी संकट में उनका स्मरण करता है, वे उसकी रक्षा करते हैं। अवलोकितेश्वर बोधिसत्त्व को नमन!"',
+      sectionTitle: 'Saddharmapundarika — The Lotus Sutra (The Universal Gate of Compassion)',
     },
   ],
 
@@ -304,6 +447,19 @@ export const BUDDHISM_TEXT_DATA: Record<string, BuddhismVerseUnit[]> = {
       translationHi:
         'उन भगवान्, अर्हत्, सम्यक् संबुद्ध को नमस्कार!\nवे भगवान् अर्हत् हैं, सम्यक् संबुद्ध हैं, विद्या और आचरण से संपन्न हैं, सुगत हैं, लोकज्ञ हैं, अद्वितीय सारथी हैं, देव और मनुष्यों के शास्ता हैं।',
       sectionTitle: 'Buddhavandana (Homage to the Blessed One)',
+    },
+    {
+      id: 'chants:ratana_sutta',
+      unitNumber: 'Ratana Sutta (The Jewel Discourse)',
+      originalText:
+        'यानीध भूतानि समागतानि भुम्मानि वा यानि व अन्तरिक्खे ।\nसब्बेव भूता सुमना भवन्तु अथोपि सक्कच्च सुणन्तु भासितं ॥\nयं किञ्चि वित्तं इध वा हुरं वा सग्गेसु वा यं रतनं पणीतं ।\nन नो समं अत्थि तथागतेन इदम्पि बुद्धे रतनं पणीतं ।\nएतेन सच्चेन सुवत्थि होतु ॥',
+      transliteration:
+        'yānīdha bhūtāni samāgatāni bhummāni vā yāni va antarikkkhe |\nsabbeva bhūtā sumanā bhavantu athopi sakkacca suṇantu bhāsitaṁ ||\nyaṁ kiñci vittaṁ idha vā huraṁ vā saggesu vā yaṁ ratanaṁ paṇītaṁ |\nna no samaṁ atthi tathāgatena idampi buddhe ratanaṁ paṇītaṁ |\netena saccena suvatthi hotu ||',
+      translationEn:
+        'The Jewel Discourse (Khuddakapatha 6 / Sutta Nipata 2.1): "Whatever spirits are assembled here, terrestrial or celestial, may all be joyous and listen attentively to what is spoken. Whatever treasure there may be here or in the world beyond, or whatever precious jewel in the heavens—none equals the Tathagata! In the Buddha is this precious jewel. By this proclamation of truth, may there be blessing and well-being!"',
+      translationHi:
+        'रतन सुत्त: "यहाँ एकत्र हुए समस्त जीवों और देवों का कल्याण हो। इस लोक या परलोक में जो भी धन अथवा स्वर्ग में जो भी रत्न है, वह तथागत बुद्ध के समान नहीं है। बुद्ध में यह अनुपम रत्न है; इस सत्य से सबका कल्याण और मंगल हो!"',
+      sectionTitle: 'Ratana Sutta — The Jewel Discourse of Protection',
     },
   ],
 

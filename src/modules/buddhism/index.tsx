@@ -102,7 +102,7 @@ export const BuddhismModule: React.FC<BuddhismModuleProps> = ({
   const [selectedSutta, setSelectedSutta] = useState<SuttaMeta>(() => {
     if (typeof window !== 'undefined' && window.location?.search) {
       const p = new URLSearchParams(window.location.search);
-      const s = p.get('sutta');
+      const s = p.get('sutta') || p.get('collection');
       if (s) {
         const found = CANONICAL_SUTTAS.find((st) => st.id === s || st.uid === s);
         if (found) return found;
