@@ -15,8 +15,28 @@ import type {
   SacredAudioRequirement,
   PlaybackProviderType
 } from '../types/sacredAudio';
-import { isApprovedPublicYouTubeId } from '../data/sacredAudioMasterCatalogue';
+import {
+  isApprovedPublicYouTubeId,
+  isApprovedLocalAudioId,
+  isApprovedLocalAudioFilePath,
+  getCanonicalRequirementById
+} from '../data/sacredAudioMasterCatalogue';
 import { resolveAudioUrl } from '../utils/audioUrlResolver';
+
+export function isSafeYouTubeEmbedUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    const validHost =
+      parsed.hostname === 'www.youtube-nocookie.com' ||
+      parsed.hostname === 'youtube-nocookie.com' ||
+      parsed.hostname === 'www.youtube.com' ||
+      parsed.hostname === 'youtube.com';
+    const validPath = /^\/embed\/[a-zA-Z0-9_-]{11}$/.test(parsed.pathname);
+    return validHost && validPath && parsed.protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
 
 export interface SacredAudioPlaybackState {
   currentRequirement: SacredAudioRequirement | null;
@@ -176,34 +196,48 @@ export class UnifiedSacredAudioService {
   }
 
   /**
-   * Primary playback initiator with strict anti-leak verification.
+   * Primary playback initiator with strict anti-leak verification and canonical catalogue anti-tampering.
    */
   public async playRequirement(requirement: SacredAudioRequirement): Promise<void> {
+    // 0. Canonical Lookup & Anti-Tampering: Enforce truth from immutable catalogue
+    const canonical = getCanonicalRequirementById(requirement.id);
+    if (!canonical) {
+      this.stop();
+      const msg = `UNKNOWN_REQUIREMENT_ERROR: Requirement ${requirement.id} is not registered in the canonical master catalogue.`;
+      this.state.currentRequirement = requirement;
+      this.state.status = 'ERROR';
+      this.state.activeProvider = 'NONE';
+      this.state.errorMessage = msg;
+      this.notifyListeners();
+      throw new Error(msg);
+    }
+
     // 1. Anti-leak invariant check: NEVER serve blocked or unpermitted items
     if (
-      requirement.availability === 'AWAITING_PERMISSION' ||
-      requirement.availability === 'SOURCE_AVAILABLE_PERMISSION_REQUIRED' ||
-      requirement.cohort === 'SOURCE_AVAILABLE_PERMISSION_REQUIRED' ||
-      requirement.rightsClassification === 'SOURCE_AVAILABLE_PERMISSION_REQUIRED' ||
-      requirement.rightsClassification === 'UNRESOLVED_NEIGHBORING_RIGHTS' ||
-      (requirement.cohort === 'LOCAL_PHYSICAL' && !requirement.isPlayable)
+      canonical.availability === 'AWAITING_PERMISSION' ||
+      canonical.availability === 'SOURCE_AVAILABLE_PERMISSION_REQUIRED' ||
+      canonical.cohort === 'SOURCE_AVAILABLE_PERMISSION_REQUIRED' ||
+      canonical.rightsClassification === 'SOURCE_AVAILABLE_PERMISSION_REQUIRED' ||
+      canonical.rightsClassification === 'UNRESOLVED_NEIGHBORING_RIGHTS' ||
+      (canonical.cohort === 'LOCAL_PHYSICAL' && !canonical.isPlayable) ||
+      (requirement.playbackProvider === 'LOCAL_HTML5' && (!canonical.isPlayable || canonical.cohort !== 'LOCAL_PHYSICAL'))
     ) {
       this.stop();
-      this.state.currentRequirement = requirement;
+      this.state.currentRequirement = canonical;
       this.state.status = 'ERROR';
       this.state.activeProvider = 'NONE';
       this.state.errorMessage =
         'BLOCKED_RIGHTS_ERROR: Recording is blocked pending legal permission and cannot be played.';
       this.notifyListeners();
       throw new Error(
-        `BLOCKED_RIGHTS_ERROR: Requirement ${requirement.id} is blocked awaiting rights clearance.`
+        `BLOCKED_RIGHTS_ERROR: Requirement ${canonical.id} is blocked awaiting rights clearance.`
       );
     }
 
     // 2. Reject non-audio text cards
-    if (requirement.cohort === 'TEXT_CARD' || requirement.availability === 'TEXT_CARD') {
+    if (canonical.cohort === 'TEXT_CARD' || canonical.availability === 'TEXT_CARD') {
       this.stop();
-      this.state.currentRequirement = requirement;
+      this.state.currentRequirement = canonical;
       this.state.status = 'ERROR';
       this.state.activeProvider = 'NONE';
       this.state.errorMessage = 'NON_AUDIO_CARD: This sacred item is a preserved non-audio reference card.';
@@ -212,9 +246,9 @@ export class UnifiedSacredAudioService {
     }
 
     // 3. Reject pending discovery requirements
-    if (requirement.cohort === 'PENDING_DISCOVERY' || requirement.availability === 'PENDING_DISCOVERY') {
+    if (canonical.cohort === 'PENDING_DISCOVERY' || canonical.availability === 'PENDING_DISCOVERY') {
       this.stop();
-      this.state.currentRequirement = requirement;
+      this.state.currentRequirement = canonical;
       this.state.status = 'ERROR';
       this.state.activeProvider = 'NONE';
       this.state.errorMessage =
@@ -223,24 +257,61 @@ export class UnifiedSacredAudioService {
       return;
     }
 
-    // 4. Handle Local HTML5 Playback (9 Rights-Cleared Assets)
-    if (requirement.playbackProvider === 'LOCAL_HTML5') {
-      if (!requirement.isPlayable || !requirement.physicalAsset) {
+    // 4. Handle Local HTML5 Playback (14 Rights-Cleared Local Audio Assets)
+    if (canonical.playbackProvider === 'LOCAL_HTML5') {
+      if (!isApprovedLocalAudioId(canonical.id)) {
         this.stop();
-        this.state.currentRequirement = requirement;
+        const msg = `UNAUTHORIZED_LOCAL_ASSET: Requirement ${canonical.id} is not an approved local audio asset.`;
+        this.state.currentRequirement = canonical;
         this.state.status = 'ERROR';
-        this.state.errorMessage = 'ASSET_ERROR: Missing physical audio asset configuration.';
+        this.state.activeProvider = 'NONE';
+        this.state.errorMessage = msg;
+        this.notifyListeners();
+        throw new Error(msg);
+      }
+
+      if (!canonical.isPlayable || !canonical.physicalAsset || !isApprovedLocalAudioFilePath(canonical.physicalAsset.filePath)) {
+        this.stop();
+        this.state.currentRequirement = canonical;
+        this.state.status = 'ERROR';
+        this.state.errorMessage = 'ASSET_ERROR: Missing or unapproved physical audio asset configuration.';
         this.notifyListeners();
         return;
+      }
+
+      // Anti-tampering check: verify that caller-supplied physicalAsset matches canonical record
+      if (requirement.physicalAsset && requirement.physicalAsset.filePath !== canonical.physicalAsset.filePath) {
+        this.stop();
+        const msg = `TAMPER_DETECTED: Local physical asset file path mismatch for ${canonical.id}.`;
+        this.state.currentRequirement = canonical;
+        this.state.status = 'ERROR';
+        this.state.errorMessage = msg;
+        this.notifyListeners();
+        throw new Error(msg);
+      }
+
+      // Reject external / remote URLs for local playback
+      if (
+        /^(?:https?:)?\/\//i.test(canonical.physicalAsset.filePath) ||
+        canonical.physicalAsset.filePath.startsWith('data:') ||
+        canonical.physicalAsset.filePath.startsWith('blob:')
+      ) {
+        this.stop();
+        const msg = `SECURITY_ERROR: Local audio asset cannot resolve to external remote URL for ${canonical.id}.`;
+        this.state.currentRequirement = canonical;
+        this.state.status = 'ERROR';
+        this.state.errorMessage = msg;
+        this.notifyListeners();
+        throw new Error(msg);
       }
 
       // Stop any existing playback first (single-track lock)
       this.stopInternalAudio();
 
-      const mediaUrl = this.resolveLocalAudioUrl(requirement.physicalAsset.filePath);
+      const mediaUrl = this.resolveLocalAudioUrl(canonical.physicalAsset.filePath);
 
       this.state = {
-        currentRequirement: requirement,
+        currentRequirement: canonical,
         status: 'LOADING',
         activeProvider: 'LOCAL_HTML5',
         currentTime: 0,
@@ -276,14 +347,14 @@ export class UnifiedSacredAudioService {
     }
 
     // 5. Handle YouTube Embed Stream (28 Approved & Tested YouTube Recordings)
-    if (requirement.playbackProvider === 'YOUTUBE_EMBED') {
+    if (canonical.playbackProvider === 'YOUTUBE_EMBED') {
       // Release Gate: Public Release Gating
       // Only the 28 individually playback-tested and content-verified YouTube recordings are enabled for public streaming.
       // The other 112 candidates remain strictly gated pending independent content & CDP playback audits.
-      if (!isApprovedPublicYouTubeId(requirement.id)) {
+      if (!isApprovedPublicYouTubeId(canonical.id)) {
         this.stop();
-        const msg = `UNVERIFIED_STREAM_GATE: Requirement ${requirement.id} is awaiting independent content verification and browser playback testing prior to public release.`;
-        this.state.currentRequirement = requirement;
+        const msg = `UNVERIFIED_STREAM_GATE: Requirement ${canonical.id} is awaiting independent content verification and browser playback testing prior to public release.`;
+        this.state.currentRequirement = canonical;
         this.state.status = 'ERROR';
         this.state.activeProvider = 'NONE';
         this.state.errorMessage = msg;
@@ -291,20 +362,46 @@ export class UnifiedSacredAudioService {
         throw new Error(msg);
       }
 
-      if (!requirement.youtubeMetadata?.videoId) {
+      if (!canonical.youtubeMetadata?.videoId) {
         this.stop();
-        this.state.currentRequirement = requirement;
+        this.state.currentRequirement = canonical;
         this.state.status = 'ERROR';
         this.state.errorMessage = 'YOUTUBE_ERROR: Missing YouTube video ID in metadata.';
         this.notifyListeners();
         return;
       }
 
+      // Anti-tampering check: verify that caller-supplied metadata matches canonical record
+      if (
+        (requirement.youtubeMetadata?.videoId && requirement.youtubeMetadata.videoId !== canonical.youtubeMetadata.videoId) ||
+        (requirement.youtubeMetadata?.embedUrl && requirement.youtubeMetadata.embedUrl !== canonical.youtubeMetadata.embedUrl)
+      ) {
+        this.stop();
+        const msg = `TAMPER_DETECTED: YouTube metadata mismatch between caller payload and canonical catalogue for ${canonical.id}.`;
+        this.state.currentRequirement = canonical;
+        this.state.status = 'ERROR';
+        this.state.errorMessage = msg;
+        this.notifyListeners();
+        throw new Error(msg);
+      }
+
+      // Safe URL verification (F-05)
+      if (!isSafeYouTubeEmbedUrl(canonical.youtubeMetadata.embedUrl)) {
+        this.stop();
+        const msg = `YOUTUBE_SECURITY_ERROR: Insecure or malformed YouTube embed URL for ${canonical.id}.`;
+        this.state.currentRequirement = canonical;
+        this.state.status = 'ERROR';
+        this.state.activeProvider = 'NONE';
+        this.state.errorMessage = msg;
+        this.notifyListeners();
+        throw new Error(msg);
+      }
+
       // Stop any local HTML5 audio immediately
       this.stopInternalAudio();
 
       this.state = {
-        currentRequirement: requirement,
+        currentRequirement: canonical,
         status: 'PLAYING',
         activeProvider: 'YOUTUBE_EMBED',
         currentTime: 0,
@@ -312,7 +409,7 @@ export class UnifiedSacredAudioService {
         volume: 1.0,
         isMuted: false,
         errorMessage: null,
-        resolvedMediaUrl: requirement.youtubeMetadata.embedUrl
+        resolvedMediaUrl: canonical.youtubeMetadata.embedUrl
       };
       this.notifyListeners();
       return;
@@ -320,7 +417,7 @@ export class UnifiedSacredAudioService {
 
     // Fallback for unknown provider
     this.stop();
-    this.state.errorMessage = `Unsupported playback provider: ${requirement.playbackProvider}`;
+    this.state.errorMessage = `Unsupported playback provider: ${canonical.playbackProvider}`;
     this.notifyListeners();
   }
 

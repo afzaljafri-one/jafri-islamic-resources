@@ -2,7 +2,7 @@
  * ============================================================================
  * JAFRI SACRED AUDIO LIBRARY — LOCAL AUDIO PLAYER BAR
  * Stage Gate 5.4B & 5.4C: Persistent Bottom Player for Local HTML5 Audio
- * Dedicated to the 9 Rights-Cleared Local Audio Assets
+ * Dedicated to the 14 Rights-Cleared Local Audio Assets
  * ============================================================================
  */
 
