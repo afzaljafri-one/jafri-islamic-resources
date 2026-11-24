@@ -8,6 +8,7 @@ import {
   SearchResultMatch,
 } from '../../platform/types';
 import { cacheService } from '../cacheService';
+import { OFFLINE_BIBLE_CHAPTERS } from './christianityOfflineData';
 
 export interface BibleBookMeta {
   bookid: number;
@@ -188,13 +189,10 @@ class ChristianityProvider {
       await cacheService.setIndexedDB(`bible_${cacheKey}`, data);
       return data;
     } catch {
-      // Tier 4: Foundational Genesis 1:1-3 emergency offline fallback
-      if (bookId === 1 && chapter === 1) {
-        return [
-          { pk: 1, verse: 1, text: 'In the beginning God created the heaven and the earth.' },
-          { pk: 2, verse: 2, text: 'And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of God moved upon the face of the waters.' },
-          { pk: 3, verse: 3, text: 'And God said, Let there be light: and there was light.' },
-        ];
+      // Tier 4: Foundational canonical offline fallback (Genesis 1, Psalms 23 & 91, Matthew 5, John 1, etc.)
+      const offlineKey = `${bookId}:${chapter}`;
+      if (OFFLINE_BIBLE_CHAPTERS[offlineKey]) {
+        return OFFLINE_BIBLE_CHAPTERS[offlineKey];
       }
       return [];
     }

@@ -1508,6 +1508,10 @@ export const READING_AUDIO_LINKAGES: readonly AudioReadingLinkage[] = [
  * Checks whether a requirement is currently approved and playable.
  */
 export function isRequirementPlayable(req: SacredAudioRequirement): boolean {
+  // Strict Theological Governance Gate: Quran recitations MUST NEVER be synthetic AI
+  if (req.tradition === 'islam' && ((req as any).isSynthetic || (req as any).isSynthesizedNarration)) {
+    return false;
+  }
   if (req.playbackProvider === 'LOCAL_HTML5') {
     return (
       req.availability === 'AVAILABLE_VERIFIED' &&

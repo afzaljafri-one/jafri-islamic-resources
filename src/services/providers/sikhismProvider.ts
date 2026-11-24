@@ -6,6 +6,7 @@
 
 import { SearchResultMatch } from '../../platform/types';
 import { cacheService } from '../cacheService';
+import { OFFLINE_ANGS_1_TO_13 } from './sikhismOfflineAngs';
 
 export interface GurbaniLine {
   verseId: number;
@@ -29,53 +30,9 @@ export interface AngData {
   lines: GurbaniLine[];
 }
 
-const OFFLINE_ANG_1: AngData = {
-  pageNo: 1,
-  raag: 'Jap Ji Sahib',
-  writer: 'Guru Nanak Dev Ji',
-  lines: [
-    {
-      verseId: 1,
-      shabadId: 1,
-      lineNo: 1,
-      pageNo: 1,
-      gurmukhi: 'ੴ ਸਤਿ ਨਾਮੁ ਕਰਤਾ ਪੁਰਖੁ ਨਿਰਭਉ ਨਿਰਵੈਰੁ ਅਕਾਲ ਮੂਰਤਿ ਅਜੂਨੀ ਸੈਭੰ ਗੁਰ ਪ੍ਰਸਾਦਿ ॥',
-      larivaar: 'ੴਸਤਿਨਾਮੁਕਰਤਾਪੁਰਖੁਨਿਰਭਉਨਿਰਵੈਰੁਅਕਾਲਮੂਰਤਿਅਜੂਨੀਸੈਭੰਗੁਰਪ੍ਰਸਾਦਿ॥',
-      transliteration: 'ik-o-aṅkār sat nām kartā purakh nir-bha-o nir-vair akāl mūrat ajūnī saibhaṅ gur prasād.',
-      translationEn: "One Universal Creator God. The Name Is Truth. Creative Being Personified. No Fear. No Hatred. Image Of The Undying, Beyond Birth, Self-Existent. By Guru's Grace.",
-      writer: 'Guru Nanak Dev Ji',
-      raag: 'Jap Ji Sahib',
-    },
-    {
-      verseId: 2,
-      shabadId: 1,
-      lineNo: 2,
-      pageNo: 1,
-      gurmukhi: '॥ ਜਪੁ ॥',
-      larivaar: '॥ਜਪੁ॥',
-      transliteration: '|| jap ||',
-      translationEn: 'Chant And Meditate:',
-      writer: 'Guru Nanak Dev Ji',
-      raag: 'Jap Ji Sahib',
-    },
-    {
-      verseId: 3,
-      shabadId: 1,
-      lineNo: 3,
-      pageNo: 1,
-      gurmukhi: 'ਆਦਿ ਸਚੁ ਜੁਗਾਦਿ ਸਚੁ ॥ ਹੈ ਭੀ ਸਚੁ ਨਾਨਕ ਹੋਸੀ ਭੀ ਸਚੁ ॥੧॥',
-      larivaar: 'ਆਦਿਸਚੁਜੁਗਾਦਿਸਚੁ॥ਹੈਭੀਸਚੁਨਾਨਕਹੋਸੀਭੀਸਚੁ॥੧॥',
-      transliteration: 'ād sach jugād sach || hai bhī sach nānak hosī bhī sach ||1||',
-      translationEn: 'True In The Primal Beginning. True Throughout The Ages. True Here And Now. O Nanak, Forever And Ever True. ||1||',
-      writer: 'Guru Nanak Dev Ji',
-      raag: 'Jap Ji Sahib',
-    },
-  ],
-};
-
 class SikhismProvider {
   private angCache: Record<number, AngData> = {
-    1: OFFLINE_ANG_1,
+    ...OFFLINE_ANGS_1_TO_13,
   };
 
   async getAng(pageNumber: number): Promise<AngData> {
@@ -158,31 +115,9 @@ class SikhismProvider {
         await cacheService.setIndexedDB(`sikh_ang_${pageNo}`, angData);
         return angData;
       } catch {
-        // Return structured offline placeholder for Ang 1 if totally offline
-        if (pageNo === 1) {
-          return {
-            pageNo: 1,
-            raag: 'Jap Ji Sahib',
-            writer: 'Guru Nanak Dev Ji',
-            lines: [
-              {
-                verseId: 1,
-                shabadId: 1,
-                lineNo: 1,
-                pageNo: 1,
-                gurmukhi:
-                  'ੴ ਸਤਿ ਨਾਮੁ ਕਰਤਾ ਪੁਰਖੁ ਨਿਰਭਉ ਨਿਰਵੈਰੁ ਅਕਾਲ ਮੂਰਤਿ ਅਜੂਨੀ ਸੈਭੰ ਗੁਰ ਪ੍ਰਸਾਦਿ ॥',
-                larivaar:
-                  'ੴਸਤਿਨਾਮੁਕਰਤਾਪੁਰਖੁਨਿਰਭਉਨਿਰਵੈਰੁਅਕਾਲਮੂਰਤਿਅਜੂਨੀਸੈਭੰਗੁਰਪ੍ਰਸਾਦਿ॥',
-                transliteration:
-                  'ik-o-aṅkār sat nām kartā purakh nir-bha-o nir-vair akāl mūrat ajūnī saibhaṅ gur prasād.',
-                translationEn:
-                  'One Universal Creator God. The Name Is Truth. Creative Being Personified. No Fear. No Hatred. Image Of The Undying, Beyond Birth, Self-Existent. By Guru\'s Grace.',
-                writer: 'Guru Nanak Dev Ji',
-                raag: 'Jap Ji Sahib',
-              },
-            ],
-          };
+        // Return structured offline corpus for Angs 1 to 13 if network is offline
+        if (OFFLINE_ANGS_1_TO_13[pageNo]) {
+          return OFFLINE_ANGS_1_TO_13[pageNo];
         }
         return { pageNo, raag: 'Gurbani', writer: 'Sikh Gurus', lines: [] };
       }
