@@ -91,7 +91,7 @@ export const TRADITIONS_COVERAGE: Record<ReligionId, TraditionCoverageDetails> =
     offlineAvailability: {
       status: 'FULL_OFFLINE',
       summary: '100% Offline Mushaf Images, PDFs & Prayer Engine',
-      details: 'All 1,461 Mushaf page plates, 4 vector PDFs, 14 local audio recitations, Adhan-JS offline prayer calculator, and Hijri calendar operate completely offline without internet.',
+      details: 'All 1,461 Mushaf page plates, 4 vector PDFs, Adhan-JS offline prayer calculator, and Hijri calendar operate completely offline without internet.',
     },
     missingOrExcluded: {
       summary: 'Theological Governance Restrictions',

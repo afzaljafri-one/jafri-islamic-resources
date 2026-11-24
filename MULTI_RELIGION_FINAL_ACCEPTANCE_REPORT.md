@@ -6,28 +6,29 @@
 - **Feature Branch Commits:**
   1. `c559fa3aa58d13e3d765b6cc6b25fb453857ca54` (`c559fa3`) — Initial release commit
   2. `c9c1295b7937a6e8c6a9c1667f814f87bf5420fc` (`c9c1295`) — Test portability, tiering, and governance commit
-- **Remote Synchronization:** `origin/feature/multi-religion-platform` synchronized at `c9c1295`
+  3. `1c6caf1bdc6d1d5598d2be83394cc246622dee0b` (`1c6caf1`) — Release gaps resolution commit (network failure recovery & scripture coverage disclosure)
+- **Remote Synchronization:** `origin/feature/multi-religion-platform` synchronized at `1c6caf1`
 - **Pull Request:** PR #1 (`feature/multi-religion-platform` -> `main`) — **Open & Draft Status**
 - **Production URL on Main:** `https://afzaljafri-one.github.io/jafri-islamic-resources/` (Active, Unmodified)
 - **Base Dev Server URL:** `http://localhost:5173/`
-- **Reconciliation Date:** November 23, 2026
-- **Status:** **ACCEPTED — TECHNICAL ACCEPTANCE COMPLETED (DRAFT PR)**
+- **Reconciliation Date:** November 24, 2026
+- **Status:** **TECHNICAL VERIFICATION: REPORTED PASS — EXTERNAL REVIEW PENDING**
 
 ---
 
-## 1. Executive Acceptance Summary
+## 1. Executive Verification Summary
 
-This reconciled report establishes the final functional, content, architectural, and visual acceptance of the seven-religion platform expansion on branch `feature/multi-religion-platform`. All metrics reflect the actual repository and remote GitHub state following the push of commit `c9c1295`.
+This reconciled report documents the reported functional, content, architectural, and visual verification results for the seven-religion platform expansion on branch `feature/multi-religion-platform`. All metrics reflect reported verification passes from the actual repository and remote GitHub state following the push of commit `1c6caf1`. These reported results support readiness for external code review; they do not constitute final release approval or production acceptance.
 
-| Acceptance Dimension | Status | Verification Result |
+| Verification Dimension | Reported Status | Verification Result |
 | :--- | :---: | :--- |
-| **Git Hygiene & Containment** | **PASS** | Branch `feature/multi-religion-platform` contains exactly 2 commits (`c559fa3`, `c9c1295`) pushed to remote. PR #1 is open as a draft. `main` and `origin/main` remain untouched at `fb4d170`. Zero production deployments executed. |
-| **Preservation of Live Islam** | **PASS** | 100% of live Quran reader (114 Surahs, 6,236 Ayahs, Dual Mushaf 15-line & 13-line, 4 Canonical PDFs, 14 local audios, Qibla/Prayer tools) fully preserved with zero regressions. |
+| **Git Hygiene & Containment** | **PASS** | Branch `feature/multi-religion-platform` contains exactly 3 commits (`c559fa3`, `c9c1295`, `1c6caf1`) pushed to remote. PR #1 is open as a draft. `main` and `origin/main` remain untouched at `fb4d170`. Zero production deployments executed. |
+| **Preservation of Live Islam** | **PASS** | Reported test results show that live Quran reader assets (114 Surahs, 6,236 Ayahs, Dual Mushaf 15-line & 13-line, 4 Canonical PDFs, dynamic EveryAyah CDN audio streaming, Qibla/Prayer tools) remain intact, with zero regressions reported across the 43 automated Islamic test cases (`test_m3_suite.py` and `test_m3_dual_mushaf_integration.py`); this represents automated regression coverage rather than exhaustive behavioural proof. |
 | **TypeScript Compilation** | **PASS** | `npx tsc -b` exited `0` with zero diagnostic errors across all modules. |
 | **Vite Production Build** | **PASS** | `npm run build` exited `0` (1,706 modules transformed, `dist/` bundle created in 7.54s). |
-| **Automated Test Suites** | **PASS** | **68 / 68 Tests Passed (100% Pass Rate)** across all 3 independent test suites. |
-| **Live Browser UI Smoke Tests** | **PASS** | Headless Chrome audit of all 9 core routes reported **0 runtime JavaScript errors** and confirmed initial DOM mounting. |
-| **Storage Isolation** | **PASS** | New platform bookmarks, progress, and preferences are namespaced under `jafri_platform_*`, guaranteeing zero collision with live Islamic production storage keys. |
+| **Automated Test Suites** | **PASS** | **Reported aggregate of 81 / 81 Tests Passed (100% Pass Rate)** across 4 suites: Targeted runtime failure recovery (13), Multi-religion (25), M3 Islamic reader (23), Dual Mushaf integration (20). *(Note: 81/81 is a reported aggregate across diverse verification methods and does not mean all tests are end-to-end behavioural tests).* |
+| **Live Browser UI Smoke Tests** | **PASS** | Headless Chrome smoke audit of all 9 core routes reported **0 runtime JavaScript errors** and verified initial DOM mounting (smoke verification only; does not prove deep user interactive flows). |
+| **Storage Isolation** | **PASS** | New platform bookmarks, progress, and preferences are namespaced under `jafri_platform_*`, designed for storage isolation with zero collisions reported in Tier 2 persistence contract tests. |
 
 ---
 
@@ -52,7 +53,7 @@ To maintain complete scholarly, liturgical, and technical integrity, navigation 
   - **13-Line Indo-Pak Mushaf:** All 849 printed pages (Pages 1 to 849) rendered in authentic South Asian IndoPak Nastaleeq script layout with ornate page borders.
 - **Curated Liturgical Selections:** 4 Canonical Vector PDFs (Surahs 018 Al-Kahf, 036 Ya-Sin, 056 Al-Waqi'ah, 067 Al-Mulk), Asma-ul-Husna (99 Names), Daily Duas, Six Kalimas, Selected Hadith.
 - **Dynamic API-Dependent Content:** Ayah-by-ayah digital text mode for all 6,236 verses is served dynamically via `quranRouter.ts` / AlQuranCloud / UmmahAPI.
-- **Offline Bundled Content:** All 1,461 Mushaf facsimile pages, 4 vector PDFs, 14 approved local recitation audios, offline prayer times engine, and Hijri calendar calculator.
+- **Offline Bundled Content:** All 1,461 Mushaf facsimile pages, 4 vector PDFs, offline prayer times engine, and Hijri calendar calculator.
 - **Missing or Unavailable Content:** AI-generated synthetic recitations of the Holy Quran are strictly prohibited and quarantined by theological governance rules.
 
 ---
@@ -153,7 +154,7 @@ To maintain complete scholarly, liturgical, and technical integrity, navigation 
 - **Complete Text Corpus:** None. Full 45 Agamas are not bundled in their entirety.
 - **Curated Liturgical Selections:** **29 Curated Foundational Text Units** bundled locally offline in `jainismTextData.ts` with Ardhamagadhi Prakrit / Sanskrit text, Romanized transliteration, and Hermann Jacobi's canonical translations. **Zero AI-generated translations.**
 - **Dynamic API-Dependent Content:** None. Jainism module is self-contained.
-- **Offline Bundled Content:** All 29 curated text units across all 9 collections are 100% bundled locally offline.
+- **Offline Bundled Content:** All 29 curated text units across all 9 collections are bundled locally offline (verified in `jainismTextData.ts`).
 - **Missing or Unavailable Content:**
   - Full textual corpus of all 45 Agamas (Angas, Upangas, Prakirnakas, Chedasutras, Mulasutras).
   - Spoken audio recitations for Agamas (classified as Pending Discovery).
@@ -166,25 +167,30 @@ The Sacred Audio Library (`src/platform/components/audio/SacredAudioLibraryHub.t
 
 ```text
 SACRED AUDIO MASTER CATALOGUE AUDIT (651 Total Requirements)
-├── 14 Playable Locally Bundled Audio (isPlayable: true, in public/audio/approved/)
-│   └── 100% human-reviewed Islamic recitations and liturgical tracks (Review PASS)
-├── 2 Rights-Blocked Audio Recordings (isPlayable: false)
-│   └── LibriVox public domain recordings awaiting licensing review
-├── 140 YouTube Streaming Tracks (isPlayable: false in HTML5; streamable in modal embed)
-│   └── 140 Approved with User Attestation Human Review PASS (100% checked against text)
+├── 16 LOCAL_PHYSICAL Audio Requirements
+│   ├── 14 Playable Locally Bundled Audio Recordings (isPlayable: true, in public/audio/)
+│   │   └── 6 Hinduism, 3 Buddhism, 3 Christianity, 2 Judaism (verified CC0/CC-BY/Public Domain rights evidence)
+│   └── 2 Rights-Blocked LibriVox Recordings (isPlayable: false)
+│       └── REQ-CHR-048 (Galatians) & REQ-CHR-049 (Ephesians) (LibriVox recordings quarantined pending civil-law neighboring rights waiver)
+├── 140 YouTube Candidates (isPlayable: false in HTML5; not approved for general audio playback)
+│   ├── 28 Individually Approved Public YouTube IDs (validated video IDs for optional modal video embed)
+│   └── 112 Awaiting YouTube Verification (candidates pending scholarly and rights attestation)
 ├── 144 Permission-Required Recordings (isPlayable: false)
-│   └── Mechon Mamre spoken Hebrew Tanakh audio (Awaiting institutional licensing agreement)
-├── 4 Text Cards (isPlayable: false)
-│   └── Liturgical entries configured as reading cards without dedicated audio tracks
+│   └── Mechon Mamre spoken Hebrew Tanakh audio (Cantor Shmuel Ofen; awaiting written institutional permission)
+├── 4 Text-Only Reference Cards (isPlayable: false)
+│   └── Preserved liturgical entries configured as reading reference cards without audio
 └── 347 Pending Discovery (isPlayable: false)
-    └── Unlicensed, unverified, or pending recording discovery
+    └── Unlicensed, unverified, or pending recording discovery (zero fabricated metadata; zero synthetic Quran audio)
 ```
 
 ### Distinction Between Catalogue Requirements and Playable Media
-- **Requirement != Playable File:** The 651 catalogue entries represent liturgical requirements.
-- **Actually Playable Offline:** Exactly **14 tracks** have physical local files (`isPlayable: true`) playable via the HTML5 sticky player.
-- **Streamable Online:** **140 YouTube tracks** are playable via official modal player embeds under standard platform terms.
-- **Quarantined / Non-Playable:** **497 requirements** (144 Mechon Mamre + 2 LibriVox + 347 Pending Discovery + 4 Text Cards) are strictly blocked from playback in compliance with project copyright and theological governance rules.
+- **Requirement != Playable File:** The 651 catalogue entries represent liturgical requirements across 7 sacred traditions.
+- **16 LOCAL_PHYSICAL Requirements:** Exactly **14 playable local recordings** have physical local files (`isPlayable: true`) located in `public/audio/` playable via the HTML5 sticky player (6 Hinduism, 3 Buddhism, 3 Christianity, 2 Judaism), and **2 rights-blocked LibriVox recordings** (`REQ-CHR-048` Galatians and `REQ-CHR-049` Ephesians) remain strictly quarantined (`isPlayable: false`).
+- **140 YouTube Candidates (Modal Video Embed Only):** Exactly **28 individually approved YouTube IDs** for optional modal video embeds; **112 candidates are awaiting verification**. No YouTube candidates are approved for general HTML5 audio playback. Never describe the 140 YouTube candidates as approved tracks or general HTML5 audio.
+- **144 Permission-Required Recordings:** Mechon Mamre spoken Hebrew Tanakh audio (Cantor Shmuel Ofen), strictly quarantined pending written institutional permission.
+- **347 Pending Discovery:** Unlicensed or unrecorded liturgical requirements awaiting discovery (theological governance strictly enforces zero synthetic Quran audio).
+- **4 Text-Only Reference Cards:** Non-audio liturgical entries configured as reference reading cards without audio.
+- **Quarantined / Non-Playable in HTML5 Player:** Exactly **637 requirements** (2 blocked LibriVox + 112 unverified YouTube candidates + 28 video-only embeds + 144 Mechon Mamre + 347 Pending Discovery + 4 Text Cards) cannot be played via the HTML5 audio player. Only the 14 approved local recordings are playable via HTML5 audio.
 
 ---
 
@@ -206,21 +212,32 @@ The platform storage service (`src/platform/services/storageService.ts`) impleme
 
 ```text
 ================================================================================
-ALL THREE TEST SUITES PASSED (68 / 68 TESTS, 100% PASS RATE)
+ALL FOUR TEST SUITES PASSED (81 / 81 REPORTED AGGREGATE TESTS, 100% PASS RATE)
 ================================================================================
-1. test_multi_religion_platform.py (Unified Multi-Religion Platform Suite):
-   - Total Tests: 25 | Passed: 25 | Failed: 0 | Skipped: 0
+1. test_targeted_failure_recovery_final.cjs (Targeted Runtime Failure & Recovery):
+   - Total Tests: 13 | Passed: 13 | Failed: 0 | Skipped: 0
    - Exit Code: 0 (100% PASS)
 
-2. test_m3_suite.py (Islamic Core Reader & Audio Integration):
+2. test_multi_religion_platform.py (Unified Multi-Religion Platform Suite):
+   - Total Tests: 25 | Passed: 25 | Failed: 0 | Skipped: 0
+   - Tier Breakdown (9 + 3 + 4 + 9 = 25):
+     • Tier 1 (Scripture Providers & Data Contracts): 9 tests
+     • Tier 2 (Storage & Persistence Contracts): 3 tests
+     • Tier 3 (Content Transparency & Audio Governance): 4 tests
+     • Tier 4 (Live Browser Smoke Tests): 9 tests
+   - Exit Code: 0 (100% PASS)
+
+3. test_m3_suite.py (Islamic Core Reader & Audio Integration):
    - Total Tests: 23 | Passed: 23 | Failed: 0 | Skipped: 0
    - Exit Code: 0 (100% PASS)
 
-3. test_m3_dual_mushaf_integration.py (Dual Mushaf Cases 1-7 Verification):
+4. test_m3_dual_mushaf_integration.py (Dual Mushaf Cases 1-7 Verification):
    - Total Tests: 20 | Passed: 20 | Failed: 0 | Skipped: 0
    - Exit Code: 0 (100% PASS)
 ================================================================================
-TOTAL AUTOMATED TESTS: 68 / 68 PASSED (100.0% Pass Rate)
+TOTAL REPORTED TESTS: 81 / 81 PASSED (100.0% Pass Rate)
+(Note: 81/81 is a reported aggregate across diverse verification methods and does
+not mean all tests are end-to-end behavioural tests.)
 ================================================================================
 COMPILATION & PRODUCTION BUILD:
 - npx tsc -b: 0 errors (Exit code 0)
@@ -228,30 +245,33 @@ COMPILATION & PRODUCTION BUILD:
 ================================================================================
 ```
 
-### 5.2 Test Count Evolution (65 vs 68 Tests)
+### 5.2 Test Count Evolution (65 vs 68 vs 81 Tests)
 - **Initial Feature Commit (`c559fa3`):** Totaled **65 tests** (23 M3 + 20 Dual Mushaf + 22 multi-religion acceptance tests).
-- **Follow-up Commit (`c9c1295`):** Restructured `test_multi_religion_platform.py` from 22 flat tests into a portable 4-tier suite of **25 tests** (+3 net tests), bringing the total to **68 tests**.
+- **Follow-up Commit (`c9c1295`):** Restructured `test_multi_religion_platform.py` from 22 flat tests into a portable 4-tier suite of **25 tests** (+3 net tests: 9 + 3 + 4 + 9 = 25), bringing the total to **68 tests**.
+- **Gap Resolution & Failure Recovery Commit (`1c6caf1`):** Added `test_targeted_failure_recovery_final.cjs` executing **13 targeted runtime failure and recovery tests** (validating CDP network offline interception, error cards, retry mechanisms, and offline fallbacks for Christian Bible and Sikh Gurbani), establishing the reported aggregate of **81 tests** (13 + 25 + 23 + 20 = 81). This 81/81 figure is a reported aggregate across distinct test methodologies and does not imply that all 81 tests are end-to-end behavioural tests.
 
 ### 5.3 Evidence Classification Taxonomy
 
 | Evidence Category | Tests / Methods Included | What is Proven | What is NOT Proven |
 | :--- | :--- | :--- | :--- |
-| **Static Source-Code Checks** | Tier 1 (9 tests: `HINDU-1.1` to `JAIN-6.1`) & Tier 2 (3 tests: `STORAGE-7.1` to `7.3`) | Code structure, constant names, regex patterns, interface definitions exist in TypeScript files. | Does not prove dynamic runtime execution, error handling on network failure, or method return values. |
-| **Catalogue & Governance Scans** | Tier 3 (4 tests: `AUDIO-8.1` to `STUDIO-8.4`) | Catalogue volume (651 entries), cohort enum presence, negative scan for synthetic Quran recitations, 30 language configurations. | Does not prove audio URL accessibility or speech synthesizer audio generation. |
-| **Live Browser UI Smoke Tests** | Tier 4 (9 tests: `UI-SMOKE-9.1` to `9.9`) | Real Headless Chrome DOM rendering; pages mount without crashing; expected text strings appear in initial DOM. | Does not prove deep user interactive flows (pagination clicks, translation dropdown changes, bookmark deletion). |
-| **Automated Integration Tests** | `test_m3_suite.py` (23 tests) & `test_m3_dual_mushaf_integration.py` (20 tests) | 114 Surahs directory completeness, EveryAyah CDN HTTP 200 streaming, 15-line & 13-line leaf sharing, dual mushaf switching, MD5 index freeze. | Does not test non-Islamic religions. |
-| **Manual Verification** | Visual inspection of sticky player, YouTube modal embed, mobile viewport resizing (375x667). | Visual layout, audio playback in browser, responsive UI adaptation. | Not automated; requires periodic human re-verification. |
+| **Static Source-Code Checks** | Tier 1 (9 tests: `HINDU-1.1` to `1.3`, `SIKH-2.1` to `2.2`, `CHRIST-3.1`, `JUDAISM-4.1`, `BUDDH-5.1`, `JAIN-6.1`) | Code structure, constant names, regex patterns, authentic data schemas, and provider interface definitions exist in TypeScript files. | Does not prove dynamic runtime execution, error handling on network failure, live API response parsing, or end-to-end UI rendering. |
+| **Storage & Persistence Contracts** | Tier 2 (3 tests: `STORAGE-7.1` to `7.3`) | Platform storage namespacing under `jafri_platform_*`, zero key collision with live Islamic keys (`jafri_bookmarks`, `jafri_last_read`), and universal bookmark canonical address schema. | Does not prove cross-device cloud synchronization, storage exhaustion handling, or every possible client runtime condition. |
+| **Catalogue & Governance Scans** | Tier 3 (4 tests: `AUDIO-8.1` to `STUDIO-8.4`) | Catalogue volume (651 entries), cohort enum integrity (16 local / 140 YouTube / 144 Mamre), theological exclusion of synthetic Quran recitations, and 30-language configuration matrix. | Does not prove external audio stream URL accessibility, live CDN uptime, speech synthesizer generation, or third-party licensing permissions. |
+| **Live Browser UI Smoke Tests** | Tier 4 (9 tests: `UI-SMOKE-9.1` to `9.9`) | Real Headless Chrome DOM rendering; verified routes mount without crashing; expected text strings appear in initial DOM. | Does not prove complete user journeys, deep interactive workflows (pagination clicks, commentary expansion, bookmark deletion), or multi-browser rendering parity. |
+| **Targeted Runtime Failure Recovery** | `test_targeted_failure_recovery_final.cjs` (13 tests) | Real Chrome DevTools Protocol network offline interception, graceful error card display, retry button controls, and offline fallback rendering under live failure injection. | Does not eliminate external API dependency for full Bible text (31,102 verses) or Sikh Angs 2–1,430; does not prove handling of arbitrary malformed network payloads. |
+| **Automated Integration Tests** | `test_m3_suite.py` (23 tests) & `test_m3_dual_mushaf_integration.py` (20 tests) (43 tests total) | 114 Surahs directory completeness, EveryAyah CDN HTTP 200 streaming, 15-line & 13-line leaf sharing, dual mushaf switching, MD5 index freeze, and Islamic reader integrity. | Does not test non-Islamic religions; does not guarantee complete user journey coverage across unexercised client configurations. |
+| **Manual Verification** | Visual inspection of sticky player, YouTube modal embed, mobile viewport resizing (375x667). | Visual layout adaptation, audio playback in browser, and responsive UI rendering on verified test viewports. | Not automated; requires periodic human re-verification and does not guarantee cross-device parity. |
 
 ---
 
 ## 6. Git Status and PR State Reconciliation
 
 - **Local Branch:** `feature/multi-religion-platform`
-- **HEAD Commit:** `c9c1295b7937a6e8c6a9c1667f814f87bf5420fc`
-- **Remote Branch:** `origin/feature/multi-religion-platform` (Synchronized at `c9c1295`)
+- **HEAD Commit:** `1c6caf1bdc6d1d5598d2be83394cc246622dee0b` (`1c6caf1`)
+- **Remote Branch:** `origin/feature/multi-religion-platform` (Synchronized at `1c6caf1`)
 - **Production `main` & `origin/main`:** Pointing to `fb4d170debc6f86f68c9fd888d66f77ede452764` (Clean, Untouched)
 - **Pull Request #1:**
   - Status: **Open**
   - Mode: **Draft**
-  - Included Commits: Exactly 2 (`c559fa3` and `c9c1295`)
-- **Production Safety:** GitHub Actions CI workflow completed `validate-build` successfully; `deploy-production` was **automatically skipped**. Live production site is 100% protected.
+  - Included Commits: Exactly 3 (`c559fa3`, `c9c1295`, `1c6caf1`)
+- **Production Safety:** GitHub Actions CI workflow completed `validate-build` successfully; `deploy-production` was **automatically skipped**. Live production site remains on baseline commit `fb4d170`. Zero production deployments executed.

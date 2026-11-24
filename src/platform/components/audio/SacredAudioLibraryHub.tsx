@@ -24,11 +24,12 @@ import {
   SACRED_AUDIO_MASTER_CATALOGUE,
   getPlayableRequirements,
   getBlockedRequirements,
-  getAwaitingIntegrationRequirements,
   getSourceAvailablePermissionRequiredRequirements,
   getPendingDiscoveryRequirements,
   getTextCardRequirements,
-  isApprovedPublicYouTubeId
+  isApprovedPublicYouTubeId,
+  getApprovedYouTubeRequirements,
+  getPendingVerificationYouTubeRequirements
 } from '../../data/sacredAudioMasterCatalogue';
 import {
   TRADITION_COLLECTIONS,
@@ -112,7 +113,10 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
         if (availabilityFilter === 'playable' && (!req.isPlayable || req.availability !== 'AVAILABLE_VERIFIED')) {
           return false;
         }
-        if (availabilityFilter === 'youtube' && req.availability !== 'AWAITING_APP_INTEGRATION') {
+        if (availabilityFilter === 'youtube' && (req.availability !== 'AWAITING_APP_INTEGRATION' || !isApprovedPublicYouTubeId(req.id))) {
+          return false;
+        }
+        if (availabilityFilter === 'unverified' && (req.cohort !== 'ACCEPTED_YOUTUBE' || isApprovedPublicYouTubeId(req.id))) {
           return false;
         }
         if (availabilityFilter === 'blocked' && req.availability !== 'AWAITING_PERMISSION') {
@@ -186,25 +190,39 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
 
   // Overall Library Metrics
   const metrics = useMemo(() => {
+    const playableLocal = getPlayableRequirements().length;
+    const youtubeApproved = getApprovedYouTubeRequirements().length;
+    const youtubeUnverified = getPendingVerificationYouTubeRequirements().length;
+    const blockedLocal = getBlockedRequirements().length;
+    const permissionRequired = getSourceAvailablePermissionRequiredRequirements().length;
+    const pendingDiscovery = getPendingDiscoveryRequirements().length;
+    const textCards = getTextCardRequirements().length;
+
     return {
       total: SACRED_AUDIO_MASTER_CATALOGUE.length, // 651
-      playableLocal: getPlayableRequirements().length, // 9
-      youtubeAccepted: getAwaitingIntegrationRequirements().length, // 28
-      blockedLocal: getBlockedRequirements().length, // 2
-      permissionRequired: getSourceAvailablePermissionRequiredRequirements().length, // 24
-      pendingDiscovery: getPendingDiscoveryRequirements().length, // 584
-      textCards: getTextCardRequirements().length, // 4
-      combinedCleared: getPlayableRequirements().length + getAwaitingIntegrationRequirements().length // 37
+      playableLocal, // 14
+      youtubeApproved, // 28
+      youtubeUnverified, // 112
+      blockedLocal, // 2
+      permissionRequired, // 144
+      pendingDiscovery, // 347
+      textCards, // 4
+      combinedCleared: playableLocal + youtubeApproved // 42
     };
   }, []);
 
   const handlePlayRequirement = async (req: SacredAudioRequirement) => {
     try {
       if (req.playbackProvider === 'YOUTUBE_EMBED') {
+        if (!isApprovedPublicYouTubeId(req.id)) {
+          console.warn('[SacredAudioLibraryHub] Playback blocked for unverified YouTube candidate:', req.id);
+          return;
+        }
         setActiveYouTubeReq(req);
       }
       await unifiedSacredAudioService.playRequirement(req);
     } catch (err) {
+      setActiveYouTubeReq(null);
       console.error('[SacredAudioLibraryHub] Playback error:', err);
     }
   };
@@ -255,10 +273,10 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
         </div>
 
         {/* Status Counts Overview Bar */}
-        <div className="mt-6 pt-6 border-t border-navy-800 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2.5 text-center">
+        <div className="mt-6 pt-6 border-t border-navy-800 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5 text-center">
           <div className="p-3 rounded-2xl bg-navy-950/80 border border-emerald-500/30">
             <div className="text-[10px] uppercase tracking-wider font-bold text-emerald-400">
-              Playable Now (Local)
+              Playable (Local)
             </div>
             <div className="font-mono text-xl font-bold text-slate-100 mt-0.5">
               {metrics.playableLocal}
@@ -268,12 +286,22 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
 
           <div className="p-3 rounded-2xl bg-navy-950/80 border border-purple-500/30">
             <div className="text-[10px] uppercase tracking-wider font-bold text-purple-300">
-              YouTube Streams
+              Approved Embeds
             </div>
             <div className="font-mono text-xl font-bold text-slate-100 mt-0.5">
-              {metrics.youtubeAccepted}
+              {metrics.youtubeApproved}
             </div>
-            <div className="text-[10px] text-slate-500">140 Approved Streams (Embed)</div>
+            <div className="text-[10px] text-slate-500">28 Video Embeds Only</div>
+          </div>
+
+          <div className="p-3 rounded-2xl bg-navy-950/80 border border-amber-500/30">
+            <div className="text-[10px] uppercase tracking-wider font-bold text-amber-400">
+              Awaiting Review
+            </div>
+            <div className="font-mono text-xl font-bold text-slate-100 mt-0.5">
+              {metrics.youtubeUnverified}
+            </div>
+            <div className="text-[10px] text-slate-500">112 Unverified Candidates</div>
           </div>
 
           <div className="p-3 rounded-2xl bg-navy-950/80 border border-rose-500/30">
@@ -288,7 +316,7 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
 
           <div className="p-3 rounded-2xl bg-navy-950/80 border border-amber-500/30">
             <div className="text-[10px] uppercase tracking-wider font-bold text-amber-400">
-              Permission Required
+              Permission Req.
             </div>
             <div className="font-mono text-xl font-bold text-slate-100 mt-0.5">
               {metrics.permissionRequired}
@@ -318,7 +346,7 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
 
           <div className="p-3 rounded-2xl bg-navy-950/80 border border-gold-500/30">
             <div className="text-[10px] uppercase tracking-wider font-bold text-gold-400">
-              Total Requirements
+              Total Register
             </div>
             <div className="font-mono text-xl font-bold text-gold-400 mt-0.5">
               {metrics.total}
@@ -438,7 +466,8 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
           {[
             { id: 'all', label: 'All Items' },
             { id: 'playable', label: `Local Audio (${metrics.playableLocal})` },
-            { id: 'youtube', label: `YouTube Streams (${metrics.youtubeAccepted})` },
+            { id: 'youtube', label: `Approved Video Embeds (${metrics.youtubeApproved})` },
+            { id: 'unverified', label: `Awaiting Verification (${metrics.youtubeUnverified})` },
             { id: 'blocked', label: `Rights Blocked (${metrics.blockedLocal})` },
             { id: 'permission', label: `Permission Required (${metrics.permissionRequired})` },
             { id: 'pending', label: `Pending Discovery (${metrics.pendingDiscovery})` },

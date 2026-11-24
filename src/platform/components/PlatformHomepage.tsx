@@ -91,7 +91,7 @@ export const PlatformHomepage: React.FC<PlatformHomepageProps> = ({
               Jafri Sacred Audio Library
             </h2>
             <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
-              Explore authentic liturgical audio across all seven world traditions: 14 verified local recordings (HTML5), 140 approved YouTube streams with human attestation, 4 preserved text cards, 144 permission-quarantined recordings (Mechon Mamre Hebrew Tanakh), 2 rights-blocked recordings (LibriVox), and transparent progress on 347 pending requirements.
+              Explore authentic liturgical audio across all seven world traditions: 14 verified local recordings (HTML5), 28 individually approved YouTube IDs for optional video embeds, with 112 candidates awaiting verification, 4 preserved text cards, 144 permission-quarantined recordings (Mechon Mamre Hebrew Tanakh), 2 rights-blocked recordings (LibriVox), and transparent progress on 347 pending requirements.
             </p>
           </div>
         </div>

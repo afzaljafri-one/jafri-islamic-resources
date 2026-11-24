@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import type { SacredAudioRequirement } from '../../types/sacredAudio';
 import { ISO_15924_REGISTRY } from '../../types/sacredAudio';
+import { isApprovedPublicYouTubeId } from '../../data/sacredAudioMasterCatalogue';
 
 interface RequirementDetailModalProps {
   isOpen: boolean;
@@ -49,6 +50,7 @@ export const RequirementDetailModal: React.FC<RequirementDetailModalProps> = ({
   }
 
   const isoEntry = ISO_15924_REGISTRY[requirement.scriptCode as keyof typeof ISO_15924_REGISTRY];
+  const isApprovedYouTube = requirement.playbackProvider === 'YOUTUBE_EMBED' && isApprovedPublicYouTubeId(requirement.id);
 
   const getStatusBadge = () => {
     switch (requirement.availability) {
@@ -60,10 +62,18 @@ export const RequirementDetailModal: React.FC<RequirementDetailModalProps> = ({
           </span>
         );
       case 'AWAITING_APP_INTEGRATION':
+        if (isApprovedYouTube) {
+          return (
+            <span className="px-3 py-1 rounded-full text-xs font-bold bg-purple-500/15 text-purple-300 border border-purple-500/30 flex items-center space-x-1.5">
+              <Youtube className="w-3.5 h-3.5 text-red-400" />
+              <span>ACCEPTED YOUTUBE VIDEO EMBED (CLICK-TO-PLAY)</span>
+            </span>
+          );
+        }
         return (
-          <span className="px-3 py-1 rounded-full text-xs font-bold bg-purple-500/15 text-purple-300 border border-purple-500/30 flex items-center space-x-1.5">
-            <Youtube className="w-3.5 h-3.5 text-red-400" />
-            <span>ACCEPTED YOUTUBE STREAM (CLICK-TO-PLAY)</span>
+          <span className="px-3 py-1 rounded-full text-xs font-bold bg-amber-950/60 text-amber-300 border border-amber-500/40 flex items-center space-x-1.5">
+            <Lock className="w-3.5 h-3.5 text-amber-400" />
+            <span>UNVERIFIED YOUTUBE CANDIDATE (AWAITING VERIFICATION)</span>
           </span>
         );
       case 'AWAITING_PERMISSION':
@@ -158,7 +168,7 @@ export const RequirementDetailModal: React.FC<RequirementDetailModalProps> = ({
                 <span>Play Local Recording</span>
               </button>
             )}
-            {requirement.availability === 'AWAITING_APP_INTEGRATION' && (
+            {requirement.availability === 'AWAITING_APP_INTEGRATION' && isApprovedYouTube && (
               <button
                 onClick={() => {
                   onPlay(requirement);
@@ -167,8 +177,14 @@ export const RequirementDetailModal: React.FC<RequirementDetailModalProps> = ({
                 className="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold shadow transition"
               >
                 <Youtube className="w-4 h-4" />
-                <span>Open YouTube Stream</span>
+                <span>Open YouTube Video Embed</span>
               </button>
+            )}
+            {requirement.availability === 'AWAITING_APP_INTEGRATION' && !isApprovedYouTube && (
+              <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-amber-950/60 border border-amber-500/40 text-amber-300 font-medium text-xs">
+                <Lock className="w-4 h-4 text-amber-400" />
+                <span>Awaiting Content Verification (Playback Locked)</span>
+              </div>
             )}
           </div>
 

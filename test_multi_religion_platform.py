@@ -369,7 +369,7 @@ try:
         "AUDIO-8.2",
         "Audio Rights Quarantine & Licensing Compliance",
         quarantine_ok,
-        "Verifies distinction of 16 Local Audio (14 approved + 2 librivox), 140 YouTube Streams, 144 Mechon Mamre (Permission Required), and 347 Pending Discovery",
+        "Verifies distinction of 16 Local Audio (14 approved + 2 librivox), 140 YouTube (28 approved + 112 awaiting verification), 144 Mechon Mamre (Permission Required), and 347 Pending Discovery",
         "GOVERNANCE"
     )
 
