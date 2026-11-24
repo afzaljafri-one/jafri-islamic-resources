@@ -19,6 +19,10 @@ import {
   VolumeX,
   Info,
   Youtube,
+  WifiOff,
+  RotateCcw,
+  AlertTriangle,
+  BookOpen,
 } from 'lucide-react';
 import {
   judaismProvider,
@@ -33,6 +37,7 @@ import { TypographyControls } from '../../platform/components/TypographyControls
 import { GenericAudioPlayerBar } from '../../platform/components/GenericAudioPlayerBar';
 import { MultilingualAudioPlayerBar } from '../../platform/components/MultilingualAudioPlayerBar';
 import { AudioNoticeModal } from '../../platform/components/AudioNoticeModal';
+import { ScriptureCoverageModal } from '../../platform/components/ScriptureCoverageModal';
 import { YouTubeEmbedModal } from '../../platform/components/audio/YouTubeEmbedModal';
 import { SACRED_AUDIO_MASTER_CATALOGUE } from '../../platform/data/sacredAudioMasterCatalogue';
 import { AttributionFooter } from '../../platform/components/AttributionFooter';
@@ -102,6 +107,8 @@ export const JudaismModule: React.FC<JudaismModuleProps> = ({
   const [activeAudioUnitId, setActiveAudioUnitId] = useState<string | null>(null);
   const [isMultilingualPlaying, setIsMultilingualPlaying] = useState<boolean>(false);
   const [isAudioNoticeOpen, setIsAudioNoticeOpen] = useState<boolean>(false);
+  const [isCoverageOpen, setIsCoverageOpen] = useState<boolean>(false);
+  const [retryTrigger, setRetryTrigger] = useState<number>(0);
   const [isYouTubeModalOpen, setIsYouTubeModalOpen] = useState<boolean>(false);
 
   // Requirement for Shema Yisrael (REQ-JUD-020)
@@ -180,29 +187,36 @@ export const JudaismModule: React.FC<JudaismModuleProps> = ({
       if (mounted) {
         setVerses(data);
         setLoading(false);
-        // Save reading progress
-        platformStorageService.saveProgress({
-          religionId: 'judaism',
-          collectionId: 'tanakh',
-          lastAddress: {
+        // Save reading progress if verses exist
+        if (data.length > 0) {
+          platformStorageService.saveProgress({
             religionId: 'judaism',
             collectionId: 'tanakh',
-            path: [
-              { levelName: 'Book', identifier: currentBook.id, label: currentBook.enTitle },
-              { levelName: 'Chapter', identifier: currentChapter, label: `Chapter ${currentChapter}` },
-            ],
-            unitIdentifier: 1,
-          },
-          displayLocation: `${currentBook.enTitle} ${currentChapter}`,
-          updatedAtTimestamp: Date.now(),
-        });
+            lastAddress: {
+              religionId: 'judaism',
+              collectionId: 'tanakh',
+              path: [
+                { levelName: 'Book', identifier: currentBook.id, label: currentBook.enTitle },
+                { levelName: 'Chapter', identifier: currentChapter, label: `Chapter ${currentChapter}` },
+              ],
+              unitIdentifier: 1,
+            },
+            displayLocation: `${currentBook.enTitle} ${currentChapter}`,
+            updatedAtTimestamp: Date.now(),
+          });
+        }
+      }
+    }).catch(() => {
+      if (mounted) {
+        setVerses([]);
+        setLoading(false);
       }
     });
 
     return () => {
       mounted = false;
     };
-  }, [currentBook, currentChapter]);
+  }, [currentBook, currentChapter, retryTrigger]);
 
   // Audio Sync Listener
   useEffect(() => {
@@ -379,6 +393,17 @@ export const JudaismModule: React.FC<JudaismModuleProps> = ({
             English (JPS)
           </button>
 
+          {/* Scripture Coverage Disclosure Button */}
+          <button
+            onClick={() => setIsCoverageOpen(true)}
+            title="Scripture Coverage & Availability Disclosure"
+            className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-xl bg-navy-950 border border-slate-700 hover:border-gold-500 text-slate-300 hover:text-gold-400 text-xs font-semibold transition cursor-pointer"
+            data-testid="judaism-coverage-btn"
+          >
+            <BookOpen className="w-3.5 h-3.5 text-gold-400" />
+            <span className="hidden sm:inline">Coverage</span>
+          </button>
+
           <button
             onClick={() => setIsSearchOpen(true)}
             title="Search the Tanakh"
@@ -472,15 +497,82 @@ export const JudaismModule: React.FC<JudaismModuleProps> = ({
 
       {/* Main Hebrew & English Verses Area */}
       <main className="space-y-4 min-h-[450px]">
+        {/* Offline Fallback Warning for Genesis 1 */}
+        {currentBook.id === 'Genesis' && currentChapter === 1 && verses.length === 2 && (
+          <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div className="flex items-center space-x-2">
+              <AlertTriangle className="w-4 h-4 text-amber-400 flex-shrink-0" />
+              <span>
+                <strong>Offline Fallback Mode:</strong> Displaying 2 foundational verses (Genesis 1:1–2) stored locally offline. Sefaria API was unreachable for remaining verses (1:3–1:31).
+              </span>
+            </div>
+            <button
+              onClick={() => setRetryTrigger((prev) => prev + 1)}
+              className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-xs whitespace-nowrap transition self-start sm:self-auto"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Retry Sefaria Connection</span>
+            </button>
+          </div>
+        )}
+
         {loading ? (
           <div className="py-24 text-center text-slate-400 text-xs space-y-2">
             <div className="w-6 h-6 border-2 border-gold-400 border-t-transparent rounded-full animate-spin mx-auto" />
             <p>Loading {currentBook.enTitle} {currentChapter} from Sefaria...</p>
           </div>
         ) : verses.length === 0 ? (
-          <div className="py-24 text-center text-slate-500 text-xs space-y-2">
-            <Info className="w-8 h-8 mx-auto text-slate-600" />
-            <p>Verses currently unavailable from Sefaria API. Please retry.</p>
+          <div
+            className="py-12 px-6 rounded-3xl bg-navy-950/80 border border-amber-500/30 text-center space-y-4 max-w-xl mx-auto my-8 animate-in fade-in-50 duration-200"
+            data-testid="judaism-error-card"
+          >
+            <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center mx-auto">
+              <WifiOff className="w-6 h-6" />
+            </div>
+            <div className="space-y-1">
+              <h3 className="font-serif text-base sm:text-lg font-bold text-slate-100">
+                Tanakh Content Unavailable (Network / Sefaria API Outage)
+              </h3>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                Unable to retrieve <strong>{currentBook.enTitle} Chapter {currentChapter}</strong> from Sefaria API v3 (`sefaria.org`).
+              </p>
+            </div>
+            <div className="p-3.5 rounded-xl bg-navy-900/90 border border-slate-800 text-[11px] text-slate-400 text-left space-y-1.5">
+              <div className="flex items-center space-x-1.5 text-amber-400 font-semibold">
+                <AlertTriangle className="w-3.5 h-3.5" />
+                <span>Scripture Architecture Notice</span>
+              </div>
+              <p>
+                The Hebrew Tanakh module dynamically streams vocalized Hebrew Masoretic text with Niqqud diacritics and JPS English translations from Sefaria. Only <strong>Genesis 1:1–2</strong> is stored locally offline as an emergency fallback.
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+              <button
+                onClick={() => setRetryTrigger((prev) => prev + 1)}
+                data-testid="judaism-retry-btn"
+                className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-gold-500 hover:bg-gold-400 text-navy-950 font-bold text-xs transition shadow-gold-sm"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Retry Sefaria Retrieval</span>
+              </button>
+              <button
+                onClick={() => {
+                  setCurrentBook(TANAKH_BOOKS[0]);
+                  setCurrentChapter(1);
+                }}
+                className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-navy-900 hover:bg-navy-800 border border-gold-500/30 text-gold-400 text-xs font-semibold transition"
+              >
+                <BookOpen className="w-3.5 h-3.5" />
+                <span>Go to Genesis 1 (Offline Fallback)</span>
+              </button>
+              <button
+                onClick={() => setIsCoverageOpen(true)}
+                className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-navy-900 hover:bg-navy-800 border border-slate-700 text-slate-300 hover:text-gold-400 text-xs font-semibold transition"
+              >
+                <Info className="w-3.5 h-3.5" />
+                <span>View Coverage Disclosure</span>
+              </button>
+            </div>
           </div>
         ) : (
           verses.map((v) => {
@@ -695,6 +787,13 @@ export const JudaismModule: React.FC<JudaismModuleProps> = ({
         isOpen={isAudioNoticeOpen}
         onClose={() => setIsAudioNoticeOpen(false)}
         religionId="judaism"
+      />
+
+      {/* Scripture Coverage & Availability Transparency Modal */}
+      <ScriptureCoverageModal
+        isOpen={isCoverageOpen}
+        onClose={() => setIsCoverageOpen(false)}
+        initialReligionId="judaism"
       />
 
       {/* Approved YouTube Embed Modal for Shema Yisrael */}

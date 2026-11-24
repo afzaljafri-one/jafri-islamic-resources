@@ -10,6 +10,7 @@
 import React, { useEffect, useState } from 'react';
 import { X, ExternalLink, ShieldCheck, AlertCircle, Info, Youtube } from 'lucide-react';
 import type { SacredAudioRequirement } from '../../types/sacredAudio';
+import { isSafeYouTubeEmbedUrl } from '../../services/unifiedSacredAudioService';
 
 interface YouTubeEmbedModalProps {
   isOpen: boolean;
@@ -106,7 +107,7 @@ export const YouTubeEmbedModal: React.FC<YouTubeEmbedModalProps> = ({
 
         {/* Video Player Frame Container (Responsive 16:9 Aspect Ratio) */}
         <div className="relative w-full aspect-video bg-black flex items-center justify-center">
-          {hasEmbedError ? (
+          {hasEmbedError || !isSafeYouTubeEmbedUrl(embedUrl) ? (
             <div className="p-6 text-center space-y-3 max-w-md">
               <AlertCircle className="w-10 h-10 text-amber-400 mx-auto" />
               <h3 className="text-sm font-bold text-slate-200">

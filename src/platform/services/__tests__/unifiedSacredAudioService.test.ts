@@ -229,6 +229,79 @@ export async function runPlaybackServiceTests(): Promise<{ totalTests: number; p
   assert(updateCount === countBefore, 'Unsubscribed listener must not receive further events');
   console.log('  ✅ Group 8 Passed: Reactive event subscription & cleanup verified.');
 
+  // Test Group 9: Anti-Tampering & Canonical Cross-Verification (F-01, F-02, F-05)
+  console.log('[RUNNING] Test Group 9: Anti-Tampering & Canonical Cross-Verification...');
+
+  // 1. Unknown requirement rejection
+  let unknownRejected = false;
+  try {
+    await service1.playRequirement({ id: 'REQ-UNKNOWN-999', playbackProvider: 'LOCAL_HTML5' } as any);
+  } catch (err: any) {
+    unknownRejected = err.message.includes('UNKNOWN_REQUIREMENT_ERROR');
+  }
+  assert(unknownRejected, 'Service must reject unknown requirements with UNKNOWN_REQUIREMENT_ERROR');
+
+  // 2. Unverified candidate borrowing approved ID with tampered videoId
+  let tamperedVideoRejected = false;
+  try {
+    await service1.playRequirement({
+      id: 'REQ-ISL-001',
+      playbackProvider: 'YOUTUBE_EMBED',
+      youtubeMetadata: {
+        videoId: 'SPOOFED_VID_123',
+        embedUrl: 'https://www.youtube-nocookie.com/embed/9bZkp7q19f0'
+      }
+    } as any);
+  } catch (err: any) {
+    tamperedVideoRejected = err.message.includes('TAMPER_DETECTED');
+  }
+  assert(tamperedVideoRejected, 'Service must reject caller with tampered videoId');
+
+  // 3. YouTube candidate with tampered embedUrl
+  let tamperedEmbedRejected = false;
+  try {
+    await service1.playRequirement({
+      id: 'REQ-ISL-001',
+      playbackProvider: 'YOUTUBE_EMBED',
+      youtubeMetadata: {
+        videoId: '9bZkp7q19f0',
+        embedUrl: 'https://attacker.com/exploit'
+      }
+    } as any);
+  } catch (err: any) {
+    tamperedEmbedRejected = err.message.includes('TAMPER_DETECTED');
+  }
+  assert(tamperedEmbedRejected, 'Service must reject caller with tampered embedUrl');
+
+  // 4. Local asset with tampered filePath pointing to remote URL
+  let tamperedLocalRejected = false;
+  try {
+    await service1.playRequirement({
+      id: 'REQ-HIN-036',
+      playbackProvider: 'LOCAL_HTML5',
+      physicalAsset: {
+        filePath: 'https://attacker.example.com/exploit.mp3'
+      }
+    } as any);
+  } catch (err: any) {
+    tamperedLocalRejected = err.message.includes('TAMPER_DETECTED');
+  }
+  assert(tamperedLocalRejected, 'Service must reject caller with tampered local physicalAsset path');
+
+  // 5. Calling LOCAL_HTML5 on non-local requirement
+  let nonLocalAsLocalRejected = false;
+  try {
+    await service1.playRequirement({
+      id: 'REQ-ISL-001',
+      playbackProvider: 'LOCAL_HTML5'
+    } as any);
+  } catch (err: any) {
+    nonLocalAsLocalRejected = err.message.includes('BLOCKED_RIGHTS_ERROR') || err.message.includes('UNAUTHORIZED_LOCAL_ASSET');
+  }
+  assert(nonLocalAsLocalRejected, 'Calling LOCAL_HTML5 on non-local requirement must be rejected');
+
+  console.log('  ✅ Group 9 Passed: Parameter tampering, ID spoofing, and remote file injection strictly blocked.');
+
   console.log('\n================================================================================');
   console.log(`PLAYBACK TEST RESULTS: ${testCount} assertions executed, ${failures.length} failures.`);
   console.log('================================================================================\n');

@@ -19,6 +19,10 @@ import {
   VolumeX,
   Play,
   Pause,
+  WifiOff,
+  RotateCcw,
+  AlertTriangle,
+  BookOpen,
 } from 'lucide-react';
 import {
   christianityProvider,
@@ -31,6 +35,7 @@ import { ScriptureNavigationDrawer } from '../../platform/components/ScriptureNa
 import { UniversalSearchModal } from '../../platform/components/UniversalSearchModal';
 import { UniversalBookmarksDrawer } from '../../platform/components/UniversalBookmarksDrawer';
 import { AudioNoticeModal } from '../../platform/components/AudioNoticeModal';
+import { ScriptureCoverageModal } from '../../platform/components/ScriptureCoverageModal';
 import { MultilingualAudioPlayerBar } from '../../platform/components/MultilingualAudioPlayerBar';
 import { TypographyControls } from '../../platform/components/TypographyControls';
 import { AttributionFooter } from '../../platform/components/AttributionFooter';
@@ -110,6 +115,9 @@ export const ChristianityModule: React.FC<ChristianityModuleProps> = ({
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const [isBookmarksOpen, setIsBookmarksOpen] = useState<boolean>(false);
   const [isAudioNoticeOpen, setIsAudioNoticeOpen] = useState<boolean>(false);
+  const [isCoverageOpen, setIsCoverageOpen] = useState<boolean>(false);
+  const [retryTrigger, setRetryTrigger] = useState<number>(0);
+  const [fetchError, setFetchError] = useState<string | null>(null);
   const [isAudioPlayerVisible, setIsAudioPlayerVisible] = useState<boolean>(false);
   const [activeAudioUnitId, setActiveAudioUnitId] = useState<string | null>(null);
   const [isAudioPlaying, setIsAudioPlaying] = useState<boolean>(false);
@@ -120,6 +128,12 @@ export const ChristianityModule: React.FC<ChristianityModuleProps> = ({
   const [bookmarks, setBookmarks] = useState<UniversalBookmark[]>(() =>
     platformStorageService.getBookmarks('christianity')
   );
+
+  const handleRetryChapter = () => {
+    setLoading(true);
+    setFetchError(null);
+    setRetryTrigger((prev) => prev + 1);
+  };
 
   useEffect(() => {
     const unsub = multilingualAudioEngine.subscribe((st) => {
@@ -147,38 +161,51 @@ export const ChristianityModule: React.FC<ChristianityModuleProps> = ({
   useEffect(() => {
     let mounted = true;
     setLoading(true);
+    setFetchError(null);
     christianityProvider
       .getChapterVerses(currentBookId, currentChapter, selectedTranslation)
       .then((vList) => {
         if (mounted) {
           setVerses(vList);
           setLoading(false);
-          // Save reading progress
-          const currentBook = books.find((b) => b.bookid === currentBookId);
-          if (currentBook) {
-            platformStorageService.saveProgress({
-              religionId: 'christianity',
-              collectionId: `bible-${selectedTranslation.toLowerCase()}`,
-              lastAddress: {
+          if (vList.length === 0) {
+            setFetchError('NETWORK_OR_API_UNAVAILABLE');
+          } else {
+            setFetchError(null);
+            // Save reading progress
+            const currentBook = books.find((b) => b.bookid === currentBookId);
+            if (currentBook) {
+              platformStorageService.saveProgress({
                 religionId: 'christianity',
                 collectionId: `bible-${selectedTranslation.toLowerCase()}`,
-                path: [
-                  { levelName: 'Book', identifier: currentBookId, label: currentBook.name },
-                  { levelName: 'Chapter', identifier: currentChapter, label: `Chapter ${currentChapter}` },
-                ],
-                unitIdentifier: 1,
-              },
-              displayLocation: `${currentBook.name} ${currentChapter}`,
-              updatedAtTimestamp: Date.now(),
-            });
+                lastAddress: {
+                  religionId: 'christianity',
+                  collectionId: `bible-${selectedTranslation.toLowerCase()}`,
+                  path: [
+                    { levelName: 'Book', identifier: currentBookId, label: currentBook.name },
+                    { levelName: 'Chapter', identifier: currentChapter, label: `Chapter ${currentChapter}` },
+                  ],
+                  unitIdentifier: 1,
+                },
+                displayLocation: `${currentBook.name} ${currentChapter}`,
+                updatedAtTimestamp: Date.now(),
+              });
+            }
           }
+        }
+      })
+      .catch(() => {
+        if (mounted) {
+          setVerses([]);
+          setLoading(false);
+          setFetchError('NETWORK_OR_API_UNAVAILABLE');
         }
       });
 
     return () => {
       mounted = false;
     };
-  }, [currentBookId, currentChapter, selectedTranslation, books]);
+  }, [currentBookId, currentChapter, selectedTranslation, books, retryTrigger]);
 
   const currentBook = books.find((b) => b.bookid === currentBookId) || {
     bookid: 1,
@@ -430,6 +457,17 @@ export const ChristianityModule: React.FC<ChristianityModuleProps> = ({
             <span className="hidden sm:inline">Audio</span>
           </button>
 
+          {/* Scripture Coverage Disclosure Button */}
+          <button
+            onClick={() => setIsCoverageOpen(true)}
+            title="Scripture Coverage & Availability Disclosure"
+            className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-xl bg-navy-950 border border-slate-700 hover:border-gold-500 text-slate-300 hover:text-gold-400 text-xs font-semibold transition cursor-pointer"
+            data-testid="christianity-coverage-btn"
+          >
+            <BookOpen className="w-3.5 h-3.5 text-gold-400" />
+            <span className="hidden sm:inline">Coverage</span>
+          </button>
+
           <button
             onClick={() => setIsSearchOpen(true)}
             title="Search the Bible"
@@ -536,9 +574,52 @@ export const ChristianityModule: React.FC<ChristianityModuleProps> = ({
             <p>Loading {currentBook.name} {currentChapter} ({selectedTranslation})...</p>
           </div>
         ) : verses.length === 0 ? (
-          <div className="py-20 text-center text-slate-500 text-xs space-y-2">
-            <Info className="w-8 h-8 mx-auto text-slate-600" />
-            <p>Chapter text currently unavailable from provider. Try selecting another translation.</p>
+          <div
+            className="py-12 px-6 rounded-3xl bg-navy-950/80 border border-amber-500/30 text-center space-y-4 max-w-xl mx-auto my-8 animate-in fade-in-50 duration-200"
+            data-testid="christianity-error-card"
+          >
+            <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center mx-auto">
+              <WifiOff className="w-6 h-6" />
+            </div>
+            <div className="space-y-1">
+              <h3 className="font-serif text-base sm:text-lg font-bold text-slate-100">
+                Bible Chapter Retrieval Unavailable (Network / API Outage)
+              </h3>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                Unable to retrieve <strong>{currentBook.name} Chapter {currentChapter}</strong> ({selectedTranslation}) from the Bolls Life public API.
+              </p>
+              {fetchError && (
+                <p className="text-[10px] text-amber-400/80 font-mono">
+                  Diagnostics: {fetchError}
+                </p>
+              )}
+            </div>
+            <div className="p-3.5 rounded-xl bg-navy-900/90 border border-slate-800 text-[11px] text-slate-400 text-left space-y-1.5">
+              <div className="flex items-center space-x-1.5 text-amber-400 font-semibold">
+                <AlertTriangle className="w-3.5 h-3.5" />
+                <span>Scripture Architecture Notice</span>
+              </div>
+              <p>
+                The Christian Bible module dynamically fetches all 31,102 verses across all 66 books from public online endpoints. <strong>Zero verses are cached offline.</strong> If your device is offline or the third-party API server is experiencing downtime, chapter text cannot be displayed.
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+              <button
+                onClick={handleRetryChapter}
+                data-testid="christianity-retry-btn"
+                className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-gold-500 hover:bg-gold-400 text-navy-950 font-bold text-xs transition shadow-gold-sm"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Retry Chapter Retrieval</span>
+              </button>
+              <button
+                onClick={() => setIsCoverageOpen(true)}
+                className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-navy-900 hover:bg-navy-800 border border-slate-700 text-slate-300 hover:text-gold-400 text-xs font-semibold transition"
+              >
+                <Info className="w-3.5 h-3.5" />
+                <span>View Coverage Disclosure</span>
+              </button>
+            </div>
           </div>
         ) : (
           verses.map((v) => {
@@ -745,6 +826,13 @@ export const ChristianityModule: React.FC<ChristianityModuleProps> = ({
         isOpen={isAudioNoticeOpen}
         onClose={() => setIsAudioNoticeOpen(false)}
         religionId="christianity"
+      />
+
+      {/* Scripture Coverage & Availability Transparency Modal */}
+      <ScriptureCoverageModal
+        isOpen={isCoverageOpen}
+        onClose={() => setIsCoverageOpen(false)}
+        initialReligionId="christianity"
       />
 
       {/* Multilingual Audio Player Bar */}

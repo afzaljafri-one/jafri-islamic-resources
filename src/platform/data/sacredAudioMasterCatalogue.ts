@@ -20650,3 +20650,53 @@ export function getPendingVerificationYouTubeRequirements(): readonly SacredAudi
     (req) => req.cohort === 'ACCEPTED_YOUTUBE' && !isApprovedPublicYouTubeId(req.id)
   );
 }
+
+export const APPROVED_LOCAL_AUDIO_IDS: ReadonlySet<string> = new Set<string>([
+  'REQ-HIN-036',
+  'REQ-HIN-037',
+  'REQ-HIN-038',
+  'REQ-HIN-067',
+  'REQ-HIN-079',
+  'REQ-HIN-080',
+  'REQ-BUD-001',
+  'REQ-BUD-010',
+  'REQ-BUD-020',
+  'REQ-CHR-067',
+  'REQ-CHR-071',
+  'REQ-CHR-073',
+  'REQ-JUD-001',
+  'REQ-JUD-006'
+]);
+
+export function isApprovedLocalAudioId(id: string): boolean {
+  return APPROVED_LOCAL_AUDIO_IDS.has(id);
+}
+
+export const APPROVED_LOCAL_AUDIO_FILE_PATHS: ReadonlySet<string> = new Set<string>([
+  'public/audio/hinduism/hinduism_vedas_purusha_suktam_vedadhayana_gosthi.ogg',
+  'public/audio/hinduism/hinduism_vedas_sri_suktam_vedadhayana_gosthi.ogg',
+  'public/audio/hinduism/hinduism_vedas_ganapati_suktam_vedadhayana_gosthi.ogg',
+  'public/audio/hinduism/hinduism_mantras_gayatri_mantra_wilfredor.ogg',
+  'public/audio/hinduism/hinduism_stotras_sri_guru_stotram_swami_atmananda.ogg',
+  'public/audio/hinduism/hinduism_stotras_devi_suktam_vedadhayana_gosthi.ogg',
+  'public/audio/buddhism/buddhism_tipitaka_patimokkha_pali_recitation.ogg',
+  'public/audio/buddhism/buddhism_suttas_sutras_heart_sutra_prajnaparamita_layperson.ogg',
+  'public/audio/buddhism/buddhism_chants_buddham_saranam_gacchami_hariharan.oga',
+  'public/audio/christianity/christianity_prayers_pater_noster_the_tudor_consort.ogg',
+  'public/audio/christianity/christianity_prayers_magnificat_panharmonikon.oga',
+  'public/audio/christianity/christianity_prayers_credo_in_unum_deum_the_tudor_consort.ogg',
+  'public/audio/judaism/judaism_torah_bereshit_asael.oga',
+  'public/audio/judaism/judaism_neviim_joshua_asael.oga'
+]);
+
+export function isApprovedLocalAudioFilePath(filePath: string): boolean {
+  return APPROVED_LOCAL_AUDIO_FILE_PATHS.has(filePath);
+}
+
+const CANONICAL_REQUIREMENTS_BY_ID = new Map<string, SacredAudioRequirement>(
+  SACRED_AUDIO_MASTER_CATALOGUE.map((req) => [req.id, req])
+);
+
+export function getCanonicalRequirementById(id: string): SacredAudioRequirement | undefined {
+  return CANONICAL_REQUIREMENTS_BY_ID.get(id);
+}
