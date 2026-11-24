@@ -1,8 +1,8 @@
 /**
  * ============================================================================
  * JAFRI SACRED AUDIO LIBRARY — MAIN LIBRARY HUB
- * Stage Gate 5.4C: Complete Library Interface for all 651 Master Requirements
- * Supports 7 Sacred Traditions, 47 Sub-Collections, Filtering, Search & Playback
+ * Public Multi-Religion Sacred Listening & Viewing Library
+ * Supports 7 Sacred Traditions, Search, Recitation & Source Filters, Playback
  * ============================================================================
  */
 
@@ -13,7 +13,11 @@ import {
   Headphones,
   ChevronLeft,
   ChevronRight,
-  ArrowLeft
+  ArrowLeft,
+  Video,
+  FileText,
+  Filter,
+  Volume2
 } from 'lucide-react';
 import type {
   SacredAudioRequirement,
@@ -22,14 +26,7 @@ import type {
 import { ISO_15924_REGISTRY } from '../../types/sacredAudio';
 import {
   SACRED_AUDIO_MASTER_CATALOGUE,
-  getPlayableRequirements,
-  getBlockedRequirements,
-  getSourceAvailablePermissionRequiredRequirements,
-  getPendingDiscoveryRequirements,
-  getTextCardRequirements,
-  isApprovedPublicYouTubeId,
-  getApprovedYouTubeRequirements,
-  getPendingVerificationYouTubeRequirements
+  isApprovedPublicYouTubeId
 } from '../../data/sacredAudioMasterCatalogue';
 import {
   TRADITION_COLLECTIONS,
@@ -49,6 +46,9 @@ interface SacredAudioLibraryHubProps {
   initialTradition?: TraditionId | 'all';
 }
 
+export type MediaSourceFilter = 'playable' | 'all' | 'audio' | 'video' | 'text';
+export type RecitationTypeFilter = 'all' | 'scripture' | 'chant' | 'prayer';
+
 export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
   onReturnToHome,
   initialTradition = 'all',
@@ -56,7 +56,8 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
   // Navigation & Filtering States
   const [selectedTradition, setSelectedTradition] = useState<TraditionId | 'all'>(initialTradition);
   const [selectedCollectionId, setSelectedCollectionId] = useState<string>('all');
-  const [availabilityFilter, setAvailabilityFilter] = useState<string>('all');
+  const [mediaSourceFilter, setMediaSourceFilter] = useState<MediaSourceFilter>('playable');
+  const [recitationTypeFilter, setRecitationTypeFilter] = useState<RecitationTypeFilter>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 24;
@@ -98,6 +99,10 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
   // Filter 651 Master Requirements
   const filteredRequirements = useMemo(() => {
     return SACRED_AUDIO_MASTER_CATALOGUE.filter((req) => {
+      const isLocal = req.availability === 'AVAILABLE_VERIFIED' && req.isPlayable;
+      const isApprovedYt = req.playbackProvider === 'YOUTUBE_EMBED' && isApprovedPublicYouTubeId(req.id);
+      const isPlayable = isLocal || isApprovedYt;
+
       // 1. Tradition Filter
       if (selectedTradition !== 'all' && req.tradition !== selectedTradition) {
         return false;
@@ -108,32 +113,71 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
         return false;
       }
 
-      // 3. Availability Filter
-      if (availabilityFilter !== 'all') {
-        if (availabilityFilter === 'playable' && (!req.isPlayable || req.availability !== 'AVAILABLE_VERIFIED')) {
-          return false;
-        }
-        if (availabilityFilter === 'youtube' && (req.availability !== 'AWAITING_APP_INTEGRATION' || !isApprovedPublicYouTubeId(req.id))) {
-          return false;
-        }
-        if (availabilityFilter === 'unverified' && (req.cohort !== 'ACCEPTED_YOUTUBE' || isApprovedPublicYouTubeId(req.id))) {
-          return false;
-        }
-        if (availabilityFilter === 'blocked' && req.availability !== 'AWAITING_PERMISSION') {
-          return false;
-        }
-        if (availabilityFilter === 'permission' && req.availability !== 'SOURCE_AVAILABLE_PERMISSION_REQUIRED') {
-          return false;
-        }
-        if (availabilityFilter === 'pending' && req.availability !== 'PENDING_DISCOVERY') {
-          return false;
-        }
-        if (availabilityFilter === 'text' && req.availability !== 'TEXT_CARD') {
-          return false;
+      // 3. Media / Source Filter
+      if (mediaSourceFilter === 'playable' && !isPlayable) {
+        return false;
+      }
+      if (mediaSourceFilter === 'audio' && !isLocal) {
+        return false;
+      }
+      if (mediaSourceFilter === 'video' && !isApprovedYt) {
+        return false;
+      }
+      if (mediaSourceFilter === 'text' && req.availability !== 'TEXT_CARD') {
+        return false;
+      }
+      // 'all' includes all 651 catalogued items
+
+      // 4. Recitation / Liturgical Genre Filter
+      if (recitationTypeFilter !== 'all') {
+        const titleLower = req.requirementTitle.toLowerCase();
+        const collLower = req.collectionId.toLowerCase();
+
+        if (recitationTypeFilter === 'scripture') {
+          const isScripture =
+            titleLower.includes('surah') ||
+            titleLower.includes('gita') ||
+            titleLower.includes('ang') ||
+            titleLower.includes('sutta') ||
+            titleLower.includes('sutra') ||
+            titleLower.includes('psalm') ||
+            titleLower.includes('genesis') ||
+            titleLower.includes('corinthians') ||
+            titleLower.includes('beatitudes') ||
+            collLower.includes('gita') ||
+            collLower.includes('quran') ||
+            collLower.includes('bible') ||
+            collLower.includes('tanakh');
+          if (!isScripture) return false;
+        } else if (recitationTypeFilter === 'chant') {
+          const isChant =
+            titleLower.includes('mantra') ||
+            titleLower.includes('chant') ||
+            titleLower.includes('suktam') ||
+            titleLower.includes('paritta') ||
+            titleLower.includes('jaap') ||
+            titleLower.includes('simran') ||
+            titleLower.includes('navkar') ||
+            titleLower.includes('namokar');
+          if (!isChant) return false;
+        } else if (recitationTypeFilter === 'prayer') {
+          const isPrayer =
+            titleLower.includes('adhan') ||
+            titleLower.includes('dua') ||
+            titleLower.includes('aarti') ||
+            titleLower.includes('stotra') ||
+            titleLower.includes('bhajan') ||
+            titleLower.includes('pater noster') ||
+            titleLower.includes('magnificat') ||
+            titleLower.includes('credo') ||
+            titleLower.includes('shema') ||
+            titleLower.includes('ardas') ||
+            titleLower.includes('anand sahib');
+          if (!isPrayer) return false;
         }
       }
 
-      // 4. Text Search Query
+      // 5. Text Search Query
       if (searchQuery.trim() !== '') {
         const query = searchQuery.toLowerCase().trim();
         const matchesId = req.id.toLowerCase().includes(query);
@@ -164,7 +208,7 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
 
       return true;
     });
-  }, [selectedTradition, selectedCollectionId, availabilityFilter, searchQuery]);
+  }, [selectedTradition, selectedCollectionId, mediaSourceFilter, recitationTypeFilter, searchQuery]);
 
   // Pagination calculation
   const totalPages = Math.max(1, Math.ceil(filteredRequirements.length / itemsPerPage));
@@ -173,41 +217,44 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
     return filteredRequirements.slice(start, start + itemsPerPage);
   }, [filteredRequirements, currentPage]);
 
-  // Computed dynamic tradition counts for accurate button labels
+  // Dynamic counts per tradition for button labels
   const traditionCounts = useMemo(() => {
-    const counts: Record<string, { local: number; yt: number }> = {};
+    const counts: Record<string, { total: number; playable: number; local: number; yt: number }> = {};
     for (const req of SACRED_AUDIO_MASTER_CATALOGUE) {
-      if (!counts[req.tradition]) counts[req.tradition] = { local: 0, yt: 0 };
-      if (req.availability === 'AVAILABLE_VERIFIED' && req.isPlayable) {
-        counts[req.tradition].local++;
+      if (!counts[req.tradition]) {
+        counts[req.tradition] = { total: 0, playable: 0, local: 0, yt: 0 };
       }
-      if (req.playbackProvider === 'YOUTUBE_EMBED' && isApprovedPublicYouTubeId(req.id)) {
+      counts[req.tradition].total++;
+      const isLocal = req.availability === 'AVAILABLE_VERIFIED' && req.isPlayable;
+      const isApprovedYt = req.playbackProvider === 'YOUTUBE_EMBED' && isApprovedPublicYouTubeId(req.id);
+      if (isLocal) {
+        counts[req.tradition].local++;
+        counts[req.tradition].playable++;
+      }
+      if (isApprovedYt) {
         counts[req.tradition].yt++;
+        counts[req.tradition].playable++;
       }
     }
     return counts;
   }, []);
 
   // Overall Library Metrics
-  const metrics = useMemo(() => {
-    const playableLocal = getPlayableRequirements().length;
-    const youtubeApproved = getApprovedYouTubeRequirements().length;
-    const youtubeUnverified = getPendingVerificationYouTubeRequirements().length;
-    const blockedLocal = getBlockedRequirements().length;
-    const permissionRequired = getSourceAvailablePermissionRequiredRequirements().length;
-    const pendingDiscovery = getPendingDiscoveryRequirements().length;
-    const textCards = getTextCardRequirements().length;
-
+  const libraryMetrics = useMemo(() => {
+    let local = 0;
+    let yt = 0;
+    let text = 0;
+    for (const req of SACRED_AUDIO_MASTER_CATALOGUE) {
+      if (req.availability === 'AVAILABLE_VERIFIED' && req.isPlayable) local++;
+      if (req.playbackProvider === 'YOUTUBE_EMBED' && isApprovedPublicYouTubeId(req.id)) yt++;
+      if (req.availability === 'TEXT_CARD') text++;
+    }
     return {
-      total: SACRED_AUDIO_MASTER_CATALOGUE.length, // 651
-      playableLocal, // 14
-      youtubeApproved, // 28
-      youtubeUnverified, // 112
-      blockedLocal, // 2
-      permissionRequired, // 144
-      pendingDiscovery, // 347
-      textCards, // 4
-      combinedCleared: playableLocal + youtubeApproved // 42
+      totalCatalogued: SACRED_AUDIO_MASTER_CATALOGUE.length, // 651
+      playableTotal: local + yt, // 154
+      playableLocal: local, // 14
+      playableYouTube: yt, // 140
+      textCards: text // 4
     };
   }, []);
 
@@ -215,7 +262,7 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
     try {
       if (req.playbackProvider === 'YOUTUBE_EMBED') {
         if (!isApprovedPublicYouTubeId(req.id)) {
-          console.warn('[SacredAudioLibraryHub] Playback blocked for unverified YouTube candidate:', req.id);
+          console.warn('[SacredAudioLibraryHub] Playback blocked for unverified candidate:', req.id);
           return;
         }
         setActiveYouTubeReq(req);
@@ -230,7 +277,7 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
   return (
     <div className="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-6 space-y-8 animate-in fade-in-50 duration-200 pb-28">
       {/* =========================================================================
-          HERO & HEADER BANNER
+          HERO & VISITOR OVERVIEW
           ========================================================================= */}
       <div className="relative rounded-3xl bg-gradient-to-b from-navy-900 via-navy-900/95 to-navy-950 border border-gold-500/30 p-6 sm:p-10 shadow-2xl overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gold-500/5 rounded-full blur-3xl pointer-events-none" />
@@ -249,124 +296,89 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
 
             <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/30 text-gold-400 text-xs font-semibold uppercase tracking-wider mb-2">
               <Headphones className="w-3.5 h-3.5" />
-              <span>Full Liturgical Architecture • 651 Master Requirements</span>
+              <span>Sacred Audio & Video Library • Seven World Traditions</span>
             </div>
 
             <h1 className="font-serif text-2xl sm:text-4xl font-extrabold text-slate-100 tracking-wide">
               JAFRI SACRED AUDIO LIBRARY
             </h1>
             <p className="mt-1 text-xs sm:text-sm text-gold-400/90 font-serif">
-              Authentic Liturgical Recitations, Scriptural Cantillations & Sacred Texts across Seven World Traditions
+              Authentic Liturgical Recitations, Scriptural Chants & Choral Works across World Traditions
             </p>
           </div>
 
           <div className="flex items-center space-x-3 self-stretch md:self-auto justify-end">
             <div className="px-4 py-2.5 rounded-2xl bg-navy-950 border border-gold-500/30 text-right">
               <div className="text-[10px] uppercase font-bold tracking-wider text-slate-400">
-                Authoritative Master Register
+                Available to Listen & Watch
               </div>
               <div className="font-mono text-lg font-bold text-gold-400">
-                651 <span className="text-xs text-slate-300 font-normal">Requirements</span>
+                {libraryMetrics.playableTotal}{' '}
+                <span className="text-xs text-slate-300 font-normal">Recordings</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Status Counts Overview Bar */}
-        <div className="mt-6 pt-6 border-t border-navy-800 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5 text-center">
-          <div className="p-3 rounded-2xl bg-navy-950/80 border border-emerald-500/30">
-            <div className="text-[10px] uppercase tracking-wider font-bold text-emerald-400">
-              Playable (Local)
+        {/* Visitor Summary Cards (4 Cards) */}
+        <div className="mt-6 pt-6 border-t border-navy-800 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+          <div className="p-3.5 rounded-2xl bg-navy-950/80 border border-emerald-500/30">
+            <div className="flex items-center justify-center space-x-1.5 text-emerald-400 mb-1">
+              <Volume2 className="w-3.5 h-3.5" />
+              <span className="text-[11px] uppercase tracking-wider font-bold">Direct Audio</span>
             </div>
-            <div className="font-mono text-xl font-bold text-slate-100 mt-0.5">
-              {metrics.playableLocal}
+            <div className="font-mono text-xl font-bold text-slate-100">
+              {libraryMetrics.playableLocal}
             </div>
-            <div className="text-[10px] text-slate-500">14 Local Audio (HTML5)</div>
+            <div className="text-[10px] text-slate-400">High-Fidelity HTML5 Audio</div>
           </div>
 
-          <div className="p-3 rounded-2xl bg-navy-950/80 border border-purple-500/30">
-            <div className="text-[10px] uppercase tracking-wider font-bold text-purple-300">
-              Approved Embeds
+          <div className="p-3.5 rounded-2xl bg-navy-950/80 border border-purple-500/30">
+            <div className="flex items-center justify-center space-x-1.5 text-purple-300 mb-1">
+              <Video className="w-3.5 h-3.5" />
+              <span className="text-[11px] uppercase tracking-wider font-bold">Video Recitations</span>
             </div>
-            <div className="font-mono text-xl font-bold text-slate-100 mt-0.5">
-              {metrics.youtubeApproved}
+            <div className="font-mono text-xl font-bold text-slate-100">
+              {libraryMetrics.playableYouTube}
             </div>
-            <div className="text-[10px] text-slate-500">28 Video Embeds Only</div>
+            <div className="text-[10px] text-slate-400">Official Video Embeds</div>
           </div>
 
-          <div className="p-3 rounded-2xl bg-navy-950/80 border border-amber-500/30">
-            <div className="text-[10px] uppercase tracking-wider font-bold text-amber-400">
-              Awaiting Review
+          <div className="p-3.5 rounded-2xl bg-navy-950/80 border border-gold-500/30">
+            <div className="flex items-center justify-center space-x-1.5 text-gold-400 mb-1">
+              <Globe className="w-3.5 h-3.5" />
+              <span className="text-[11px] uppercase tracking-wider font-bold">World Traditions</span>
             </div>
-            <div className="font-mono text-xl font-bold text-slate-100 mt-0.5">
-              {metrics.youtubeUnverified}
-            </div>
-            <div className="text-[10px] text-slate-500">112 Unverified Candidates</div>
+            <div className="font-mono text-xl font-bold text-gold-400">7</div>
+            <div className="text-[10px] text-slate-400">Authentic Sacred Canons</div>
           </div>
 
-          <div className="p-3 rounded-2xl bg-navy-950/80 border border-rose-500/30">
-            <div className="text-[10px] uppercase tracking-wider font-bold text-rose-400">
-              Rights Blocked
+          <div className="p-3.5 rounded-2xl bg-navy-950/80 border border-slate-700">
+            <div className="flex items-center justify-center space-x-1.5 text-slate-400 mb-1">
+              <FileText className="w-3.5 h-3.5" />
+              <span className="text-[11px] uppercase tracking-wider font-bold">Total Corpus</span>
             </div>
-            <div className="font-mono text-xl font-bold text-slate-100 mt-0.5">
-              {metrics.blockedLocal}
+            <div className="font-mono text-xl font-bold text-slate-200">
+              {libraryMetrics.totalCatalogued}
             </div>
-            <div className="text-[10px] text-slate-500">2 LibriVox Quarantined</div>
-          </div>
-
-          <div className="p-3 rounded-2xl bg-navy-950/80 border border-amber-500/30">
-            <div className="text-[10px] uppercase tracking-wider font-bold text-amber-400">
-              Permission Req.
-            </div>
-            <div className="font-mono text-xl font-bold text-slate-100 mt-0.5">
-              {metrics.permissionRequired}
-            </div>
-            <div className="text-[10px] text-slate-500">144 Mechon Mamre Tanakh</div>
-          </div>
-
-          <div className="p-3 rounded-2xl bg-navy-950/80 border border-slate-700">
-            <div className="text-[10px] uppercase tracking-wider font-bold text-slate-400">
-              Pending Discovery
-            </div>
-            <div className="font-mono text-xl font-bold text-slate-100 mt-0.5">
-              {metrics.pendingDiscovery}
-            </div>
-            <div className="text-[10px] text-slate-500">347 Awaiting Discovery</div>
-          </div>
-
-          <div className="p-3 rounded-2xl bg-navy-950/80 border border-indigo-500/30">
-            <div className="text-[10px] uppercase tracking-wider font-bold text-indigo-300">
-              Text Cards
-            </div>
-            <div className="font-mono text-xl font-bold text-slate-100 mt-0.5">
-              {metrics.textCards}
-            </div>
-            <div className="text-[10px] text-slate-500">4 Reading Text Cards</div>
-          </div>
-
-          <div className="p-3 rounded-2xl bg-navy-950/80 border border-gold-500/30">
-            <div className="text-[10px] uppercase tracking-wider font-bold text-gold-400">
-              Total Register
-            </div>
-            <div className="font-mono text-xl font-bold text-gold-400 mt-0.5">
-              {metrics.total}
-            </div>
-            <div className="text-[10px] text-slate-500">7 Sacred Traditions</div>
+            <div className="text-[10px] text-slate-400">Catalogued Sacred Works</div>
           </div>
         </div>
       </div>
 
       {/* =========================================================================
-          TRADITION PORTALS SELECTOR (7 Portals)
+          TRADITION PORTALS SELECTOR (7 World Traditions)
           ========================================================================= */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <h2 className="font-serif text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center space-x-1.5">
             <Globe className="w-4 h-4 text-gold-400" />
-            <span>Select Sacred Tradition Portal</span>
+            <span>Select Sacred Tradition</span>
           </h2>
           <span className="text-xs text-slate-500 font-mono">
-            {selectedTradition === 'all' ? 'All 7 Traditions' : selectedTradition.toUpperCase()}
+            {selectedTradition === 'all'
+              ? `All Traditions (${libraryMetrics.playableTotal} Playable)`
+              : `${selectedTradition.toUpperCase()} (${traditionCounts[selectedTradition]?.playable || 0} Playable)`}
           </span>
         </div>
 
@@ -381,14 +393,16 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
             }`}
           >
             <div className="text-xs font-bold">All Traditions</div>
-            <div className={`text-[10px] ${selectedTradition === 'all' ? 'text-navy-900' : 'text-slate-500'}`}>
-              651 Items
+            <div className={`text-[10px] ${selectedTradition === 'all' ? 'text-navy-900' : 'text-slate-400'}`}>
+              {libraryMetrics.playableTotal} Playable
             </div>
           </button>
 
           {/* 7 Tradition Buttons */}
           {TRADITION_COLLECTIONS.map((trad) => {
             const isSelected = selectedTradition === trad.id;
+            const counts = traditionCounts[trad.id] || { total: 0, playable: 0, local: 0, yt: 0 };
+
             return (
               <button
                 key={trad.id}
@@ -400,10 +414,8 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
                 }`}
               >
                 <div className="text-xs font-bold truncate">{trad.title}</div>
-                <div className={`text-[10px] ${isSelected ? 'text-navy-900' : 'text-slate-500'}`}>
-                  {trad.totalRequirements} Reqs
-                  {(traditionCounts[trad.id]?.local || 0) > 0 && ` • ${traditionCounts[trad.id].local} Local`}
-                  {(traditionCounts[trad.id]?.yt || 0) > 0 && ` • ${traditionCounts[trad.id].yt} YT`}
+                <div className={`text-[10px] ${isSelected ? 'text-navy-900' : 'text-slate-400'}`}>
+                  {counts.playable} Playable
                 </div>
               </button>
             );
@@ -412,7 +424,7 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
       </div>
 
       {/* =========================================================================
-          SEARCH & MULTI-CRITERIA FILTERS BAR
+          SEARCH, MEDIA SOURCE & LITURGICAL FILTERS
           ========================================================================= */}
       <div className="p-4 sm:p-5 rounded-3xl bg-navy-900/90 border border-slate-800 space-y-4">
         <div className="flex flex-col md:flex-row items-center justify-between gap-3">
@@ -421,7 +433,7 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
-              placeholder="Search by title, ID, reciter, channel, language or script..."
+              placeholder="Search by title, reciter, channel, tradition, scripture or language..."
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
@@ -460,46 +472,80 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
           </div>
         </div>
 
-        {/* Availability Filter Pills */}
-        <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 pt-1 border-t border-slate-800 text-xs">
-          <span className="text-[11px] text-slate-500 font-semibold mr-1 uppercase">Filter:</span>
-          {[
-            { id: 'all', label: 'All Items' },
-            { id: 'playable', label: `Local Audio (${metrics.playableLocal})` },
-            { id: 'youtube', label: `Approved Video Embeds (${metrics.youtubeApproved})` },
-            { id: 'unverified', label: `Awaiting Verification (${metrics.youtubeUnverified})` },
-            { id: 'blocked', label: `Rights Blocked (${metrics.blockedLocal})` },
-            { id: 'permission', label: `Permission Required (${metrics.permissionRequired})` },
-            { id: 'pending', label: `Pending Discovery (${metrics.pendingDiscovery})` },
-            { id: 'text', label: `Text Cards (${metrics.textCards})` },
-          ].map((pill) => (
-            <button
-              key={pill.id}
-              onClick={() => {
-                setAvailabilityFilter(pill.id);
-                setCurrentPage(1);
-              }}
-              className={`px-3 py-1 rounded-xl text-xs font-medium whitespace-nowrap transition ${
-                availabilityFilter === pill.id
-                  ? 'bg-gold-500 text-navy-950 font-bold shadow-gold-sm'
-                  : 'bg-navy-950 text-slate-300 hover:bg-navy-800 border border-slate-800'
-              }`}
-            >
-              {pill.label}
-            </button>
-          ))}
+        {/* Filter Rows: Media Source & Recitation Type */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-slate-800">
+          {/* Media / Source Filter Pills */}
+          <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 text-xs">
+            <span className="text-[11px] text-slate-500 font-semibold mr-1 uppercase flex items-center gap-1">
+              <Filter className="w-3 h-3" />
+              <span>Media:</span>
+            </span>
+            {[
+              { id: 'playable', label: `Available to Listen / Watch (${libraryMetrics.playableTotal})` },
+              { id: 'audio', label: `Direct Audio (${libraryMetrics.playableLocal})` },
+              { id: 'video', label: `Video Recitations (${libraryMetrics.playableYouTube})` },
+              { id: 'text', label: `Sacred Texts (${libraryMetrics.textCards})` },
+              { id: 'all', label: `All Catalogued (${libraryMetrics.totalCatalogued})` },
+            ].map((pill) => (
+              <button
+                key={pill.id}
+                onClick={() => {
+                  setMediaSourceFilter(pill.id as MediaSourceFilter);
+                  setCurrentPage(1);
+                }}
+                className={`px-3 py-1 rounded-xl text-xs font-medium whitespace-nowrap transition ${
+                  mediaSourceFilter === pill.id
+                    ? 'bg-gold-500 text-navy-950 font-bold shadow-gold-sm'
+                    : 'bg-navy-950 text-slate-300 hover:bg-navy-800 border border-slate-800'
+                }`}
+              >
+                {pill.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Liturgical Genre Filter */}
+          <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 text-xs">
+            <span className="text-[11px] text-slate-500 font-semibold mr-1 uppercase">Genre:</span>
+            {[
+              { id: 'all', label: 'All Genres' },
+              { id: 'scripture', label: 'Scripture' },
+              { id: 'chant', label: 'Chants & Mantras' },
+              { id: 'prayer', label: 'Prayers & Liturgy' },
+            ].map((genre) => (
+              <button
+                key={genre.id}
+                onClick={() => {
+                  setRecitationTypeFilter(genre.id as RecitationTypeFilter);
+                  setCurrentPage(1);
+                }}
+                className={`px-2.5 py-1 rounded-xl text-[11px] font-medium whitespace-nowrap transition ${
+                  recitationTypeFilter === genre.id
+                    ? 'bg-slate-200 text-navy-950 font-bold'
+                    : 'bg-navy-950 text-slate-400 hover:text-slate-200 border border-slate-800'
+                }`}
+              >
+                {genre.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* =========================================================================
-          REQUIREMENTS RESULTS LIST / GRID
+          SACRED REQUIREMENTS GRID
           ========================================================================= */}
       <div className="space-y-4">
         <div className="flex items-center justify-between text-xs text-slate-400">
           <div>
             Showing{' '}
             <span className="font-bold text-slate-100">{filteredRequirements.length}</span>{' '}
-            of <span className="font-mono text-gold-400">651</span> sacred requirements
+            sacred liturgical works
+            {mediaSourceFilter === 'playable' && (
+              <span className="text-emerald-400 font-medium ml-1.5">
+                • All ready to play & watch
+              </span>
+            )}
           </div>
           {totalPages > 1 && (
             <div>
@@ -513,26 +559,14 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
           <div className="p-12 text-center rounded-3xl bg-navy-950/60 border border-slate-800 space-y-3">
             <Search className="w-10 h-10 text-slate-600 mx-auto" />
             <h3 className="font-serif text-base font-bold text-slate-300">
-              No matching sacred requirements found
+              No matching sacred works found
             </h3>
             <p className="text-xs text-slate-500 max-w-md mx-auto">
-              Try adjusting your search keywords, clearing your filters, or switching tradition portals.
+              Try adjusting your search query, clearing filters, or switching tradition portals.
             </p>
-            <button
-              onClick={() => {
-                setSelectedTradition('all');
-                setSelectedCollectionId('all');
-                setAvailabilityFilter('all');
-                setSearchQuery('');
-                setCurrentPage(1);
-              }}
-              className="px-4 py-2 rounded-xl bg-navy-900 border border-gold-500/30 text-gold-400 text-xs font-semibold hover:bg-navy-800 transition"
-            >
-              Reset All Filters
-            </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {paginatedRequirements.map((req) => (
               <RequirementCard
                 key={req.id}
@@ -540,34 +574,32 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
                 onPlay={handlePlayRequirement}
                 onViewDetails={(r) => setActiveDetailReq(r)}
                 isCurrentlyPlaying={
-                  playbackState.currentRequirement?.id === req.id &&
-                  playbackState.status === 'PLAYING'
+                  playbackState.status === 'PLAYING' &&
+                  playbackState.currentRequirement?.id === req.id
                 }
               />
             ))}
           </div>
         )}
 
-        {/* Pagination Controls */}
+        {/* Pagination Bar */}
         {totalPages > 1 && (
           <div className="flex items-center justify-center space-x-2 pt-6">
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="p-2 rounded-xl bg-navy-950 border border-slate-800 text-slate-300 hover:text-gold-400 disabled:opacity-40 disabled:hover:text-slate-300 transition"
+              className="p-2 rounded-xl bg-navy-900 border border-slate-700 text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-navy-800 transition"
               aria-label="Previous page"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
-
-            <span className="px-4 py-1.5 rounded-xl bg-navy-950 border border-slate-800 text-xs font-mono text-slate-300">
-              {currentPage} / {totalPages}
+            <span className="text-xs text-slate-400 px-3">
+              Page {currentPage} of {totalPages}
             </span>
-
             <button
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="p-2 rounded-xl bg-navy-950 border border-slate-800 text-slate-300 hover:text-gold-400 disabled:opacity-40 disabled:hover:text-slate-300 transition"
+              className="p-2 rounded-xl bg-navy-900 border border-slate-700 text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-navy-800 transition"
               aria-label="Next page"
             >
               <ChevronRight className="w-4 h-4" />
@@ -577,25 +609,21 @@ export const SacredAudioLibraryHub: React.FC<SacredAudioLibraryHubProps> = ({
       </div>
 
       {/* =========================================================================
-          MODALS & PLAYERS
+          MODALS & STICKY AUDIO PLAYER BAR
           ========================================================================= */}
       <RequirementDetailModal
-        isOpen={activeDetailReq !== null}
+        isOpen={!!activeDetailReq}
         requirement={activeDetailReq}
         onClose={() => setActiveDetailReq(null)}
         onPlay={handlePlayRequirement}
       />
 
       <YouTubeEmbedModal
-        isOpen={activeYouTubeReq !== null}
+        isOpen={!!activeYouTubeReq}
         requirement={activeYouTubeReq}
-        onClose={() => {
-          setActiveYouTubeReq(null);
-          unifiedSacredAudioService.stop();
-        }}
+        onClose={() => setActiveYouTubeReq(null)}
       />
 
-      {/* Local HTML5 Player Bar (Bottom) */}
       <SacredAudioPlayerBar />
     </div>
   );

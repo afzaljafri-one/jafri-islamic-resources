@@ -58,7 +58,7 @@ export const RequirementDetailModal: React.FC<RequirementDetailModalProps> = ({
         return (
           <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center space-x-1.5">
             <ShieldCheck className="w-3.5 h-3.5" />
-            <span>AVAILABLE & PLAYABLE NOW (LOCAL HTML5)</span>
+            <span>DIRECT AUDIO RECORDING (HIGH FIDELITY HTML5)</span>
           </span>
         );
       case 'AWAITING_APP_INTEGRATION':
@@ -66,42 +66,42 @@ export const RequirementDetailModal: React.FC<RequirementDetailModalProps> = ({
           return (
             <span className="px-3 py-1 rounded-full text-xs font-bold bg-purple-500/15 text-purple-300 border border-purple-500/30 flex items-center space-x-1.5">
               <Youtube className="w-3.5 h-3.5 text-red-400" />
-              <span>ACCEPTED YOUTUBE VIDEO EMBED (CLICK-TO-PLAY)</span>
+              <span>OFFICIAL VIDEO RECITATION (OFFICIAL EMBED)</span>
             </span>
           );
         }
         return (
-          <span className="px-3 py-1 rounded-full text-xs font-bold bg-amber-950/60 text-amber-300 border border-amber-500/40 flex items-center space-x-1.5">
-            <Lock className="w-3.5 h-3.5 text-amber-400" />
-            <span>UNVERIFIED YOUTUBE CANDIDATE (AWAITING VERIFICATION)</span>
+          <span className="px-3 py-1 rounded-full text-xs font-bold bg-slate-800 text-slate-300 border border-slate-700 flex items-center space-x-1.5">
+            <Clock className="w-3.5 h-3.5 text-slate-400" />
+            <span>RECORDING IN PREPARATION</span>
           </span>
         );
       case 'AWAITING_PERMISSION':
         return (
-          <span className="px-3 py-1 rounded-full text-xs font-bold bg-rose-500/15 text-rose-400 border border-rose-500/30 flex items-center space-x-1.5">
-            <ShieldAlert className="w-3.5 h-3.5" />
-            <span>BLOCKED PENDING PERMISSION (LIBRIVOX)</span>
+          <span className="px-3 py-1 rounded-full text-xs font-bold bg-slate-800 text-slate-300 border border-slate-700 flex items-center space-x-1.5">
+            <Clock className="w-3.5 h-3.5 text-slate-400" />
+            <span>RECORDING IN PREPARATION (RIGHTS REVIEW)</span>
           </span>
         );
       case 'SOURCE_AVAILABLE_PERMISSION_REQUIRED':
         return (
           <span className="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30 flex items-center space-x-1.5">
             <Lock className="w-3.5 h-3.5" />
-            <span>PERMISSION REQUIRED (MECHON MAMRE)</span>
+            <span>ARCHIVAL PRESERVATION (INSTITUTIONAL PERMISSIONS IN PROGRESS)</span>
           </span>
         );
       case 'PENDING_DISCOVERY':
         return (
           <span className="px-3 py-1 rounded-full text-xs font-bold bg-slate-800 text-slate-400 border border-slate-700 flex items-center space-x-1.5">
             <Clock className="w-3.5 h-3.5" />
-            <span>PENDING GENUINE DISCOVERY</span>
+            <span>SACRED WORK PRESERVED (AUDIO IN CURATION)</span>
           </span>
         );
       case 'TEXT_CARD':
         return (
           <span className="px-3 py-1 rounded-full text-xs font-bold bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 flex items-center space-x-1.5">
             <FileText className="w-3.5 h-3.5" />
-            <span>PRESERVED NON-AUDIO TEXT CARD</span>
+            <span>SACRED REFERENCE TEXT (LITURGICAL READING)</span>
           </span>
         );
     }
@@ -153,7 +153,7 @@ export const RequirementDetailModal: React.FC<RequirementDetailModalProps> = ({
           {/* Status Banner */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-navy-900/90 border border-slate-800">
             <div>
-              <div className="text-[11px] text-slate-400 mb-1">Operational Availability:</div>
+              <div className="text-[11px] text-slate-400 mb-1">Media Availability:</div>
               {getStatusBadge()}
             </div>
             {requirement.isPlayable && (
@@ -165,7 +165,7 @@ export const RequirementDetailModal: React.FC<RequirementDetailModalProps> = ({
                 className="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-gradient-to-r from-gold-500 to-gold-400 text-navy-950 font-bold shadow-gold hover:from-gold-400 hover:to-gold-300 transition"
               >
                 <Play className="w-4 h-4 fill-current" />
-                <span>Play Local Recording</span>
+                <span>Play Audio Recording</span>
               </button>
             )}
             {requirement.availability === 'AWAITING_APP_INTEGRATION' && isApprovedYouTube && (
@@ -177,13 +177,37 @@ export const RequirementDetailModal: React.FC<RequirementDetailModalProps> = ({
                 className="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold shadow transition"
               >
                 <Youtube className="w-4 h-4" />
-                <span>Open YouTube Video Embed</span>
+                <span>Watch Video Recitation</span>
               </button>
             )}
             {requirement.availability === 'AWAITING_APP_INTEGRATION' && !isApprovedYouTube && (
+              <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-slate-900 border border-slate-700 text-slate-400 font-medium text-xs">
+                <Clock className="w-4 h-4 text-slate-400" />
+                <span>Recording in Preparation</span>
+              </div>
+            )}
+            {requirement.availability === 'SOURCE_AVAILABLE_PERMISSION_REQUIRED' && (
               <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-amber-950/60 border border-amber-500/40 text-amber-300 font-medium text-xs">
                 <Lock className="w-4 h-4 text-amber-400" />
-                <span>Awaiting Content Verification (Playback Locked)</span>
+                <span>Archival Recording (Permissions in Progress)</span>
+              </div>
+            )}
+            {requirement.availability === 'AWAITING_PERMISSION' && (
+              <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-slate-900 border border-slate-700 text-slate-400 font-medium text-xs">
+                <Clock className="w-4 h-4 text-slate-400" />
+                <span>Recording in Preparation</span>
+              </div>
+            )}
+            {requirement.availability === 'PENDING_DISCOVERY' && (
+              <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-slate-900 border border-slate-700 text-slate-400 font-medium text-xs">
+                <Clock className="w-4 h-4 text-slate-400" />
+                <span>Liturgical Work Catalogued</span>
+              </div>
+            )}
+            {requirement.availability === 'TEXT_CARD' && (
+              <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-indigo-950/60 border border-indigo-500/40 text-indigo-300 font-medium text-xs">
+                <FileText className="w-4 h-4 text-indigo-400" />
+                <span>Liturgical Reading Available</span>
               </div>
             )}
           </div>

@@ -503,7 +503,7 @@ else:
     dom_audio = fetch_dom(f"{BASE_URL}/?religion=sacred-audio")
     audio_hub = "Sacred Audio Library" in dom_audio or "Sacred Audio" in dom_audio
     audio_counter = "651" in dom_audio or "Requirements" in dom_audio
-    audio_badges = "Pending Discovery" in dom_audio or "Local Audio" in dom_audio or "Rights Blocked" in dom_audio or "Awaiting Discovery" in dom_audio
+    audio_badges = "Direct Audio" in dom_audio or "Video Recitation" in dom_audio or "Local Audio" in dom_audio or "Awaiting Discovery" in dom_audio
     record("UI-SMOKE-9.9", "Sacred Audio Hub & Rights Badges", audio_hub and audio_counter and audio_badges, "Sacred Audio Hub displays 651 requirements counter and licensing status filters", "UI-SMOKE")
 
 # ==============================================================================

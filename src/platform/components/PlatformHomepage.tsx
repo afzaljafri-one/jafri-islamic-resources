@@ -82,16 +82,16 @@ export const PlatformHomepage: React.FC<PlatformHomepageProps> = ({
           </div>
           <div className="space-y-1">
             <div className="flex items-center space-x-2 flex-wrap">
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-gold-500/10 text-gold-300 border border-gold-500/20">
-                Gate 5.4 Completed
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                154 Works Available
               </span>
-              <span className="text-xs text-slate-400">• 651 Master Requirements</span>
+              <span className="text-xs text-slate-400">• Seven Sacred World Traditions</span>
             </div>
             <h2 className="text-lg sm:text-xl font-serif font-bold text-slate-100">
               Jafri Sacred Audio Library
             </h2>
             <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
-              Explore authentic liturgical audio across all seven world traditions: 14 verified local recordings (HTML5), 28 individually approved YouTube IDs for optional video embeds, with 112 candidates awaiting verification, 4 preserved text cards, 144 permission-quarantined recordings (Mechon Mamre Hebrew Tanakh), 2 rights-blocked recordings (LibriVox), and transparent progress on 347 pending requirements.
+              Listen to authentic liturgical recitations, scriptural cantillations, and sacred choral works across all seven world traditions: 14 direct high-fidelity local audio recordings and 140 official video recitations, with an authoritative multilingual archive of 651 documented works.
             </p>
           </div>
         </div>

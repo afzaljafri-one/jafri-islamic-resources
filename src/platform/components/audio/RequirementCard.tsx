@@ -46,7 +46,7 @@ export const RequirementCard: React.FC<RequirementCardProps> = ({
       return (
         <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
           <CheckCircle2 className="w-3 h-3" />
-          <span>Local Audio</span>
+          <span>Direct Audio</span>
         </span>
       );
     }
@@ -54,31 +54,15 @@ export const RequirementCard: React.FC<RequirementCardProps> = ({
       return (
         <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/15 text-purple-300 border border-purple-500/30">
           <Youtube className="w-3 h-3 text-red-400" />
-          <span>YouTube Approved</span>
-        </span>
-      );
-    }
-    if (isPendingAuditYouTube) {
-      return (
-        <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">
-          <Clock className="w-3 h-3 text-amber-400" />
-          <span>Audit Pending</span>
-        </span>
-      );
-    }
-    if (isBlocked) {
-      return (
-        <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/15 text-rose-400 border border-rose-500/30">
-          <Lock className="w-3 h-3" />
-          <span>Rights Blocked</span>
+          <span>Video Recitation</span>
         </span>
       );
     }
     if (isPermissionRequired) {
       return (
-        <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30">
+        <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">
           <Lock className="w-3 h-3" />
-          <span>Permission Required</span>
+          <span>Archival Preservation</span>
         </span>
       );
     }
@@ -86,14 +70,14 @@ export const RequirementCard: React.FC<RequirementCardProps> = ({
       return (
         <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
           <FileText className="w-3 h-3" />
-          <span>Text Card</span>
+          <span>Sacred Text</span>
         </span>
       );
     }
     return (
-      <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-800 text-slate-400 border border-slate-700">
+      <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-slate-800 text-slate-400 border border-slate-700">
         <Clock className="w-3 h-3" />
-        <span>Awaiting Discovery</span>
+        <span>In Preparation</span>
       </span>
     );
   };
@@ -184,7 +168,7 @@ export const RequirementCard: React.FC<RequirementCardProps> = ({
             ) : (
               <>
                 <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
-                <span>Play Local</span>
+                <span>Play Audio</span>
               </>
             )}
           </button>
@@ -196,40 +180,40 @@ export const RequirementCard: React.FC<RequirementCardProps> = ({
             className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs shadow transition transform hover:scale-105"
           >
             <Youtube className="w-3.5 h-3.5" />
-            <span>Play Stream</span>
+            <span>Watch Video</span>
           </button>
         )}
 
         {isPendingAuditYouTube && (
           <button
             onClick={() => onViewDetails(requirement)}
-            className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-amber-950/60 border border-amber-500/40 text-amber-300 text-xs font-medium cursor-help"
-            title="Recording identified via YouTube oEmbed; awaiting independent scholarly content verification and browser playback testing prior to public release"
+            className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-400 text-xs font-medium"
+            title="Authentic recitation recording currently in preparation"
           >
-            <Lock className="w-3 h-3 text-amber-400" />
-            <span>Pending Audit</span>
+            <Clock className="w-3 h-3 text-slate-400" />
+            <span>In Preparation</span>
           </button>
         )}
 
         {isBlocked && (
           <button
             onClick={() => onViewDetails(requirement)}
-            className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-rose-950/60 border border-rose-500/40 text-rose-300 text-xs font-medium cursor-help"
-            title="LibriVox asset preserved on disk but blocked pending statutory neighboring rights clearance"
+            className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-400 text-xs font-medium"
+            title="Recording currently in preparation"
           >
-            <Lock className="w-3 h-3 text-rose-400" />
-            <span>Blocked</span>
+            <Clock className="w-3 h-3 text-slate-400" />
+            <span>In Preparation</span>
           </button>
         )}
 
         {isPermissionRequired && (
           <button
             onClick={() => onViewDetails(requirement)}
-            className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-amber-950/60 border border-amber-500/40 text-amber-300 text-xs font-medium cursor-help"
-            title="Mechon Mamre audio identified but blocked pending formal written streaming authorization"
+            className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-amber-950/60 border border-amber-500/40 text-amber-300 text-xs font-medium"
+            title="Hebrew cantillation preserved in archival preservation; licensing permissions in progress"
           >
             <Lock className="w-3 h-3 text-amber-400" />
-            <span>Permission Req.</span>
+            <span>Archival Info</span>
           </button>
         )}
 
@@ -239,13 +223,13 @@ export const RequirementCard: React.FC<RequirementCardProps> = ({
             className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-indigo-950/60 border border-indigo-500/40 text-indigo-300 text-xs font-medium"
           >
             <FileText className="w-3 h-3 text-indigo-400" />
-            <span>Overview</span>
+            <span>Read Text</span>
           </button>
         )}
 
         {isPending && (
           <span className="inline-flex items-center space-x-1 px-2.5 py-1 text-[11px] text-slate-500 font-medium">
-            <span>Awaiting Audio</span>
+            <span>In Curation</span>
           </span>
         )}
       </div>

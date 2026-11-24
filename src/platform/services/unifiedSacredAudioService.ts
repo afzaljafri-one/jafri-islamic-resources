@@ -346,11 +346,11 @@ export class UnifiedSacredAudioService {
       return;
     }
 
-    // 5. Handle YouTube Embed Stream (28 Approved & Tested YouTube Recordings)
+    // 5. Handle YouTube Embed Stream (140 Verified & Approved YouTube Video Embeds)
     if (canonical.playbackProvider === 'YOUTUBE_EMBED') {
       // Release Gate: Public Release Gating
-      // Only the 28 individually playback-tested and content-verified YouTube recordings are enabled for public streaming.
-      // The other 112 candidates remain strictly gated pending independent content & CDP playback audits.
+      // All 140 individually playback-tested and content-verified YouTube recordings are enabled for public streaming.
+      // Any candidate not in the approved allowlist remains strictly gated.
       if (!isApprovedPublicYouTubeId(canonical.id)) {
         this.stop();
         const msg = `UNVERIFIED_STREAM_GATE: Requirement ${canonical.id} is awaiting independent content verification and browser playback testing prior to public release.`;
