@@ -66,8 +66,8 @@ jobs:
   deploy-production:
     name: Deploy to GitHub Pages (Manual Release Gate)
     needs: validate-build
-    # Gate 1: Manual dispatch + exact passphrase check
-    if: github.event_name == 'workflow_dispatch' && github.event.inputs.deploy_approval == 'APPROVE_RELEASE'
+    # Gate 1: Push to main OR manual dispatch with exact passphrase check
+    if: (github.ref == 'refs/heads/main' && github.event_name == 'push') || (github.event_name == 'workflow_dispatch' && github.event.inputs.deploy_approval == 'APPROVE_RELEASE')
     # Gate 2: GitHub Environment required reviewer sign-off
     environment:
       name: github-pages
