@@ -1721,6 +1721,31 @@ export function resolveReadingAudioMatches(
       link.requirementId === 'REQ-BUD-025'
     ) {
       isExact = true;
+    } else if (
+      (normCollectionId === 'navkar' || normReadingId.includes('navkar') || (normTitle && normTitle.includes('navkar'))) &&
+      link.requirementId === 'REQ-JAI-007'
+    ) {
+      isExact = true;
+    } else if (
+      (normCollectionId === 'bhaktamar' || normReadingId.includes('bhaktamar') || (normTitle && normTitle.includes('bhaktamar'))) &&
+      link.requirementId === 'REQ-JAI-012'
+    ) {
+      isExact = true;
+    } else if (
+      (normCollectionId === 'pratikraman' || normReadingId.includes('pratikraman') || (normTitle && normTitle.includes('pratikraman'))) &&
+      link.requirementId === 'REQ-JAI-023'
+    ) {
+      isExact = true;
+    } else if (
+      (normCollectionId === 'samayik' || normReadingId.includes('samayik') || (normTitle && normTitle.includes('samayik'))) &&
+      link.requirementId === 'REQ-JAI-028'
+    ) {
+      isExact = true;
+    } else if (
+      (normCollectionId === 'jain_hymns' || normReadingId.includes('meri_bhavana') || (normTitle && normTitle.includes('meri bhavana'))) &&
+      link.requirementId === 'REQ-JAI-033'
+    ) {
+      isExact = true;
     }
 
     // Helper to verify if linkage book or collection matches context

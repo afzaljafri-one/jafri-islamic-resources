@@ -236,4 +236,26 @@ export const JAINISM_COLLECTIONS: JainCollectionMeta[] = [
     sectarianNote:
       'Tattvartha Sutra is universally accepted and commented upon by both major traditions (Pujyapada\'s Sarvarthasiddhi for Digambaras; Umashvati’s Svopajna Bhashya & Siddhasenagani for Shvetambaras).',
   },
+  {
+    id: 'agama_framework',
+    title: 'The 45 Agamas & Canonical Corpus (Angas, Upangas & Digambara Texts)',
+    nativeTitle: '४५ जैन आगम एवं प्रामाणिक शास्त्र (अंग, उपांग, षट्खण्डागम)',
+    category: 'Agama Canon',
+    tradition: 'Both Traditions (Distinct Recensions)',
+    originalLanguage: 'Ardhamagadhi Prakrit, Sauraseni Prakrit & Sanskrit',
+    authorOrCompiler:
+      'Ganadharas (Gautama & Sudharman), Acharya Pushpadanta, Bhutabali & Acharya Kundakunda',
+    translatorOrCommentator:
+      'Hermann Jacobi (SBE Vols. 22 & 45), Dr. A.N. Upadhye, Muni Jambuvijayaji',
+    sourceEdition: 'Agamoddaya Samiti / Jaina Agama Series / Sacred Books of the East',
+    sourceUrl: 'https://jainworld.com/scriptures/jain-agamas-overview/',
+    copyrightStatus: 'Public Domain (Ancient canonical scriptures and historical scholarship)',
+    licensingStatus: 'Public Domain',
+    availableFormats: ['original_text', 'translation'],
+    contentStatus: 'verified_available',
+    summary:
+      'The comprehensive structural matrix of the Jain scriptural canon. Documents all 45 Agamas preserved in the Shvetambara tradition: 12 Angas (foundational preachings of Mahavira), 12 Upangas (subsidiary texts), 10 Prakirnakas (miscellaneous texts), 6 Chedasutras (monastic expiation), 4 Mulasutras (fundamental vows), and 2 Culikasutras (Nandi and Anuyogadvara); together with the Digambara canonical authorities: Shatkhandagama, Kashayaprabhrta, and Acharya Kundakunda’s monumental treatises (Samayasara, Pravachanasara, Niyamasara).',
+    sectarianNote:
+      'The Shvetambara canon of 45 Agamas was codified at the Council of Valabhi (5th c. CE). The Digambara tradition holds that the original Angas were gradually lost from oral memory, and venerates the Shatkhandagama (revealed to Pushpadanta and Bhutabali) and Kundakunda’s metaphysics as their most authoritative scriptural heritage.',
+  },
 ];

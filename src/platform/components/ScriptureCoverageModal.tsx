@@ -325,27 +325,28 @@ export const TRADITIONS_COVERAGE: Record<ReligionId, TraditionCoverageDetails> =
   jainism: {
     religionId: 'jainism',
     name: 'Jainism',
-    nativeName: 'जैन धर्म',
+    nativeName: 'जैन धर्म / जिणसासण',
     canonicalMetadata: {
       status: 'COMPLETE',
-      summary: '9 Canonical Collections Metadata',
-      details: '9 collections spanning Navkar Mantra, Bhaktamar Stotra, Classical Agamas (Acaranga, Sutrakritanga), Uttaradhyayana Sutra, Kalpa Sutra, Samayik, and Tattvartha Sutra.',
+      summary: '10 Canonical Collections & 45 Agamas Framework',
+      details: '10 collections covering the 45 Shvetambara Agamas framework (12 Angas, 12 Upangas, 10 Prakirnakas, 6 Chedasutras, 4 Mulasutras, 2 Culikasutras) and Digambara canon (Shatkhandagama, Kashayaprabhrta, and Kundakunda treatises), Navkar Mantra, Bhaktamar Stotra (Shvetambara 44 and Digambara 48 recensions), Classical Agamas (Acaranga, Sutrakritanga), Uttaradhyayana Sutra (36 Sermons, Keshi-Gautama dialogue), Kalpa Sutra (Trishala dreams, Diksha, Kevala Jnana, Nirvana), Pratikraman, Samayik, Meri Bhavana, and Tattvartha Sutra.',
     },
     textCorpus: {
       status: 'CURATED_SELECTIONS',
-      summary: '29 Curated Canonical Texts (Zero AI)',
-      details: 'Curated canonical passages in Ardhamagadhi Prakrit / Sanskrit with Hermann Jacobi\'s public domain translations (Sacred Books of the East Vols. 22 & 45). Zero AI-generated translations.',
+      summary: '45+ Curated Canonical Units in Ardhamagadhi & Sanskrit (Zero AI)',
+      details: 'Curated canonical passages in Ardhamagadhi Prakrit, Sauraseni Prakrit, and Sanskrit with Hermann Jacobi public domain scholarly translations (Sacred Books of the East Vols. 22 & 45), Nathmal Tatia, K.K. Dixit, and Pandit Jugalkishor Mukhtar. Zero AI-generated translations.',
     },
     curatedLiturgicalSelections: {
-      count: 29,
-      summary: '29 Foundational Text Units (100% Bundled Offline)',
+      count: 45,
+      summary: '45+ Foundational Canonical & Liturgical Units (100% Bundled Offline)',
       items: [
-        'Navkar Mantra (Complete 9 Lines with Prakrit & English Translation)',
-        'Acaranga Sutra (Book 1, Lecture 1, Lesson 1 — Ahimsa Foundation)',
-        'Sutrakritanga Sutra & Uttaradhyayana Sutra (Chapter 10 Leaf of the Tree)',
-        'Kalpa Sutra (Lives of the Tirthankaras — Bhagavan Mahavira)',
-        'Bhaktamar Stotra (Stanzas 1, 2, 48 by Acharya Manatunga)',
-        'Tattvartha Sutra (Chapter 1: Parasparopagraho Jivanam)',
+        'The 45 Agamas Canonical Matrix: 12 Angas (Acaranga to Drstivada), 12 Upangas, 10 Prakirnakas, 6 Chedasutras, 4 Mulasutras, 2 Culikasutras, and Digambara Shatkhandagama & Samayasara',
+        'Acaranga Sutra (First Anga): Weapon Scrutiny (1.1.1), Supreme Law of Ahimsa (1.5.5), Identity of Self and Other (1.2.3), and Ascetic Equanimity (1.8.1)',
+        'Sutrakritanga Sutra (Second Anga): Refutation of Fatalism / Niyativada, Moral Agency, and Universal Compassion (Daya Dharma)',
+        'Uttaradhyayana Sutra: Monastic Discipline (Ch 1), Nami Pravrajya (Ch 9 Inner Conquest), Withered Leaf Impermanence (Ch 10), Keshi-Gautama Reconciliation (Ch 23), and Jiva-Ajiva Classification (Ch 36)',
+        'Kalpa Sutra (Bhadrabahu): Queen Trishala 14 Auspicious Dreams, Mahavira Diksha Renunciation, Kevala Jnana Omniscience at Rjupalika, and Nirvana at Pavapuri',
+        'Tattvartha Sutra (Umashvati): Ratnatraya (1.1), Seven Tattvas (1.4), Five Bhavas (2.8), Parasparopagraho Jivanam (5.21), Five Great Vows (7.1), Samvara & Nirjara (9.1), and Kundakunda Samayasara (Gatha 1)',
+        'Liturgical & Devotional Masterpieces: Namokar Maha Mantra (9-line canon), Bhaktamar Stotra (Shvetambara 44 / Digambara 48 reconciliation), Pratikraman (Khamemi Savve Jive & Michhami Dukkadam), Samayik (Karemi Bhante & Logassa Sutra), and Meri Bhavana (Pt. Jugalkishor Mukhtar)',
       ],
     },
     networkDependentContent: {
@@ -357,12 +358,12 @@ export const TRADITIONS_COVERAGE: Record<ReligionId, TraditionCoverageDetails> =
     offlineAvailability: {
       status: 'FULL_OFFLINE',
       summary: '100% Offline (Self-Contained)',
-      details: 'All 29 curated text units across all 9 collections are 100% available offline with zero network connectivity.',
+      details: 'All 45+ curated text units across all 10 collections are 100% available offline with zero network connectivity.',
     },
     missingOrExcluded: {
       summary: 'Excluded or Unavailable Material',
       items: [
-        'Full textual corpus of all 45 Agamas (Angas, Upangas, Prakirnakas, Chedasutras, Mulasutras).',
+        'Full textual corpus of all 45 Agamas (millions of words across Prakrit commentaries, Niryuktis, and Churnis).',
         'Spoken audio recitations for Agamas are currently unmapped (pending discovery).',
       ],
     },

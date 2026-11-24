@@ -82,7 +82,7 @@ export const JainismModule: React.FC<JainismModuleProps> = ({
   const [selectedText, setSelectedText] = useState<JainTextMeta>(() => {
     if (typeof window !== 'undefined' && window.location?.search) {
       const p = new URLSearchParams(window.location.search);
-      const t = p.get('text');
+      const t = p.get('text') || p.get('collection');
       if (t) {
         const found = JAIN_CANONICAL_TEXTS.find((tx) => tx.id === t);
         if (found) return found;
@@ -90,6 +90,18 @@ export const JainismModule: React.FC<JainismModuleProps> = ({
     }
     return JAIN_CANONICAL_TEXTS[0]; // Navkar Mantra
   });
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const p = new URLSearchParams(window.location.search);
+    const t = p.get('text') || p.get('collection');
+    if (t) {
+      const found = JAIN_CANONICAL_TEXTS.find((tx) => tx.id === t);
+      if (found && found.id !== selectedText.id) {
+        setSelectedText(found);
+      }
+    }
+  }, [window.location.search]);
   const [copiedUnit, setCopiedUnit] = useState<string | null>(null);
 
   // Platform Controls & Drawers

@@ -83,21 +83,23 @@ async function runLiveTest() {
     if (!wsUrl) throw new Error('Could not connect to Chrome DevTools Protocol');
     console.log(`[CDP] Connected to Chrome DevTools endpoint at ${wsUrl}`);
 
-    const WebSocket = require('ws');
-    ws = new WebSocket(wsUrl);
-    await new Promise((resolve) => ws.once('open', resolve));
+    const ws = new globalThis.WebSocket(wsUrl);
+    await new Promise((resolve, reject) => {
+      ws.onopen = resolve;
+      ws.onerror = reject;
+    });
 
     let msgId = 1;
     const pending = new Map();
-    ws.on('message', (raw) => {
-      const msg = JSON.parse(raw);
+    ws.onmessage = (event) => {
+      const msg = JSON.parse(event.data);
       if (msg.id && pending.has(msg.id)) {
         const { resolve, reject } = pending.get(msg.id);
         pending.delete(msg.id);
         if (msg.error) reject(msg.error);
         else resolve(msg.result);
       }
-    });
+    };
 
     function send(method, params = {}, sessionId = undefined) {
       return new Promise((resolve, reject) => {
