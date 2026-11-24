@@ -41,6 +41,8 @@ import {
   ScriptureUnit,
 } from '../../platform/services/multilingualAudioEngine';
 import { UniversalBookmark } from '../../platform/types';
+import { TwoColumnReadingLayout } from '../../platform/components/layout/TwoColumnReadingLayout';
+import { ReadingContext } from '../../platform/services/contextualAudioMatcher';
 
 const BUDDHISM_AUDIO_EDITIONS: ScriptureAudioEditionOption[] = [
   {
@@ -488,8 +490,18 @@ export const BuddhismModule: React.FC<BuddhismModuleProps> = ({
         </div>
       </div>
 
-      {/* Main Sutta Segments Reading Area */}
-      <main className="space-y-4 min-h-[450px]">
+      {/* Main Sutta Segments Reading Area with Contextual Sacred Audio Player */}
+      {(() => {
+        const readingContext: ReadingContext = {
+          religionId: 'buddhism',
+          collectionId: selectedSutta.id || selectedSutta.uid,
+          bookName: selectedSutta.titleEn || selectedSutta.title,
+          title: `${selectedSutta.titleEn || selectedSutta.title} ${selectedSutta.titlePali || selectedSutta.nativeTitle || ''}`.trim(),
+        };
+
+        return (
+          <TwoColumnReadingLayout context={readingContext}>
+            <main className="space-y-4 min-h-[450px]">
         {loading ? (
           <div className="py-24 text-center text-slate-400 text-xs space-y-2">
             <div className="w-6 h-6 border-2 border-gold-400 border-t-transparent rounded-full animate-spin mx-auto" />
@@ -624,7 +636,10 @@ export const BuddhismModule: React.FC<BuddhismModuleProps> = ({
             );
           })
         )}
-      </main>
+            </main>
+          </TwoColumnReadingLayout>
+        );
+      })()}
 
       {/* Audio Status Note */}
       <div className="p-3.5 rounded-2xl bg-navy-950/60 border border-slate-800/80 text-[11px] text-slate-400 flex items-center justify-between">

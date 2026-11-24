@@ -88,24 +88,27 @@ def read_source_file(relative_path: str) -> str:
         raise FileNotFoundError(f"Required source file not found: {path}")
     return path.read_text(encoding="utf-8")
 
-def fetch_dom(url: str, wait_ms: int = 2500, timeout: int = 15) -> str:
+def fetch_dom(url: str, wait_ms: int = 2500, timeout: int = 25) -> str:
     if not CHROME_PATH:
         return ""
-    cmd = [
-        CHROME_PATH,
-        "--headless=new",
-        "--disable-gpu",
-        "--no-sandbox",
-        f"--virtual-time-budget={wait_ms}",
-        "--dump-dom",
-        url
-    ]
-    try:
-        res = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
-        return res.stdout
-    except Exception as e:
-        print(f"Warning: Failed to fetch DOM for {url}: {e}")
-        return ""
+    import tempfile
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        cmd = [
+            CHROME_PATH,
+            "--headless=new",
+            "--disable-gpu",
+            "--no-sandbox",
+            f"--user-data-dir={tmp_dir}",
+            f"--virtual-time-budget={wait_ms}",
+            "--dump-dom",
+            url
+        ]
+        try:
+            res = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+            return res.stdout
+        except Exception as e:
+            print(f"Warning: Failed to fetch DOM for {url}: {e}")
+            return ""
 
 print("=" * 80)
 print("UNIFIED MULTI-RELIGION PLATFORM: PORTABLE VERIFICATION SUITE")

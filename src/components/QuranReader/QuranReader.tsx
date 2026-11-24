@@ -19,6 +19,8 @@ import { SearchModal } from './SearchModal';
 import { BookmarksDrawer } from './BookmarksDrawer';
 import { RefreshCw, AlertTriangle, CheckCircle2, FileDown, Loader2, Info } from 'lucide-react';
 import { quranAudioService, AudioPlayerState } from '../../services/audio';
+import { TwoColumnReadingLayout } from '../../platform/components/layout/TwoColumnReadingLayout';
+import type { ReadingContext } from '../../platform/services/contextualAudioMatcher';
 
 export const QuranReader: React.FC = () => {
   // Directory & Selection
@@ -366,6 +368,14 @@ export const QuranReader: React.FC = () => {
     xl: 'text-3xl lg:text-4xl',
   };
 
+  const readingContext: ReadingContext = {
+    religionId: 'islam',
+    collectionId: 'quran_surahs_arabic',
+    chapterId: currentSurahNumber,
+    bookName: currentSurah?.englishName || `Surah ${currentSurahNumber}`,
+    title: currentSurah?.englishNameTranslation || `Surah ${currentSurahNumber}`,
+  };
+
   return (
     <div className="space-y-6" data-testid="quran-reader">
       {/* 1. Sticky Reader Controls Bar */}
@@ -507,8 +517,9 @@ export const QuranReader: React.FC = () => {
         )}
       </div>
 
-      {/* 3. Main Reading Canvas */}
+      {/* 3. Main Reading Canvas — Two-Column Reading & Sacred Audio Experience */}
       <div className="max-w-7xl mx-auto px-4 lg:px-8 pb-24">
+        <TwoColumnReadingLayout context={readingContext}>
         {viewMode === 'pages' ? (
           <MushafPageViewer
             currentSurahNumber={currentSurahNumber}
@@ -619,6 +630,7 @@ export const QuranReader: React.FC = () => {
             />
           )
         )}
+        </TwoColumnReadingLayout>
       </div>
 
       {/* 4. Drawers & Modals */}

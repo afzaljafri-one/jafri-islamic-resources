@@ -46,6 +46,8 @@ import { UniversalBookmarksDrawer } from '../../platform/components/UniversalBoo
 import { AudioNoticeModal } from '../../platform/components/AudioNoticeModal';
 import { ScriptureCoverageModal } from '../../platform/components/ScriptureCoverageModal';
 import { YouTubeEmbedModal } from '../../platform/components/audio/YouTubeEmbedModal';
+import { TwoColumnReadingLayout } from '../../platform/components/layout/TwoColumnReadingLayout';
+import type { ReadingContext } from '../../platform/services/contextualAudioMatcher';
 import { SACRED_AUDIO_MASTER_CATALOGUE } from '../../platform/data/sacredAudioMasterCatalogue';
 import { MultilingualAudioPlayerBar } from '../../platform/components/MultilingualAudioPlayerBar';
 import { TypographyControls } from '../../platform/components/TypographyControls';
@@ -550,6 +552,14 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
     return col.category === activeCategoryFilter;
   });
 
+  const readingContext: ReadingContext = {
+    religionId: 'hinduism',
+    collectionId: selectedCollectionId,
+    chapterId: selectedCollectionId === 'gita' ? currentChapterNum : undefined,
+    bookName: selectedCollectionId === 'gita' ? 'Bhagavad Gita' : selectedCollection.title,
+    title: selectedCollectionId === 'gita' ? currentChapter.translation : selectedCollection.title,
+  };
+
   return (
     <div className="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-6 space-y-6 animate-in fade-in-50 duration-200">
       {/* Top Breadcrumb & Controls Bar */}
@@ -873,8 +883,9 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
         </div>
       )}
 
-      {/* MAIN READING AREA */}
-      <main className="space-y-4 min-h-[450px]">
+      {/* MAIN READING AREA — Two-Column Scripture & Sacred Audio Experience */}
+      <TwoColumnReadingLayout context={readingContext}>
+        <main className="space-y-4 min-h-[450px]">
         {selectedCollectionId === 'gita' ? (
           /* =========================================================================
              VIEW 1: BHAGAVAD GITA (18 CHAPTERS & 700 SHLOKAS)
@@ -1243,6 +1254,7 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
           )
         )}
       </main>
+      </TwoColumnReadingLayout>
 
       {/* Audio Status Note */}
       <div className="p-4 rounded-xl bg-navy-950/50 border border-slate-800/80 text-xs text-slate-400 space-y-1">

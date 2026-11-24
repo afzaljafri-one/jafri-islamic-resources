@@ -43,6 +43,8 @@ import {
   ScriptureUnit,
 } from '../../platform/services/multilingualAudioEngine';
 import { UniversalBookmark } from '../../platform/types';
+import { TwoColumnReadingLayout } from '../../platform/components/layout/TwoColumnReadingLayout';
+import { ReadingContext } from '../../platform/services/contextualAudioMatcher';
 
 const SIKHISM_AUDIO_EDITIONS: ScriptureAudioEditionOption[] = [
   {
@@ -477,8 +479,19 @@ export const SikhismModule: React.FC<SikhismModuleProps> = ({
         </div>
       </div>
 
-      {/* Main Gurbani Lines Area */}
-      <main className="space-y-4 min-h-[450px]">
+      {/* Main Gurbani Lines Area with Contextual Sacred Audio Player */}
+      {(() => {
+        const readingContext: ReadingContext = {
+          religionId: 'sikhism',
+          collectionId: 'sggs',
+          bookName: 'Sri Guru Granth Sahib Ji',
+          chapterId: currentAng,
+          title: angData?.raag ? `Ang ${currentAng} • ${angData.raag}` : `Ang ${currentAng}`,
+        };
+
+        return (
+          <TwoColumnReadingLayout context={readingContext}>
+            <main className="space-y-4 min-h-[450px]">
         {loading ? (
           <div className="py-24 text-center text-slate-400 text-xs space-y-2">
             <div className="w-6 h-6 border-2 border-gold-400 border-t-transparent rounded-full animate-spin mx-auto" />
@@ -635,7 +648,10 @@ export const SikhismModule: React.FC<SikhismModuleProps> = ({
             );
           })
         )}
-      </main>
+            </main>
+          </TwoColumnReadingLayout>
+        );
+      })()}
 
       {/* Bottom Pagination */}
       <div className="flex items-center justify-between pt-4 border-t border-slate-800">

@@ -49,6 +49,8 @@ import {
   ScriptureUnit,
 } from '../../platform/services/multilingualAudioEngine';
 import { UniversalBookmark } from '../../platform/types';
+import { TwoColumnReadingLayout } from '../../platform/components/layout/TwoColumnReadingLayout';
+import { ReadingContext } from '../../platform/services/contextualAudioMatcher';
 
 const JUDAISM_AUDIO_EDITIONS: ScriptureAudioEditionOption[] = [
   {
@@ -495,8 +497,20 @@ export const JudaismModule: React.FC<JudaismModuleProps> = ({
         </div>
       </div>
 
-      {/* Main Hebrew & English Verses Area */}
-      <main className="space-y-4 min-h-[450px]">
+      {/* Main Hebrew & English Verses Area with Contextual Sacred Audio Player */}
+      {(() => {
+        const readingContext: ReadingContext = {
+          religionId: 'judaism',
+          collectionId: 'tanakh',
+          bookId: currentBook.id,
+          bookName: currentBook.enTitle,
+          chapterId: currentChapter,
+          title: `${currentBook.enTitle} ${currentChapter}`,
+        };
+
+        return (
+          <TwoColumnReadingLayout context={readingContext}>
+            <main className="space-y-4 min-h-[450px]">
         {/* Offline Fallback Warning for Genesis 1 */}
         {currentBook.id === 'Genesis' && currentChapter === 1 && verses.length === 2 && (
           <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -659,7 +673,10 @@ export const JudaismModule: React.FC<JudaismModuleProps> = ({
             );
           })
         )}
-      </main>
+            </main>
+          </TwoColumnReadingLayout>
+        );
+      })()}
 
       {/* Bottom Pagination */}
       <div className="flex items-center justify-between pt-4 border-t border-slate-800">

@@ -36,6 +36,8 @@ import { UniversalSearchModal } from '../../platform/components/UniversalSearchM
 import { UniversalBookmarksDrawer } from '../../platform/components/UniversalBookmarksDrawer';
 import { AudioNoticeModal } from '../../platform/components/AudioNoticeModal';
 import { ScriptureCoverageModal } from '../../platform/components/ScriptureCoverageModal';
+import { TwoColumnReadingLayout } from '../../platform/components/layout/TwoColumnReadingLayout';
+import type { ReadingContext } from '../../platform/services/contextualAudioMatcher';
 import { MultilingualAudioPlayerBar } from '../../platform/components/MultilingualAudioPlayerBar';
 import { TypographyControls } from '../../platform/components/TypographyControls';
 import { AttributionFooter } from '../../platform/components/AttributionFooter';
@@ -367,6 +369,15 @@ export const ChristianityModule: React.FC<ChristianityModuleProps> = ({
     setTimeout(() => setCopiedVerse(null), 2000);
   };
 
+  const readingContext: ReadingContext = {
+    religionId: 'christianity',
+    collectionId: `bible-${selectedTranslation.toLowerCase()}`,
+    bookId: currentBookId,
+    bookName: currentBook.name,
+    chapterId: currentChapter,
+    title: `${currentBook.name} ${currentChapter}`,
+  };
+
   return (
     <div className="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-6 space-y-6 animate-in fade-in-50 duration-200">
       {/* Top Breadcrumb & Controls Bar */}
@@ -566,8 +577,9 @@ export const ChristianityModule: React.FC<ChristianityModuleProps> = ({
         </div>
       </div>
 
-      {/* Main Scripture Reading Cards Area */}
-      <main className="space-y-3 min-h-[400px]">
+      {/* Main Scripture Reading Cards Area — Two-Column Reading & Sacred Audio Experience */}
+      <TwoColumnReadingLayout context={readingContext}>
+        <main className="space-y-3 min-h-[400px]">
         {loading ? (
           <div className="py-20 text-center text-slate-400 text-xs space-y-2">
             <div className="w-6 h-6 border-2 border-gold-400 border-t-transparent rounded-full animate-spin mx-auto" />
@@ -695,6 +707,7 @@ export const ChristianityModule: React.FC<ChristianityModuleProps> = ({
           })
         )}
       </main>
+      </TwoColumnReadingLayout>
 
       {/* Chapter Pagination Bottom Footer */}
       <div className="flex items-center justify-between pt-4 border-t border-slate-800">

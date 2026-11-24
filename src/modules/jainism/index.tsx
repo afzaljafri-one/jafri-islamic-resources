@@ -43,6 +43,8 @@ import {
   ScriptureUnit,
 } from '../../platform/services/multilingualAudioEngine';
 import { UniversalBookmark } from '../../platform/types';
+import { TwoColumnReadingLayout } from '../../platform/components/layout/TwoColumnReadingLayout';
+import { ReadingContext } from '../../platform/services/contextualAudioMatcher';
 
 const JAINISM_AUDIO_EDITIONS: ScriptureAudioEditionOption[] = [
   {
@@ -439,8 +441,18 @@ export const JainismModule: React.FC<JainismModuleProps> = ({
         </div>
       </div>
 
-      {/* Main Sutras Reading Area */}
-      <main className="space-y-4 min-h-[450px]">
+      {/* Main Sutras Reading Area with Contextual Sacred Audio Player */}
+      {(() => {
+        const readingContext: ReadingContext = {
+          religionId: 'jainism',
+          collectionId: selectedText.id,
+          bookName: selectedText.titleEn,
+          title: selectedText.titlePrakrit ? `${selectedText.titleEn} (${selectedText.titlePrakrit})` : selectedText.titleEn,
+        };
+
+        return (
+          <TwoColumnReadingLayout context={readingContext}>
+            <main className="space-y-4 min-h-[450px]">
         {units.length === 0 ? (
           <div className="py-24 text-center text-slate-500 text-xs space-y-2">
             <Info className="w-8 h-8 mx-auto text-slate-600" />
@@ -538,7 +550,10 @@ export const JainismModule: React.FC<JainismModuleProps> = ({
             );
           })
         )}
-      </main>
+            </main>
+          </TwoColumnReadingLayout>
+        );
+      })()}
 
       {/* Audio Status Note */}
       <div className="p-3.5 rounded-2xl bg-navy-950/60 border border-slate-800/80 text-[11px] text-slate-400 flex items-center justify-between">
