@@ -1,0 +1,194 @@
+[
+  {
+    "tradition": "hinduism",
+    "testName": "Gita Chapter 1 Initial Match",
+    "expected": "Bhagavad Gita — Chapter 1",
+    "actual": "Bhagavad Gita — Chapter 1: Arjuna Vishada Yoga (अर्जुनविषादयोग) (Matching Audio)",
+    "passed": true,
+    "status": "PASS"
+  },
+  {
+    "tradition": "hinduism",
+    "testName": "Gita Ch 1 -> Ch 2 Transition",
+    "expected": "Bhagavad Gita — Chapter 2",
+    "actual": "Bhagavad Gita — Chapter 2: Sankhya Yoga (सांख्ययोग) (Matching Audio)",
+    "passed": true,
+    "status": "PASS"
+  },
+  {
+    "tradition": "hinduism",
+    "testName": "Gita -> Bhajans Collection Transition",
+    "expected": "Collection Recording with Bhajan audio, ZERO Gita persistence",
+    "actual": "Badge: \"Collection Recording\", Track: \"Mirabai — Payoji Maine Ram Ratan Dhan Payo\"",
+    "passed": true,
+    "status": "PASS"
+  },
+  {
+    "tradition": "hinduism",
+    "testName": "Puranas Empty State (Level 5)",
+    "expected": "No approved recording currently available for this reading: The 18 Mahapuranas",
+    "actual": "No approved recording currently available for this reading. Reading: The 18 Mahapuranas (Overview & ",
+    "passed": true,
+    "status": "PASS"
+  },
+  {
+    "tradition": "christianity",
+    "testName": "Genesis 1 Quarantined LibriVox (Level 5)",
+    "expected": "No approved recording currently available for this reading: Genesis Chapter 1",
+    "actual": "No approved recording currently available for this reading. Reading: Genesis Chapter 1 This scriptur",
+    "passed": true,
+    "status": "PASS"
+  },
+  {
+    "tradition": "christianity",
+    "testName": "Matthew 6 (Level 1 Match)",
+    "expected": "The Lord's Prayer (Our Father / Pater Noster — Matthew 6:9–13)",
+    "actual": "The Lord's Prayer (Our Father / Pater Noster — Matthew 6:9–13)",
+    "passed": true,
+    "status": "PASS"
+  },
+  {
+    "tradition": "christianity",
+    "testName": "Matthew 1 Transition (Level 5 Empty State)",
+    "expected": "No approved recording currently available for: Matthew Chapter 1",
+    "actual": "No approved recording currently available for this reading. Reading: Matthew Cha",
+    "passed": true,
+    "status": "PASS"
+  },
+  {
+    "tradition": "christianity",
+    "testName": "Psalm 23 (Level 1 Match)",
+    "expected": "Psalm 23 (The Lord is My Shepherd)",
+    "actual": "Psalm 23 (The Lord is My Shepherd — Complete Psalm)",
+    "passed": true,
+    "status": "PASS"
+  },
+  {
+    "tradition": "buddhism",
+    "testName": "SN 56.11 Sutta (Level 1 Match)",
+    "expected": "SN 56.11 — Dhammacakkappavattana Sutta",
+    "actual": "SN 56.11 — Dhammacakkappavattana Sutta: The Middle Way (Majjhima Patipada)",
+    "passed": true,
+    "status": "PASS"
+  },
+  {
+    "tradition": "buddhism",
+    "testName": "Tipitaka Overview Transition",
+    "expected": "Collection Recording or Level 5 Empty State, NO SN 56.11 persistence",
+    "actual": "Badge: \"Matching Audio\", Track: \"The Pali Tipitaka Structure (Vinaya, Sutta, Abhidhamma)\"",
+    "passed": true,
+    "status": "PASS"
+  },
+  {
+    "tradition": "buddhism",
+    "testName": "Karaniya Metta Sutta (Level 1 Match)",
+    "expected": "Karaniya Metta Sutta",
+    "actual": "Karaniya Metta Sutta — Complete 10-Verse Continuous Paritta Chanting",
+    "passed": true,
+    "status": "PASS"
+  },
+  {
+    "tradition": "islam",
+    "testName": "Surah 1: Al-Fatihah (Level 1 Match)",
+    "expected": "Surah 1: Al-Fatihah (الفاتحة)",
+    "actual": "Surah 1: Al-Fatihah (الفاتحة) — Arabic Murattal",
+    "passed": true,
+    "status": "PASS"
+  },
+  {
+    "tradition": "islam",
+    "testName": "Surah 1 -> Surah 2 Transition (Level 5 Empty State)",
+    "expected": "No approved recording currently available for Surah Al-Baqarah",
+    "actual": "No approved recording currently available for this reading. Reading: Surah Al-Ba",
+    "passed": true,
+    "status": "PASS"
+  },
+  {
+    "tradition": "islam",
+    "testName": "Surah 113: Al-Falaq (Level 1 Match)",
+    "expected": "Surah 113: Al-Falaq",
+    "actual": "Surah 113: Al-Falaq (الفلق) — Arabic Murattal",
+    "passed": true,
+    "status": "PASS"
+  },
+  {
+    "tradition": "islam",
+    "testName": "Surah 114: An-Nas (Level 5 Empty State)",
+    "expected": "No approved recording currently available for Surah An-Nas",
+    "actual": "No approved recording currently available for this reading. Reading: Surah An-Na",
+    "passed": true,
+    "status": "PASS"
+  },
+  {
+    "tradition": "sikhism",
+    "testName": "Ang 1 (Level 1 Match)",
+    "expected": "Sri Guru Granth Sahib Ji — Ang 1 (Mool Mantar)",
+    "actual": "Sri Guru Granth Sahib Ji — Ang 1 (Mool Mantar)",
+    "passed": true,
+    "status": "PASS"
+  },
+  {
+    "tradition": "sikhism",
+    "testName": "Ang 1 -> Ang 2 Transition (Level 2 Chapter Match)",
+    "expected": "Sri Guru Granth Sahib Ji — Angs 1–8 (Japji Sahib)",
+    "actual": "Sri Guru Granth Sahib Ji — Angs 1–8 (Japji Sahib Complete)",
+    "passed": true,
+    "status": "PASS"
+  },
+  {
+    "tradition": "jainism",
+    "testName": "Namokar Mantra Initial Match",
+    "expected": "Ṇamōkāra Mahāmantra",
+    "actual": "Ṇamōkāra Mahāmantra — Complete Continuous Chanting (108 Repetitions)",
+    "passed": true,
+    "status": "PASS"
+  },
+  {
+    "tradition": "jainism",
+    "testName": "Namokar -> Bhaktamara Stotra Transition",
+    "expected": "Bhaktāmara Stōtra recordings, ZERO Namokar persistence",
+    "actual": "Bhaktāmara Stōtra — Complete Recitation (Shvetambara Recension — 44 Shlokas)",
+    "passed": true,
+    "status": "PASS"
+  },
+  {
+    "tradition": "jainism",
+    "testName": "Jain Agamas Empty State (Level 5)",
+    "expected": "No approved recording currently available for Jain Agamas",
+    "actual": "No approved recording currently available for this reading. Reading: The Jain Ag",
+    "passed": true,
+    "status": "PASS"
+  },
+  {
+    "tradition": "judaism",
+    "testName": "Genesis 1 (Level 1 Match)",
+    "expected": "Genesis Chapter 1 (Bereshit 1:1–2:3)",
+    "actual": "Torah: Book of Genesis (Bereshit) בְּרֵאשִׁית — 50 Chapters Complete Cantillation",
+    "passed": true,
+    "status": "PASS"
+  },
+  {
+    "tradition": "judaism",
+    "testName": "Transition to Joshua 1 (Level 1 Match)",
+    "expected": "Joshua Chapter 1 (Yehoshua 1:1–9)",
+    "actual": "Nevi'im: Book of Joshua (Yehoshua) יְהוֹשֻׁעַ — 24 Chapters Cantillation",
+    "passed": true,
+    "status": "PASS"
+  },
+  {
+    "tradition": "judaism",
+    "testName": "Deuteronomy 6 (Level 1 Match — Shema Yisrael)",
+    "expected": "Shema Yisrael (Deuteronomy 6:4)",
+    "actual": "Shema Yisrael (Deuteronomy 6:4 — The Central Jewish Declaration of Faith)",
+    "passed": true,
+    "status": "PASS"
+  },
+  {
+    "tradition": "judaism",
+    "testName": "Exodus 1 Empty State (Level 5)",
+    "expected": "No approved recording currently available for: Exodus Chapter 1",
+    "actual": "No approved recording currently available for this reading. Reading: Exodus (She",
+    "passed": true,
+    "status": "PASS"
+  }
+]

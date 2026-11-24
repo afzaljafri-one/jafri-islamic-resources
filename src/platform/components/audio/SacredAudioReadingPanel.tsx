@@ -1,8 +1,8 @@
 /**
  * ============================================================================
- * ZODIACBEE / JAFRI SACRED AUDIO LIBRARY — PERSISTENT READING PLAYER PANEL
+ * JAFRI RELIGIOUS RESOURCES — PERSISTENT SACRED AUDIO READING PANEL
  * Dedicated Right-Column (approx 35%) Contextual Listening Experience
- * Synchronized with UnifiedSacredAudioService & Master Catalogue
+ * Synchronized with Unified Universal Audio-Scripture Synchronization Engine
  * ============================================================================
  */
 
@@ -17,7 +17,8 @@ import {
   ExternalLink,
   Headphones,
   CheckCircle2,
-  Info
+  Info,
+  Radio,
 } from 'lucide-react';
 import type { SacredAudioRequirement } from '../../types/sacredAudio';
 import {
@@ -25,9 +26,9 @@ import {
   SacredAudioPlaybackState,
 } from '../../services/unifiedSacredAudioService';
 import {
-  ReadingContext,
   matchContextualAudio,
   ContextualAudioResult,
+  CanonicalReadingContext,
 } from '../../services/contextualAudioMatcher';
 
 function formatTime(seconds: number): string {
@@ -38,7 +39,7 @@ function formatTime(seconds: number): string {
 }
 
 export interface SacredAudioReadingPanelProps {
-  context: ReadingContext;
+  context: CanonicalReadingContext;
   className?: string;
 }
 
@@ -51,6 +52,9 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
     unifiedSacredAudioService.getState()
   );
 
+  // Monotonically increasing request counter to prevent asynchronous race conditions
+  const syncRequestIdRef = useRef<number>(0);
+
   // Subscribe to playback changes
   useEffect(() => {
     const unsubscribe = unifiedSacredAudioService.subscribe((state) => {
@@ -59,33 +63,35 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
     return unsubscribe;
   }, []);
 
-  // Compute contextual audio match result based on reading context
+  // Compute canonical contextual audio match result using the Universal Synchronization Engine
   const matchResult: ContextualAudioResult = useMemo(() => {
     return matchContextualAudio(context);
   }, [
     context.religionId,
     context.categoryId,
+    context.scriptureId,
     context.collectionId,
+    context.resourceId,
+    context.readingId,
     context.bookId,
     context.bookName,
     context.chapterId,
     context.sectionId,
+    context.verseId,
+    context.verseRange,
+    context.canonicalTitle,
     context.title,
   ]);
 
   const {
+    matchLevel,
     scopeLabel,
     primaryMatches,
     additionalRecordings,
     totalAvailableForTradition,
     hasDirectMatch,
-    message,
+    activeReadingTitle,
   } = matchResult;
-
-  // Combined playlist: primary matches first, followed by other approved recordings in tradition
-  const activePlaylist = useMemo(() => {
-    return [...primaryMatches, ...additionalRecordings];
-  }, [primaryMatches, additionalRecordings]);
 
   // Selected requirement for display/interaction
   const [selectedReq, setSelectedReq] = useState<SacredAudioRequirement | null>(() => {
@@ -96,43 +102,49 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
   const contextKey = [
     context.religionId || '',
     context.categoryId || '',
+    context.scriptureId || '',
     context.collectionId || '',
-    context.bookId || '',
-    context.bookName || '',
+    context.resourceId || '',
+    context.readingId || '',
+    context.bookId ?? '',
     context.chapterId ?? '',
-    context.sectionId || '',
-    context.title || '',
+    context.sectionId ?? '',
+    context.verseId ?? '',
+    context.canonicalTitle || '',
   ].join('::');
 
   const prevContextKeyRef = useRef<string>(contextKey);
 
-  // Synchronize selection and stop previous playback when reading context changes
+  // Synchronize selection and immediately invalidate previous playback upon context transition
   useEffect(() => {
     const isContextChanged = prevContextKeyRef.current !== contextKey;
+    const currentRequestId = ++syncRequestIdRef.current;
 
     if (isContextChanged) {
       prevContextKeyRef.current = contextKey;
 
-      // Check if active playback belongs to the new reading
+      // Check if active playback belongs to the new reading's verified primary matches
       const isCurrentPlayingInNewMatches =
         playbackState.currentRequirement &&
         primaryMatches.some((r) => r.id === playbackState.currentRequirement?.id);
 
-      // Stop previous playback immediately if it belonged to previous reading
+      // Stop and reset previous playback immediately if it belonged to previous reading
       if (playbackState.status !== 'IDLE' && !isCurrentPlayingInNewMatches) {
         unifiedSacredAudioService.stop();
       }
 
-      // Immediately select the matching track for the new reading, or clear if no direct match
-      if (primaryMatches.length > 0) {
-        setSelectedReq(primaryMatches[0]);
-      } else {
-        // Clear selection to ensure previous scripture track is NEVER displayed
-        setSelectedReq(null);
+      // Check request ID to protect against asynchronous state races
+      if (currentRequestId === syncRequestIdRef.current) {
+        if (primaryMatches.length > 0) {
+          setSelectedReq(primaryMatches[0]);
+        } else {
+          // Strict Level 5 (No Match): Clear selection. NEVER retain previous track!
+          setSelectedReq(null);
+        }
       }
     } else {
-      // Keep selectedReq valid on mount or after direct matches update
-      if (!selectedReq && primaryMatches.length > 0) {
+      // Maintain selected requirement state on initial mount or updates
+      if (!selectedReq && primaryMatches.length > 0 && currentRequestId === syncRequestIdRef.current) {
         setSelectedReq(primaryMatches[0]);
       }
     }
@@ -144,7 +156,8 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
     selectedReq,
   ]);
 
-  // Determine currently active requirement (playing or matching selection)
+  // Determine active requirement:
+  // An audio requirement is only active if it belongs to the current verified context or explicit user selection
   const isPlaybackActiveInCurrentContext =
     Boolean(playbackState.currentRequirement) &&
     (playbackState.status === 'PLAYING' ||
@@ -167,8 +180,12 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
     playbackState.currentRequirement?.id === activeReq?.id &&
     playbackState.status === 'LOADING';
 
-  // Current index in playlist for next/previous navigation
-  const currentIndex = activePlaylist.findIndex((r) => r.id === activeReq?.id);
+  // Navigation playlist: primary matches if direct match, otherwise additional tradition recordings
+  const activeNavigationList = useMemo(() => {
+    return primaryMatches.length > 0 ? primaryMatches : additionalRecordings;
+  }, [primaryMatches, additionalRecordings]);
+
+  const currentIndex = activeNavigationList.findIndex((r) => r.id === activeReq?.id);
 
   // Play / Pause handler
   const handleTogglePlay = async (reqToPlay?: SacredAudioRequirement) => {
@@ -187,12 +204,12 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
     }
   };
 
-  // Next / Previous navigation
+  // Next / Previous navigation within the relevant group
   const handlePreviousTrack = () => {
-    if (activePlaylist.length <= 1) return;
+    if (activeNavigationList.length <= 1) return;
     const prevIndex =
-      currentIndex <= 0 ? activePlaylist.length - 1 : currentIndex - 1;
-    const prevReq = activePlaylist[prevIndex];
+      currentIndex <= 0 ? activeNavigationList.length - 1 : currentIndex - 1;
+    const prevReq = activeNavigationList[prevIndex];
     setSelectedReq(prevReq);
     if (playbackState.status === 'PLAYING') {
       unifiedSacredAudioService.playRequirement(prevReq);
@@ -200,10 +217,10 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
   };
 
   const handleNextTrack = () => {
-    if (activePlaylist.length <= 1) return;
+    if (activeNavigationList.length <= 1) return;
     const nextIndex =
-      currentIndex >= activePlaylist.length - 1 ? 0 : currentIndex + 1;
-    const nextReq = activePlaylist[nextIndex];
+      currentIndex >= activeNavigationList.length - 1 ? 0 : currentIndex + 1;
+    const nextReq = activeNavigationList[nextIndex];
     setSelectedReq(nextReq);
     if (playbackState.status === 'PLAYING') {
       unifiedSacredAudioService.playRequirement(nextReq);
@@ -225,7 +242,7 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
     unifiedSacredAudioService.toggleMute();
   };
 
-  // Attribution details
+  // Reciter / Performer Attribution
   const getReciterAttribution = (req: SacredAudioRequirement): string => {
     if (req.youtubeMetadata?.channelTitle) {
       return req.youtubeMetadata.channelTitle;
@@ -250,11 +267,11 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
           PANEL HEADER: Sacred Audio Library & Scope
           ----------------------------------------------------------------------- */}
       <div className="flex items-center justify-between pb-3 border-b border-navy-800">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 rounded-xl bg-gold-500/15 border border-gold-500/40 flex items-center justify-center text-gold-400">
+        <div className="flex items-center space-x-2 min-w-0">
+          <div className="w-8 h-8 rounded-xl bg-gold-500/15 border border-gold-500/40 flex items-center justify-center text-gold-400 flex-shrink-0">
             <Headphones className="w-4 h-4" />
           </div>
-          <div>
+          <div className="min-w-0">
             <div className="text-[10px] font-bold uppercase tracking-wider text-gold-400 flex items-center space-x-1">
               <span>Sacred Audio Library</span>
               <span className="text-slate-600">•</span>
@@ -268,34 +285,65 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
           </div>
         </div>
 
-        {hasDirectMatch ? (
-          <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-            <CheckCircle2 className="w-3 h-3" />
-            <span>Matching Audio</span>
-          </span>
-        ) : (
-          <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-amber-500/10 text-amber-400 border border-amber-500/30">
-            <Info className="w-3 h-3" />
-            <span>Library Audio</span>
-          </span>
-        )}
+        {/* -------------------------------------------------------------------
+            STRICT MATCH LEVEL BADGE (Levels 1 to 5)
+            ------------------------------------------------------------------- */}
+        <div className="flex-shrink-0">
+          {matchLevel === 'EXACT' && (
+            <span
+              data-testid="match-scope-badge"
+              className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30"
+              title="Exact match for this individual reading"
+            >
+              <CheckCircle2 className="w-3 h-3" />
+              <span>Matching Audio</span>
+            </span>
+          )}
+          {matchLevel === 'CHAPTER' && (
+            <span
+              data-testid="match-scope-badge"
+              className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/10 text-blue-400 border border-blue-500/30"
+              title="Recording covers this chapter or section"
+            >
+              <CheckCircle2 className="w-3 h-3" />
+              <span>Chapter / Section Audio</span>
+            </span>
+          )}
+          {matchLevel === 'COLLECTION' && (
+            <span
+              data-testid="match-scope-badge"
+              className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/10 text-indigo-400 border border-indigo-500/30"
+              title="Recording covers the broader collection"
+            >
+              <Radio className="w-3 h-3" />
+              <span>Collection Recording</span>
+            </span>
+          )}
+          {!hasDirectMatch && (
+            <span
+              data-testid="match-scope-badge"
+              className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-amber-500/10 text-amber-400 border border-amber-500/30"
+              title="No direct recording for this reading"
+            >
+              <Info className="w-3 h-3" />
+              <span>Library Audio</span>
+            </span>
+          )}
+        </div>
       </div>
 
       {/* -----------------------------------------------------------------------
-          NO DIRECT MATCH NOTICE (Graceful Contextual Fallback)
+          COLLECTION MATCH EXPLANATORY NOTICE
           ----------------------------------------------------------------------- */}
-      {!hasDirectMatch && message && (
+      {matchLevel === 'COLLECTION' && (
         <div
-          data-testid="no-audio-matched"
-          className="p-3 rounded-2xl bg-navy-900/80 border border-amber-500/30 text-amber-300 text-xs flex items-start space-x-2.5"
+          data-testid="collection-recording-notice"
+          className="p-2.5 rounded-xl bg-indigo-950/60 border border-indigo-500/30 text-indigo-200 text-xs flex items-start space-x-2"
         >
-          <Info className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
-          <div>
-            <p className="font-semibold">{message}</p>
-            <p className="text-[11px] text-slate-400 mt-0.5">
-              Showing authentic approved recordings available from this sacred tradition below.
-            </p>
-          </div>
+          <Info className="w-4 h-4 text-indigo-400 flex-shrink-0 mt-0.5" />
+          <p className="leading-snug">
+            This recording covers the broader scripture collection, not necessarily the specific individual reading currently open.
+          </p>
         </div>
       )}
 
@@ -454,7 +502,7 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
           <div className="flex items-center justify-center space-x-4 pt-2">
             <button
               onClick={handlePreviousTrack}
-              disabled={activePlaylist.length <= 1}
+              disabled={activeNavigationList.length <= 1}
               data-testid="audio-prev-track-btn"
               className="p-2 rounded-xl bg-navy-950 border border-slate-700 text-slate-300 hover:text-gold-400 hover:border-gold-500/40 disabled:opacity-30 disabled:cursor-not-allowed transition"
               title="Previous Recording"
@@ -479,7 +527,7 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
 
             <button
               onClick={handleNextTrack}
-              disabled={activePlaylist.length <= 1}
+              disabled={activeNavigationList.length <= 1}
               data-testid="audio-next-track-btn"
               className="p-2 rounded-xl bg-navy-950 border border-slate-700 text-slate-300 hover:text-gold-400 hover:border-gold-500/40 disabled:opacity-30 disabled:cursor-not-allowed transition"
               title="Next Recording"
@@ -489,6 +537,9 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
           </div>
         </div>
       ) : (
+        /* ---------------------------------------------------------------------
+           LEVEL 5: NO APPROVED MATCH (Strict Graceful Empty State)
+           --------------------------------------------------------------------- */
         <div
           data-testid="no-audio-card"
           className="p-6 text-center bg-navy-900/60 border border-amber-500/30 rounded-2xl space-y-3 shadow-lg"
@@ -500,30 +551,100 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
             <h3 className="font-serif text-sm font-bold text-slate-100">
               No approved recording currently available for this reading.
             </h3>
-            <p className="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
-              This scripture text is available for authentic study. You may browse and play approved liturgical recordings from the broader tradition catalogue below.
+            <p className="text-xs text-gold-400 font-medium">
+              Reading: {activeReadingTitle}
+            </p>
+            <p className="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed pt-1">
+              This scripture text is available for authentic study. You may browse and listen to other approved liturgical recordings from the {context.religionId} tradition below.
             </p>
           </div>
         </div>
       )}
 
       {/* -----------------------------------------------------------------------
-          PLAYLIST: Additional Relevant Recordings
+          PRIMARY MATCHES LIST (When multiple exact/chapter matches exist)
           ----------------------------------------------------------------------- */}
-      <div className="space-y-2 pt-2">
+      {primaryMatches.length > 1 && (
+        <div className="space-y-2 pt-1">
+          <div className="flex items-center justify-between text-xs text-slate-400 px-1">
+            <span className="font-semibold text-slate-300">
+              Matching Recordings ({primaryMatches.length})
+            </span>
+            <span className="text-[10px] text-emerald-400 font-mono">Verified Match</span>
+          </div>
+
+          <div className="max-h-48 overflow-y-auto space-y-1.5 pr-1 custom-scrollbar">
+            {primaryMatches.map((req) => {
+              const isSelected = activeReq?.id === req.id;
+              const isPlayingThis =
+                playbackState.currentRequirement?.id === req.id &&
+                playbackState.status === 'PLAYING';
+
+              return (
+                <div
+                  key={req.id}
+                  data-testid={`playlist-item-${req.id}`}
+                  onClick={() => handleTogglePlay(req)}
+                  className={`p-2 rounded-xl border text-left cursor-pointer transition flex items-center justify-between group ${
+                    isSelected
+                      ? 'bg-gold-500/10 border-gold-500/50 shadow-gold-sm'
+                      : 'bg-navy-900/70 border-slate-800/80 hover:bg-navy-900 hover:border-slate-700'
+                  }`}
+                >
+                  <div className="flex items-center space-x-2 min-w-0 pr-2">
+                    <div
+                      className={`w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0 text-xs font-mono ${
+                        isPlayingThis
+                          ? 'bg-gold-500 text-navy-950 font-bold'
+                          : isSelected
+                          ? 'bg-gold-500/20 text-gold-400'
+                          : 'bg-navy-950 text-slate-400 group-hover:text-gold-400'
+                      }`}
+                    >
+                      {isPlayingThis ? (
+                        <Pause className="w-3 h-3 fill-current" />
+                      ) : (
+                        <Play className="w-3 h-3 fill-current ml-0.5" />
+                      )}
+                    </div>
+
+                    <div className="min-w-0">
+                      <div className="text-xs font-semibold text-slate-200 truncate group-hover:text-gold-300">
+                        {req.requirementTitle}
+                      </div>
+                      <div className="text-[10px] text-slate-400 truncate">
+                        {getReciterAttribution(req)}
+                      </div>
+                    </div>
+                  </div>
+
+                  <span className="text-[9px] font-mono text-gold-400/80 flex-shrink-0">
+                    {req.id}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* -----------------------------------------------------------------------
+          LEVEL 4: SEPARATE TRADITION CATALOGUE
+          "Other Available Recordings from This Tradition"
+          Explicitly isolated from the active reading match
+          ----------------------------------------------------------------------- */}
+      <div className="space-y-2 pt-2 border-t border-navy-800/80">
         <div className="flex items-center justify-between text-xs text-slate-400 px-1">
           <span className="font-semibold text-slate-300">
-            {hasDirectMatch
-              ? `Recordings (${activePlaylist.length})`
-              : `Tradition Catalogue (${activePlaylist.length})`}
+            Other Available Recordings from This Tradition ({additionalRecordings.length})
           </span>
           <span className="text-[10px] text-gold-400/80 font-mono">
-            {activePlaylist.length} Playable
+            {totalAvailableForTradition} Total
           </span>
         </div>
 
-        <div className="max-h-60 sm:max-h-72 overflow-y-auto space-y-1.5 pr-1 custom-scrollbar">
-          {activePlaylist.map((req) => {
+        <div className="max-h-56 sm:max-h-64 overflow-y-auto space-y-1.5 pr-1 custom-scrollbar">
+          {additionalRecordings.map((req) => {
             const isSelected = activeReq?.id === req.id;
             const isPlayingThis =
               playbackState.currentRequirement?.id === req.id &&

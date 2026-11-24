@@ -106,8 +106,22 @@ export const ChristianityModule: React.FC<ChristianityModuleProps> = ({
   // Book & Chapter State
   const [books, setBooks] = useState<BibleBookMeta[]>([]);
   const [selectedTranslation, setSelectedTranslation] = useState<string>('KJV');
-  const [currentBookId, setCurrentBookId] = useState<number>(1); // 1 = Genesis
-  const [currentChapter, setCurrentChapter] = useState<number>(1);
+  const [currentBookId, setCurrentBookId] = useState<number>(() => {
+    if (typeof window !== 'undefined' && window.location?.search) {
+      const p = new URLSearchParams(window.location.search);
+      const b = p.get('book');
+      if (b && !isNaN(Number(b))) return Number(b);
+    }
+    return 1;
+  }); // 1 = Genesis
+  const [currentChapter, setCurrentChapter] = useState<number>(() => {
+    if (typeof window !== 'undefined' && window.location?.search) {
+      const p = new URLSearchParams(window.location.search);
+      const ch = p.get('chapter');
+      if (ch && !isNaN(Number(ch))) return Number(ch);
+    }
+    return 1;
+  });
   const [verses, setVerses] = useState<BollsVerseRaw[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [copiedVerse, setCopiedVerse] = useState<number | null>(null);
@@ -372,10 +386,13 @@ export const ChristianityModule: React.FC<ChristianityModuleProps> = ({
   const readingContext: ReadingContext = {
     religionId: 'christianity',
     categoryId: currentBook.bookid <= 39 ? 'Old Testament' : 'New Testament',
+    scriptureId: 'bible',
     collectionId: `bible-${selectedTranslation.toLowerCase()}`,
     bookId: currentBookId,
     bookName: currentBook.name,
     chapterId: currentChapter,
+    readingId: `${currentBook.name.toLowerCase().replace(/\s+/g, '-')}-${currentChapter}`,
+    canonicalTitle: `${currentBook.name} Chapter ${currentChapter}`,
     title: `${currentBook.name} ${currentChapter}`,
   };
 

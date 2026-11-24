@@ -96,8 +96,25 @@ export const JudaismModule: React.FC<JudaismModuleProps> = ({
   onReturnToHome,
 }) => {
   // Book & Chapter State
-  const [currentBook, setCurrentBook] = useState<TanakhBookMeta>(TANAKH_BOOKS[0]); // Genesis
-  const [currentChapter, setCurrentChapter] = useState<number>(1);
+  const [currentBook, setCurrentBook] = useState<TanakhBookMeta>(() => {
+    if (typeof window !== 'undefined' && window.location?.search) {
+      const p = new URLSearchParams(window.location.search);
+      const b = p.get('book');
+      if (b) {
+        const found = TANAKH_BOOKS.find((bk) => bk.id.toLowerCase() === b.toLowerCase() || bk.enTitle.toLowerCase() === b.toLowerCase());
+        if (found) return found;
+      }
+    }
+    return TANAKH_BOOKS[0];
+  }); // Genesis
+  const [currentChapter, setCurrentChapter] = useState<number>(() => {
+    if (typeof window !== 'undefined' && window.location?.search) {
+      const p = new URLSearchParams(window.location.search);
+      const ch = p.get('chapter');
+      if (ch && !isNaN(Number(ch))) return Number(ch);
+    }
+    return 1;
+  });
   const [verses, setVerses] = useState<TanakhVerseData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [copiedVerse, setCopiedVerse] = useState<number | null>(null);
@@ -502,10 +519,13 @@ export const JudaismModule: React.FC<JudaismModuleProps> = ({
         const readingContext: ReadingContext = {
           religionId: 'judaism',
           categoryId: currentBook.category,
+          scriptureId: 'tanakh',
           collectionId: 'tanakh',
           bookId: currentBook.id,
           bookName: currentBook.enTitle,
           chapterId: currentChapter,
+          readingId: `${currentBook.id.toLowerCase()}-${currentChapter}`,
+          canonicalTitle: `${currentBook.enTitle} Chapter ${currentChapter}`,
           title: `${currentBook.enTitle} ${currentChapter}`,
         };
 

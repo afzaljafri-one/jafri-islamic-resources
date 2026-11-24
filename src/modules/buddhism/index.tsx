@@ -99,7 +99,17 @@ export const BuddhismModule: React.FC<BuddhismModuleProps> = ({
   onReturnToHome,
 }) => {
   // Selected Sutta & Segments State
-  const [selectedSutta, setSelectedSutta] = useState<SuttaMeta>(CANONICAL_SUTTAS[0]); // SN 56.11
+  const [selectedSutta, setSelectedSutta] = useState<SuttaMeta>(() => {
+    if (typeof window !== 'undefined' && window.location?.search) {
+      const p = new URLSearchParams(window.location.search);
+      const s = p.get('sutta');
+      if (s) {
+        const found = CANONICAL_SUTTAS.find((st) => st.id === s || st.uid === s);
+        if (found) return found;
+      }
+    }
+    return CANONICAL_SUTTAS[0];
+  });
   const [segments, setSegments] = useState<SuttaSegment[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [copiedSegment, setCopiedSegment] = useState<string | null>(null);
@@ -494,9 +504,12 @@ export const BuddhismModule: React.FC<BuddhismModuleProps> = ({
       {(() => {
         const readingContext: ReadingContext = {
           religionId: 'buddhism',
-          categoryId: selectedSutta.nikaya ? `${selectedSutta.nikaya} Nikaya` : 'Tipitaka',
+          categoryId: selectedSutta.category || (selectedSutta.nikaya ? `${selectedSutta.nikaya} Nikaya` : 'Tipitaka'),
+          scriptureId: 'tipitaka',
           collectionId: selectedSutta.id || selectedSutta.uid,
+          readingId: selectedSutta.id || selectedSutta.uid,
           bookName: selectedSutta.titleEn || selectedSutta.title,
+          canonicalTitle: selectedSutta.titleEn || selectedSutta.title,
           title: `${selectedSutta.titleEn || selectedSutta.title} ${selectedSutta.titlePali || selectedSutta.nativeTitle || ''}`.trim(),
         };
 

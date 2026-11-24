@@ -219,11 +219,26 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
   onReturnToHome,
 }) => {
   // Collection Selection State
-  const [selectedCollectionId, setSelectedCollectionId] = useState<string>('gita');
+  const [selectedCollectionId, setSelectedCollectionId] = useState<string>(() => {
+    if (typeof window !== 'undefined' && window.location?.search) {
+      const p = new URLSearchParams(window.location.search);
+      const c = p.get('collection');
+      if (c && HINDUISM_COLLECTIONS.some((col) => col.id === c)) return c;
+    }
+    return 'gita';
+  });
   const [activeCategoryFilter, setActiveCategoryFilter] = useState<string>('All');
+  const [selectedUnitId, setSelectedUnitId] = useState<string | null>(null);
 
   // Chapter & Verses State (Gita)
-  const [currentChapterNum, setCurrentChapterNum] = useState<number>(1);
+  const [currentChapterNum, setCurrentChapterNum] = useState<number>(() => {
+    if (typeof window !== 'undefined' && window.location?.search) {
+      const p = new URLSearchParams(window.location.search);
+      const ch = p.get('chapter');
+      if (ch && !isNaN(Number(ch))) return Number(ch);
+    }
+    return 1;
+  });
   const [verses, setVerses] = useState<GitaVerseData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedCommentary, setSelectedCommentary] = useState<
@@ -285,6 +300,7 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
     unifiedSacredAudioService.stop();
     setIsAudioPlayerVisible(false);
     setActiveAudioUnitId(null);
+    setSelectedUnitId(null);
     setSelectedCollectionId(colId);
     if (chapterNum !== undefined) {
       setCurrentChapterNum(chapterNum);
@@ -373,6 +389,7 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
   };
 
   const handlePlayNonGitaUnit = (u: HinduismVerseUnit) => {
+    setSelectedUnitId(u.id);
     if (!u.audio?.audioUrl) return;
     const unitId = `hin_${selectedCollectionId}_${u.id}`;
     setIsAudioPlayerVisible(true);
@@ -564,13 +581,31 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
     }
   };
 
+  const activeUnit = nonGitaUnits.find((u) => u.id === selectedUnitId) || null;
+
   const readingContext: ReadingContext = {
     religionId: 'hinduism',
     categoryId: selectedCollection.category,
+    scriptureId: selectedCollectionId === 'gita' ? 'gita' : selectedCollectionId,
     collectionId: selectedCollectionId,
     chapterId: selectedCollectionId === 'gita' ? currentChapterNum : undefined,
+    readingId: selectedCollectionId === 'gita'
+      ? `gita-ch-${currentChapterNum}`
+      : activeUnit
+      ? activeUnit.id
+      : undefined,
+    sectionId: activeUnit ? activeUnit.id : undefined,
     bookName: selectedCollectionId === 'gita' ? 'Bhagavad Gita' : selectedCollection.title,
-    title: selectedCollectionId === 'gita' ? currentChapter.translation : selectedCollection.title,
+    canonicalTitle: selectedCollectionId === 'gita'
+      ? `Bhagavad Gita — Chapter ${currentChapterNum}`
+      : activeUnit
+      ? String(activeUnit.unitNumber || activeUnit.sectionTitle || selectedCollection.title)
+      : selectedCollection.title,
+    title: selectedCollectionId === 'gita'
+      ? currentChapter.translation
+      : activeUnit
+      ? String(activeUnit.sectionTitle || activeUnit.unitNumber || selectedCollection.title)
+      : selectedCollection.title,
   };
 
   return (
@@ -1138,8 +1173,9 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
                 <div
                   key={u.id}
                   id={`unit-${u.id}`}
-                  className={`p-5 rounded-2xl border transition space-y-3 group ${
-                    isPlayingThisUnit
+                  onClick={() => setSelectedUnitId(u.id)}
+                  className={`p-5 rounded-2xl border transition space-y-3 group cursor-pointer ${
+                    isPlayingThisUnit || selectedUnitId === u.id
                       ? 'bg-gold-500/15 border-gold-500/60 shadow-lg ring-1 ring-gold-500/50'
                       : 'bg-navy-950/70 hover:bg-navy-900/80 border-slate-800/80 hover:border-slate-700'
                   }`}

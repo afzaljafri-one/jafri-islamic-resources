@@ -79,9 +79,17 @@ export const JainismModule: React.FC<JainismModuleProps> = ({
   onReturnToHome,
 }) => {
   // Selected Text State
-  const [selectedText, setSelectedText] = useState<JainTextMeta>(
-    JAIN_CANONICAL_TEXTS[0] // Navkar Mantra
-  );
+  const [selectedText, setSelectedText] = useState<JainTextMeta>(() => {
+    if (typeof window !== 'undefined' && window.location?.search) {
+      const p = new URLSearchParams(window.location.search);
+      const t = p.get('text');
+      if (t) {
+        const found = JAIN_CANONICAL_TEXTS.find((tx) => tx.id === t);
+        if (found) return found;
+      }
+    }
+    return JAIN_CANONICAL_TEXTS[0]; // Navkar Mantra
+  });
   const [copiedUnit, setCopiedUnit] = useState<string | null>(null);
 
   // Platform Controls & Drawers
@@ -446,8 +454,11 @@ export const JainismModule: React.FC<JainismModuleProps> = ({
         const readingContext: ReadingContext = {
           religionId: 'jainism',
           categoryId: selectedText.category || 'Agamas & Stotras',
+          scriptureId: selectedText.id,
           collectionId: selectedText.id,
+          readingId: selectedText.id,
           bookName: selectedText.titleEn,
+          canonicalTitle: selectedText.titleEn,
           title: selectedText.titlePrakrit ? `${selectedText.titleEn} (${selectedText.titlePrakrit})` : selectedText.titleEn,
         };
 

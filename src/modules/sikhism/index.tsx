@@ -90,7 +90,14 @@ export const SikhismModule: React.FC<SikhismModuleProps> = ({
   onReturnToHome,
 }) => {
   // Ang Pagination State (1 to 1430)
-  const [currentAng, setCurrentAng] = useState<number>(1);
+  const [currentAng, setCurrentAng] = useState<number>(() => {
+    if (typeof window !== 'undefined' && window.location?.search) {
+      const p = new URLSearchParams(window.location.search);
+      const a = p.get('ang');
+      if (a && !isNaN(Number(a))) return Number(a);
+    }
+    return 1;
+  });
   const [angData, setAngData] = useState<AngData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [copiedLine, setCopiedLine] = useState<number | null>(null);
@@ -484,9 +491,12 @@ export const SikhismModule: React.FC<SikhismModuleProps> = ({
         const readingContext: ReadingContext = {
           religionId: 'sikhism',
           categoryId: 'Sri Guru Granth Sahib Ji',
+          scriptureId: 'sggs',
           collectionId: 'sggs',
+          readingId: `ang-${currentAng}`,
           bookName: 'Sri Guru Granth Sahib Ji',
           chapterId: currentAng,
+          canonicalTitle: `Sri Guru Granth Sahib Ji — Ang ${currentAng}`,
           title: angData?.raag ? `Ang ${currentAng} • ${angData.raag}` : `Ang ${currentAng}`,
         };
 
