@@ -63,8 +63,8 @@ export const HINDUISM_COLLECTIONS: HinduismCollectionMeta[] = [
   },
   {
     id: 'valmiki_ramayana',
-    title: 'Valmiki Ramayana (Aditya Hridaya & Epic Structure)',
-    nativeTitle: 'वाल्मीकि रामायण (आदित्यहृदय स्तोत्रम् एवं काण्ड संग्रह)',
+    title: 'Valmiki Ramayana (All Seven Kandas & Aditya Hridaya)',
+    nativeTitle: 'वाल्मीकि रामायण (सप्तकाण्ड संग्रह एवं आदित्यहृदय स्तोत्रम्)',
     category: 'Itihasa / Epics',
     tradition: 'Classical Sanskrit Itihasa (Adi Kavya)',
     originalLanguage: 'Classical Sanskrit',
@@ -79,7 +79,7 @@ export const HINDUISM_COLLECTIONS: HinduismCollectionMeta[] = [
     availableFormats: ['original_text', 'translation'],
     contentStatus: 'verified_available',
     summary:
-      'The ancient Sanskrit epic narrating the life and virtues of Sri Rama across seven canonical Kandas (Bala, Ayodhya, Aranya, Kishkindha, Sundara, Yuddha, Uttara). Features the authentic Sanskrit text and translation of the Aditya Hridaya Stotram (Yuddha Kanda 105), imparted by Sage Agastya to Rama on the battlefield.',
+      'The ancient Sanskrit epic narrating the life and virtues of Sri Rama across all seven canonical Kandas (Bala, Ayodhya, Aranya, Kishkindha, Sundara, Yuddha, Uttara). Features foundational verses from each Kanda and the complete authentic text of the Aditya Hridaya Stotram (Yuddha Kanda 105).',
     versesCount: 31,
   },
   {
@@ -105,13 +105,13 @@ export const HINDUISM_COLLECTIONS: HinduismCollectionMeta[] = [
   },
   {
     id: 'principal_upanishads',
-    title: 'Principal Upanishads (Mukhya Upanishads)',
-    nativeTitle: 'मुख्योपनिषदः (ईश, केन, कठ, माण्डूक्य, मुण्डक, तैत्तिरीय, छान्दोग्य)',
+    title: 'Principal Upanishads (10 Mukhya Upanishads & Mahavakyas)',
+    nativeTitle: 'दश मुख्योपनिषदः (ईश, केन, कठ, प्रश्न, मुण्डक, माण्डूक्य, तैत्तिरीय, ऐतरेय, छान्दोग्य, बृहदारण्यक)',
     category: 'Upanishads',
     tradition: 'Shruti / Vedanta (Jnana Kanda)',
     originalLanguage: 'Vedic & Classical Sanskrit',
     authorOrCompiler:
-      'Vedic Sages (Yajnavalkya, Pippalada, Angiras, Nachiketa, Sandilya)',
+      'Vedic Sages (Yajnavalkya, Pippalada, Angiras, Nachiketa, Uddalaka)',
     translatorOrCommentator:
       'F. Max Müller (Sacred Books of the East Vols. 1 & 15, Oxford Clarendon Press, 1879–1884)',
     sourceEdition: 'Sacred Books of the East / Advaita Ashrama Publications',
@@ -121,13 +121,13 @@ export const HINDUISM_COLLECTIONS: HinduismCollectionMeta[] = [
     availableFormats: ['original_text', 'translation'],
     contentStatus: 'verified_available',
     summary:
-      'The philosophical culmination (Vedanta) of Vedic revelation. Features the complete 18 mantras of the Isha Upanishad (Shukla Yajurveda) on seeing the Divine in all creation, the 12 Karikas of the Mandukya Upanishad on the sacred syllable AUM and the four states of consciousness, and foundational Mahavakyas.',
-    versesCount: 30,
+      'The philosophical culmination (Vedanta) of Vedic revelation across all 10 Mukhya Upanishads and the Four Great Mahavakyas: Isha (Purnamadah), Kena, Katha (Atman & Chariot), Prashna (Prana & Rayi), Mundaka (Two Birds & Satyameva Jayate), Mandukya (Ayam Atma Brahma), Taittiriya (Satyam Vada), Aitareya (Prajnanam Brahma), Chandogya (Tat Tvam Asi), and Brihadaranyaka (Aham Brahmasmi & Neti Neti).',
+    versesCount: 35,
   },
   {
     id: 'vedas',
     title: 'The Four Vedas (Rigveda, Samaveda, Yajurveda, Atharvaveda)',
-    nativeTitle: 'चत्वारो वेदाः (ऋग्वेद, सामवेद, यजुर्वेद, अथर्ववेद संहिता)',
+    nativeTitle: 'चत्वारो वेदाः (ऋग्वेद, सामवेद, यजुर्वेद, अथर्ववेद संहिता एवं सूक्तानि)',
     category: 'Shruti / Vedas',
     tradition: 'Shruti (Apaurusheya Sanatana Revelation)',
     originalLanguage: 'Archaic Vedic Sanskrit (with Svara notation)',
@@ -141,13 +141,13 @@ export const HINDUISM_COLLECTIONS: HinduismCollectionMeta[] = [
     availableFormats: ['original_text', 'translation'],
     contentStatus: 'verified_available',
     summary:
-      'The primordial scripture of Hinduism, containing hymns to the cosmic powers (Devas) and philosophical contemplation. Includes the Agni Sukta (Rigveda 1.1), the Nasadiya Sukta (Hymn of Creation 10.129), the Purusha Sukta (Cosmic Being 10.90), and the Prithvi Sukta (Atharvaveda 12.1).',
-    versesCount: 22,
+      'The primordial scripture of Hinduism, containing hymns to cosmic powers (Devas) and profound cosmological philosophy across all Four Vedas: Rigveda (Agni Suktam 1.1, Gayatri 3.62.10, Nasadiya Suktam 10.129, Purusha Suktam 10.90, Ganapati Suktam 2.23.1), Samaveda (Agne Ayahi Vitaye 1.1.1), Shukla Yajurveda (Shiva Sankalpa & Shanti Suktam), and Atharvaveda (Bhumi Suktam 12.1 & Skambha Suktam 10.7).',
+    versesCount: 25,
   },
   {
     id: 'puranas',
-    title: 'The 18 Mahapuranas (Overview & Shrimad Bhagavata Gopi Gita)',
-    nativeTitle: 'अष्टादश महापुराणानि (श्रीमद्भागवत गोपीगीतम् एवं विष्णुपुराण)',
+    title: 'The 18 Mahapuranas (Matrix, Bhagavata, Vishnu, Devi Mahatmya, Shiva Purana)',
+    nativeTitle: 'अष्टादश महापुराणानि (त्रिविध गुण वर्गीकरण, गोपीगीतम्, विष्णु, देवी माहात्म्य एवं शिवपुराण)',
     category: 'Puranas',
     tradition: 'Smriti / Purana-Itihasa',
     originalLanguage: 'Classical Sanskrit',
@@ -161,8 +161,8 @@ export const HINDUISM_COLLECTIONS: HinduismCollectionMeta[] = [
     availableFormats: ['original_text', 'translation'],
     contentStatus: 'verified_available',
     summary:
-      'The encyclopedic post-Vedic narratives expounding cosmology, theology, genealogy, and dharma across 18 Mahapuranas categorized by the three Gunas (Sattva, Rajas, Tamas). Features the canonical catalogue and the exquisite Sanskrit Gopi Gita (Shrimad Bhagavata Canto 10 Chapter 31).',
-    versesCount: 19,
+      'The encyclopedic post-Vedic narratives expounding cosmology, theology, genealogy, and dharma across 18 Mahapuranas categorized by the three Gunas (Sattva, Rajas, Tamas). Features the canonical matrix and selected classical excerpts: Shrimad Bhagavata Purana Gopi Gita (10.31), Vishnu Purana Dhruva Stuti (1.12), Markandeya Purana Devi Mahatmya / Chandi Path (81), and Shiva Purana Rudra Samhita invocation (1.1).',
+    versesCount: 25,
   },
   {
     id: 'hanuman_chalisas',

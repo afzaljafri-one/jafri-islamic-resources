@@ -1656,6 +1656,36 @@ export function resolveReadingAudioMatches(
       link.requirementId === 'REQ-HIN-053'
     ) {
       isExact = true;
+    } else if (
+      (normSectionId.includes('yuddha_kanda') || normReadingId.includes('yuddha_kanda') || normReadingId.includes('aditya') || (normTitle && normTitle.includes('aditya hridaya'))) &&
+      link.requirementId === 'REQ-HIN-020'
+    ) {
+      isExact = true;
+    } else if (
+      (normSectionId.includes('isha') || normReadingId.includes('isha') || (normTitle && normTitle.includes('isha'))) &&
+      (link.requirementId === 'REQ-HIN-028' || link.requirementId === 'REQ-HIN-029')
+    ) {
+      isExact = true;
+    } else if (
+      (normSectionId.includes('mandukya') || normReadingId.includes('mandukya') || (normTitle && normTitle.includes('mandukya'))) &&
+      link.requirementId === 'REQ-HIN-032'
+    ) {
+      isExact = true;
+    } else if (
+      (normSectionId.includes('purusha_sukta') || normReadingId.includes('purusha_sukta') || (normTitle && normTitle.includes('purusha'))) &&
+      link.requirementId === 'REQ-HIN-036'
+    ) {
+      isExact = true;
+    } else if (
+      (normSectionId.includes('sri_suktam') || normReadingId.includes('sri_suktam') || (normTitle && normTitle.includes('sri sukta'))) &&
+      link.requirementId === 'REQ-HIN-037'
+    ) {
+      isExact = true;
+    } else if (
+      (normSectionId.includes('ganapati_suktam') || normReadingId.includes('ganapati_suktam') || (normTitle && normTitle.includes('ganapati sukta'))) &&
+      link.requirementId === 'REQ-HIN-038'
+    ) {
+      isExact = true;
     }
 
     // Helper to verify if linkage book or collection matches context

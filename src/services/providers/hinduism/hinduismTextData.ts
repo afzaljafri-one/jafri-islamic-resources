@@ -28,7 +28,7 @@ export interface HinduismVerseUnit {
 
 export const HINDUISM_TEXT_DATA: Record<string, HinduismVerseUnit[]> = {
   // ----------------------------------------------------------------------------
-  // 1. VALMIKI RAMAYANA (Aditya Hridaya Stotram — Yuddha Kanda 105)
+  // 1. VALMIKI RAMAYANA (Seven Canonical Kandas & Aditya Hridaya Stotram)
   // ----------------------------------------------------------------------------
   valmiki_ramayana: [
     {
@@ -45,43 +45,95 @@ export const HINDUISM_TEXT_DATA: Record<string, HinduismVerseUnit[]> = {
       sectionTitle: 'Seven Canonical Kandas Structure',
     },
     {
-      id: 'valmiki_ramayana:aditya_1',
-      unitNumber: 'Aditya Hridaya 1-2',
+      id: 'valmiki_ramayana:bala_kanda',
+      unitNumber: 'Kanda 1 — Bala Kanda',
       originalText:
-        'ततो युद्धपरिश्रान्तं समरे चिन्तया स्थितम् ।\nरावणं चाग्रतो दृष्ट्वा युद्धाय समुपस्थितम् ॥\nदैवतैश्च समागम्य द्रष्टुमभ्यागतो रणम् ।\nउपागम्याब्रवीद्राममगस्त्यो भगवानृषिः ॥',
+        'तपःस्वाध्यायनिरतं तपस्वी वाग्विदां वरम् ।\nनारदं परिपप्रच्छ वाल्मीकिर्मुनिपुङ्गवम् ॥\nको न्वस्मिन् साम्प्रतं लोके गुणवान् कश्च वीर्यवान् ।\nधर्मज्ञश्च कृतज्ञश्च सत्यवाक्यो दृढव्रतः ॥',
       transliteration:
-        'tato yuddhaparīśrāntaṁ samare cintayā sthitam |\nrāvaṇaṁ cāgrato dṛṣṭvā yuddhāya samupasthitam ||\ndaivataiśca samāgamya draṣṭumabhyāgato raṇam |\nupāgamyābravīdrāmamagastyo bhagavānṛṣiḥ ||',
+        'tapaḥsvādhyāyanirataṁ tapasvī vāgvidāṁ varam |\nnāradaṁ paripapraccha vālmīkirmunipuṅgavam ||\nko nvasmin sāmprataṁ loke guṇavān kaśca vīryavān |\ndharmajñaśca kṛtajñaśca satyavākyo dṛḍhavrataḥ ||',
       translationEn:
-        'Seeing Sri Rama standing thoughtful on the battlefield, fatigued from the long combat, and Ravana positioned before him ready for war, the revered Sage Agastya, who had arrived with the gods to witness the conflict, approached Rama and spoke thus.',
+        'The ascetic Valmiki inquired of the eminent sage Narada, devoted to penance and Vedic study, the foremost among the eloquent: "Who in this present world is truly endowed with noble virtues, who is valiant, knower of righteousness, grateful, truthful in speech, and firm in his vows?" Narada replied that such an ideal being exists in Sri Rama of the Ikshvaku dynasty.',
       translationHi:
-        'युद्ध से थके हुए और रणभूमि में चिंता में डूबे श्रीराम को रावण के सामने युद्ध के लिए तैयार खड़ा देखकर, देवताओं के साथ युद्ध देखने आए पूज्य अगस्त्य ऋषि ने श्रीराम के पास आकर कहा।',
-      sectionTitle: 'Aditya Hridaya Stotram (Sage Agastya to Rama)',
+        'तपस्या और स्वाध्याय में निरन्तर लगे रहने वाले महर्षि वाल्मीकि ने मुनिश्रेष्ठ नारदजी से पूछा: "इस समय संसार में गुणवान, पराक्रमी, धर्मज्ञ, कृतज्ञ, सत्यवादी और दृढप्रतिज्ञ कौन पुरुष है?" नारदजी ने उत्तर दिया कि इक्ष्वाकु वंश में उत्पन्न श्रीराम ही ऐसे आदर्श पुरुष हैं।',
+      sectionTitle: 'Bala Kanda (1.1.1–4) — The Sixteen Virtues of Sri Rama',
     },
     {
-      id: 'valmiki_ramayana:aditya_2',
-      unitNumber: 'Aditya Hridaya 3-4',
+      id: 'valmiki_ramayana:ayodhya_kanda',
+      unitNumber: 'Kanda 2 — Ayodhya Kanda',
       originalText:
-        'राम राम महाबाहो शृणु गुह्यं सनातनम् ।\nयेन सर्वानरीन वत्स समरे विजयिष्यसि ॥\nआदित्यहृदयं पुण्यं सर्वशत्रुविनाशनम् ।\nजयावहं जपेन्नित्यमक्षयं परमं शिवम् ॥',
+        'अहं हि वचनाद्राज्ञः पतेयमपि पावके ।\nभक्षयेयं विषं तीक्ष्णं पतेयमपि चार्णवे ॥\nनियुक्तो गुरुणा पित्रा नृपेण च हितेन च ।\nतद्ब्रूहि वचनं देवि राज्ञा यदभिनन्दितम् ॥',
       transliteration:
-        'rāma rāma mahābāho śṛṇu guhyaṁ sanātanam |\nyena sarvānarīn vatsa samare vijayiṣyasi ||\nādityahṛdayaṁ puṇyaṁ sarvaśatruvināśanam |\njayāvahaṁ japennityamakṣayaṁ paramaṁ śivam ||',
+        'ahaṁ hi vacanādrājñaḥ pateyamapi pāvake |\nbhakṣayeyaṁ viṣaṁ tīkṣṇaṁ pateyamapi cārṇave ||\nniyukto guruṇā pitrā nṛpeṇa ca hitena ca |\ntadbrūhi vacanaṁ devi rājñā yadabhinanditam ||',
       translationEn:
-        'O Rama, mighty-armed warrior, listen to this eternal and supreme secret, by reciting which, dear child, you will conquer all enemies in battle. This sacred hymn is the Aditya Hridaya (The Heart of the Sun), the destroyer of all foes, the bestower of victory, eternal, and supremely auspicious.',
+        'Sri Rama addressed Mother Kaikeyi: "At the command of my father the King, I am ready to leap into fire, consume deadly poison, or plunge into the ocean. He is my preceptor, my father, my sovereign, and my supreme benefactor. Tell me without hesitation, O Queen, whatever the King desires of me, and I shall fulfill it completely."',
       translationHi:
-        'हे महाबाहो राम! इस सनातन गोपनीय रहस्य को सुनो, जिससे तुम युद्ध में समस्त शत्रुओं पर विजय प्राप्त करोगे। यह पवित्र आदित्यहृदय स्तोत्र सब शत्रुओं का नाश करने वाला, विजय प्रदाता और परम कल्याणकारी है।',
-      sectionTitle: 'Aditya Hridaya Stotram (Imparting the Secret)',
+        'श्रीराम ने माता कैकेयी से कहा: "महाराज की आज्ञा से मैं अग्नि में कूद सकता हूँ, तीक्ष्ण विष खा सकता हूँ अथवा समुद्र में गिर सकता हूँ। वे मेरे गुरु, पिता, राजा और हितैषी हैं। हे देवि! राजा को जो भी अभीष्ट है, वह कहिए; मैं उसका पूर्ण पालन करूँगा।"',
+      sectionTitle: 'Ayodhya Kanda (2.18.28–30) — Unwavering Adherence to Truth (Pitru-Vakya)',
     },
     {
-      id: 'valmiki_ramayana:aditya_3',
-      unitNumber: 'Aditya Hridaya 15',
+      id: 'valmiki_ramayana:aranya_kanda',
+      unitNumber: 'Kanda 3 — Aranya Kanda',
       originalText:
-        'नक्षत्रग्रहताराणामधिपो विश्वभावनः ।\nतेजसामपि तेजस्वी द्वादशात्मन्नमोऽस्तु ते ॥',
+        'अप्यहं जीवितं जह्यां त्वां वा सीते सलक्ष्मणाम् ।\nन तु प्रतिज्ञां संश्रुत्य ब्राह्मणेभ्यो विशेषतः ॥',
       transliteration:
-        'nakṣatragrahatārāṇāmadhipo viśvabhāvanaḥ |\ntejasāmapi tejasvī dvādaśātmannamo\'stu te ||',
+        'apyahaṁ jīvitaṁ jahyāṁ tvāṁ vā sīte salakṣmaṇām |\nna tu pratijñāṁ saṁśrutya brāhmaṇebhyo viśeṣataḥ ||',
       translationEn:
-        'Salutations to You who are the Lord of constellations, planets, and stars; the generator of all the worlds; the most luminous among the luminous! Salutations to You who manifest in the twelve solar forms (Dvadasaditya)!',
+        'Rama said to Sita in the Dandaka forest: "I might abandon even my life, or you, O Sita, along with Lakshmana, but having once given my solemn word to protect the sages who practice penance in the wilderness, I can never break that sacred pledge."',
       translationHi:
-        'नक्षत्रों, ग्रहों और तारों के स्वामी, विश्व के उत्पादक, तेजों में भी परम तेजस्वी द्वादश आदित्यों के रूप में प्रतिष्ठित आपको नमस्कार है।',
-      sectionTitle: 'Aditya Hridaya Stotram (Solar Adoration)',
+        'दण्डकारण्य में श्रीराम ने सीताजी से कहा: "हे सीते! मैं अपने प्राण त्याग सकता हूँ, अथवा लक्ष्मण सहित तुम्हें भी छोड़ सकता हूँ, किन्तु ऋषियों और मुनियों को दिया गया रक्षा का वचन मैं कभी नहीं तोड़ सकता।"',
+      sectionTitle: 'Aranya Kanda (3.10.19) — Sacred Pledge to Protect the Hermits',
+    },
+    {
+      id: 'valmiki_ramayana:kishkindha_kanda',
+      unitNumber: 'Kanda 4 — Kishkindha Kanda',
+      originalText:
+        'नानृग्वेदविनीतस्य नायजुर्वेदधारिणः ।\nनासामवेदविदुषः शक्यमेवं विभाषितुम् ॥\nनूनं व्याकरणं कृत्स्नमनेन बहुधा श्रुतम् ।\nबहु व्याहरतानेन न किञ्चिदपशब्दितम् ॥',
+      transliteration:
+        'nānṛgvedavinītasya nāyajurvedadhāriṇaḥ |\nnāsāmavedaviduṣaḥ śakyamevaṁ vibhāṣitum ||\nnūnaṁ vyākaraṇaṁ kṛtsnamanena bahudhā śrutam |\nbahu vyāharatānena na kiñcidapaśabditam ||',
+      translationEn:
+        'Upon first meeting Hanuman, Sri Rama turned to Lakshmana in admiration: "None who is not thoroughly versed in the Rigveda, none who has not mastered the Yajurveda, none who is not skilled in the Samaveda could speak with such flawless eloquence. Verily, the entire science of grammar has been mastered by him; though he spoke at length, not a single flawed or ungrammatical word escaped his lips."',
+      translationHi:
+        'हनुमानजी के वचन सुनकर श्रीराम ने लक्ष्मण से कहा: "जिसने ऋग्वेद, यजुर्वेद और सामवेद का सम्यक अध्ययन न किया हो, वह इस प्रकार मधुर और शुद्ध भाषण नहीं कर सकता। इन्होंने सम्पूर्ण व्याकरण का अनेकों बार अध्ययन किया है, क्योंकि इतनी बात कहने पर भी इनके मुख से एक भी अशुद्ध शब्द नहीं निकला।"',
+      sectionTitle: 'Kishkindha Kanda (4.3.28–29) — Sri Rama Praises Hanuman’s Wisdom & Eloquence',
+    },
+    {
+      id: 'valmiki_ramayana:sundara_kanda',
+      unitNumber: 'Kanda 5 — Sundara Kanda',
+      originalText:
+        'ततो रावणनीतायाः सीतायाः शत्रुकर्शनः ।\nइयेष पदमन्वेष्टुं चारणाचरिते पथि ॥\nयथा राघोः प्रयुक्तः शरः श्वसनविक्रमः ।\nगच्छेत्तद्वद्गमिष्यामि लङ्कां रावणपालिताम् ॥',
+      transliteration:
+        'tato rāvaṇanītāyāḥ sītāyāḥ śatrukarśanaḥ |\niyeṣa padamanveṣṭuṁ cāraṇācarite pathi ||\nyathā rāghoḥ prayuktaḥ śaraḥ śvasanavikramaḥ |\ngacchettadvadgamiṣyāmi laṅkāṁ rāvaṇapālitām ||',
+      translationEn:
+        'Resolved to discover the whereabouts of Sita abducted by Ravana, the vanquisher of foes Hanuman prepared to leap along the aerial path traversed by celestial bards. He declared: "Even as an arrow shot from the mighty bow of Raghava speeds with the fury of the wind, so shall I speed across the ocean to Lanka ruled by Ravana."',
+      translationHi:
+        'शत्रुओं का दमन करने वाले वीर हनुमानजी ने रावण द्वारा हरी गई सीताजी की खोज करने के लिए आकाश मार्ग से जाने का निश्चय किया। उन्होंने कहा: "जैसे श्रीराम के धनुष से छूटा हुआ बाण वायु के वेग से जाता है, वैसे ही मैं भी रावण-रक्षित लंका की ओर वेग से जाऊँगा।"',
+      sectionTitle: 'Sundara Kanda (5.1.1, 5.1.37) — Hanuman’s Epic Leap across the Ocean',
+    },
+    {
+      id: 'valmiki_ramayana:yuddha_kanda',
+      unitNumber: 'Kanda 6 — Yuddha Kanda (Aditya Hridaya)',
+      originalText:
+        'ततो युद्धपरिश्रान्तं समरे चिन्तया स्थितम् ।\nरावणं चाग्रतो दृष्ट्वा युद्धाय समुपस्थितम् ॥\nदैवतैश्च समागम्य द्रष्टुमभ्यागतो रणम् ।\nउपागम्याब्रवीद्राममगस्त्यो भगवानृषिः ॥\nराम राम महाबाहो शृणु गुह्यं सनातनम् ।\nयेन सर्वानरीन वत्स समरे विजयिष्यसि ॥\nआदित्यहृदयं पुण्यं सर्वशत्रुविनाशनम् ।\nजयावहं जपेन्नित्यमक्षयं परमं शिवम् ॥\nनक्षत्रग्रहताराणामधिपो विश्वभावनः ।\nतेजसामपि तेजस्वी द्वादशात्मन्नमोऽस्तु ते ॥',
+      transliteration:
+        'tato yuddhaparīśrāntaṁ samare cintayā sthitam |\nrāvaṇaṁ cāgrato dṛṣṭvā yuddhāya samupasthitam ||\ndaivataiśca samāgamya draṣṭumabhyāgato raṇam |\nupāgamyābravīdrāmamagastyo bhagavānṛṣiḥ ||\nrāma rāma mahābāho śṛṇu guhyaṁ sanātanam |\nyena sarvānarīn vatsa samare vijayiṣyasi ||\nādityahṛdayaṁ puṇyaṁ sarvaśatruvināśanam |\njayāvahaṁ japennityamakṣayaṁ paramaṁ śivam ||\nnakṣatragrahatārāṇāmadhipo viśvabhāvanaḥ |\ntejasāmapi tejasvī dvādaśātmannamo\'stu te ||',
+      translationEn:
+        'On the battlefield of Lanka, seeing Sri Rama weary from combat, the revered Sage Agastya approached and imparted the eternal Aditya Hridaya Stotram (The Heart of the Sun). "O mighty-armed Rama, listen to this auspicious secret by which you shall vanquish all adversaries in battle. Worship the Sun-God, the soul of the universe, who shines in twelve forms. Conquering Ravana, Dharma shall triumph."',
+      translationHi:
+        'रणभूमि में श्रीराम को चिंतामग्न देखकर महर्षि अगस्त्य ने उन्हें परम पवित्र आदित्यहृदय स्तोत्र का उपदेश दिया। इसके प्रभाव से श्रीराम ने महाप्रतापी रावण का संहार कर धर्म की विजय स्थापित की।',
+      sectionTitle: 'Yuddha Kanda (6.105.1–15) — Sage Agastya Imparts Aditya Hridaya & Victory of Dharma',
+    },
+    {
+      id: 'valmiki_ramayana:uttara_kanda',
+      unitNumber: 'Kanda 7 — Uttara Kanda',
+      originalText:
+        'न पर्यदेवन्विधवा न च व्यालकृतं भयम् ।\nन व्याधिजं भयं चासीद्रामे राज्यं प्रशासति ॥\nनिर्दस्युरभवल्लोको नानर्थः कञ्चिदस्पृशत् ।\nन च स्म वृद्ध बालानां प्रेतकार्याणि कुर्वते ॥\nसर्वं मुदितमेवासीत्सर्वो धर्मपरोऽभवत् ।\nराममेवानुपश्यन्तो नाभ्यहिंसन्परस्परम् ॥',
+      transliteration:
+        'na paryadevanvidhavā na ca vyālakṛtaṁ bhayam |\nna vyādhijaṁ bhayaṁ cāsīdrāme rājyaṁ praśāsati ||\nnirdasyurabhavalloko nānarthaḥ kañcidaspṛśat |\nna ca sma vṛddhā bālānāṁ pretakāryāṇi kurvate ||\nsarvaṁ muditamevāsītsarvo dharmaparo\'bhavat |\nrāmamevānupaśyanto nābhyahiṁsanparasparam ||',
+      translationEn:
+        'While Sri Rama governed the kingdom, there were no widows to lament, nor fear from wild beasts or diseases. The world was freed from theft and violence; misfortune touched no one. Elders never had to perform funeral rites for children. All people lived in joy, devoted to Dharma, following Rama\'s supreme example and causing injury to none.',
+      translationHi:
+        'श्रीराम के राज्य शासन में कोई स्त्री विधवा नहीं होती थी, न हिंसक जीवों का भय था और न रोगों का। चोरी और विपत्ति का नाम न था; वृद्धों को बालकों का श्राद्ध नहीं करना पड़ता था। सभी प्रजा प्रसन्न और धर्मपरायण थी, और परस्पर किसी से वैर नहीं करती थी।',
+      sectionTitle: 'Uttara Kanda (7.99.1–5) — Ramarajya: The Sovereign Ideal of Righteous Governance',
     },
   ],
 
@@ -144,12 +196,12 @@ export const HINDUISM_TEXT_DATA: Record<string, HinduismVerseUnit[]> = {
   ],
 
   // ----------------------------------------------------------------------------
-  // 3. PRINCIPAL UPANISHADS (Isha Upanishad — Complete Canonical Mantras)
+  // 3. PRINCIPAL UPANISHADS (The Ten Mukhya Upanishads & The Four Mahavakyas)
   // ----------------------------------------------------------------------------
   principal_upanishads: [
     {
       id: 'isha:shanti',
-      unitNumber: 'Shanti Mantra',
+      unitNumber: '1. Isha — Shanti Mantra',
       originalText:
         'ॐ पूर्णमदः पूर्णमिदं पूर्णात्पूर्णमुदच्यते ।\nपूर्णस्य पूर्णमादाय पूर्णमेवावशिष्यते ॥\nॐ शान्तिः शान्तिः शान्तिः ॥',
       transliteration:
@@ -158,11 +210,11 @@ export const HINDUISM_TEXT_DATA: Record<string, HinduismVerseUnit[]> = {
         'AUM. That unmanifest Brahman is infinite and whole; this manifest universe is infinite and whole. From the Infinite Brahman proceeds this infinite universe. When the wholeness of the infinite universe is absorbed into the Infinite, the Infinite alone remains intact. AUM, Peace, Peace, Peace.',
       translationHi:
         'ॐ। वह (परब्रह्म) पूर्ण है और यह (जगत) भी पूर्ण है। पूर्ण से ही पूर्ण की उत्पत्ति होती है। पूर्ण में से पूर्ण को निकाल लेने पर भी पूर्ण ही शेष रहता है। ॐ शान्ति, शान्ति, शान्ति।',
-      sectionTitle: 'Isha Upanishad — Invocatory Peace Mantra',
+      sectionTitle: 'Isha Upanishad (Shukla Yajurveda) — Invocatory Peace Mantra',
     },
     {
       id: 'isha:1',
-      unitNumber: 'Mantra 1',
+      unitNumber: '1. Isha — Mantra 1',
       originalText:
         'ईशा वास्यमिदँ सर्वं यत्किञ्च जगत्यां जगत् ।\nतेन त्यक्तेन भुञ्जीथा मा गृधः कस्यस्विद्धनम् ॥',
       transliteration:
@@ -171,92 +223,244 @@ export const HINDUISM_TEXT_DATA: Record<string, HinduismVerseUnit[]> = {
         'All this—whatever moves and exists in this changing universe—is enveloped and permeated by the Lord (Isha). Enjoy and sustain your life through renunciation and detachment; do not covet the wealth of anyone.',
       translationHi:
         'इस परिवर्तनशील जगत में जो कुछ भी चराचर है, वह सब ईश्वर से व्याप्त है। त्यागपूर्वक उसका उपभोग करो; किसी के भी धन का लोभ मत करो।',
-      sectionTitle: 'Isha Upanishad — Sovereign Verse on Renunciation',
+      sectionTitle: 'Isha Upanishad (Shukla Yajurveda) — Sovereign Verse on Renunciation',
     },
     {
-      id: 'isha:2',
-      unitNumber: 'Mantra 2',
+      id: 'kena:1',
+      unitNumber: '2. Kena — Khanda 1.1–2',
       originalText:
-        'कुर्वन्नेवेह कर्माणि जिजीविषेच्छतं समाः ।\nएवं त्वयि नान्यथेतोऽस्ति न कर्म लिप्यते नरे ॥',
+        'केनेषितं पतति प्रेषितं मनः केन प्राणः प्रथमः प्रैति युक्तः ।\nकेनेषितां वाचमिमां वदन्ति चक्षुः श्रोत्रं क उ देवो युनक्ति ॥\nश्रोत्रस्य श्रोत्रं मनसो मनो यद्वाचो ह वाचं स उ प्राणस्य प्राणः ।\nचक्षुषश्चक्षुरतिमुच्य धीराः प्रेत्यास्माल्लोकादमृता भवन्ति ॥',
       transliteration:
-        'kurvanneveha karmāṇi jijīviṣecchataṁ samāḥ |\nevaṁ tvayi nānyatheto\'sti na karma lipyate nare ||',
+        'keneṣitaṁ patati preṣitaṁ manaḥ kena prāṇaḥ prathamaḥ praiti yuktaḥ |\nkeneṣitāṁ vācamimāṁ vadanti cakṣuḥ śrotraṁ ka u devo yunakti ||\nśrotrasya śrotraṁ manaso mano yadvāco ha vācaṁ sa u prāṇasya prāṇaḥ |\ncakṣuṣaścakṣuratimucya dhīrāḥ pretyāsmāllokādamṛtā bhavanti ||',
       translationEn:
-        'Only performing dedicated, selfless action in this world should one desire to live for a hundred years. Thus for you, and not otherwise, will action not cling to you and taint the soul.',
+        'By whom willed and directed does the mind soar to its object? By whom enjoined does the primary life-breath (Prana) go forth? By whom prompted do mortals speak this speech? What divine power directs the eye and the ear? It is the Ear of the ear, the Mind of the mind, the Speech of speech, the Life of life, and the Eye of the eye. The wise, relinquishing false identification with senses and body, transcend mortality and become immortal.',
       translationHi:
-        'इस संसार में निष्काम कर्म करते हुए ही सौ वर्ष तक जीने की इच्छा करनी चाहिए। तुम्हारे लिए इससे भिन्न कोई मार्ग नहीं है, जिससे कर्म मनुष्य में लिप्त न हो।',
-      sectionTitle: 'Isha Upanishad — Dedication to Action (Karma Yoga)',
+        'किसकी इच्छा से प्रेरित होकर मन अपने विषयों पर दौड़ता है? किसके द्वारा नियुक्त होकर मुख्य प्राण गति करता है? किसके द्वारा प्रेरित होकर लोग वाणी बोलते हैं? और कौन सा देव नेत्र और कान को प्रेरित करता है? वह कानों का कान, मन का मन, वाणी की वाणी, प्राण का प्राण और आँखों की आँख है। धीर पुरुष इसमें स्थित होकर अमर हो जाते हैं।',
+      sectionTitle: 'Kena Upanishad (Samaveda) — The Underlying Consciousness of the Senses',
     },
     {
-      id: 'isha:6',
-      unitNumber: 'Mantra 6',
+      id: 'katha:1',
+      unitNumber: '3. Katha — Valli 1.2.18, 1.3.3',
       originalText:
-        'यस्तु सर्वाणि भूतान्यात्मन्येवानुपश्यति ।\nसर्वभूतेषु चात्मानं ततो न विजुगुप्सते ॥',
+        'न जायते म्रियते वा विपश्चिन्नायं कुतश्चिन्न बभूव कश्चित् ।\nअजो नित्यः शाश्वतोऽयं पुराणो न हन्यते हन्यमाने शरीरे ॥\nआत्मानँ रथिनं विद्धि शरीरँ रथमेव तु ।\nबुद्धिं तु सारथिं विद्धि मनः प्रग्रहमेव च ॥',
       transliteration:
-        'yastu sarvāṇi bhūtānyātmanyevānupaśyati |\nsarvabhūteṣu cātmānaṁ tato na vijugupsate ||',
+        'na jāyate mriyate vā vipaścinnāyaṁ kutaścinna babhūva kaścit |\najo nityaḥ śāśvato\'yaṁ purāṇo na hanyate hanyamāne śarīre ||\nātmānaom rathinaṁ viddhi śarīraom rathameva tu |\nbuddhiṁ tu sārathiṁ viddhi manaḥ pragrahameva ca ||',
       translationEn:
-        'He who sees all beings in the Self (Atman), and the Self in all beings, never turns away with repulsion, hatred, or sorrow from anything in creation.',
+        'Yama instructs Nachiketa: "The Knowing Self (Atman) is never born, nor does it ever die; it sprang from nothing and nothing sprang from it. It is unborn, eternal, imperishable, and ancient; it is not slain when the body is slain." "Know the Atman as the lord of the chariot, the physical body as the chariot itself; know the intellect (Buddhi) as the charioteer, and the mind as the reins."',
       translationHi:
-        'जो पुरुष सभी प्राणियों को अपनी ही आत्मा में देखता है और सम्पूर्ण प्राणियों में अपनी आत्मा को देखता है, वह किसी से भी घृणा नहीं करता।',
-      sectionTitle: 'Isha Upanishad — Universal Oneness',
+        'यमराज ने नचिकेता को उपदेश दिया: "यह ज्ञानी आत्मा न कभी जन्म लेता है और न मरता है। यह न किसी से उत्पन्न हुआ है और न कोई इससे उत्पन्न हुआ है। यह अजन्मा, नित्य, शाश्वत और पुरातन है; शरीर के नष्ट होने पर भी यह नहीं मारा जाता।" "आत्मा को रथी, शरीर को रथ, बुद्धि को सारथी और मन को लगाम जानो।"',
+      sectionTitle: 'Katha Upanishad (Krishna Yajurveda) — Immortality of the Soul & The Chariot Allegory',
+    },
+    {
+      id: 'prashna:1',
+      unitNumber: '4. Prashna — Prashna 1.3–4',
+      originalText:
+        'कबन्धिनः कात्यायन उपेत्य पप्रच्छ—भगवन् कुतो ह वा इमाः प्रजाः प्रजायन्त इति ॥\nतस्मै स होवाच—प्रजाकामो वै प्रजापतिः स तपोऽतप्यत स तपस्तप्त्वा स मिथुनमुत्पादयते—रयिं च प्राणं चेत्येतौ मे बहुधा प्रजाः करिष्यत इति ॥',
+      transliteration:
+        'kabandhinaḥ kātyāyana upetya papraccha—bhagavan kuto ha vā imāḥ prajāḥ prajāyanta iti ||\ntasmai sa hovāca—prajākāmo vai prajāpatiḥ sa tapo\'tapyata sa tapastaptvā sa mithunamutpādayate—rayiṁ ca prāṇaṁ cetyetau me bahudhā prajāḥ kariṣyata iti ||',
+      translationEn:
+        'Kabandhin, son of Katya, approached Sage Pippalada and asked: "Revered sir, whence are all these living beings born?" Pippalada answered: "Prajapati (the Creator Lord) practiced contemplative austerity. In that tapas, He brought forth a sacred primal pair—Rayi (matter/form) and Prana (energy/consciousness)—saying: These two shall multiply creation in diverse ways."',
+      translationHi:
+        'कबन्धिन कात्यायन ने महर्षि पिप्पलाद से पूछा: "भगवन! ये सभी प्रजाएँ कहाँ से उत्पन्न होती हैं?" पिप्पलाद ने उत्तर दिया: "प्रजापति ने सृष्टि की कामना से तप किया और उस तप से एक युगल उत्पन्न किया—रयि (पदार्थ/चन्द्रमा) और प्राण (ऊर्जा/सूर्य)—यह विचार करके कि ये दोनों मिलकर विविध प्रजाओं को उत्पन्न करेंगे।"',
+      sectionTitle: 'Prashna Upanishad (Atharvaveda) — The Cosmic Dual Principle of Prana & Rayi',
+    },
+    {
+      id: 'mundaka:1',
+      unitNumber: '5. Mundaka — Mundaka 3.1.1, 3.1.6',
+      originalText:
+        'द्वा सुपर्णा सयुजा सखाया समानं वृक्षं परिषस्वजाते ।\nतयोरन्यः पिप्पलं स्वाद्वत्त्यनश्नन्नन्यो अभिचाकशीति ॥\nसत्यमेव जयते नानृतं सत्येन पन्था विततो देवयानः ।\nयेनाक्रमन्त्यृषयो ह्याप्तकामा यत्र तत् सत्यस्य परमं निधानम् ॥',
+      transliteration:
+        'dvā suparṇā sayujā sakhāyā samānaṁ vṛkṣaṁ pariṣasvajāte |\ntayoranyaḥ pippalaṁ svādvattyanaśnannanyo abhicākaśīti ||\nsatyameva jayate nānṛtaṁ satyena panthā vitato devayānaḥ |\nyenākramantyṛṣayo hyāptakāmā yatra tat satyasya paramaṁ nidhānam ||',
+      translationEn:
+        'Two birds of golden plumage, inseparable companions, cling to the same tree. One of them eats the sweet and bitter fruits of the tree, while the other looks on as the serene, unattached witness. "Truth alone triumphs, never untruth (Satyameva Jayate Nanritam). By truth the divine path is paved, by which the liberated sages, free from desire, ascend to where lies the supreme abode of Truth."',
+      translationHi:
+        'दो सुंदर पंखों वाले पक्षी, जो परस्पर सखा हैं, एक ही वृक्ष पर रहते हैं। उनमें से एक वृक्ष के फलों का स्वाद लेकर खाता है, जबकि दूसरा साक्षी भाव से केवल देखता रहता है। "सत्य की ही विजय होती है, असत्य की नहीं। सत्य से ही देवयान का मार्ग प्रशस्त होता है, जिससे निष्काम ऋषि सत्य के परम धाम को प्राप्त करते हैं।"',
+      sectionTitle: 'Mundaka Upanishad (Atharvaveda) — The Two Birds & Satyameva Jayate',
     },
     {
       id: 'mandukya:1',
-      unitNumber: 'Mandukya Karika 1',
+      unitNumber: '6. Mandukya — Karikas 1, 7 & Mahavakya',
       originalText:
-        'ओमित्येतदक्षरमिदँ सर्वं तस्योपव्याख्यानं भूतं भवद्भवविष्यदिति सर्वमोङ्कार एव ।\nयच्चान्यत्त्रिकालातीतं तदप्योङ्कार एव ॥',
+        'ओमित्येतदक्षरमिदँ सर्वं तस्योपव्याख्यानं भूतं भवद्भवविष्यदिति सर्वमोङ्कार एव ।\nयच्चान्यत्त्रिकालातीतं तदप्योङ्कार एव ॥\nसर्वं ह्येतद् ब्रह्म अयमात्मा ब्रह्म सोऽयमात्मा चतुष्पात् ॥\nनान्तष्प्रज्ञं न बहिष्प्रज्ञं नोभयतःप्रज्ञं न प्रज्ञानघनं न प्रज्ञं नाप्रज्ञम् ।\nअदृष्टमव्यवहार्यमग्राह्यमलक्षणमचिन्त्यमव्यपदेश्यमेकात्मप्रत्ययसारं प्रपञ्चोपशमं शान्तं शिवमद्वैतं चतुर्थं मन्यन्ते स आत्मा स विज्ञेयः ॥',
       transliteration:
-        'omityetadakṣaramidaom sarvaṁ tasyopavyākhyānaṁ bhūtaṁ bhavadbhaviṣyaditi sarvamoṅkāra eva |\nyaccānyattrikālātītaṁ tadapyoṅkāra eva ||',
+        'omityetadakṣaramidaom sarvaṁ tasyopavyākhyānaṁ bhūtaṁ bhavadbhaviṣyaditi sarvamoṅkāra eva |\nyaccānyattrikālātītaṁ tadapyoṅkāra eva ||\nsarvaṁ hyetad brahma ayamātmā brahma so\'yamātmā catuṣpāt ||\nnāntaṣprajñaṁ na bahiṣprajñaṁ nobhayataḥprajñaṁ na prajñānaghanaṁ na prajñaṁ nāprajñam |\nadṛṣṭamavyavahāryamagrāhyamalakṣaṇamacintyamavyapadeśyamekātmapratyayasāraṁ prapañcopaśamaṁ śāntaṁ śivamadvaitaṁ caturthaṁ manyante sa ātmā sa vijñeyaḥ ||',
       translationEn:
-        'AUM—this imperishable syllable is this entire manifest universe. An exposition thereof is as follows: what was, what is, and what will be—all is verily OM. And whatever else transcends the threefold divisions of past, present, and future, that too is OM.',
+        'AUM—this imperishable syllable is all that exists. All that was, is, and will be is OM. All is Brahman; this Self is Brahman (Ayam Atma Brahma — Atharvaveda Mahavakya). The Fourth state (Turiya) is not inwardly conscious, nor outwardly conscious, nor conscious of both; it is unseen, beyond empirical dealing, incomprehensible, uninferable, unthinkable, ineffable, the essence of the single Self-awareness, the cessation of the world-appearance, peaceful, auspicious, non-dual. That is the Atman; that is to be realized.',
       translationHi:
-        'ॐ यह अविनाशी अक्षर ही यह सब कुछ है। उसका उपव्याख्यान यह है: जो भूत, वर्तमान और भविष्य है—वह सब ओंकार ही है। और जो त्रिकाल से अतीत है, वह भी ओंकार ही है।',
-      sectionTitle: 'Mandukya Upanishad — The Absolute OM',
+        'ॐ यह अविनाशी अक्षर ही यह सब कुछ है। यह सब कुछ ब्रह्म ही है; "यह आत्मा ब्रह्म है" (अयम् आत्मा ब्रह्म)। जो न अन्तःप्रज्ञ है, न बहिष्प्रज्ञ है, न दोनों प्रकार का प्रज्ञ है; जो अदृष्ट, अव्यवहार्य, अग्राह्य, अचिन्त्य और अनिर्वचनीय है, वही शान्त, शिव और अद्वैत चतुर्थ पद (तुरीय) है। वही आत्मा है, वही जानने योग्य है।',
+      sectionTitle: 'Mandukya Upanishad (Atharvaveda) — The Fourth State (Turiya) & Ayam Atma Brahma',
+    },
+    {
+      id: 'taittiriya:1',
+      unitNumber: '7. Taittiriya — Shiksha 1.11.1 & Ananda 2.1.1',
+      originalText:
+        'सत्यं वद । धर्मं चर । स्वाध्यायान्मा प्रमदः ।\nआचार्याय प्रियं धनमाहृत्य प्रजातन्तुं मा व्यवच्छेत्सीः ॥\nसत्यं ज्ञानमनन्तं ब्रह्म । यो वेद निहितं गुहायां परमे व्योमन् ।\nसोऽश्नुते सर्वान् कामान् सह । ब्रह्मणा विपश्चितेति ॥',
+      transliteration:
+        'satyaṁ vada | dharmaṁ cara | svādhyāyānmā pramadaḥ |\nācāryāya priyaṁ dhanamāhṛtya prajātantuṁ mā vyavacchetsīḥ ||\nsatyaṁ jñānamanantaṁ brahma | yo veda nihitaṁ guhāyāṁ parame vyoman |\nso\'śnute sarvān kāmān saha | brahmaṇā vipaściteti ||',
+      translationEn:
+        'Convocation injunction to students: "Speak the truth. Practice righteousness (Dharma). Do not neglect daily scriptural study (Svadhyaya)." "Brahman is Truth, Knowledge, and Infinity (Satyam Jnanam Anantam Brahma). Whoever realizes That hidden in the secret cavern of the heart and in the supreme space fulfills all desires in union with the Omniscient Brahman."',
+      translationHi:
+        'शिष्य को दीक्षांत उपदेश: "सत्य बोलो। धर्म का आचरण करो। स्वाध्याय में प्रमाद मत करो।" "सत्य, ज्ञान और अनन्त ही ब्रह्म है। जो पुरुष हृदय-गुहा के परम आकाश में स्थित उस ब्रह्म को जान लेता है, वह उस सर्वज्ञ ब्रह्म के साथ सम्पूर्ण कामनाओं को प्राप्त कर लेता है।"',
+      sectionTitle: 'Taittiriya Upanishad (Krishna Yajurveda) — Satyam Vada Dharmam Chara & Infinite Brahman',
+    },
+    {
+      id: 'aitareya:1',
+      unitNumber: '8. Aitareya — 3.1.3 & Mahavakya',
+      originalText:
+        'एष ब्रह्मैष इन्द्र एष प्रजापतिरेते सर्वे देवा इमानि च पञ्चमहाभूतानि पृथिवी वायुराकाश आपो ज्योतींषि... सर्वं तत्प्रज्ञानेत्रं प्रज्ञाने प्रतिष्ठितं प्रज्ञानेत्रो लोकः प्रज्ञा प्रतिष्ठा प्रज्ञानं ब्रह्म ॥',
+      transliteration:
+        'eṣa brahmaiṣa indra eṣa prajāpatirete sarve devā imāni ca pañcamahābhūtāni pṛthivī vāyurākāśa āpo jyotīṁṣi... sarvaṁ tatprajñānetraṁ prajñāne pratiṣṭhitaṁ prajñānetro lokaḥ prajñā pratiṣṭhā prajñānaṁ brahma ||',
+      translationEn:
+        'This is Brahman, this is Indra, this is Prajapati, all these gods, and the five great cosmic elements: earth, air, space, water, and fire. All this is guided by Consciousness, grounded in Consciousness. The universe has Consciousness as its eye; Consciousness is its foundation. "Consciousness is Brahman" (Prajnanam Brahma — Rigveda Mahavakya).',
+      translationHi:
+        'यह ब्रह्म है, यही इन्द्र है, यही प्रजापति है, ये समस्त देवगण और पाँचों महाभूत (पृथ्वी, वायु, आकाश, जल और अग्नि) हैं। यह सम्पूर्ण जगत चेतना द्वारा ही संचालित और प्रतिष्ठित है। चेतना ही जगत का आधार है; "चेतना (प्रज्ञान) ही ब्रह्म है" (प्रज्ञानं ब्रह्म)।',
+      sectionTitle: 'Aitareya Upanishad (Rigveda) — Prajnanam Brahma (Consciousness is Brahman)',
+    },
+    {
+      id: 'chandogya:1',
+      unitNumber: '9. Chandogya — 6.8.7 & Mahavakya',
+      originalText:
+        'स य एषोऽणिमैतदात्म्यमिदँ सर्वं तत्सत्यँ स आत्मा तत्त्वमसि श्वेतकेतो इति ।\nभूय एव मा भगवान् विज्ञापयत्विति तथा सोम्येति होवाच ॥\nसर्वं खल्विदं ब्रह्म तज्जलानिति शान्त उपासीत ॥',
+      transliteration:
+        'sa ya eṣo\'ṇimaitadātmyamidaom sarvaṁ tatsatyaom sa ātmā tattvamasi śvetaketo iti |\nbhūya eva mā bhagavān vijñāpayatviti tathā somyeti hovāca ||\nsarvaṁ khalvidaṁ brahma tajjalāniti śānta upāsīta ||',
+      translationEn:
+        'Uddalaka instructs his son Shvetaketu: "That subtlest essence—in it all that exists has its self. That is the True. That is the Atman. That Thou Art, O Shvetaketu (Tat Tvam Asi — Samaveda Mahavakya)." "All this visible universe is verily Brahman (Sarvam Khalvidam Brahma); from Him it originates, into Him it dissolves, and in Him it is sustained. Thus with a peaceful and serene mind, one should contemplate Him."',
+      translationHi:
+        'उद्दालक ऋषि ने अपने पुत्र श्वेतकेतु को उपदेश दिया: "वह जो सूक्ष्म तत्व है, वही इस सम्पूर्ण जगत का आत्मा है। वही सत्य है, वही आत्मा है; \'वह तुम ही हो, हे श्वेतकेतु\' (तत्त्वमसि)।" "यह सम्पूर्ण चराचर जगत निश्चय ही ब्रह्म है; उसी से यह उत्पन्न होता है, उसी में लीन होता है और उसी में चेष्टा करता है। अतः शांतचित्त होकर उसकी उपासना करनी चाहिए।"',
+      sectionTitle: 'Chandogya Upanishad (Samaveda) — Tat Tvam Asi & Sarvam Khalvidam Brahma',
+    },
+    {
+      id: 'brihadaranyaka:1',
+      unitNumber: '10. Brihadaranyaka — 1.3.28, 1.4.10 & Neti Neti',
+      originalText:
+        'असतो मा सद्गमय । तमसो मा ज्योतिर्गमय । मृत्योर्माऽमृतं गमय ॥\nब्रह्म वा इदमग्र आसीत् तदात्मानमेवावेत्—अहं ब्रह्मास्मीति । तस्मात्तत्सर्वमभवत् ॥\nस एष नेति नेत्यात्माऽगृह्यो न हि गृह्यतेऽशीर्यो न हि शीर्यतेऽसङ्गो न हि सज्यतेऽसितो न व्यथते न रिष्यति ॥',
+      transliteration:
+        'asato mā sadgamaya | tamaso mā jyotirgamaya | mṛtyormā\'mṛtaṁ gamaya ||\nbrahma vā idamagra āsīt tadātmānamevāvet—ahaṁ brahmāsmīti | tasmāttatsarvamabhavat ||\nsa eṣa neti netyātmā\'gṛhyo na hi gṛhyate\'śīryo na hi śīryate\'saṅgo na hi sajyate\'sito na vyathate na riṣyati ||',
+      translationEn:
+        '"Lead me from the unreal to the Real. Lead me from darkness to Light. Lead me from death to Immortality." "Brahman verily was this universe in the beginning. It knew Itself only as: \'I am Brahman\' (Aham Brahmasmi — Yajurveda Mahavakya). Therefore It became all." "That Self is described as Neti, Neti (Not this, Not this). It is imperceptible, for It cannot be perceived; un-decaying, for It never decays; unattached, for It never attaches Itself; unbound, untroubled, and uninjured."',
+      translationHi:
+        '"मुझे असत्य से सत्य की ओर ले चलो। मुझे अंधकार से प्रकाश की ओर ले चलो। मुझे मृत्यु से अमरता की ओर ले चलो।" "प्रारंभ में यह सब ब्रह्म ही था। उसने अपने को ही जाना कि \'मैं ब्रह्म हूँ\' (अहं ब्रह्मास्मि)। अतः वह सब कुछ हो गया।" "वह आत्मा \'नेति-नेति\' (यह नहीं, यह नहीं) है। वह अग्राह्य है क्योंकि पकड़ा नहीं जा सकता, अविनश्वर है क्योंकि नष्ट नहीं होता, असंग है क्योंकि लिप्त नहीं होता।"',
+      sectionTitle: 'Brihadaranyaka Upanishad (Shukla Yajurveda) — Asato Ma Sadgamaya, Aham Brahmasmi & Neti Neti',
     },
   ],
 
   // ----------------------------------------------------------------------------
-  // 4. THE VEDAS (Rigveda, Samaveda, Yajurveda, Atharvaveda)
+  // 4. THE FOUR VEDAS (Rigveda, Samaveda, Yajurveda, Atharvaveda)
   // ----------------------------------------------------------------------------
   vedas: [
+    // --- RIGVEDA SAMHITA ---
     {
       id: 'rigveda:1.1.1',
-      unitNumber: 'Rigveda 1.1.1',
+      unitNumber: 'Rigveda 1.1.1–4',
       originalText:
-        'अग्निमीळे पुरोहितं यज्ञस्य देवमृत्विजम् ।\nहोतारं रत्नधातमम् ॥',
+        'अग्निमीळे पुरोहितं यज्ञस्य देवमृत्विजम् ।\nहोतारं रत्नधातमम् ॥\nअग्निः पूर्वेभिरृषिभिरीड्यो नूतनैरुत ।\nस देवाँ एह वक्षति ॥',
       transliteration:
-        'agnimīḷe purohitaṁ yajñasya devamṛtvijam |\nhotāraṁ ratnadhātamam ||',
+        'agnimīḷe purohitaṁ yajñasya devamṛtvijam |\nhotāraṁ ratnadhātamam ||\nagniḥ pūrvebhirṛṣibhirīḍyo nūtanairuta |\nsa devāom eha vakṣati ||',
       translationEn:
-        'I praise Agni, the chosen priest, the divine minister of the cosmic sacrifice, the invoker of the gods, and the bestower of supreme spiritual treasures.',
+        'I praise Agni, the chosen priest, the divine minister of the cosmic sacrifice, the invoker of the gods, and the bestower of supreme spiritual treasures. Agni, worthy of adoration by ancient and modern seers alike, bring hither the shining gods to this sacred assembly.',
       translationHi:
-        'मैं यज्ञ के पुरोहित, प्रकाशमान देव, ऋत्विक, होता और रत्नों को धारण करने वाले अग्निदेव की स्तुति करता हूँ।',
-      sectionTitle: 'Rigveda — Agni Sukta (The First Vedic Hymn)',
+        'मैं यज्ञ के पुरोहित, प्रकाशमान देव, ऋत्विक, होता और रत्नों को धारण करने वाले अग्निदेव की स्तुति करता हूँ। अग्निदेव जो पूर्वकालीन और वर्तमान ऋषियों द्वारा पूजनीय हैं, वे यहाँ दिव्य देवताओं को लेकर आएं।',
+      sectionTitle: 'Rigveda (Hymn 1.1) — Agni Suktam (The Primordial Vedic Invocation)',
+    },
+    {
+      id: 'rigveda:gayatri',
+      unitNumber: 'Rigveda 3.62.10 (Gayatri)',
+      originalText:
+        'ॐ भूर्भुवः स्वः ।\nतत्सवितुर्वरेण्यं भर्गो देवस्य धीमहि ।\nधियो यो नः प्रचोदयात् ॥',
+      transliteration:
+        'oṁ bhūrbhuvaḥ svaḥ |\ntatsaviturvareṇyaṁ bhargo devasya dhīmahi |\ndhiyo yo naḥ pracodayāt ||',
+      translationEn:
+        'AUM, throughout the physical (Bhur), subtle (Bhuva), and celestial (Svah) spheres of reality. May we meditate upon that supreme, adorable radiance of the Divine Solar Creator (Savitr). May that Divine Light illumine, inspire, and guide our intellect and understanding toward spiritual realization.',
+      translationHi:
+        'ॐ। भूलोक, भुवर्लोक और स्वर्लोक में व्याप्त! हम उस सृष्टि-उत्पादक प्रकाशमान सविता देव के परम वरेण्य तेज का ध्यान करते हैं। वह परमात्मा हमारी बुद्धि को सत्कर्मों और सत्य ज्ञान की ओर प्रेरित करे।',
+      sectionTitle: 'Rigveda 3.62.10 — Savitr Gayatri Mantra (The Mother of the Vedas)',
     },
     {
       id: 'rigveda:10.129.1',
-      unitNumber: 'Nasadiya Sukta 10.129.1',
+      unitNumber: 'Rigveda 10.129.1–3',
       originalText:
-        'नासदासीन्नो सदासीत्तदानीं नासीद्रजो नो व्योमा परो यत् ।\nकिमावरीवः कुह कस्य शर्मन्नम्भः किमासीद्गहनं गभीरम् ॥',
+        'नासदासीन्नो सदासीत्तदानीं नासीद्रजो नो व्योमा परो यत् ।\nकिमावरीवः कुह कस्य शर्मन्नम्भः किमासीद्गहनं गभीरम् ॥\nन मृत्युरासीदमृतं न तर्हि न रात्र्या अह्न आसीत्प्रकेतः ।\nआनीदवातं स्वधया तदेकं तस्माद्धान्यन्न परः किञ्चनास ॥',
       transliteration:
-        'nāsadāsīnno sadāsīttadānīṁ nāsīdrajo no vyomā paro yat |\nkimāvarīvaḥ kuha kasya śarmannambhaḥ kimāsīdgahanaṁ gabhīram ||',
+        'nāsadāsīnno sadāsīttadānīṁ nāsīdrajo no vyomā paro yat |\nkimāvarīvaḥ kuha kasya śarmannambhaḥ kimāsīdgahanaṁ gabhīram ||\nna mṛtyurāsīdamṛtaṁ na tarhi na rātryā ahna āsītpraketaḥ |\nānīdavātaṁ svadhayā tadekaṁ tasmāddhānyanna paraḥ kiñcanāsa ||',
       translationEn:
-        'Then there was neither existence (Sat) nor non-existence (Asat); there was neither the realm of space nor the sky beyond. What covered all? Where was it, and in whose protection? Was there water, deep and unfathomable?',
+        'Then there was neither non-existence (Asat) nor existence (Sat); there was neither space nor the celestial sky beyond. What covered all? Where was it, and in whose protection? Was there water, unfathomably deep? Death was not then, nor immortality; there was no sign of night or day. That One Supreme Reality breathed breathless by Its own intrinsic nature (Svadhaya); beyond That nothing whatever existed.',
       translationHi:
-        'सृष्टि से पहले न असत् था और न सत् था; न अंतरिक्ष था और न उससे परे आकाश। किसने आवरण किया? कहाँ और किसकी शरण में? क्या अथाह और गहन जल था?',
-      sectionTitle: 'Rigveda — Nasadiya Sukta (The Hymn of Creation)',
+        'सृष्टि से पूर्व न असत् था और न सत् था; न अंतरिक्ष था और न उससे परे आकाश। किसने सबको ढक रखा था? कहाँ और किसकी शरण में? मृत्यु नहीं थी, न अमरता थी; रात और दिन का भेद न था। वह एक परब्रह्म अपनी ही शक्ति से बिना वायु के श्वास ले रहा था; उसके अतिरिक्त परे कुछ भी न था।',
+      sectionTitle: 'Rigveda 10.129 — Nasadiya Suktam (The Hymn of Creation)',
+    },
+
+    // --- SAMAVEDA SAMHITA ---
+    {
+      id: 'samaveda:1.1.1',
+      unitNumber: 'Samaveda 1.1.1 (Saman Invocation)',
+      originalText:
+        'अग्न आ याहि वीतये गृणानो हव्यदातये ।\nनि होता सत्सि बर्हिषि ॥',
+      transliteration:
+        'agna ā yāhi vītaye gṛṇāno havyadātaye |\nni hotā satsi barhiṣi ||',
+      translationEn:
+        'Come, O Agni, to the sacred feast; celebrated by our songs of praise, come to partake of our divine oblations. Sit as the supreme invoker (Hota) upon the sacred grass (Barhis). [Set to the primordial musical melody of the Samaveda, the Veda of sacred chanting].',
+      translationHi:
+        'हे अग्निदेव! स्तुति गान से प्रसन्न होकर हमारे हव्य को स्वीकार करने के लिए यहाँ पधारिए। होता के रूप में हमारे पवित्र कुश-आसन पर विराजमान होइए। (सामवेद का आदि मन्त्र)।',
+      sectionTitle: 'Samaveda (Archika 1.1.1) — Agne Ayahi Vitaye (Primordial Melodic Saman)',
+    },
+
+    // --- YAJURVEDA SAMHITA ---
+    {
+      id: 'yajurveda:shiva_sankalpa',
+      unitNumber: 'Yajurveda (VS 34.1–3)',
+      originalText:
+        'येनेदं भूतं भुवनं भविष्यत् परिगृहीतममृतेन सर्वम् ।\nयेन यज्ञस्तायते सप्तहोता तन्मे मनः शिवसङ्कल्पमस्तु ॥\nयत्प्रज्ञानमुत चेतो धृतिश्च यज्ज्योतिरन्तरमृतं प्रजासु ।\nयस्मान्न ऋते किञ्चन कर्म क्रियते तन्मे मनः शिवसङ्कल्पमस्तु ॥',
+      transliteration:
+        'yenedaṁ bhūtaṁ bhuvanaṁ bhaviṣyat parigṛhītamamṛtena sarvam |\nyena yajñastāyate saptahotā tanme manaḥ śivasaṅkalpamastu ||\nyatprajñānamuta ceto dhṛtiśca yajjyotirantaramṛtaṁ prajāsu |\nyasmānna ṛte kiñcana karma kriyate tanme manaḥ śivasaṅkalpamastu ||',
+      translationEn:
+        'That immortal Mind by which all the past, present, and future is comprehended; by which the cosmic sacrifice with its seven priests is performed—may that mind of mine be filled with auspicious, noble, and benevolent resolves (Shiva Sankalpamastu). That mind which is knowledge, consciousness, and steadfast will—the immortal light residing within all beings, without which no action can be accomplished—may that mind of mine abide in auspicious divinity.',
+      translationHi:
+        'जिस अमर मन के द्वारा भूत, वर्तमान और भविष्य सब कुछ जाना जाता है, जिससे सात होताओं वाला यज्ञ संपन्न होता है—वह मेरा मन कल्याणकारी संकल्पों से युक्त हो (तन्मे मनः शिवसंकल्पमस्तु)। जो मन ज्ञान, चेतना और धैर्य का रूप है तथा समस्त प्राणियों के भीतर अमर ज्योति है—वह मेरा मन सदा शुभ विचारों से भरा रहे।',
+      sectionTitle: 'Shukla Yajurveda (Vajasaneyi Samhita 34.1–3) — Shiva Sankalpa Suktam',
     },
     {
-      id: 'atharvaveda:12.1.12',
-      unitNumber: 'Atharvaveda 12.1.12',
+      id: 'yajurveda:shanti_sukta',
+      unitNumber: 'Yajurveda (VS 36.17)',
       originalText:
-        'माता भूमिः पुत्रो अहं पृथिव्याः ।\nपर्जन्यः पिता स उ नः पिपर्तु ॥',
+        'द्यौः शान्तिरन्तरिक्षँ शान्तिः पृथिवी शान्तिरापः शान्तिरोषधयः शान्तिः ।\nवनस्पतयः शान्तिर्विश्वेदेवाः शान्तिर्ब्रह्म शान्तिः सर्वँ शान्तिः शान्तिरेव शान्तिः सा मा शान्तिरेधि ॥\nॐ शान्तिः शान्तिः शान्तिः ॥',
       transliteration:
-        'mātā bhūmiḥ putro ahaṁ pṛthivyāḥ |\nparjanyaḥ pitā sa u naḥ pipartu ||',
+        'dyauḥ śāntirantarikṣaom śāntiḥ pṛthivī śāntirāpaḥ śāntiroṣadhayaḥ śāntiḥ |\nvanaspatayaḥ śāntirviśvedevāḥ śāntirbrahma śāntiḥ sarvaom śāntiḥ śāntireva śāntiḥ sā mā śāntiredhi ||\noṁ śāntiḥ śāntiḥ śāntiḥ ||',
       translationEn:
-        'The Earth is my Mother; I am the son of the Earth. The rain-bearing sky is our Father; may he nurture and protect us.',
+        'May peace radiate through the heavenly skies; may peace pervade the atmospheric realm; may peace abide upon the earth; may the waters bring peace; may plants and herbs yield peace; may the trees and forests bestow peace; may all the cosmic powers (Vishvedevas) embody peace; may Brahman be peace; may peace be upon all creation; may peace itself be peace; may that very peace enter into me. AUM, Peace, Peace, Peace.',
       translationHi:
-        'भूमि मेरी माता है और मैं पृथ्वी का पुत्र हूँ। पर्जन्य (मेघ) हमारे पिता हैं, वे हमारा पालन-पोषण करें।',
-      sectionTitle: 'Atharvaveda — Prithvi Sukta (Hymn to Mother Earth)',
+        'द्युलोक में शांति हो, अंतरिक्ष में शांति हो, पृथ्वी पर शांति हो, जल में शांति हो, औषधियों में शांति हो, वनस्पतियों में शांति हो, समस्त देवगणों में शांति हो, ब्रह्म में शांति हो, सर्वत्र शांति हो, शांति ही शांति हो; वह शांति मुझे प्राप्त हो। ॐ शान्ति, शान्ति, शान्ति।',
+      sectionTitle: 'Shukla Yajurveda (Vajasaneyi Samhita 36.17) — Shanti Suktam (Universal Peace Prayer)',
     },
+
+    // --- ATHARVAVEDA SAMHITA ---
+    {
+      id: 'atharvaveda:12.1.12',
+      unitNumber: 'Atharvaveda 12.1.1–12',
+      originalText:
+        'सत्यं बृहदृतमुग्रं दीक्षा तपो ब्रह्म यज्ञः पृथिवीं धारयन्ति ।\nसा नो भूतस्य भव्यस्य पत्न्युरुं लोकं पृथिवी नः कृणोतु ॥\nमाता भूमिः पुत्रो अहं पृथिव्याः ।\nपर्जन्यः पिता स उ नः पिपर्तु ॥',
+      transliteration:
+        'satyaṁ bṛhadṛtamugraṁ dīkṣā tapo brahma yajñaḥ pṛthivīṁ dhārayanti |\nsā no bhūtasya bhavyasya patnyuruṁ lokaṁ pṛthivī naḥ kṛṇotu ||\nmātā bhūmiḥ putro ahaṁ pṛthivyāḥ |\nparjanyaḥ pitā sa u naḥ pipartu ||',
+      translationEn:
+        'Truth, cosmic order (Rita), mighty dedication, consecration, spiritual austerity, sacred wisdom, and selfless sacrifice uphold the Mother Earth. May She, the sovereign mistress of all that was and will be, grant us vast and unconfined space. "The Earth is my Mother; I am the son of the Earth. The rain-bearing sky is our Father; may he nurture and protect us."',
+      translationHi:
+        'महान सत्य, ऋत (प्राकृतिक नियम), दीक्षा, तप, ब्रह्मज्ञान और यज्ञ पृथ्वी को धारण करते हैं। भूत और भविष्य की स्वामिनी वह पृथ्वी हमें विशाल विस्तार प्रदान करे। "भूमि मेरी माता है और मैं पृथ्वी का पुत्र हूँ। पर्जन्य (मेघ) हमारे पिता हैं, वे हमारा पोषण करें।"',
+      sectionTitle: 'Atharvaveda 12.1 — Bhumi Suktam / Prithvi Suktam (Ode to Mother Earth)',
+    },
+    {
+      id: 'atharvaveda:skambha',
+      unitNumber: 'Atharvaveda 10.7.1',
+      originalText:
+        'कस्मिन्नङ्गे तपो अस्याधि तिष्ठति कस्मिन्नङ्गमृतमस्याध्याहितम् ।\nक्व व्रतं क्व श्रद्धास्य तिष्ठति कस्मिन्नङ्गे सत्यमस्य प्रतिष्ठितम् ॥',
+      transliteration:
+        'kasminnaṅge tapo asyādhi tiṣṭhati kasminnaṅgamṛtamasyādhyāhitam |\nkva vrataṁ kva śraddhāsya tiṣṭhati kasminnaṅge satyamasya pratiṣṭhitam ||',
+      translationEn:
+        'In which cosmic limb of His does Tapas (spiritual heat) reside? In which limb is the cosmic order (Rita) established? Where abide His vows, where His faith? In which limb of the Cosmic Pillar (Skambha) is eternal Truth firmly founded? Skambha is the eternal cosmic support of all worlds—the Supreme Brahman.',
+      translationHi:
+        'इस विराट पुरुष (स्कम्भ) के किस अंग में तप प्रतिष्ठित है? किस अंग में ऋत समाहित है? इनके व्रत और श्रद्धा कहाँ स्थित हैं? और किस अंग में सत्य प्रतिष्ठित है? यह स्कम्भ ही सम्पूर्ण ब्रह्माण्ड का आधार स्तम्भ—परब्रह्म है।',
+      sectionTitle: 'Atharvaveda 10.7.1 — Skambha Suktam (The Cosmic Pillar of Brahman)',
+    },
+
+    // --- AUTHENTIC VEDIC CHANTING AUDIO UNITS ---
     {
       id: 'veda:purusha_sukta',
       unitNumber: 'Purusha Sukta (Rigveda 10.90)',
@@ -326,21 +530,60 @@ export const HINDUISM_TEXT_DATA: Record<string, HinduismVerseUnit[]> = {
   ],
 
   // ----------------------------------------------------------------------------
-  // 5. THE 18 MAHAPURANAS (Gopi Gita & Canonical Catalogue)
+  // 5. THE 18 MAHAPURANAS (Canonical Classification & Selected Excerpts)
   // ----------------------------------------------------------------------------
   puranas: [
     {
       id: 'puranas:catalogue',
-      unitNumber: 'Canonical Catalogue',
+      unitNumber: 'Canonical 18 Mahapuranas Matrix',
       originalText:
         'ब्राह्मं पाद्मं वैष्णवं च शैवं लैङ्गं सगारुडम् ।\nनारदीयं भागवतमाग्नेयं स्कान्दसंज्ञितम् ॥\nभविष्यं ब्रह्मवैवर्तं मार्कण्डेयं सवामनम् ।\nवाराहं मात्स्यं कौर्मं च ब्रह्माण्डाख्यमिति त्रिषट् ॥',
       transliteration:
         'brāhmaṁ pādmaṁ vaiṣṇavaṁ ca śaivaṁ laiṅgaṁ sagāruḍam |\nnāradīyaṁ bhāgavatamāgneyaṁ skāndasaṁjñitam ||\nbhaviṣyaṁ brahmavaivartaṁ mārkaṇḍeyaṁ savāmanam |\nvārāhaṁ mātsyaṁ kaurmaṁ ca brahmāṇḍākhyamiti triṣaṭ ||',
       translationEn:
-        'The eighteen Mahapuranas are: 1. Brahma, 2. Padma, 3. Vishnu, 4. Shiva, 5. Linga, 6. Garuda, 7. Narada, 8. Bhagavata, 9. Agni, 10. Skanda, 11. Bhavishya, 12. Brahma-Vaivarta, 13. Markandeya, 14. Vamana, 15. Varaha, 16. Matsya, 17. Kurma, and 18. Brahmanda. These are traditionally grouped into Sattvika (Vaishnava), Rajasa (Brahma), and Tamasa (Shaiva/Shakta) divisions.',
+        'The eighteen Mahapuranas composed by Maharshi Veda Vyasa comprise approximately 400,000 Sanskrit verses, classified into three groups according to the Gunas: Sattvika (Vaishnava), Rajasa (Brahma), and Tamasa (Shaiva/Shakta). Together they elucidate cosmic creation, royal lineages, moral righteousness, and metaphysical devotion.',
       translationHi:
-        'अठारह महापुराण हैं: ब्रह्म, पद्म, विष्णु, शिव, लिंग, गरुड़, नारद, भागवत, अग्नि, स्कन्द, भविष्य, ब्रह्मवैवर्त, मार्कण्डेय, वामन, वराह, मत्स्य, कूर्म और ब्रह्माण्ड पुराण।',
-      sectionTitle: 'The 18 Mahapuranas Classification',
+        'महर्षि वेदव्यास द्वारा प्रणीत अठारह महापुराण लगभग ४००,००० श्लोकों में विस्तृत हैं, जिन्हें तीन गुणों (सात्त्विक, राजसिक, तामसिक) में वर्गीकृत किया गया है: ब्रह्म, पद्म, विष्णु, शिव, लिंग, गरुड़, नारद, भागवत, अग्नि, स्कन्द, भविष्य, ब्रह्मवैवर्त, मार्कण्डेय, वामन, वराह, मत्स्य, कूर्म और ब्रह्माण्ड पुराण।',
+      sectionTitle: 'The 18 Mahapuranas — Canonical Classification & Overview',
+    },
+    {
+      id: 'puranas:sattva_vaishnava',
+      unitNumber: 'Sattvika / Vaishnava (6 Puranas)',
+      originalText:
+        '१. विष्णु पुराण (२३,००० श्लोक) — पराशर मुनि प्रणीत शुद्ध भक्ति एवं सृष्टि विवरण\n२. श्रीमद्भागवत पुराण (१८,००० श्लोक) — द्वादश स्कन्ध, कृष्ण लीला एवं नवधा भक्ति\n३. नारद पुराण (२५,००० श्लोक) — वेदाङ्ग, तीर्थ माहात्म्य एवं व्रतकथा\n४. गरुड़ पुराण (१९,००० श्लोक) — धर्म, नीति, मृत्यु पश्चात् आत्मा की गति एवं मोक्ष\n५. पद्म पुराण (५५,००० श्लोक) — पञ्च खण्ड, तीर्थ एवं भगवद्गीता माहात्म्य\n६. वराह पुराण (२४,००० श्लोक) — पृथ्वी उद्धार, वराह अवतार एवं वैष्णव आचार',
+      transliteration:
+        '1. Vishnu Purana (23,000 verses) — Sage Parashara; pure devotion & cosmogony\n2. Srimad Bhagavata (18,000 verses) — 12 Cantos, Krishna Lila & Navadha Bhakti\n3. Narada Purana (25,000 verses) — Vedangas, sacred pilgrimage sites & vratas\n4. Garuda Purana (19,000 verses) — Dharma, ethics, post-mortem soul transit & liberation\n5. Padma Purana (55,000 verses) — 5 sections, sacred tirthas & Gita Mahatmya\n6. Varaha Purana (24,000 verses) — Earth deliverance, Varaha Avatara & Vaishnava conduct',
+      translationEn:
+        'The Six Sattvika (Vaishnava) Mahapuranas emphasize the maintenance and preservation of cosmic order (Sthiti) through Lord Vishnu and His Avataras. They expound the philosophy of unalloyed devotion (Shuddha Bhakti), selfless surrender, virtuous conduct, and liberation.',
+      translationHi:
+        'छह सात्त्विक (वैष्णव) महापुराण भगवान विष्णु और उनके अवतारों के माध्यम से सृष्टि के संरक्षण, शुद्ध भक्ति, तीर्थ माहात्म्य और मोक्ष का प्रतिपादन करते हैं।',
+      sectionTitle: 'The 6 Sattvika Mahapuranas (Vaishnava Tradition)',
+    },
+    {
+      id: 'puranas:rajas_brahma',
+      unitNumber: 'Rajasa / Brahma (6 Puranas)',
+      originalText:
+        '१. ब्रह्म पुराण (१०,००० श्लोक) — आदि पुराण, सूर्य एवं तीर्थ वर्णन\n२. ब्रह्माण्ड पुराण (१२,००० श्लोक) — ललिता सहस्रनाम एवं अध्यात्म रामायण\n३. ब्रह्मवैवर्त पुराण (१८,००० श्लोक) — राधा-कृष्ण गोलोक लीला एवं प्रकृति रहस्य\n४. मार्कण्डेय पुराण (९,००० श्लोक) — देवी माहात्म्य (दुर्गा सप्तशती / चण्डी पाठ)\n५. भविष्य पुराण (१४,५०० श्लोक) — सूर्य उपासना, भविष्य कथन एवं युग धर्म\n६. वामन पुराण (१०,००० श्लोक) — वामन अवतार एवं त्रिविक्रम स्वरूप',
+      transliteration:
+        '1. Brahma Purana (10,000 verses) — Adi Purana; Surya worship & pilgrimage\n2. Brahmanda Purana (12,000 verses) — Lalita Sahasranama & Adhyatma Ramayana\n3. Brahmavaivarta Purana (18,000 verses) — Radha-Krishna Goloka pastimes & Prakriti\n4. Markandeya Purana (9,000 verses) — Devi Mahatmya (Durga Saptashati / Chandi Path)\n5. Bhavishya Purana (14,500 verses) — Solar worship, prophecies & Dharma of the Yugas\n6. Vamana Purana (10,000 verses) — Vamana Avatara & Trivikrama manifestation',
+      translationEn:
+        'The Six Rajasa (Brahma / Creation) Mahapuranas expound the cosmic manifestation (Srishti), genealogy of gods and kings, sacred mother goddesses (Devi Mahatmya in Markandeya Purana), divine hymns like Lalita Sahasranama (Brahmanda Purana), and ethical duty across cosmic eras.',
+      translationHi:
+        'छह राजसिक महापुराण सृष्टि-रचना, देवी माहात्म्य (मार्कण्डेय पुराण), ललिता सहस्रनाम (ब्रह्माण्ड पुराण), सूर्य उपासना और युगधर्म का वर्णन करते हैं।',
+      sectionTitle: 'The 6 Rajasa Mahapuranas (Brahma / Creation & Shakta Tradition)',
+    },
+    {
+      id: 'puranas:tamas_shaiva',
+      unitNumber: 'Tamasa / Shaiva (6 Puranas)',
+      originalText:
+        '१. शिव पुराण (२४,००० श्लोक) — रुद्र संहिता, लिंगोद्भव एवं शिव तत्त्व\n२. लिंग पुराण (११,००० श्लोक) — लिंगोपासना एवं सदाशिव स्वरूप\n३. स्कन्द पुराण (८१,१०० श्लोक) — सर्वाधिक विस्तृत महापुराण, काशी खण्ड एवं केदार खण्ड\n४. अग्नि पुराण (१५,४०० श्लोक) — ज्ञान-विज्ञान, आयुर्वेद, धनुर्वेद एवं योग का विश्वकोश\n५. मत्स्य पुराण (१४,००० श्लोक) — मत्स्य अवतार, मनु-संवाद एवं वास्तु शास्त्र\n६. कूर्म पुराण (१७,००० श्लोक) — ईश्वर गीता एवं कूर्म अवतार रहस्य',
+      transliteration:
+        '1. Shiva Purana (24,000 verses) — Rudra Samhita, Lingodbhava & Shiva tattva\n2. Linga Purana (11,000 verses) — Linga worship & formless Sadasiva\n3. Skanda Purana (81,100 verses) — Longest Mahapurana; Kashi Khanda & Kedara Khanda\n4. Agni Purana (15,400 verses) — Encyclopedia of Ayurveda, Dhanurveda & Yoga\n5. Matsya Purana (14,000 verses) — Matsya Avatara, Manu dialogue & Vastu Shastra\n6. Kurma Purana (17,000 verses) — Ishvara Gita & Kurma Avatara wisdom',
+      translationEn:
+        'The Six Tamasa (Shaiva / Transformation) Mahapuranas focus on cosmic dissolution, transformation, ascetic wisdom, and the non-dual realization of Lord Shiva. Skanda Purana is the most voluminous (over 81,000 verses), while Agni Purana serves as an ancient Sanskrit encyclopedia of arts, sciences, medicine, and temple architecture.',
+      translationHi:
+        'छह तामसिक (शैव) महापुराण लय, ध्यान, शिव-तत्त्व, काशी खण्ड (स्कन्द पुराण) और ज्ञान-विज्ञान के विश्वकोश (अग्नि पुराण) का प्रतिपादन करते हैं।',
+      sectionTitle: 'The 6 Tamasa Mahapuranas (Shaiva & Encyclopedic Tradition)',
     },
     {
       id: 'bhagavata:gopi_gita_1',
@@ -367,6 +610,45 @@ export const HINDUISM_TEXT_DATA: Record<string, HinduismVerseUnit[]> = {
       translationHi:
         'आपकी लीला-कथामृत संतप्त हृदयों को जीवन देने वाली है, कवियों और ज्ञानी पुरुषों द्वारा प्रशंसित है, पापों को हरने वाली और सुनते ही परम मंगल प्रदान करने वाली है। इस पृथ्वी पर जो आपके गुणगान का प्रचार करते हैं, वे ही सबसे बड़े दानी हैं।',
       sectionTitle: 'Shrimad Bhagavata Purana — Tava Kathamritam (The Nectar of Divine Pastimes)',
+    },
+    {
+      id: 'vishnu_purana:dhruva_stuti',
+      unitNumber: 'Vishnu Purana 1.12 (Dhruva Stuti)',
+      originalText:
+        'शान्तं सर्वगतं सूक्ष्मं परं ज्योतिर्मयं शिवम् ।\nअव्ययं व्योमसंकाशं परमात्मानमव्ययम् ॥\nनमामि तमहं देवं सर्वात्मानं सनातनम् ।\nयस्मात्सर्वमिदं जातं यस्मिंश्च प्रलयं गताः ॥',
+      transliteration:
+        'śāntaṁ sarvagataṁ sūkṣmaṁ paraṁ jyotirmayaṁ śivam |\navyayaṁ vyomasaṅkāśaṁ paramātmānamavyayam ||\nnamāmi tamahaṁ devaṁ sarvātmānaṁ sanātanam |\nyasmātsarvamidaṁ jātaṁ yasmiṁśca pralayaṁ gatāḥ ||',
+      translationEn:
+        'Dhruva\'s prayer to Lord Vishnu (Vishnu Purana 1.12): "I bow to that Supreme Divine Person, peaceful, all-pervading, subtle, luminous, auspicious, imperishable, like ethereal space, the eternal Soul of all beings—from whom this entire universe is born and into whom it dissolves."',
+      translationHi:
+        'ध्रुव की विष्णु स्तुति (विष्णु पुराण १.१२): "मैं उन शांत, सर्वव्यापी, सूक्ष्म, परम ज्योतिर्मय, कल्याणकारी, अविनाशी, आकाश के समान व्यापक, सनातन परमात्मा को प्रणाम करता हूँ, जिनसे यह सारा संसार उत्पन्न हुआ है और जिनमें सब लीन हो जाते हैं।"',
+      sectionTitle: 'Vishnu Purana 1.12 — Dhruva Stuti (Praise of the All-Pervading Lord)',
+    },
+    {
+      id: 'markandeya:devi_mahatmya',
+      unitNumber: 'Markandeya Purana 81.1, 81.55 (Devi Mahatmya)',
+      originalText:
+        'ॐ सावर्णिः सूर्यतनयो यो मनुः कथ्यतेऽष्टमः ।\nनिशामय तदुत्पत्तिं विस्तराद् गदतो मम ॥\nज्ञानिनामपि चेतांसि देवी भगवती हि सा ।\nबलादाकृष्य मोहाय महामाया प्रयच्छति ॥',
+      transliteration:
+        'oṁ sāvarṇiḥ sūryatanayo yo manuḥ kathyate\'ṣṭamaḥ |\nniśāmaya tadutpattiṁ vistarād gadato mama ||\njñānināmapi cetāṁsi devī bhagavatī hi sā |\nbalādākṛṣya mohāya mahāmāyā prayacchati ||',
+      translationEn:
+        'Markandeya Purana (Devi Mahatmya 81.1, 81.55): "Savarṇi, son of Surya, is proclaimed the eighth Manu; hear from me the detailed account of his origin. That Divine Goddess, Mahamaya, forcibly draws even the minds of the wise into the cosmic play of illusion and reveals the path of supreme liberation."',
+      translationHi:
+        'मार्कण्डेय पुराण (देवी माहात्म्य / दुर्गा सप्तशती ८१.१, ८१.५५): "सूर्यपुत्र सावर्णि जो आठवें मनु कहे जाते हैं, उनकी उत्पत्ति की कथा विस्तारपूर्वक सुनो। वे भगवती महामाया ज्ञानियों के चित्त को भी बलपूर्वक खींचकर मोह में डाल देती हैं तथा वही मोक्ष प्रदान करने वाली हैं।"',
+      sectionTitle: 'Markandeya Purana — Devi Mahatmya / Chandi Path Invocation',
+    },
+    {
+      id: 'shiva_purana:rudra_samhita',
+      unitNumber: 'Shiva Purana (Rudra Samhita 1.1.1–2)',
+      originalText:
+        'निष्प्रपञ्चाय शान्ताय निर्विकल्पाय वेधसे ।\nसच्चिदानन्दरूपाय नमः श्रीशंकराय च ॥\nयतः प्रवृत्तमेतद्धि जगत् स्थावरजङ्गमम् ।\nतं नमामि परं देवं शंकरं शूलपाणिनम् ॥',
+      transliteration:
+        'niṣprapañcāya śāntāya nirvikalpāya vedhase |\nsaccidānandarūpāya namaḥ śrīśaṅkarāya ca ||\nyataḥ pravṛttametaddhi jagat sthāvarajaṅgamam |\ntaṁ namāmi paraṁ devaṁ śaṅkaraṁ śūlapāṇinam ||',
+      translationEn:
+        'Shiva Purana (Rudra Samhita 1.1.1–2): "Salutations to Sri Shankara, who is beyond worldly phenomena, peaceful, free of duality, the Supreme Creator, whose nature is Existence, Consciousness, and Absolute Bliss. From whom this entire animate and inanimate universe has emanated—to that Supreme God, Lord Shiva, I bow in reverence."',
+      translationHi:
+        'शिव पुराण (रुद्र संहिता १.१.१–२): "प्रपंच से रहित, शांत, निर्विकल्प, विधाता और सच्चिदानन्द स्वरूप श्रीशंकर को प्रणाम है। जिनसे इस समस्त चर-अचर जगत की प्रवृत्ति हुई है, उन त्रिशूलधारी देवाधिदेव शंकर को मैं प्रणाम करता हूँ।"',
+      sectionTitle: 'Shiva Purana (Rudra Samhita 1.1.1–2) — Invocatory Mangalacharana',
     },
   ],
 

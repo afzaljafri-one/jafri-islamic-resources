@@ -108,24 +108,24 @@ export const TRADITIONS_COVERAGE: Record<ReligionId, TraditionCoverageDetails> =
     nativeName: 'सनातन धर्म',
     canonicalMetadata: {
       status: 'COMPLETE',
-      summary: '18 Bhagavad Gita Adhyayas & 11 Collections',
-      details: 'Complete 18 Adhyayas (701 Shlokas) metadata of the Bhagavad Gita with Sanskrit titles, IAST transliteration, and thematic summaries. 11 extended canonical collections metadata (Vedas, Upanishads, Ramayana, Puranas, Aartis, Stotras).',
+      summary: '18 Bhagavad Gita Adhyayas & 11 Canonical Collections',
+      details: 'Complete 18 Adhyayas (701 Shlokas) metadata of the Bhagavad Gita with Sanskrit titles, IAST transliteration, and thematic summaries. 11 extended canonical collections metadata covering the Four Vedas, Ten Principal Upanishads with Four Mahavakyas, Valmiki Ramayana (all Seven Kandas), Eighteen Mahapuranas Matrix, Chalisas, Aartis, and Stotras.',
     },
     textCorpus: {
       status: 'CURATED_SELECTIONS',
-      summary: 'Curated Selections & Dynamic Gita Verses',
-      details: 'Not a complete text corpus of all multi-volume epics or Vedas. Comprises 55 offline curated liturgical units plus dynamic API fetching for the Bhagavad Gita.',
+      summary: 'Curated Vedic & Epic Corpus + Dynamic Gita Verses',
+      details: 'Comprehensive canonical excerpts and foundational suktas across the Four Vedas, Seven Kandas Ramayana, Ten Principal Upanishads, and Eighteen Mahapuranas matrix (75+ offline curated units) plus dynamic multi-commentary retrieval for the Bhagavad Gita.',
     },
     curatedLiturgicalSelections: {
-      count: 55,
-      summary: '55 Foundational Liturgical Units (100% Bundled Offline)',
+      count: 75,
+      summary: '75+ Foundational Scriptural & Liturgical Units (100% Bundled Offline)',
       items: [
-        'Gayatri Mantra & Mahamrityunjaya Mantra (Vedic Sanskrit & IAST)',
-        'Purusha Suktam, Sri Suktam & Ganapati Atharvashirsha',
-        'Hanuman Chalisa (Complete 40 Chaupais & 3 Dohas)',
-        'Classical Aartis (Om Jai Jagdish Hare, Aarti Kunj Bihari Ki)',
-        'Sacred Stotras (Mahishasura Mardini, Shiva Tandava, Madhurashtakam)',
-        'Principal Upanishads selections (Isha, Mandukya, Katha, Chandogya)',
+        'Four Vedas: Rigveda (Agni, Gayatri, Nasadiya), Samaveda Saman, Shukla Yajurveda (Shiva Sankalpa, Shanti), Atharvaveda (Bhumi, Skambha)',
+        'Principal Upanishads (All 10 Mukhya Upanishads & 4 Mahavakyas: Isha, Kena, Katha, Prashna, Mundaka, Mandukya, Taittiriya, Aitareya, Chandogya, Brihadaranyaka)',
+        'Valmiki Ramayana: Complete Seven Kandas (Bala, Ayodhya, Aranya, Kishkindha, Sundara, Yuddha Aditya Hridaya, Uttara)',
+        'Eighteen Mahapuranas: Guna Matrix (Sattva, Rajas, Tamas) + Shrimad Bhagavata Gopi Gita, Vishnu Purana, Devi Mahatmya, Shiva Purana',
+        'Vedic Chanting Audio Units: Purusha Suktam (Rigveda 10.90), Sri Suktam (Khilani), Ganapati Suktam (2.23.1)',
+        'Classical Liturgy: Hanuman Chalisa complete, Aartis (Om Jai Jagdish Hare, Kunj Bihari Ki), and Stotras (Mahishasura Mardini, Shiva Tandava)',
       ],
     },
     networkDependentContent: {
@@ -137,12 +137,12 @@ export const TRADITIONS_COVERAGE: Record<ReligionId, TraditionCoverageDetails> =
     offlineAvailability: {
       status: 'FULL_OFFLINE',
       summary: 'Chapter 1 Bundled Offline + Chapters 1–18 Static & Cached Locally',
-      details: 'Full Chapter 1 (47 Shlokas) and all 55 liturgical units are embedded offline in the app bundle. All 18 chapters (701 Shlokas) are served from verified static dataset assets and permanently stored in IndexedDB upon retrieval.',
+      details: 'Full Chapter 1 (47 Shlokas) and all 75+ scriptural units are embedded offline in the app bundle. All 18 chapters (701 Shlokas) are served from verified static dataset assets and permanently stored in IndexedDB upon retrieval.',
     },
     missingOrExcluded: {
       summary: 'Excluded or Unavailable Material',
       items: [
-        'Complete Sanskrit text of 18 Mahapuranas, 4 Vedas (Samhitas, Brahmanas, Aranyakas), and Valmiki Ramayana (24,000 verses).',
+        'Complete Sanskrit text of 18 Mahapuranas (400,000 verses), 4 complete Vedic Samhitas, and unabridged Valmiki Ramayana (24,000 verses).',
         'Audio recitations for Gita verses are quarantined pending commercial-use clearance.',
       ],
     },
