@@ -15,6 +15,8 @@ import {
   HINDUISM_TEXT_DATA,
   HinduismVerseUnit,
 } from './hinduism/hinduismTextData';
+import { GITA_CHAPTER_1_OFFLINE } from './hinduism/gitaChapter1Data';
+import { cacheService } from '../cacheService';
 
 export { HINDUISM_COLLECTIONS, HINDUISM_TEXT_DATA };
 export type { HinduismCollectionMeta, HinduismVerseUnit };
@@ -95,10 +97,23 @@ const FOUNDATIONAL_GITA_VERSES: Record<string, GitaVerseData> = {
 };
 
 class HinduismProvider {
-  private verseCache: Record<string, GitaVerseData> = { ...FOUNDATIONAL_GITA_VERSES };
+  private verseCache: Record<string, GitaVerseData> = {};
   private chapterCache: Record<number, GitaVerseData[]> = {
-    1: [FOUNDATIONAL_GITA_VERSES['1:1'], FOUNDATIONAL_GITA_VERSES['1:2']],
+    1: GITA_CHAPTER_1_OFFLINE,
   };
+
+  constructor() {
+    // Seed Chapter 1 offline verses into cache
+    for (const v of GITA_CHAPTER_1_OFFLINE) {
+      this.verseCache[`1:${v.verse}`] = v;
+    }
+    // Seed foundational verses
+    for (const [key, val] of Object.entries(FOUNDATIONAL_GITA_VERSES)) {
+      if (!this.verseCache[key]) {
+        this.verseCache[key] = val;
+      }
+    }
+  }
 
   getCollections(): HinduismCollectionMeta[] {
     return HINDUISM_COLLECTIONS;
@@ -118,8 +133,48 @@ class HinduismProvider {
       return this.verseCache[key];
     }
 
+    // Tier 1: Check Chapter 1 offline bundle
+    if (chapter === 1) {
+      const offlineV = GITA_CHAPTER_1_OFFLINE.find((v) => v.verse === verse);
+      if (offlineV) {
+        this.verseCache[key] = offlineV;
+        return offlineV;
+      }
+    }
+
+    // Tier 2: Check if entire chapter is already cached
+    if (this.chapterCache[chapter]) {
+      const found = this.chapterCache[chapter].find((v) => v.verse === verse);
+      if (found) {
+        this.verseCache[key] = found;
+        return found;
+      }
+    }
+
+    // Tier 3: Fetch from local static JSON asset
     try {
-      const res = await fetch(`https://vedicscriptures.github.io/slok/${chapter}/${verse}`);
+      const baseUrl: string = (import.meta as any).env?.BASE_URL || '/';
+      const cleanBase = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
+      const staticUrl = `${cleanBase}data/gita/chapter_${chapter}.json`;
+      const res = await fetch(staticUrl);
+      if (res.ok) {
+        const data: GitaVerseData[] = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          this.chapterCache[chapter] = data;
+          data.forEach((v) => {
+            this.verseCache[`${chapter}:${v.verse}`] = v;
+          });
+          const match = data.find((v) => v.verse === verse);
+          if (match) return match;
+        }
+      }
+    } catch {
+      // Local static fetch unavailable, continue
+    }
+
+    // Tier 4: Fetch from live VedicScriptures API (with trailing slash!)
+    try {
+      const res = await fetch(`https://vedicscriptures.github.io/slok/${chapter}/${verse}/`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
 
@@ -146,25 +201,83 @@ class HinduismProvider {
   }
 
   async getChapterVerses(chapter: number): Promise<GitaVerseData[]> {
-    if (this.chapterCache[chapter]) {
+    const meta = GITA_CHAPTERS.find((c) => c.chapter_number === chapter) || GITA_CHAPTERS[0];
+    const expectedCount = meta.verses_count;
+
+    // Tier 1: In-Memory Chapter Cache (must have full verse count)
+    if (this.chapterCache[chapter] && this.chapterCache[chapter].length === expectedCount) {
       return this.chapterCache[chapter];
     }
 
-    const meta = GITA_CHAPTERS.find((c) => c.chapter_number === chapter) || GITA_CHAPTERS[0];
-    const promises: Promise<GitaVerseData | null>[] = [];
-
-    // Fetch complete canonical verses of the Adhyaya
-    const count = meta.verses_count;
-    for (let v = 1; v <= count; v++) {
-      promises.push(this.getVerse(chapter, v));
+    // Tier 2: Bundled Offline Chapter 1
+    if (chapter === 1 && GITA_CHAPTER_1_OFFLINE.length === expectedCount) {
+      this.chapterCache[1] = GITA_CHAPTER_1_OFFLINE;
+      return GITA_CHAPTER_1_OFFLINE;
     }
 
-    const results = await Promise.all(promises);
-    const verses = results.filter((v): v is GitaVerseData => v !== null);
-    if (verses.length > 0) {
-      this.chapterCache[chapter] = verses;
+    // Tier 3: Multi-Tier Persistent Cache (IndexedDB)
+    try {
+      const cached = await cacheService.getIndexedDB<GitaVerseData[]>(`gita_chapter_${chapter}`);
+      if (cached && Array.isArray(cached) && cached.length === expectedCount) {
+        this.chapterCache[chapter] = cached;
+        cached.forEach((v) => {
+          this.verseCache[`${chapter}:${v.verse}`] = v;
+        });
+        return cached;
+      }
+    } catch {
+      // Continue to local static tier
     }
-    return verses;
+
+    // Tier 4: Local Static JSON Bundle (/data/gita/chapter_${chapter}.json)
+    try {
+      const baseUrl: string = (import.meta as any).env?.BASE_URL || '/';
+      const cleanBase = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
+      const staticUrl = `${cleanBase}data/gita/chapter_${chapter}.json`;
+      const res = await fetch(staticUrl);
+      if (res.ok) {
+        const data: GitaVerseData[] = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          this.chapterCache[chapter] = data;
+          data.forEach((v) => {
+            this.verseCache[`${chapter}:${v.verse}`] = v;
+          });
+          await cacheService.setIndexedDB(`gita_chapter_${chapter}`, data);
+          return data;
+        }
+      }
+    } catch {
+      // Static fetch failed, fallback to upstream API
+    }
+
+    // Tier 5: Live Upstream VedicScriptures API (with trailing slash)
+    try {
+      const promises: Promise<GitaVerseData | null>[] = [];
+      for (let v = 1; v <= expectedCount; v++) {
+        promises.push(this.getVerse(chapter, v));
+      }
+      const results = await Promise.all(promises);
+      const verses = results.filter((v): v is GitaVerseData => v !== null);
+      if (verses.length > 0) {
+        this.chapterCache[chapter] = verses;
+        if (verses.length === expectedCount) {
+          await cacheService.setIndexedDB(`gita_chapter_${chapter}`, verses);
+        }
+        return verses;
+      }
+    } catch {
+      // Upstream failed
+    }
+
+    // Tier 6: Return any available foundational or cached verses
+    const partialVerses: GitaVerseData[] = [];
+    for (let v = 1; v <= expectedCount; v++) {
+      const cached = this.verseCache[`${chapter}:${v}`] || FOUNDATIONAL_GITA_VERSES[`${chapter}:${v}`];
+      if (cached) {
+        partialVerses.push(cached);
+      }
+    }
+    return partialVerses;
   }
 
   async search(query: string): Promise<SearchResultMatch[]> {

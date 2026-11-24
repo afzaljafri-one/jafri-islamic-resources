@@ -7,6 +7,7 @@
 import {
   SearchResultMatch,
 } from '../../platform/types';
+import { cacheService } from '../cacheService';
 
 export interface BibleBookMeta {
   bookid: number;
@@ -14,6 +15,75 @@ export interface BibleBookMeta {
   chronorder: number;
   chapters: number;
 }
+
+export const CANONICAL_BIBLE_BOOKS: BibleBookMeta[] = [
+  { bookid: 1, name: 'Genesis', chronorder: 1, chapters: 50 },
+  { bookid: 2, name: 'Exodus', chronorder: 2, chapters: 40 },
+  { bookid: 3, name: 'Leviticus', chronorder: 3, chapters: 27 },
+  { bookid: 4, name: 'Numbers', chronorder: 4, chapters: 36 },
+  { bookid: 5, name: 'Deuteronomy', chronorder: 5, chapters: 34 },
+  { bookid: 6, name: 'Joshua', chronorder: 6, chapters: 24 },
+  { bookid: 7, name: 'Judges', chronorder: 7, chapters: 21 },
+  { bookid: 8, name: 'Ruth', chronorder: 8, chapters: 4 },
+  { bookid: 9, name: '1 Samuel', chronorder: 9, chapters: 31 },
+  { bookid: 10, name: '2 Samuel', chronorder: 10, chapters: 24 },
+  { bookid: 11, name: '1 Kings', chronorder: 11, chapters: 22 },
+  { bookid: 12, name: '2 Kings', chronorder: 12, chapters: 25 },
+  { bookid: 13, name: '1 Chronicles', chronorder: 13, chapters: 29 },
+  { bookid: 14, name: '2 Chronicles', chronorder: 14, chapters: 36 },
+  { bookid: 15, name: 'Ezra', chronorder: 15, chapters: 10 },
+  { bookid: 16, name: 'Nehemiah', chronorder: 16, chapters: 13 },
+  { bookid: 17, name: 'Esther', chronorder: 17, chapters: 10 },
+  { bookid: 18, name: 'Job', chronorder: 18, chapters: 42 },
+  { bookid: 19, name: 'Psalms', chronorder: 19, chapters: 150 },
+  { bookid: 20, name: 'Proverbs', chronorder: 20, chapters: 31 },
+  { bookid: 21, name: 'Ecclesiastes', chronorder: 21, chapters: 12 },
+  { bookid: 22, name: 'Song of Solomon', chronorder: 22, chapters: 8 },
+  { bookid: 23, name: 'Isaiah', chronorder: 23, chapters: 66 },
+  { bookid: 24, name: 'Jeremiah', chronorder: 24, chapters: 52 },
+  { bookid: 25, name: 'Lamentations', chronorder: 25, chapters: 5 },
+  { bookid: 26, name: 'Ezekiel', chronorder: 26, chapters: 48 },
+  { bookid: 27, name: 'Daniel', chronorder: 27, chapters: 12 },
+  { bookid: 28, name: 'Hosea', chronorder: 28, chapters: 14 },
+  { bookid: 29, name: 'Joel', chronorder: 29, chapters: 3 },
+  { bookid: 30, name: 'Amos', chronorder: 30, chapters: 9 },
+  { bookid: 31, name: 'Obadiah', chronorder: 31, chapters: 1 },
+  { bookid: 32, name: 'Jonah', chronorder: 32, chapters: 4 },
+  { bookid: 33, name: 'Micah', chronorder: 33, chapters: 7 },
+  { bookid: 34, name: 'Nahum', chronorder: 34, chapters: 3 },
+  { bookid: 35, name: 'Habakkuk', chronorder: 35, chapters: 3 },
+  { bookid: 36, name: 'Zephaniah', chronorder: 36, chapters: 3 },
+  { bookid: 37, name: 'Haggai', chronorder: 37, chapters: 2 },
+  { bookid: 38, name: 'Zechariah', chronorder: 38, chapters: 14 },
+  { bookid: 39, name: 'Malachi', chronorder: 39, chapters: 4 },
+  { bookid: 40, name: 'Matthew', chronorder: 40, chapters: 28 },
+  { bookid: 41, name: 'Mark', chronorder: 41, chapters: 16 },
+  { bookid: 42, name: 'Luke', chronorder: 42, chapters: 24 },
+  { bookid: 43, name: 'John', chronorder: 43, chapters: 21 },
+  { bookid: 44, name: 'Acts', chronorder: 44, chapters: 28 },
+  { bookid: 45, name: 'Romans', chronorder: 45, chapters: 16 },
+  { bookid: 46, name: '1 Corinthians', chronorder: 46, chapters: 16 },
+  { bookid: 47, name: '2 Corinthians', chronorder: 47, chapters: 13 },
+  { bookid: 48, name: 'Galatians', chronorder: 48, chapters: 6 },
+  { bookid: 49, name: 'Ephesians', chronorder: 49, chapters: 6 },
+  { bookid: 50, name: 'Philippians', chronorder: 50, chapters: 4 },
+  { bookid: 51, name: 'Colossians', chronorder: 51, chapters: 4 },
+  { bookid: 52, name: '1 Thessalonians', chronorder: 52, chapters: 5 },
+  { bookid: 53, name: '2 Thessalonians', chronorder: 53, chapters: 3 },
+  { bookid: 54, name: '1 Timothy', chronorder: 54, chapters: 6 },
+  { bookid: 55, name: '2 Timothy', chronorder: 55, chapters: 4 },
+  { bookid: 56, name: 'Titus', chronorder: 56, chapters: 3 },
+  { bookid: 57, name: 'Philemon', chronorder: 57, chapters: 1 },
+  { bookid: 58, name: 'Hebrews', chronorder: 58, chapters: 13 },
+  { bookid: 59, name: 'James', chronorder: 59, chapters: 5 },
+  { bookid: 60, name: '1 Peter', chronorder: 60, chapters: 5 },
+  { bookid: 61, name: '2 Peter', chronorder: 61, chapters: 3 },
+  { bookid: 62, name: '1 John', chronorder: 62, chapters: 5 },
+  { bookid: 63, name: '2 John', chronorder: 63, chapters: 1 },
+  { bookid: 64, name: '3 John', chronorder: 64, chapters: 1 },
+  { bookid: 65, name: 'Jude', chronorder: 65, chapters: 1 },
+  { bookid: 66, name: 'Revelation', chronorder: 66, chapters: 22 },
+];
 
 export interface BollsVerseRaw {
   pk: number;
@@ -78,18 +148,9 @@ class ChristianityProvider {
       this.booksCache[translationId] = data;
       return data;
     } catch {
-      // Fallback foundational books list if network is offline
-      return [
-        { bookid: 1, name: 'Genesis', chronorder: 1, chapters: 50 },
-        { bookid: 2, name: 'Exodus', chronorder: 2, chapters: 40 },
-        { bookid: 19, name: 'Psalms', chronorder: 19, chapters: 150 },
-        { bookid: 40, name: 'Matthew', chronorder: 40, chapters: 28 },
-        { bookid: 43, name: 'John', chronorder: 43, chapters: 21 },
-        { bookid: 45, name: 'Romans', chronorder: 45, chapters: 16 },
-        { bookid: 48, name: 'Galatians', chronorder: 48, chapters: 6 },
-        { bookid: 49, name: 'Ephesians', chronorder: 49, chapters: 6 },
-        { bookid: 66, name: 'Revelation', chronorder: 66, chapters: 22 },
-      ];
+      // Complete 66-book Protestant Canon fallback if network is offline
+      this.booksCache[translationId] = CANONICAL_BIBLE_BOOKS;
+      return CANONICAL_BIBLE_BOOKS;
     }
   }
 
@@ -99,10 +160,24 @@ class ChristianityProvider {
     translationId: string = 'KJV'
   ): Promise<BollsVerseRaw[]> {
     const cacheKey = `${translationId}:${bookId}:${chapter}`;
+
+    // Tier 1: In-memory cache
     if (this.chaptersCache[cacheKey]) {
       return this.chaptersCache[cacheKey];
     }
 
+    // Tier 2: Persistent IndexedDB cache
+    try {
+      const cached = await cacheService.getIndexedDB<BollsVerseRaw[]>(`bible_${cacheKey}`);
+      if (cached && Array.isArray(cached) && cached.length > 0) {
+        this.chaptersCache[cacheKey] = cached;
+        return cached;
+      }
+    } catch {
+      // Continue to API fetch
+    }
+
+    // Tier 3: Live Bolls Life API
     try {
       const res = await fetch(
         `https://bolls.life/get-text/${translationId}/${bookId}/${chapter}/`
@@ -110,8 +185,17 @@ class ChristianityProvider {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data: BollsVerseRaw[] = await res.json();
       this.chaptersCache[cacheKey] = data;
+      await cacheService.setIndexedDB(`bible_${cacheKey}`, data);
       return data;
     } catch {
+      // Tier 4: Foundational Genesis 1:1-3 emergency offline fallback
+      if (bookId === 1 && chapter === 1) {
+        return [
+          { pk: 1, verse: 1, text: 'In the beginning God created the heaven and the earth.' },
+          { pk: 2, verse: 2, text: 'And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of God moved upon the face of the waters.' },
+          { pk: 3, verse: 3, text: 'And God said, Let there be light: and there was light.' },
+        ];
+      }
       return [];
     }
   }

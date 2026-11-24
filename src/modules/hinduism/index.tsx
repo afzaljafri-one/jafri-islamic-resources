@@ -264,7 +264,7 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
   );
 
   const isOfflineGitaVerse = (chapter: number, verse: number): boolean => {
-    return (chapter === 1 && (verse === 1 || verse === 2)) || (chapter === 2 && verse === 47);
+    return chapter === 1 || (chapter === 2 && verse === 47);
   };
   const [bookmarks, setBookmarks] = useState<UniversalBookmark[]>(() =>
     platformStorageService.getBookmarks('hinduism')
@@ -944,9 +944,8 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
               <div className="flex items-center space-x-2 text-slate-300">
                 <span className="font-semibold text-gold-400">Availability:</span>
                 <span>
-                  {currentChapterNum === 1 && 'Shlokas 1.1 & 1.2 are bundled locally offline. Verses 1.3–1.47 are retrieved dynamically from VedicScriptures API.'}
-                  {currentChapterNum === 2 && 'Shloka 2.47 is bundled locally offline. Remaining Shlokas are retrieved dynamically from VedicScriptures API.'}
-                  {currentChapterNum > 2 && `Chapter ${currentChapterNum} has no offline-bundled verses. All ${currentChapter.verses_count} Shlokas are fetched dynamically via VedicScriptures API.`}
+                  {currentChapterNum === 1 && 'Chapter 1 (all 47 Shlokas) is bundled locally offline in the application bundle. Zero external network dependency.'}
+                  {currentChapterNum > 1 && `Chapter ${currentChapterNum} (${currentChapter.verses_count} Shlokas) is loaded from the verified static dataset with multi-tier IndexedDB caching & VedicScriptures fallback.`}
                 </span>
               </div>
               <button
@@ -1004,7 +1003,7 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
                     <span>Scripture Architecture Notice</span>
                   </div>
                   <p>
-                    Chapter {currentChapterNum} has no offline-bundled verses. Only <strong>Shlokas 1.1, 1.2, and 2.47</strong> are stored locally offline in the application. All other 698 verses require active internet connectivity to stream.
+                    Unable to load Chapter {currentChapterNum} ({currentChapter.verses_count} Shlokas). The application queries verified static assets, IndexedDB cache, and VedicScriptures API with automatic multi-tier fallback. Check network connectivity or return to Chapter 1 (100% offline bundle).
                   </p>
                 </div>
                 <div className="flex flex-wrap items-center justify-center gap-2 pt-2">

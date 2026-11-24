@@ -5,6 +5,7 @@
 // ==============================================================================
 
 import { SearchResultMatch } from '../../platform/types';
+import { cacheService } from '../cacheService';
 
 export interface TanakhBookMeta {
   id: string; // e.g. 'Genesis'
@@ -55,6 +56,16 @@ class JudaismProvider {
     }
 
     try {
+      const cached = await cacheService.getIndexedDB<TanakhVerseData[]>(`tanakh_${cacheKey}`);
+      if (cached && Array.isArray(cached) && cached.length > 0) {
+        this.chapterCache[cacheKey] = cached;
+        return cached;
+      }
+    } catch {
+      // Continue to API fetch
+    }
+
+    try {
       const res = await fetch(
         `https://www.sefaria.org/api/v3/texts/${bookId}.${chapter}?version=hebrew&version=english`
       );
@@ -80,6 +91,7 @@ class JudaismProvider {
       }
 
       this.chapterCache[cacheKey] = verses;
+      await cacheService.setIndexedDB(`tanakh_${cacheKey}`, verses);
       return verses;
     } catch {
       // Fallback offline verses for Genesis 1

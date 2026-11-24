@@ -5,6 +5,7 @@
 // ==============================================================================
 
 import { SearchResultMatch } from '../../platform/types';
+import { cacheService } from '../cacheService';
 
 export interface GurbaniLine {
   verseId: number;
@@ -83,6 +84,17 @@ class SikhismProvider {
       return this.angCache[pageNo];
     }
 
+    // Tier 2: Persistent IndexedDB cache
+    try {
+      const cached = await cacheService.getIndexedDB<AngData>(`sikh_ang_${pageNo}`);
+      if (cached && cached.lines && cached.lines.length > 0) {
+        this.angCache[pageNo] = cached;
+        return cached;
+      }
+    } catch {
+      // Continue to API fetch
+    }
+
     try {
       const res = await fetch(`https://api.banidb.com/v2/angs/${pageNo}`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -113,6 +125,7 @@ class SikhismProvider {
       };
 
       this.angCache[pageNo] = angData;
+      await cacheService.setIndexedDB(`sikh_ang_${pageNo}`, angData);
       return angData;
     } catch {
       // Fallback to GurbaniNow API
@@ -142,6 +155,7 @@ class SikhismProvider {
         };
 
         this.angCache[pageNo] = angData;
+        await cacheService.setIndexedDB(`sikh_ang_${pageNo}`, angData);
         return angData;
       } catch {
         // Return structured offline placeholder for Ang 1 if totally offline
