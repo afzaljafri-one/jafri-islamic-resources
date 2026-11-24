@@ -264,8 +264,8 @@ async function runLiveTest() {
 
     results.checks.push({
       test: 'Live Coverage Transparency Modal Audit (Sikhism Angs 1–13)',
-      mentionsAngs1To13,
-      mentionsGurbaniNow,
+      modalMentionsAngs1To13,
+      modalMentionsGurbaniNow,
       status: modalMentionsAngs1To13 && modalMentionsGurbaniNow ? 'PASS' : 'FAIL',
     });
 

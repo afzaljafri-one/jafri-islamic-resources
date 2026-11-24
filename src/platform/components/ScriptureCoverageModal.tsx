@@ -23,6 +23,7 @@ export interface TraditionCoverageDetails {
   religionId: ReligionId;
   name: string;
   nativeName: string;
+  overallStatus: 'COMPLETE' | 'PARTIAL' | 'PLANNED' | 'UNAVAILABLE';
   canonicalMetadata: {
     status: 'COMPLETE' | 'PARTIAL';
     summary: string;
@@ -60,6 +61,7 @@ export const TRADITIONS_COVERAGE: Record<ReligionId, TraditionCoverageDetails> =
     religionId: 'islam',
     name: 'Islam',
     nativeName: 'الإسلام',
+    overallStatus: 'COMPLETE',
     canonicalMetadata: {
       status: 'COMPLETE',
       summary: 'All 114 Surahs & 30 Juz',
@@ -106,6 +108,7 @@ export const TRADITIONS_COVERAGE: Record<ReligionId, TraditionCoverageDetails> =
     religionId: 'hinduism',
     name: 'Hinduism',
     nativeName: 'सनातन धर्म',
+    overallStatus: 'PARTIAL',
     canonicalMetadata: {
       status: 'COMPLETE',
       summary: '18 Bhagavad Gita Adhyayas & 11 Canonical Collections',
@@ -152,6 +155,7 @@ export const TRADITIONS_COVERAGE: Record<ReligionId, TraditionCoverageDetails> =
     religionId: 'christianity',
     name: 'Christianity',
     nativeName: 'Christianity',
+    overallStatus: 'PARTIAL',
     canonicalMetadata: {
       status: 'COMPLETE',
       summary: '66 Canonical Books (Protestant Canon)',
@@ -199,6 +203,7 @@ export const TRADITIONS_COVERAGE: Record<ReligionId, TraditionCoverageDetails> =
     religionId: 'judaism',
     name: 'Judaism',
     nativeName: 'יהדות',
+    overallStatus: 'PARTIAL',
     canonicalMetadata: {
       status: 'COMPLETE',
       summary: 'All 24 Canonical Tanakh Books (39 Scrolls & 929 Chapters)',
@@ -241,6 +246,7 @@ export const TRADITIONS_COVERAGE: Record<ReligionId, TraditionCoverageDetails> =
     religionId: 'sikhism',
     name: 'Sikhism',
     nativeName: 'ਸਿੱਖੀ',
+    overallStatus: 'PARTIAL',
     canonicalMetadata: {
       status: 'COMPLETE',
       summary: '1,430 Ang Navigation Range (SGGS)',
@@ -286,6 +292,7 @@ export const TRADITIONS_COVERAGE: Record<ReligionId, TraditionCoverageDetails> =
     religionId: 'buddhism',
     name: 'Buddhism',
     nativeName: 'धर्म / बुद्ध सासन',
+    overallStatus: 'PARTIAL',
     canonicalMetadata: {
       status: 'COMPLETE',
       summary: '9 Canonical Collections & Pali Tipitaka Framework',
@@ -332,6 +339,7 @@ export const TRADITIONS_COVERAGE: Record<ReligionId, TraditionCoverageDetails> =
     religionId: 'jainism',
     name: 'Jainism',
     nativeName: 'जैन धर्म / जिणसासण',
+    overallStatus: 'PARTIAL',
     canonicalMetadata: {
       status: 'COMPLETE',
       summary: '10 Canonical Collections & 45 Agamas Framework',
@@ -461,6 +469,19 @@ export const ScriptureCoverageModal: React.FC<ScriptureCoverageModalProps> = ({
               </div>
             </div>
             <div className="flex flex-wrap items-center gap-2">
+              <span
+                className={`px-3 py-1 rounded-full text-xs font-bold border tracking-wider uppercase ${
+                  coverage.overallStatus === 'COMPLETE'
+                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                    : coverage.overallStatus === 'PARTIAL'
+                    ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                    : coverage.overallStatus === 'PLANNED'
+                    ? 'bg-sky-500/20 text-sky-300 border-sky-500/40'
+                    : 'bg-rose-500/20 text-rose-300 border-rose-500/40'
+                }`}
+              >
+                STATUS: {coverage.overallStatus}
+              </span>
               <span
                 className={`px-3 py-1 rounded-full text-xs font-bold border ${
                   coverage.offlineAvailability.status === 'FULL_OFFLINE'
