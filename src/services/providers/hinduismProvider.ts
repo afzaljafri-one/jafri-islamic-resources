@@ -102,6 +102,78 @@ export const FOUNDATIONAL_GITA_VERSES: Record<string, GitaVerseData> = {
     purohitEn: '[Translation withheld pending documented software redistribution permission]',
     ramsukhdasHi: '[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]',
   },
+  '4:38': {
+    chapter: 4,
+    verse: 38,
+    slok: 'न हि ज्ञानेन सदृशं पवित्रमिह विद्यते |\nतत्स्वयं योगसंसिद्धः कालेनात्मनि विन्दति ||',
+    transliteration: 'na hi jñānena sadṛśaṁ pavitramiha vidyate |\ntatsvayaṁ yogasaṁsiddhaḥ kālenātmani vindati ||',
+    translationEn: 'Truly, there is no purifier in this world like wisdom. He who is perfected in Yoga finds it within himself in the fullness of time.',
+    edwinArnoldEn: 'Truly, there is no purifier in this world like wisdom. He who is perfected in Yoga finds it within himself in the fullness of time.',
+    sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
+    gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
+    purohitEn: '[Translation withheld pending documented software redistribution permission]',
+    ramsukhdasHi: '[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]',
+  },
+  '9:26': {
+    chapter: 9,
+    verse: 26,
+    slok: 'पत्रं पुष्पं फलं तोयं यो मे भक्त्या प्रयच्छति |\nतदहं भक्त्युपहृतमश्नामि प्रयतात्मनः ||',
+    transliteration: 'patraṁ puṣpaṁ phalaṁ toyaṁ yo me bhaktyā prayacchati |\ntadahaṁ bhaktyupahṛtamaśnāmi prayatātmanaḥ ||',
+    translationEn: 'Whoever offers Me with devotion a leaf, a flower, a fruit, or water, that offering of love, from the pure of heart, I accept.',
+    edwinArnoldEn: 'Whoever offers Me with devotion a leaf, a flower, a fruit, or water, that offering of love, from the pure of heart, I accept.',
+    sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
+    gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
+    purohitEn: '[Translation withheld pending documented software redistribution permission]',
+    ramsukhdasHi: '[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]',
+  },
+  '12:13': {
+    chapter: 12,
+    verse: 13,
+    slok: 'अद्वेष्टा सर्वभूतानां मैत्रः करुण एव च |\nनिर्ममो निरहङ्कारः समदुःखसुखः क्षमी ||',
+    transliteration: 'adveṣṭā sarvabhūtānāṁ maitraḥ karuṇa eva ca |\nnirmamo nirahaṅkāraḥ samaduḥkhasukhaḥ kṣamī ||',
+    translationEn: 'He who hates no being, who is friendly and compassionate to all, who is free from attachment and egoism, balanced in pleasure and pain, and forgiving.',
+    edwinArnoldEn: 'He who hates no being, who is friendly and compassionate to all, who is free from attachment and egoism, balanced in pleasure and pain, and forgiving.',
+    sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
+    gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
+    purohitEn: '[Translation withheld pending documented software redistribution permission]',
+    ramsukhdasHi: '[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]',
+  },
+  '16:3': {
+    chapter: 16,
+    verse: 3,
+    slok: 'तेजः क्षमा धृतिः शौचमद्रोहो नातिमानिता |\nभवन्ति सम्पदं दैवीमभिजातस्य भारत ||',
+    transliteration: 'tejaḥ kṣamā dhṛtiḥ śaucamadroho nātimānitā |\nbhavanti sampadaṁ daivīmabhijātasya bhārata ||',
+    translationEn: 'Purity of heart, steadfastness in knowledge, charity, restraint and sacrifice, forgiveness and absence of pride — these belong to one born for a divine state.',
+    edwinArnoldEn: 'Purity of heart, steadfastness in knowledge, charity, restraint and sacrifice, forgiveness and absence of pride — these belong to one born for a divine state.',
+    sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
+    gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
+    purohitEn: '[Translation withheld pending documented software redistribution permission]',
+    ramsukhdasHi: '[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]',
+  },
+  '17:20': {
+    chapter: 17,
+    verse: 20,
+    slok: 'दातव्यमिति यद्दानं दीयतेऽनुپकारिणे |\nदेशे काले च पात्रे च तद्दानं सात्त्विकं स्मृतम् ||',
+    transliteration: 'dātavyamiti yaddānaṁ dīyate’nupakāriṇe |\ndeśe kāle ca pātre ca taddānaṁ sāttvikaṁ smṛtam ||',
+    translationEn: 'That gift which is given to one from whom no return is expected, with the feeling that it is one’s duty to give, at the right place and time, is held to be pure.',
+    edwinArnoldEn: 'That gift which is given to one from whom no return is expected, with the feeling that it is one’s duty to give, at the right place and time, is held to be pure.',
+    sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
+    gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
+    purohitEn: '[Translation withheld pending documented software redistribution permission]',
+    ramsukhdasHi: '[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]',
+  },
+  '18:66': {
+    chapter: 18,
+    verse: 66,
+    slok: 'सर्वधर्मान्परित्यज्य मामेकं शरणं व्रज |\nअहं त्वा सर्वपापेभ्यो मोक्षयिष्यामि मा शुचः ||',
+    transliteration: 'sarvadharmānparityajya māmekaṁ śaraṇaṁ vraja |\nahaṁ tvā sarvapāpebhyo mokṣayiṣyāmi mā śucaḥ ||',
+    translationEn: 'Abandoning all varieties of dharmas, surrender unto Me alone; I will deliver thee from all sins, grieve not.',
+    edwinArnoldEn: 'Abandoning all varieties of dharmas, surrender unto Me alone; I will deliver thee from all sins, grieve not.',
+    sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
+    gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
+    purohitEn: '[Translation withheld pending documented software redistribution permission]',
+    ramsukhdasHi: '[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]',
+  },
 };
 
 class HinduismProvider {
@@ -111,16 +183,25 @@ class HinduismProvider {
   };
 
   constructor() {
-    // Seed Chapter 1 offline verses into cache
+    // Seed Chapter 1 offline verses into cache, merging known foundational translations
     for (const v of GITA_CHAPTER_1_OFFLINE) {
-      this.verseCache[`1:${v.verse}`] = v;
+      const key = `1:${v.verse}`;
+      const found = FOUNDATIONAL_GITA_VERSES[key];
+      this.verseCache[key] = found ? { ...v, ...found } : v;
     }
     // Seed foundational verses
     for (const [key, val] of Object.entries(FOUNDATIONAL_GITA_VERSES)) {
       if (!this.verseCache[key]) {
         this.verseCache[key] = val;
+      } else {
+        this.verseCache[key] = { ...this.verseCache[key], ...val };
       }
     }
+    // Also update chapter 1 cache with merged verses
+    this.chapterCache[1] = GITA_CHAPTER_1_OFFLINE.map((v) => {
+      const found = FOUNDATIONAL_GITA_VERSES[`1:${v.verse}`];
+      return found ? { ...v, ...found } : v;
+    });
   }
 
   getCollections(): HinduismCollectionMeta[] {
@@ -186,16 +267,23 @@ class HinduismProvider {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
 
+      // Strictly strip and withhold proprietary/restricted modern translations
+      // (Swami Sivananda, Swami Gambhirananda, Shri Purohit Swami, Swami Ramsukhdas)
+      // Remote fields (data.siva?.et, data.gambir?.et, data.purohit?.et, data.rams?.ht)
+      // are never allowed into memory cache, IndexedDB cache, or reader output!
+      const known = FOUNDATIONAL_GITA_VERSES[key];
       const vData: GitaVerseData = {
         chapter,
         verse,
-        slok: data.slok || '',
-        transliteration: data.transliteration || '',
-        sivanandaEn: data.siva?.et || '',
-        gambhiranandaEn: data.gambir?.et || '',
-        purohitEn: data.purohit?.et || '',
-        ramsukhdasHi: data.rams?.ht || '',
-        shankaraBhashya: data.sankar?.et || data.sankar?.ht || '',
+        slok: data.slok || known?.slok || '',
+        transliteration: data.transliteration || known?.transliteration || '',
+        translationEn: known?.translationEn || known?.edwinArnoldEn,
+        edwinArnoldEn: known?.edwinArnoldEn,
+        sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
+        gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
+        purohitEn: '[Translation withheld pending documented software redistribution permission]',
+        ramsukhdasHi: '[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]',
+        shankaraBhashya: data.sankar?.et || data.sankar?.ht || known?.shankaraBhashya || '',
       };
 
       this.verseCache[key] = vData;

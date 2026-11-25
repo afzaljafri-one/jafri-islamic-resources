@@ -98,6 +98,9 @@ export interface UniversalSearchResult {
   primaryTranslationRights?: ComponentRightsRecord;
   secondaryTranslationRights?: ComponentRightsRecord;
   transliterationRights?: ComponentRightsRecord;
+
+  /** Phase 6.3.5.1: Mandatory Thematic Virtues Disclaimer */
+  thematicDisclaimer?: string;
 }
 
 /**

@@ -48,6 +48,9 @@ jobs:
       - name: Run TypeScript Type-Check (tsc -b)
         run: npx tsc -b
 
+      - name: Generate and Validate Reconciled Corpus Inventory
+        run: node scripts/generate_phase6_3_5_corpus_inventory.cjs
+
       - name: Run Phase 6.3.4 Data & Rights Gate Validator
         run: node test_phase6_3_4_rights_gate.cjs
 
@@ -56,8 +59,16 @@ jobs:
         env:
           VITE_BASE_PATH: '/jafri-islamic-resources/'
 
+      - name: Scan Production Bundle for Restricted Strings
+        run: node scripts/scan_production_bundle_rights.cjs
+
       - name: Run Phase 6.3.5 Final Rights Enforcement & Corpus Reconciliation Gate
         run: node test_phase6_3_5_data_rights_gate.cjs
+
+      - name: Run Phase 6.3.5.1 Browser Acceptance Suite
+        run: node --experimental-websocket test_phase6_3_5_1_acceptance.cjs
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
 
       # upload-pages-artifact creates the static tarball without needing configure-pages
       - name: Upload Pages Artifact
@@ -90,3 +101,19 @@ jobs:
       - name: Publish Artifact to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Live Smoke Test Verification
+        run: |
+          echo "Verifying live production deployment on GitHub Pages..."
+          for i in {1..6}; do
+            echo "Checking deployment attempt $i/6..."
+            PAGE_HTML=$(curl -f -s -L https://afzaljafri-one.github.io/jafri-islamic-resources/ || true)
+            if echo "$PAGE_HTML" | grep -q "Jafri Sacred Library"; then
+              echo "✓ Live smoke test passed: Production site is serving current release."
+              exit 0
+            fi
+            echo "Waiting 10s for CDN edge cache propagation..."
+            sleep 10
+          done
+          echo "✗ Live smoke test failed to verify production site within timeout."
+          exit 1

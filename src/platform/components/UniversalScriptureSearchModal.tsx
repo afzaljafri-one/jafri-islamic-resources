@@ -723,6 +723,25 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                             </span>
                           );
                         })()}
+
+                        {/* Secondary Translation Rights Badge (Phase 6.3.5.1) */}
+                        {result.secondaryTranslationRights && (
+                          <span
+                            data-testid="secondary-rights-badge"
+                            className={`text-[10px] font-mono px-2 py-0.2 rounded-full border ${
+                              result.secondaryTranslationRights.rightsStatus === 'PERMISSION_REQUIRED' || !result.secondaryTranslationRights.isAvailable
+                                ? 'bg-rose-500/10 text-rose-300 border-rose-500/30 font-semibold'
+                                : result.secondaryTranslationRights.rightsStatus === 'RESTRICTED'
+                                ? 'bg-amber-500/10 text-amber-300 border-amber-500/30'
+                                : 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30'
+                            }`}
+                            title={`Secondary Translation: ${result.secondaryTranslationRights.componentName} • Rights Holder: ${result.secondaryTranslationRights.rightsHolderOrPublisher || 'Unspecified'} • Status: ${result.secondaryTranslationRights.rightsStatus}`}
+                          >
+                            {result.secondaryTranslationRights.rightsStatus === 'PERMISSION_REQUIRED' || !result.secondaryTranslationRights.isAvailable
+                              ? 'Secondary: Permission Required'
+                              : `Secondary: ${result.secondaryTranslationRights.exactLicenceIdentifier}`}
+                          </span>
+                        )}
                       </div>
 
                       {/* Match Type Badge */}
@@ -741,9 +760,11 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                       {result.matchType === 'thematic_result' && (
                         <p
                           data-testid="thematic-result-note"
+                          title="Thematic discovery — contextual spiritual reflection, not direct scriptural equivalence."
                           className="text-[11px] text-purple-300/90 font-serif italic mt-0.5"
                         >
-                          Thematic discovery — contextual spiritual reflection, not direct scriptural equivalence.
+                          {result.thematicDisclaimer ||
+                            "This passage has been selected solely for its thematic relevance to this virtue. Inclusion does not imply any theological equivalence, syncretism, or doctrinal endorsement between traditions."}
                         </p>
                       )}
                     </div>
@@ -826,14 +847,47 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                           </p>
                         );
                       })()}
-                      {result.secondaryTranslationText && (
-                        <p
-                          dir="rtl"
-                          className="text-xs text-slate-400 font-urdu leading-relaxed pt-1 border-t border-slate-850"
-                        >
-                          {result.secondaryTranslationText}
-                        </p>
-                      )}
+                      {(() => {
+                        if (!result.secondaryTranslationText && !result.secondaryTranslationRights) {
+                          return null;
+                        }
+                        const secRights = result.secondaryTranslationRights;
+                        const isWithheld =
+                          secRights?.isAvailable === false ||
+                          secRights?.rightsStatus === 'PERMISSION_REQUIRED' ||
+                          (secRights && secRights.rightsStatus !== 'VERIFIED' && secRights.rightsStatus !== 'RESTRICTED') ||
+                          result.secondaryTranslationText?.includes('موقوف') ||
+                          result.secondaryTranslationText?.includes('withheld') ||
+                          result.secondaryTranslationText?.includes('स्थगित');
+
+                        if (isWithheld) {
+                          return (
+                            <div
+                              data-testid="secondary-translation-withheld-notice"
+                              className="p-2.5 rounded-lg bg-rose-950/20 border border-rose-500/30 space-y-1 mt-2 text-right"
+                              dir="rtl"
+                            >
+                              <div className="flex items-center justify-end space-x-1.5 space-x-reverse text-xs text-rose-300 font-semibold font-mono">
+                                <span>⚠️ مجاز ثانوی ترجمہ موقوف ہے</span>
+                              </div>
+                              <p className="text-xs text-rose-200/90 font-urdu leading-relaxed">
+                                {secRights?.withheldNotice ||
+                                  result.secondaryTranslationText ||
+                                  'مجاز اردو ترجمہ (علامہ جوادی) کا متن حقوق کی تصدیق تک موقوف ہے۔'}
+                              </p>
+                            </div>
+                          );
+                        }
+
+                        return (
+                          <p
+                            dir="rtl"
+                            className="text-xs text-slate-400 font-urdu leading-relaxed pt-1 border-t border-slate-850"
+                          >
+                            {result.secondaryTranslationText}
+                          </p>
+                        );
+                      })()}
                     </div>
 
                     {/* Parallel Translations Section (if present) */}
@@ -848,7 +902,9 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                               tr.isAvailable === false ||
                               tr.rightsStatus === 'PERMISSION_REQUIRED' ||
                               tr.text.includes('withheld') ||
-                              tr.text.includes('स्थगित');
+                              tr.text.includes('excluded') ||
+                              tr.text.includes('स्थगित') ||
+                              tr.text.includes('موقوف');
 
                             return (
                               <div
@@ -896,7 +952,10 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                                   })()}
                                 </div>
                                 {isWithheld ? (
-                                  <p className="text-rose-300/80 font-serif italic text-xs leading-relaxed">
+                                  <p
+                                    data-testid="parallel-translation-withheld-notice"
+                                    className="text-rose-300/80 font-serif italic text-xs leading-relaxed"
+                                  >
                                     {tr.withheldNotice || tr.text}
                                   </p>
                                 ) : (

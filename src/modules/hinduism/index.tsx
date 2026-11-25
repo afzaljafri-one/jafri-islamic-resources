@@ -243,8 +243,8 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
   const [verses, setVerses] = useState<GitaVerseData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedCommentary, setSelectedCommentary] = useState<
-    'siva' | 'gambir' | 'purohit' | 'rams'
-  >('siva');
+    'arnold' | 'siva' | 'gambir' | 'purohit' | 'rams'
+  >('arnold');
   const [copiedVerse, setCopiedVerse] = useState<number | string | null>(null);
 
   // Platform Controls & Drawers
@@ -390,9 +390,9 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
           id: `${currentChapterNum}.${v.verse}`,
           label: `Adhyaya ${currentChapterNum}, Shloka ${v.verse}`,
           originalText: v.slok,
-          translationText: v.sivanandaEn || v.gambhiranandaEn || v.ramsukhdasHi,
+          translationText: v.edwinArnoldEn || v.translationEn || v.sivanandaEn || v.gambhiranandaEn || v.ramsukhdasHi,
           translations: {
-            en: v.sivanandaEn || v.gambhiranandaEn || v.purohitEn,
+            en: v.edwinArnoldEn || v.translationEn || v.sivanandaEn || v.gambhiranandaEn || v.purohitEn,
             hi: v.ramsukhdasHi,
           },
           originalAudioUrl: null,
@@ -558,7 +558,7 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
         displayTitle: `Bhagavad Gita ${v.chapter}:${v.verse}`,
         displaySubtitle: currentChapter.translation,
         snippetRootText: v.slok,
-        snippetTranslatedText: v.sivanandaEn,
+        snippetTranslatedText: v.edwinArnoldEn || v.translationEn || v.sivanandaEn,
         savedAtTimestamp: Date.now(),
       };
       platformStorageService.saveBookmark(bkm);
@@ -602,7 +602,9 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
 
   const handleCopyVerse = (v: GitaVerseData) => {
     const transText =
-      selectedCommentary === 'gambir'
+      selectedCommentary === 'arnold'
+        ? v.edwinArnoldEn || v.translationEn || 'Translation'
+        : selectedCommentary === 'gambir'
         ? v.gambhiranandaEn
         : selectedCommentary === 'purohit'
         ? v.purohitEn
@@ -731,10 +733,11 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
               onChange={(e) => setSelectedCommentary(e.target.value as any)}
               className="bg-navy-950 border border-slate-700 text-slate-200 text-xs rounded-xl px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-gold-500 font-medium cursor-pointer"
             >
-              <option value="siva">Swami Sivananda (English)</option>
-              <option value="gambir">Swami Gambhirananda (English)</option>
-              <option value="purohit">Shri Purohit Swami (English)</option>
-              <option value="rams">Swami Ramsukhdas (Hindi)</option>
+              <option value="arnold">Sir Edwin Arnold (1885 • Public Domain)</option>
+              <option value="siva">Swami Sivananda (Permission Required • Withheld)</option>
+              <option value="gambir">Swami Gambhirananda (Permission Required • Withheld)</option>
+              <option value="purohit">Shri Purohit Swami (Permission Required • Withheld)</option>
+              <option value="rams">Swami Ramsukhdas (Hindi • Withheld)</option>
             </select>
           )}
 
@@ -1126,13 +1129,22 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
                   (b) => b.id === `hin:gita:${v.chapter}:${v.verse}`
                 );
                 const translationText =
-                  selectedCommentary === 'gambir'
+                  selectedCommentary === 'arnold'
+                    ? v.edwinArnoldEn || v.translationEn
+                    : selectedCommentary === 'gambir'
                     ? v.gambhiranandaEn
                     : selectedCommentary === 'purohit'
                     ? v.purohitEn
                     : selectedCommentary === 'rams'
                     ? v.ramsukhdasHi
                     : v.sivanandaEn;
+
+                const isWithheldCommentary =
+                  selectedCommentary !== 'arnold' ||
+                  !translationText ||
+                  translationText.includes('withheld') ||
+                  translationText.includes('स्थगित') ||
+                  translationText.startsWith('[');
 
                 return (
                   <div
@@ -1216,13 +1228,28 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
                     </p>
                   )}
 
-                  {/* Translation */}
-                  <div
-                    style={{ fontSize: `${preferences.fontSizeRem}rem` }}
-                    className="text-slate-200 leading-relaxed text-sm pt-1"
-                  >
-                    {translationText}
-                  </div>
+                  {/* Translation or Withheld Notice */}
+                  {isWithheldCommentary ? (
+                    <div
+                      data-testid="gita-translation-withheld-notice"
+                      className="p-3 rounded-xl bg-rose-950/20 border border-rose-500/30 space-y-1 my-1"
+                    >
+                      <div className="flex items-center space-x-1.5 text-xs text-rose-300 font-semibold font-mono">
+                        <span>⚠️ Translation Withheld (Permission Required)</span>
+                      </div>
+                      <p className="text-xs text-rose-200/90 font-serif leading-relaxed italic">
+                        {translationText ||
+                          'This modern copyrighted translation requires explicit redistribution licensing and is excluded from the client application.'}
+                      </p>
+                    </div>
+                  ) : (
+                    <div
+                      style={{ fontSize: `${preferences.fontSizeRem}rem` }}
+                      className="text-slate-200 leading-relaxed text-sm pt-1 font-serif"
+                    >
+                      {translationText}
+                    </div>
+                  )}
 
                   {/* Shankara Bhashya Commentary note if available */}
                   {v.shankaraBhashya && (

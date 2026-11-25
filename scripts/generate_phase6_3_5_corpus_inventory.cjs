@@ -120,14 +120,18 @@ bibleVerses.push({
   offlineStatus: 'BUNDLED_OFFLINE'
 });
 
+const chapterSelectionVerses = bibleVerses.filter(v => v.chapterCompleteness !== 'STANDALONE_LANDMARK_VERSE');
+
 inventory.traditions.christianity = {
   canonicalScripture: 'The Holy Bible (King James Version 1611)',
   canonScope: '66 Canonical Books (1,189 Chapters, 31,102 Verses)',
-  bundledOfflineVersesCount: bibleVerses.length, // 48
   chapterSelectionsCount: bibleChapterKeys.length, // 7
+  chapterSelectionsVersesCount: chapterSelectionVerses.length, // 47
   completeChaptersCount, // 1 (Psalm 23)
   partialSelectionsCount, // 6
   standaloneLandmarkVersesCount: 1, // John 3:16
+  bundledOfflineVersesCount: bibleVerses.length, // 48
+  inventoryDescription: '47 verses across 7 chapter selections + 1 standalone John 3:16 = 48 unique bundled verses total',
   offlineUnits: bibleVerses
 };
 
@@ -149,7 +153,7 @@ const gitaOfflineShlokas = gitaCh1Verses.map(v => ({
 const coreLandmarks = [
   { chapter: 2, verse: 47, note: 'Karmanye Vadhikaraste' },
   { chapter: 4, verse: 38, note: 'Wisdom the Purifier' },
-  { chapter: 9, verse: 27, note: 'Yat Karoshi' },
+  { chapter: 9, verse: 26, note: 'Patram Pushpam (Devotion & Gratitude)' },
   { chapter: 12, verse: 13, note: 'Karuna Eva Cha' },
   { chapter: 16, verse: 3, note: 'Daivi Sampad' },
   { chapter: 17, verse: 20, note: 'Satvika Dana' },
@@ -268,8 +272,33 @@ inventory.traditions.jainism = {
 };
 
 // -----------------------------------------------------------------------------
+// VALIDATION & INTEGRITY CHECKS BEFORE PERSISTENCE
+// -----------------------------------------------------------------------------
+if (inventory.traditions.islam.bundledOfflineAyahsCount !== 10) {
+  throw new Error(`Islam count mismatch: expected 10, got ${inventory.traditions.islam.bundledOfflineAyahsCount}`);
+}
+if (chapterSelectionVerses.length !== 47 || bibleVerses.length !== 48) {
+  throw new Error(`Christianity count mismatch: expected 47 chapter-selection + 1 standalone = 48 total, got ${chapterSelectionVerses.length} + 1 = ${bibleVerses.length}`);
+}
+if (inventory.traditions.hinduism.chapter1ShlokasCount !== 47 || inventory.traditions.hinduism.landmarkCoreShlokasCount !== 7 || inventory.traditions.hinduism.totalBundledOfflineShlokas !== 54) {
+  throw new Error(`Hinduism count mismatch: expected 47 Ch 1 + 7 landmarks = 54 total, got ${inventory.traditions.hinduism.totalBundledOfflineShlokas}`);
+}
+if (inventory.traditions.judaism.completeBundledChaptersCount !== 4 || inventory.traditions.judaism.totalBundledVersesCount !== 50) {
+  throw new Error(`Judaism count mismatch: expected 4 complete chapters = 50 verses, got ${inventory.traditions.judaism.totalBundledVersesCount}`);
+}
+if (inventory.traditions.sikhism.completeBundledAngsCount !== 13 || inventory.traditions.sikhism.landmarkIndexedPassagesCount !== 5) {
+  throw new Error(`Sikhism count mismatch: expected 13 Angs + 5 landmarks, got ${inventory.traditions.sikhism.completeBundledAngsCount} Angs and ${inventory.traditions.sikhism.landmarkIndexedPassagesCount} landmarks`);
+}
+if (inventory.traditions.buddhism.bundledOfflineDhammapadaVersesCount !== 7) {
+  throw new Error(`Buddhism count mismatch: expected 7 Dhammapada verses, got ${inventory.traditions.buddhism.bundledOfflineDhammapadaVersesCount}`);
+}
+if (inventory.traditions.jainism.referenceGroupsCount !== 6 || inventory.traditions.jainism.totalIndividualAphorismCoordinates !== 14) {
+  throw new Error(`Jainism count mismatch: expected 6 groups and 14 aphorisms, got ${inventory.traditions.jainism.referenceGroupsCount} groups and ${inventory.traditions.jainism.totalIndividualAphorismCoordinates} aphorisms`);
+}
+
+// -----------------------------------------------------------------------------
 // WRITE OUTPUT FILE
 // -----------------------------------------------------------------------------
 const outputPath = path.join(repoRoot, 'phase6_3_5_corpus_inventory.json');
 fs.writeFileSync(outputPath, JSON.stringify(inventory, null, 2), 'utf8');
-console.log(`Generated corpus inventory written to ${outputPath}`);
+console.log(`Generated corpus inventory successfully validated and written to ${outputPath}`);

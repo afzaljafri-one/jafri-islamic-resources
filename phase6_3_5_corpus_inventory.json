@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Jafri Sacred Library — Phase 6.3.5 Reconciled Corpus Inventory",
-    "generationTimestamp": "2026-11-25T12:15:38.971Z",
+    "generationTimestamp": "2026-11-25T13:41:58.020Z",
     "baselineCommit": "5eeb34ac547abdd2172af56a5daa714e7368b903",
     "reconciliationRule": "Directly generated from active bundled datasets on disk"
   },
@@ -100,11 +100,13 @@
     "christianity": {
       "canonicalScripture": "The Holy Bible (King James Version 1611)",
       "canonScope": "66 Canonical Books (1,189 Chapters, 31,102 Verses)",
-      "bundledOfflineVersesCount": 48,
       "chapterSelectionsCount": 7,
+      "chapterSelectionsVersesCount": 47,
       "completeChaptersCount": 1,
       "partialSelectionsCount": 6,
       "standaloneLandmarkVersesCount": 1,
+      "bundledOfflineVersesCount": 48,
+      "inventoryDescription": "47 verses across 7 chapter selections + 1 standalone John 3:16 = 48 unique bundled verses total",
       "offlineUnits": [
         {
           "id": "chr:kjv:genesis:1:1",
@@ -993,12 +995,12 @@
           "offlineStatus": "BUNDLED_OFFLINE"
         },
         {
-          "id": "hin:gita:9:27",
-          "canonicalCoordinate": "Bhagavad Gita 9:27",
+          "id": "hin:gita:9:26",
+          "canonicalCoordinate": "Bhagavad Gita 9:26",
           "chapter": 9,
-          "verse": 27,
-          "numberingActive": "9.27",
-          "numberingCrossReference": "9.27",
+          "verse": 26,
+          "numberingActive": "9.26",
+          "numberingCrossReference": "9.26",
           "offlineStatus": "BUNDLED_OFFLINE"
         },
         {

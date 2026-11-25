@@ -171,6 +171,59 @@ assert(
   `Universal search service enforces mandatory verbatim disclaimer: "${REQUIRED_DISCLAIMER}"`
 );
 
+const MANDATORY_VIRTUES_DISCLAIMER = 'This passage has been selected solely for its thematic relevance to this virtue. Inclusion does not imply any theological equivalence, syncretism, or doctrinal endorsement between traditions.';
+const virtuesDisclaimerCount = (thematicDefsBlock.match(/thematicDisclaimer:\s*['"]This passage has been selected solely/g) || []).length;
+assert(
+  virtuesDisclaimerCount === 49,
+  `Every single one of the 49 thematic passages contains the mandatory virtues disclaimer (found ${virtuesDisclaimerCount}/49)`
+);
+
+// Verify canonicalTextRights and primaryTranslationRights across all 49 passages
+const canonRightsCount = (thematicDefsBlock.match(/canonicalTextRights:\s*\{/g) || []).length;
+const primRightsCount = (thematicDefsBlock.match(/primaryTranslationRights:\s*\{/g) || []).length;
+assert(
+  canonRightsCount >= 49,
+  `All 49 thematic passages have static canonicalTextRights records (found ${canonRightsCount})`
+);
+assert(
+  primRightsCount >= 49,
+  `All 49 thematic passages have static primaryTranslationRights records (found ${primRightsCount})`
+);
+
+// -----------------------------------------------------------------------------
+// 3.5. ALLAMA JAWADI URDU TRANSLATION RIGHTS GATE (PHASE 6.3.5.1 HOTFIX)
+// -----------------------------------------------------------------------------
+console.log('\n3.5. Checking Allama Jawadi Urdu translation rights gate & withholding...');
+const JAWADI_WITHHELD_NOTICE = 'مجاز اردو ترجمہ (علامہ جوادی) کا متن حقوق کی تصدیق تک موقوف ہے۔';
+const JAWADI_TAG = '[مجاز اردو ترجمہ (علامہ جوادی) کا متن حقوق کی تصدیق تک موقوف ہے]';
+
+assert(
+  searchServiceText.includes(JAWADI_TAG),
+  `universalScriptureSearchService.ts uses explicit withholding tag for Jawadi Urdu: "${JAWADI_TAG}"`
+);
+
+// Ensure foundational passages do not contain raw Jawadi text
+const FORBIDDEN_JAWADI_TEXTS = [
+  'سب تعریفیں اللہ کے لیے ہیں جو تمام جہانوں کا رب ہے',
+  'اے ایمان والو! صبر اور نماز سے مدد لو',
+  'جو لوگ اپنا مال اللہ کی راہ میں خرچ کرتے ہیں ان کی مثال اس دانے جیسی ہے',
+  'وہ جسے چاہے حکمت عطا کرتا ہے، اور جسے حکمت مل گئی',
+  'جو خوشحالی اور تنگ دستی میں خرچ کرتے ہیں اور غصہ پینے والے',
+  'اور جب تمہارے رب نے آگاہ کر دیا کہ اگر تم شکر کرو گے تو میں تمہیں اور زیادہ دوں گا',
+  'اور ہم نے آپ کو تمام جہانوں کے لیے رحمت بنا کر بھیجا ہے',
+  'اور رحمان کے بندے وہ ہیں جو زمین پر عاجزی سے چلتے ہیں',
+  'کہہ دیجیے کہ وہ اللہ ایک ہے',
+];
+
+let noRawJawadiInSearchService = true;
+FORBIDDEN_JAWADI_TEXTS.forEach((txt) => {
+  if (searchServiceText.includes(txt)) {
+    noRawJawadiInSearchService = false;
+    console.error(`universalScriptureSearchService.ts illegally contains raw Jawadi text: "${txt}"`);
+  }
+});
+assert(noRawJawadiInSearchService, 'universalScriptureSearchService.ts has zero raw Allama Jawadi Urdu texts');
+
 // -----------------------------------------------------------------------------
 // 4. RIGHTS GATE & DISTRIBUTION AUDIT (BUNDLE INSPECTION)
 // -----------------------------------------------------------------------------
@@ -183,12 +236,13 @@ assert(Boolean(jsBundleName), `Found production bundle: ${jsBundleName}`);
 
 const jsBundleText = fs.readFileSync(path.join(distAssetsDir, jsBundleName), 'utf8');
 
-// Check that Sahih International Ayah 2:255 translation text was withheld from client bundle
+// Check that Sahih International and Jawadi Urdu translation texts were withheld from client bundle
 const FORBIDDEN_STRINGS = [
   'the Ever-Living, the Self-Sustaining of all existence',
   'Neither drowsiness overtakes Him nor sleep',
   'and they encompass not a thing of His knowledge except for what He wills',
   'His Kursi extends over the heavens and the earth',
+  ...FORBIDDEN_JAWADI_TEXTS,
 ];
 
 let noForbiddenStrings = true;
@@ -198,7 +252,7 @@ FORBIDDEN_STRINGS.forEach((str) => {
     console.error(`Client bundle illegally contains forbidden restricted string: "${str}"`);
   }
 });
-assert(noForbiddenStrings, 'Client bundle strictly withholds unverified / PERMISSION_REQUIRED translation text (Sahih International)');
+assert(noForbiddenStrings, 'Client bundle strictly withholds unverified / PERMISSION_REQUIRED translation texts (Sahih International & Allama Jawadi)');
 
 // Check that component isolation and withheld notices are bundled
 assert(
@@ -208,6 +262,18 @@ assert(
 assert(
   jsBundleText.includes('translation-withheld-notice') || jsBundleText.includes('Authorised Translation Withheld'),
   'Client bundle includes clear notice for withheld translations pending rights clearance'
+);
+assert(
+  jsBundleText.includes('secondary-translation-withheld-notice'),
+  'Client bundle includes secondary-translation-withheld-notice data-testid'
+);
+assert(
+  jsBundleText.includes('secondary-rights-badge'),
+  'Client bundle includes secondary-rights-badge data-testid'
+);
+assert(
+  jsBundleText.includes('gita-translation-withheld-notice'),
+  'Client bundle includes gita-translation-withheld-notice data-testid'
 );
 
 // -----------------------------------------------------------------------------
