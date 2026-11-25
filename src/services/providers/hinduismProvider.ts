@@ -17,9 +17,13 @@ import {
 } from './hinduism/hinduismTextData';
 import { GITA_CHAPTER_1_OFFLINE } from './hinduism/gitaChapter1Data';
 import { cacheService } from '../cacheService';
+import {
+  EDWIN_ARNOLD_ALLOWLIST,
+  EdwinArnoldAllowlistEntry,
+} from './hinduism/edwinArnoldAllowlist';
 
-export { HINDUISM_COLLECTIONS, HINDUISM_TEXT_DATA };
-export type { HinduismCollectionMeta, HinduismVerseUnit };
+export { HINDUISM_COLLECTIONS, HINDUISM_TEXT_DATA, EDWIN_ARNOLD_ALLOWLIST };
+export type { HinduismCollectionMeta, HinduismVerseUnit, EdwinArnoldAllowlistEntry };
 
 export interface GitaChapterMeta {
   chapter_number: number;
@@ -71,8 +75,8 @@ export const FOUNDATIONAL_GITA_VERSES: Record<string, GitaVerseData> = {
     verse: 1,
     slok: 'धृतराष्ट्र उवाच |\nधर्मक्षेत्रे कुरुक्षेत्रे समवेता युयुत्सवः |\nमामकाः पाण्डवाश्चैव किमकुर्वत सञ्जय || १ ||',
     transliteration: 'dhṛtarāṣṭra uvāca |\ndharmakṣetre kurukṣetre samavetā yuyutsavaḥ |\nmāmakāḥ pāṇḍavāścaiva kimakurvata sañjaya || 1 ||',
-    translationEn: 'Dhritarashtra said: On the field of truth, on Kurukshetra assembled, eager for the fight, what did my people and the Pandavas do, O Sanjaya?',
-    edwinArnoldEn: 'Dhritarashtra said: On the field of truth, on Kurukshetra assembled, eager for the fight, what did my people and the Pandavas do, O Sanjaya?',
+    translationEn: EDWIN_ARNOLD_ALLOWLIST['1:1'].text,
+    edwinArnoldEn: EDWIN_ARNOLD_ALLOWLIST['1:1'].text,
     sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
     gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
     purohitEn: '[Translation withheld pending documented software redistribution permission]',
@@ -83,8 +87,8 @@ export const FOUNDATIONAL_GITA_VERSES: Record<string, GitaVerseData> = {
     verse: 2,
     slok: 'सञ्जय उवाच |\nदृष्ट्वा तु पाण्डवानीकं व्यूढं दुर्योधनस्तदा |\nआचार्यमुपसङ्गम्य राजा वचनमब्रवीत् || २ ||',
     transliteration: 'sañjaya uvāca |\ndṛṣṭvā tu pāṇḍavānīkaṁ vyūḍhaṁ duryodhanastadā |\nācāryamupasaṅgamya rājā vacanamabravīt || 2 ||',
-    translationEn: 'Sanjaya said: King Duryodhana, seeing the battle-host of the Pandavas in array, drew near to his master Drona, and spake this word:',
-    edwinArnoldEn: 'Sanjaya said: King Duryodhana, seeing the battle-host of the Pandavas in array, drew near to his master Drona, and spake this word:',
+    translationEn: EDWIN_ARNOLD_ALLOWLIST['1:2'].text,
+    edwinArnoldEn: EDWIN_ARNOLD_ALLOWLIST['1:2'].text,
     sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
     gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
     purohitEn: '[Translation withheld pending documented software redistribution permission]',
@@ -95,8 +99,8 @@ export const FOUNDATIONAL_GITA_VERSES: Record<string, GitaVerseData> = {
     verse: 47,
     slok: 'कर्मण्येवाधिकारस्ते मा फलेषु कदाचन |\nमा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि ||',
     transliteration: 'karmaṇyevādhikāraste mā phaleṣu kadācana |\nmā karmaphalaheturbhūrmā te saṅgo\'stvakarmaṇi ||',
-    translationEn: 'Thy right is only unto action, not unto the fruits thereof; let not the fruit of action be thy motive, neither let there be in thee attachment to inaction.',
-    edwinArnoldEn: 'Thy right is only unto action, not unto the fruits thereof; let not the fruit of action be thy motive, neither let there be in thee attachment to inaction.',
+    translationEn: EDWIN_ARNOLD_ALLOWLIST['2:47'].text,
+    edwinArnoldEn: EDWIN_ARNOLD_ALLOWLIST['2:47'].text,
     sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
     gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
     purohitEn: '[Translation withheld pending documented software redistribution permission]',
@@ -107,8 +111,8 @@ export const FOUNDATIONAL_GITA_VERSES: Record<string, GitaVerseData> = {
     verse: 38,
     slok: 'न हि ज्ञानेन सदृशं पवित्रमिह विद्यते |\nतत्स्वयं योगसंसिद्धः कालेनात्मनि विन्दति ||',
     transliteration: 'na hi jñānena sadṛśaṁ pavitramiha vidyate |\ntatsvayaṁ yogasaṁsiddhaḥ kālenātmani vindati ||',
-    translationEn: 'Truly, there is no purifier in this world like wisdom. He who is perfected in Yoga finds it within himself in the fullness of time.',
-    edwinArnoldEn: 'Truly, there is no purifier in this world like wisdom. He who is perfected in Yoga finds it within himself in the fullness of time.',
+    translationEn: EDWIN_ARNOLD_ALLOWLIST['4:38'].text,
+    edwinArnoldEn: EDWIN_ARNOLD_ALLOWLIST['4:38'].text,
     sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
     gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
     purohitEn: '[Translation withheld pending documented software redistribution permission]',
@@ -119,8 +123,8 @@ export const FOUNDATIONAL_GITA_VERSES: Record<string, GitaVerseData> = {
     verse: 26,
     slok: 'पत्रं पुष्पं फलं तोयं यो मे भक्त्या प्रयच्छति |\nतदहं भक्त्युपहृतमश्नामि प्रयतात्मनः ||',
     transliteration: 'patraṁ puṣpaṁ phalaṁ toyaṁ yo me bhaktyā prayacchati |\ntadahaṁ bhaktyupahṛtamaśnāmi prayatātmanaḥ ||',
-    translationEn: 'Whoever offers Me with devotion a leaf, a flower, a fruit, or water, that offering of love, from the pure of heart, I accept.',
-    edwinArnoldEn: 'Whoever offers Me with devotion a leaf, a flower, a fruit, or water, that offering of love, from the pure of heart, I accept.',
+    translationEn: EDWIN_ARNOLD_ALLOWLIST['9:26'].text,
+    edwinArnoldEn: EDWIN_ARNOLD_ALLOWLIST['9:26'].text,
     sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
     gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
     purohitEn: '[Translation withheld pending documented software redistribution permission]',
@@ -131,8 +135,8 @@ export const FOUNDATIONAL_GITA_VERSES: Record<string, GitaVerseData> = {
     verse: 13,
     slok: 'अद्वेष्टा सर्वभूतानां मैत्रः करुण एव च |\nनिर्ममो निरहङ्कारः समदुःखसुखः क्षमी ||',
     transliteration: 'adveṣṭā sarvabhūtānāṁ maitraḥ karuṇa eva ca |\nnirmamo nirahaṅkāraḥ samaduḥkhasukhaḥ kṣamī ||',
-    translationEn: 'He who hates no being, who is friendly and compassionate to all, who is free from attachment and egoism, balanced in pleasure and pain, and forgiving.',
-    edwinArnoldEn: 'He who hates no being, who is friendly and compassionate to all, who is free from attachment and egoism, balanced in pleasure and pain, and forgiving.',
+    translationEn: EDWIN_ARNOLD_ALLOWLIST['12:13'].text,
+    edwinArnoldEn: EDWIN_ARNOLD_ALLOWLIST['12:13'].text,
     sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
     gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
     purohitEn: '[Translation withheld pending documented software redistribution permission]',
@@ -143,8 +147,8 @@ export const FOUNDATIONAL_GITA_VERSES: Record<string, GitaVerseData> = {
     verse: 3,
     slok: 'तेजः क्षमा धृतिः शौचमद्रोहो नातिमानिता |\nभवन्ति सम्पदं दैवीमभिजातस्य भारत ||',
     transliteration: 'tejaḥ kṣamā dhṛtiḥ śaucamadroho nātimānitā |\nbhavanti sampadaṁ daivīmabhijātasya bhārata ||',
-    translationEn: 'Purity of heart, steadfastness in knowledge, charity, restraint and sacrifice, forgiveness and absence of pride — these belong to one born for a divine state.',
-    edwinArnoldEn: 'Purity of heart, steadfastness in knowledge, charity, restraint and sacrifice, forgiveness and absence of pride — these belong to one born for a divine state.',
+    translationEn: EDWIN_ARNOLD_ALLOWLIST['16:3'].text,
+    edwinArnoldEn: EDWIN_ARNOLD_ALLOWLIST['16:3'].text,
     sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
     gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
     purohitEn: '[Translation withheld pending documented software redistribution permission]',
@@ -155,8 +159,8 @@ export const FOUNDATIONAL_GITA_VERSES: Record<string, GitaVerseData> = {
     verse: 20,
     slok: 'दातव्यमिति यद्दानं दीयतेऽनुپकारिणे |\nदेशे काले च पात्रे च तद्दानं सात्त्विकं स्मृतम् ||',
     transliteration: 'dātavyamiti yaddānaṁ dīyate’nupakāriṇe |\ndeśe kāle ca pātre ca taddānaṁ sāttvikaṁ smṛtam ||',
-    translationEn: 'That gift which is given to one from whom no return is expected, with the feeling that it is one’s duty to give, at the right place and time, is held to be pure.',
-    edwinArnoldEn: 'That gift which is given to one from whom no return is expected, with the feeling that it is one’s duty to give, at the right place and time, is held to be pure.',
+    translationEn: EDWIN_ARNOLD_ALLOWLIST['17:20'].text,
+    edwinArnoldEn: EDWIN_ARNOLD_ALLOWLIST['17:20'].text,
     sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
     gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
     purohitEn: '[Translation withheld pending documented software redistribution permission]',
@@ -167,8 +171,8 @@ export const FOUNDATIONAL_GITA_VERSES: Record<string, GitaVerseData> = {
     verse: 66,
     slok: 'सर्वधर्मान्परित्यज्य मामेकं शरणं व्रज |\nअहं त्वा सर्वपापेभ्यो मोक्षयिष्यामि मा शुचः ||',
     transliteration: 'sarvadharmānparityajya māmekaṁ śaraṇaṁ vraja |\nahaṁ tvā sarvapāpebhyo mokṣayiṣyāmi mā śucaḥ ||',
-    translationEn: 'Abandoning all varieties of dharmas, surrender unto Me alone; I will deliver thee from all sins, grieve not.',
-    edwinArnoldEn: 'Abandoning all varieties of dharmas, surrender unto Me alone; I will deliver thee from all sins, grieve not.',
+    translationEn: EDWIN_ARNOLD_ALLOWLIST['18:66'].text,
+    edwinArnoldEn: EDWIN_ARNOLD_ALLOWLIST['18:66'].text,
     sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
     gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
     purohitEn: '[Translation withheld pending documented software redistribution permission]',
@@ -181,11 +185,12 @@ export const WITHHELD_GITA_COMMENTARY_HI = '[अनुवाद का वित
 export const WITHHELD_GITA_BHASHYA = '[Commentary translation withheld pending documented software redistribution permission]';
 
 /**
- * Phase 6.3.5.2 Central Gita Verse Sanitizer
+ * Phase 6.3.5.3 Central Gita Verse Sanitizer & Fail-Closed Translation Whitelist
  * Every Gita verse from every retrieval or caching path (offline bundle, memory cache,
  * static JSON, remote API, IndexedDB reads and writes) must pass through this boundary.
  * Strictly guarantees that unverified modern commentaries are suppressed and that only
- * verified public domain translations (e.g. Sir Edwin Arnold 1885) are exposed.
+ * verified public domain translations from EDWIN_ARNOLD_ALLOWLIST are exposed.
+ * All non-allowlist coordinates return an explicit translation-withheld notice.
  */
 export function sanitizeGitaVerse(rawVerse: any): GitaVerseData {
   if (!rawVerse) {
@@ -195,25 +200,21 @@ export function sanitizeGitaVerse(rawVerse: any): GitaVerseData {
   const verse = Number(rawVerse.verse);
   const key = `${chapter}:${verse}`;
   const foundational = FOUNDATIONAL_GITA_VERSES[key];
+  const approvedEntry = EDWIN_ARNOLD_ALLOWLIST[key];
 
-  // Verified English translation (Edwin Arnold 1885 Public Domain)
-  const verifiedArnold =
-    foundational?.edwinArnoldEn ||
-    foundational?.translationEn ||
-    (rawVerse.edwinArnoldEn &&
-    !rawVerse.edwinArnoldEn.includes('withheld') &&
-    !rawVerse.edwinArnoldEn.includes('Sivananda') &&
-    !rawVerse.edwinArnoldEn.includes('Gambhirananda')
-      ? rawVerse.edwinArnoldEn
-      : undefined);
+  // Phase 6.3.5.3 Fail-Closed Coordinate Whitelist:
+  // English translation is ONLY populated when the coordinate is strictly present in EDWIN_ARNOLD_ALLOWLIST.
+  // Permissive fallback checks on rawVerse strings are completely forbidden.
+  // Non-allowlist coordinates return an explicit translation-withheld notice.
+  const verifiedTranslation = approvedEntry ? approvedEntry.text : WITHHELD_GITA_COMMENTARY_EN;
 
   return {
     chapter,
     verse,
     slok: rawVerse.slok || foundational?.slok || '',
     transliteration: rawVerse.transliteration || foundational?.transliteration || '',
-    translationEn: verifiedArnold,
-    edwinArnoldEn: verifiedArnold,
+    translationEn: verifiedTranslation,
+    edwinArnoldEn: verifiedTranslation,
     sivanandaEn: WITHHELD_GITA_COMMENTARY_EN,
     gambhiranandaEn: WITHHELD_GITA_COMMENTARY_EN,
     purohitEn: WITHHELD_GITA_COMMENTARY_EN,
@@ -372,7 +373,7 @@ class HinduismProvider {
         // Enforce central sanitization on all IndexedDB reads
         const sanitized = sanitizeGitaChapter(cached);
 
-        // Detect if old cache contained unsanitized proprietary commentary text
+        // Detect if old cache contained unsanitized proprietary commentary text or unapproved translations
         const getStr = (c: any): string => {
           if (!c) return '';
           if (typeof c === 'string') return c;
@@ -380,18 +381,29 @@ class HinduismProvider {
         };
 
         const hadUnsafeData = cached.some((v: any) => {
+          const key = `${chapter}:${v.verse}`;
+          const approved = EDWIN_ARNOLD_ALLOWLIST[key];
           const s = getStr(v.sivanandaEn);
           const g = getStr(v.gambhiranandaEn);
           const p = getStr(v.purohitEn);
           const r = getStr(v.ramsukhdasHi);
           const sh = getStr(v.shankaraBhashya);
-          return (
+          const t = getStr(v.translationEn);
+          const ea = getStr(v.edwinArnoldEn);
+
+          const hasUnsafeCommentary =
             (s && !s.includes('withheld')) ||
             (g && !g.includes('withheld')) ||
             (p && !p.includes('withheld')) ||
             (r && !r.includes('स्थगित') && !r.includes('withheld')) ||
-            (sh && !sh.includes('withheld'))
-          );
+            (sh && !sh.includes('withheld'));
+
+          const hasUnsafeTranslation = approved
+            ? (t && t !== approved.text && !t.includes('withheld')) ||
+              (ea && ea !== approved.text && !ea.includes('withheld'))
+            : (t && !t.includes('withheld')) || (ea && !ea.includes('withheld'));
+
+          return hasUnsafeCommentary || hasUnsafeTranslation;
         });
 
         if (hadUnsafeData) {

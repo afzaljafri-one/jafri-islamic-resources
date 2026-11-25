@@ -65,8 +65,8 @@ jobs:
       - name: Run Phase 6.3.5 Final Rights Enforcement & Corpus Reconciliation Gate
         run: node test_phase6_3_5_data_rights_gate.cjs
 
-      - name: Run Phase 6.3.5.2 Browser Acceptance Suite
-        run: node --experimental-websocket test_phase6_3_5_2_acceptance.cjs
+      - name: Run Phase 6.3.5.3 Browser Acceptance Suite
+        run: node --experimental-websocket test_phase6_3_5_3_acceptance.cjs
         env:
           CHROME_BIN: /usr/bin/google-chrome
 
@@ -126,7 +126,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Run Phase 6.3.5.2 Live Production Acceptance Suite
-        run: node --experimental-websocket test_phase6_3_5_2_prod_live.cjs
+      - name: Run Phase 6.3.5.3 Live Production Acceptance Suite
+        run: node --experimental-websocket test_phase6_3_5_3_prod_live.cjs
         env:
           CHROME_BIN: /usr/bin/google-chrome
