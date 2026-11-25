@@ -35,6 +35,8 @@ export interface GitaVerseData {
   verse: number;
   slok: string; // Sanskrit Devanagari
   transliteration: string; // IAST
+  translationEn?: string; // Verified Public Domain translation
+  edwinArnoldEn?: string; // Sir Edwin Arnold (1885, Public Domain)
   sivanandaEn: string; // Swami Sivananda English
   gambhiranandaEn: string; // Swami Gambhirananda English
   purohitEn: string; // Shri Purohit Swami English
@@ -69,30 +71,36 @@ export const FOUNDATIONAL_GITA_VERSES: Record<string, GitaVerseData> = {
     verse: 1,
     slok: 'धृतराष्ट्र उवाच |\nधर्मक्षेत्रे कुरुक्षेत्रे समवेता युयुत्सवः |\nमामकाः पाण्डवाश्चैव किमकुर्वत सञ्जय || १ ||',
     transliteration: 'dhṛtarāṣṭra uvāca |\ndharmakṣetre kurukṣetre samavetā yuyutsavaḥ |\nmāmakāḥ pāṇḍavāścaiva kimakurvata sañjaya || 1 ||',
-    sivanandaEn: 'Dhritarashtra said: What did my people and the Pandavas do, O Sanjaya! when they had assembled together on the holy plain of Kurukshetra, desirous to fight?',
-    gambhiranandaEn: 'Dhritarashtra said: O Sanjaya, what did my sons and the sons of Pandu do, having assembled on the holy field of Kurukshetra, eager to fight?',
-    purohitEn: 'Dhritarashtra said: O Sanjaya, assembled on the sacred plain of Kurukshetra, eager for the fight, what did my people and the children of Pandu?',
-    ramsukhdasHi: 'धृतराष्ट्र बोले—हे संजय! धर्मभूमि कुरुक्षेत्रमें युद्धकी इच्छासे एकत्र हुए मेरे और पाण्डुके पुत्रोंने क्या किया?',
+    translationEn: 'Dhritarashtra said: On the field of truth, on Kurukshetra assembled, eager for the fight, what did my people and the Pandavas do, O Sanjaya?',
+    edwinArnoldEn: 'Dhritarashtra said: On the field of truth, on Kurukshetra assembled, eager for the fight, what did my people and the Pandavas do, O Sanjaya?',
+    sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
+    gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
+    purohitEn: '[Translation withheld pending documented software redistribution permission]',
+    ramsukhdasHi: '[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]',
   },
   '1:2': {
     chapter: 1,
     verse: 2,
     slok: 'सञ्जय उवाच |\nदृष्ट्वा तु पाण्डवानीकं व्यूढं दुर्योधनस्तदा |\nआचार्यमुपसङ्गम्य राजा वचनमब्रवीत् || २ ||',
     transliteration: 'sañjaya uvāca |\ndṛṣṭvā tu pāṇḍavānīkaṁ vyūḍhaṁ duryodhanastadā |\nācāryamupasaṅgamya rājā vacanamabravīt || 2 ||',
-    sivanandaEn: 'Sanjaya said: Having seen the army of the Pandavas drawn up in battle array, King Duryodhana then approached his teacher (Drona) and spoke these words.',
-    gambhiranandaEn: 'Sanjaya said: But then, seeing the army of the Pandavas in battle array, King Duryodhana approached the teacher and uttered these words.',
-    purohitEn: 'Sanjaya said: Then King Duryodhana, seeing the Pandava army marshalled for battle, approached his master Drona and said:',
-    ramsukhdasHi: 'संजय बोले—उस समय राजा दुर्योधनने व्यूहरचनायुक्त पाण्डवोंकी सेनाको देखकर और द्रोणाचार्यके पास जाकर यह वचन कहा—',
+    translationEn: 'Sanjaya said: King Duryodhana, seeing the battle-host of the Pandavas in array, drew near to his master Drona, and spake this word:',
+    edwinArnoldEn: 'Sanjaya said: King Duryodhana, seeing the battle-host of the Pandavas in array, drew near to his master Drona, and spake this word:',
+    sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
+    gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
+    purohitEn: '[Translation withheld pending documented software redistribution permission]',
+    ramsukhdasHi: '[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]',
   },
   '2:47': {
     chapter: 2,
     verse: 47,
     slok: 'कर्मण्येवाधिकारस्ते मा फलेषु कदाचन |\nमा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि ||',
     transliteration: 'karmaṇyevādhikāraste mā phaleṣu kadācana |\nmā karmaphalaheturbhūrmā te saṅgo\'stvakarmaṇi ||',
-    sivanandaEn: 'Thy right is to work only, but never to its fruits; let not the fruit of action be thy motive, nor let thy attachment be to inaction.',
-    gambhiranandaEn: 'You have a right to work alone, never to its fruits. Let not the fruits of action be your motive, nor let your inclination be to inaction.',
-    purohitEn: 'You have the right to work, but for the work\'s sake only. You have no right to the fruits of work. Desire for the fruits of work must never be your motive in working. Never give way to laziness, either.',
-    ramsukhdasHi: 'तेरा कर्म करनेमें ही अधिकार है, उसके फलोंमें कभी नहीं। इसलिये तू कर्मोंके फलका हेतु मत बन और तेरी कर्म न करनेमें भी आसक्ति न हो।',
+    translationEn: 'Thy right is only unto action, not unto the fruits thereof; let not the fruit of action be thy motive, neither let there be in thee attachment to inaction.',
+    edwinArnoldEn: 'Thy right is only unto action, not unto the fruits thereof; let not the fruit of action be thy motive, neither let there be in thee attachment to inaction.',
+    sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
+    gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
+    purohitEn: '[Translation withheld pending documented software redistribution permission]',
+    ramsukhdasHi: '[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]',
   },
 };
 

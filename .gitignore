@@ -65,6 +65,7 @@ catalogue_651_export.json
 gated_112_*.json
 oembed_114_*.json
 phase*.json
+!phase6_3_5_corpus_inventory.json
 phase*.html
 quransurf_*.json
 unverified_112_*.json

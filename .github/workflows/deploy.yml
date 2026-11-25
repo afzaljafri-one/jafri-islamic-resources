@@ -56,6 +56,9 @@ jobs:
         env:
           VITE_BASE_PATH: '/jafri-islamic-resources/'
 
+      - name: Run Phase 6.3.5 Final Rights Enforcement & Corpus Reconciliation Gate
+        run: node test_phase6_3_5_data_rights_gate.cjs
+
       # upload-pages-artifact creates the static tarball without needing configure-pages
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3

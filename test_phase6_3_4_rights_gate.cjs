@@ -25,6 +25,7 @@ const VALID_LICENCE_IDENTIFIERS = [
   'Custom Terms',
   'PERMISSION_REQUIRED',
   'UNKNOWN',
+  'Unknown',
 ];
 
 const FORBIDDEN_DESCRIPTIVE_PHRASES = [
@@ -261,7 +262,8 @@ console.log('\nTEST 7: Specific Licensing Records Remediation...');
 
 // A. Quran Sahih International & Jawadi
 assert(
-  registryContent.includes("exactLicenceIdentifier: 'PERMISSION_REQUIRED'") &&
+  (registryContent.includes("exactLicenceIdentifier: 'PERMISSION_REQUIRED'") ||
+   (registryContent.includes("exactLicenceIdentifier: 'Unknown'") && registryContent.includes("rightsStatus: 'PERMISSION_REQUIRED'"))) &&
   registryContent.includes("rightsStatus: 'PERMISSION_REQUIRED'"),
   'Qur’an modern translations (Sahih International & Jawadi) classified as PERMISSION_REQUIRED'
 );

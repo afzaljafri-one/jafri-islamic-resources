@@ -30,8 +30,9 @@ export type RightsStatus =
   | 'UNKNOWN';
 
 /**
- * Controlled formal licence classifications permitted by the Phase 6.3.4 rights gate.
- * Descriptive phrases (e.g. 'Universal Religious Heritage', 'Public Gurbani Domain') are prohibited.
+ * Controlled formal licence classifications permitted by the Phase 6.3.5 rights gate.
+ * Strictly separates licence / rights basis from operational rights status.
+ * 'PERMISSION_REQUIRED' and 'UNKNOWN' are rights statuses, NOT licence identifiers.
  */
 export type ControlledLicenceIdentifier =
   | 'CC BY 3.0'
@@ -42,8 +43,7 @@ export type ControlledLicenceIdentifier =
   | 'Public Domain'
   | 'Written Permission'
   | 'Custom Terms'
-  | 'PERMISSION_REQUIRED'
-  | 'UNKNOWN';
+  | 'Unknown';
 
 export type RemoteAvailabilityStatus =
   | 'FULL'

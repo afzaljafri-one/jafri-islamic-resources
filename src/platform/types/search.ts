@@ -31,6 +31,22 @@ export interface ParallelTranslationRecord {
   rightsHolderOrPublisher?: string;
   rightsStatus?: RightsStatus;
   verificationStatus?: 'VERIFIED' | 'PARTIAL_VERIFIED' | 'UNKNOWN';
+  isAvailable?: boolean;
+  withheldNotice?: string;
+}
+
+/**
+ * Component-level rights metadata ensuring original source licences
+ * are never conflated with or applied to attached translations.
+ */
+export interface ComponentRightsRecord {
+  componentName: string; // e.g. "Original Canonical Text", "Primary Translation", "Secondary Translation"
+  rightsStatus: RightsStatus;
+  exactLicenceIdentifier: ControlledLicenceIdentifier;
+  rightsHolderOrPublisher?: string;
+  translatorOrSource?: string;
+  isAvailable: boolean; // false when PERMISSION_REQUIRED or UNKNOWN
+  withheldNotice?: string; // Reason / notice when translation text is withheld
 }
 
 /**
@@ -76,6 +92,12 @@ export interface UniversalSearchResult {
   rightsHolderOrPublisher?: string;
   rightsStatus?: RightsStatus;
   geographicRestrictions?: string;
+
+  /** Phase 6.3.5: Component-Level Rights Isolation */
+  canonicalTextRights?: ComponentRightsRecord;
+  primaryTranslationRights?: ComponentRightsRecord;
+  secondaryTranslationRights?: ComponentRightsRecord;
+  transliterationRights?: ComponentRightsRecord;
 }
 
 /**

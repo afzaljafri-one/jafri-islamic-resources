@@ -655,18 +655,31 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                           </span>
                         )}
 
-                        {/* Rights & Licence Badge (Phase 6.3.4 Fail-Closed Gate) */}
+                        {/* Component-Level Canonical Scripture Rights Badge (Phase 6.3.5) */}
+                        {result.canonicalTextRights && (
+                          <span
+                            data-testid="canonical-rights-badge"
+                            className="text-[10px] font-mono px-2 py-0.2 rounded-full border bg-cyan-500/10 text-cyan-300 border-cyan-500/30"
+                            title={`Canonical Source Text: ${result.canonicalTextRights.rightsHolderOrPublisher || 'Traditional Canon'} • Exact Licence: ${result.canonicalTextRights.exactLicenceIdentifier} • Status: ${result.canonicalTextRights.rightsStatus}`}
+                          >
+                            Text: {result.canonicalTextRights.exactLicenceIdentifier}
+                          </span>
+                        )}
+
+                        {/* Translation Rights & Licence Badge (Phase 6.3.5 Fail-Closed Gate) */}
                         {(() => {
-                          const status = result.rightsStatus;
-                          const licence = result.exactLicenceIdentifier;
-                          const holder = result.rightsHolderOrPublisher;
+                          const transRights = result.primaryTranslationRights;
+                          const status = transRights ? transRights.rightsStatus : result.rightsStatus;
+                          const licence = transRights ? transRights.exactLicenceIdentifier : result.exactLicenceIdentifier;
+                          const holder = transRights ? transRights.rightsHolderOrPublisher : result.rightsHolderOrPublisher;
 
                           if (!status || status === 'UNKNOWN' || !licence) {
                             return (
                               <span
                                 data-testid="rights-licence-badge"
+                                data-component-testid="translation-rights-badge"
                                 className="text-[10px] font-mono px-2 py-0.2 rounded-full border bg-slate-800/80 text-slate-400 border-slate-700"
-                                title={`Rights Status: UNKNOWN • ${holder ? `Rights Holder: ${holder}` : 'Rights Holder: Unspecified'}`}
+                                title={`Translation Rights Status: UNKNOWN • ${holder ? `Rights Holder: ${holder}` : 'Rights Holder: Unspecified'}`}
                               >
                                 Rights not verified
                               </span>
@@ -677,8 +690,9 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                             return (
                               <span
                                 data-testid="rights-licence-badge"
-                                className="text-[10px] font-mono px-2 py-0.2 rounded-full border bg-rose-500/10 text-rose-300 border-rose-500/30"
-                                title={`Rights Status: PERMISSION_REQUIRED • ${holder ? `Rights Holder: ${holder}` : 'Rights Holder: Unspecified'} • Permission required for redistribution`}
+                                data-component-testid="translation-rights-badge"
+                                className="text-[10px] font-mono px-2 py-0.2 rounded-full border bg-rose-500/10 text-rose-300 border-rose-500/30 font-semibold"
+                                title={`Translation Rights Status: PERMISSION_REQUIRED • ${holder ? `Rights Holder: ${holder}` : 'Rights Holder: Unspecified'} • Permission required for redistribution`}
                               >
                                 Permission Required
                               </span>
@@ -689,8 +703,9 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                             return (
                               <span
                                 data-testid="rights-licence-badge"
+                                data-component-testid="translation-rights-badge"
                                 className="text-[10px] font-mono px-2 py-0.2 rounded-full border bg-amber-500/10 text-amber-300 border-amber-500/30"
-                                title={`Rights Status: RESTRICTED • Rights Holder: ${holder || 'Documented Terms'} • Conditional non-commercial use only`}
+                                title={`Translation Rights Status: RESTRICTED • Rights Holder: ${holder || 'Documented Terms'} • Conditional non-commercial use only`}
                               >
                                 {licence}
                               </span>
@@ -700,8 +715,9 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                           return (
                             <span
                               data-testid="rights-licence-badge"
+                              data-component-testid="translation-rights-badge"
                               className="text-[10px] font-mono px-2 py-0.2 rounded-full border bg-emerald-500/10 text-emerald-300 border-emerald-500/30"
-                              title={`Rights Status: VERIFIED • Rights Holder: ${holder || 'Verified Source'} • Exact Licence: ${licence}`}
+                              title={`Translation Rights Status: VERIFIED • Rights Holder: ${holder || 'Verified Source'} • Exact Licence: ${licence}`}
                             >
                               {licence}
                             </span>
@@ -781,9 +797,35 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
 
                     {/* Translation */}
                     <div className="space-y-1">
-                      <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-serif">
-                        {result.translationText}
-                      </p>
+                      {(() => {
+                        const isWithheld =
+                          result.primaryTranslationRights?.isAvailable === false ||
+                          result.translationText.includes('withheld') ||
+                          result.translationText.includes('स्थगित') ||
+                          result.primaryTranslationRights?.rightsStatus === 'PERMISSION_REQUIRED';
+
+                        if (isWithheld) {
+                          return (
+                            <div
+                              data-testid="translation-withheld-notice"
+                              className="p-3 rounded-xl bg-rose-950/20 border border-rose-500/30 space-y-1 my-1"
+                            >
+                              <div className="flex items-center space-x-1.5 text-xs text-rose-300 font-semibold font-mono">
+                                <span>⚠️ Authorised Translation Withheld</span>
+                              </div>
+                              <p className="text-xs text-rose-200/90 font-serif leading-relaxed">
+                                {result.primaryTranslationRights?.withheldNotice || result.translationText}
+                              </p>
+                            </div>
+                          );
+                        }
+
+                        return (
+                          <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-serif">
+                            {result.translationText}
+                          </p>
+                        );
+                      })()}
                       {result.secondaryTranslationText && (
                         <p
                           dir="rtl"
@@ -801,46 +843,68 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                           Parallel Translations ({result.parallelTranslations.length} Editions)
                         </span>
                         <div className="grid gap-2 sm:grid-cols-2">
-                          {result.parallelTranslations.map((tr) => (
-                            <div key={tr.id} className="p-2 rounded-lg bg-navy-950/60 border border-slate-850 text-xs space-y-1">
-                              <div className="flex items-center justify-between text-[10px] font-mono text-slate-400">
-                                <span className="font-semibold text-gold-400/90">
-                                  {tr.translationName} ({tr.language})
-                                </span>
-                                {(() => {
-                                  const st = tr.rightsStatus;
-                                  const lic = tr.exactLicenceIdentifier;
-                                  if (!st || st === 'UNKNOWN' || !lic) {
+                          {result.parallelTranslations.map((tr) => {
+                            const isWithheld =
+                              tr.isAvailable === false ||
+                              tr.rightsStatus === 'PERMISSION_REQUIRED' ||
+                              tr.text.includes('withheld') ||
+                              tr.text.includes('स्थगित');
+
+                            return (
+                              <div
+                                key={tr.id}
+                                data-testid="parallel-translation-card"
+                                className={`p-2 rounded-lg border text-xs space-y-1 ${
+                                  isWithheld
+                                    ? 'bg-rose-950/20 border-rose-500/30 text-rose-200'
+                                    : 'bg-navy-950/60 border-slate-850 text-slate-200'
+                                }`}
+                              >
+                                <div className="flex items-center justify-between text-[10px] font-mono text-slate-400">
+                                  <span className={`font-semibold ${isWithheld ? 'text-rose-300' : 'text-gold-400/90'}`}>
+                                    {tr.translationName} ({tr.language})
+                                  </span>
+                                  {(() => {
+                                    const st = tr.rightsStatus;
+                                    const lic = tr.exactLicenceIdentifier;
+                                    if (!st || st === 'UNKNOWN' || !lic) {
+                                      return (
+                                        <span className="text-[9px] text-slate-400 bg-slate-800 px-1 py-0.2 rounded border border-slate-700">
+                                          Rights not verified
+                                        </span>
+                                      );
+                                    }
+                                    if (st === 'PERMISSION_REQUIRED' || isWithheld) {
+                                      return (
+                                        <span className="text-[9px] text-rose-300 bg-rose-950/40 px-1 py-0.2 rounded border border-rose-500/30">
+                                          Permission Required
+                                        </span>
+                                      );
+                                    }
+                                    if (st === 'RESTRICTED') {
+                                      return (
+                                        <span className="text-[9px] text-amber-300 bg-amber-950/40 px-1 py-0.2 rounded border border-amber-500/30">
+                                          {lic}
+                                        </span>
+                                      );
+                                    }
                                     return (
-                                      <span className="text-[9px] text-slate-400 bg-slate-800 px-1 py-0.2 rounded border border-slate-700">
-                                        Rights not verified
-                                      </span>
-                                    );
-                                  }
-                                  if (st === 'PERMISSION_REQUIRED') {
-                                    return (
-                                      <span className="text-[9px] text-rose-300 bg-rose-950/40 px-1 py-0.2 rounded border border-rose-500/30">
-                                        Permission Required
-                                      </span>
-                                    );
-                                  }
-                                  if (st === 'RESTRICTED') {
-                                    return (
-                                      <span className="text-[9px] text-amber-300 bg-amber-950/40 px-1 py-0.2 rounded border border-amber-500/30">
+                                      <span className="text-[9px] text-emerald-400/80 bg-emerald-950/40 px-1 py-0.2 rounded border border-emerald-500/20">
                                         {lic}
                                       </span>
                                     );
-                                  }
-                                  return (
-                                    <span className="text-[9px] text-emerald-400/80 bg-emerald-950/40 px-1 py-0.2 rounded border border-emerald-500/20">
-                                      {lic}
-                                    </span>
-                                  );
-                                })()}
+                                  })()}
+                                </div>
+                                {isWithheld ? (
+                                  <p className="text-rose-300/80 font-serif italic text-xs leading-relaxed">
+                                    {tr.withheldNotice || tr.text}
+                                  </p>
+                                ) : (
+                                  <p className="text-slate-200 font-serif leading-relaxed text-xs">{tr.text}</p>
+                                )}
                               </div>
-                              <p className="text-slate-200 font-serif leading-relaxed text-xs">{tr.text}</p>
-                            </div>
-                          ))}
+                            );
+                          })}
                         </div>
                       </div>
                     )}

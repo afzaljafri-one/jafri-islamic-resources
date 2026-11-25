@@ -12,10 +12,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 1,
     "slok": "धृतराष्ट्र उवाच |\nधर्मक्षेत्रे कुरुक्षेत्रे समवेता युयुत्सवः |\nमामकाः पाण्डवाश्चैव किमकुर्वत सञ्जय ||१-१||",
     "transliteration": "dhṛtarāṣṭra uvāca .\ndharmakṣetre kurukṣetre samavetā yuyutsavaḥ .\nmāmakāḥ pāṇḍavāścaiva kimakurvata sañjaya ||1-1||",
-    "sivanandaEn": "1.1 Dhritarashtra said  What did my people and the sons of Pandu do when they had assembled\ntogether eager for battle on the holy plain of Kurukshetra, O Sanjaya.",
-    "gambhiranandaEn": "1.1. Dhrtarastra said  O Sanjaya, what did my sons (and others) and Pandu's sons (and others) actually do when, eager for battle, they assembled on the sacred field, the Kuruksetra (Field of the Kurus)?",
-    "purohitEn": "1.1 The King Dhritarashtra asked: \"O Sanjaya! What happened on the sacred battlefield of Kurukshetra, when my people gathered against the Pandavas?\"",
-    "ramsukhdasHi": "।।1.1।। धृतराष्ट्र बोले (टिप्पणी प0 1.2) - हे संजय! (टिप्पणी प0 1.3) धर्मभूमि कुरुक्षेत्र में युद्ध की इच्छा से इकट्ठे हुए मेरेे और पाण्डु के पुत्रों ने भी क्या किया?",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.1 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -23,10 +23,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 2,
     "slok": "सञ्जय उवाच |\nदृष्ट्वा तु पाण्डवानीकं व्यूढं दुर्योधनस्तदा |\nआचार्यमुपसंगम्य राजा वचनमब्रवीत् ||१-२||",
     "transliteration": "sañjaya uvāca .\ndṛṣṭvā tu pāṇḍavānīkaṃ vyūḍhaṃ duryodhanastadā .\nācāryamupasaṃgamya rājā vacanamabravīt ||1-2||",
-    "sivanandaEn": "1.2. Sanjaya said  Having seen the army of the Pandavas drawn up in battle-array,\nKing Duryodhana then approached his teacher (Drona) and spoke these words.",
-    "gambhiranandaEn": "1.2 Sanjaya said  But then, seeing the army of the Pandavas in battle array, King Duryodhana approached the teacher (Drona) and uttered a speech:",
-    "purohitEn": "1.2 Sanjaya replied: \"The Prince Duryodhana, when he saw the army of the Pandavas paraded, approached his preceptor Guru Drona and spoke as follows:",
-    "ramsukhdasHi": "।।1.2।। संजय बोले - उस समय वज्रव्यूह-से खड़ी हुई पाण्डव-सेना को देखकर राजा दुर्योधन द्रोणाचार्य के पास जाकर यह वचन बोला।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.2 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -34,10 +34,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 3,
     "slok": "पश्यैतां पाण्डुपुत्राणामाचार्य महतीं चमूम् |\nव्यूढां द्रुपदपुत्रेण तव शिष्येण धीमता ||१-३||",
     "transliteration": "paśyaitāṃ pāṇḍuputrāṇāmācārya mahatīṃ camūm .\nvyūḍhāṃ drupadaputreṇa tava śiṣyeṇa dhīmatā ||1-3||",
-    "sivanandaEn": "1.3. \"Behold, O Teacher! this mighty army of the sons of Pandu,\narrayed by the son of Drupada, thy wise disciple.",
-    "gambhiranandaEn": "1.3 O teacher, (please) see this vast army of the sons of Pandu, arrayed for battle by the son of Drupada, your intelligent disciple.",
-    "purohitEn": "1.3 Revered Father! Behold this mighty host of the Pandavas, paraded by the son of King Drupada, thy wise disciple.",
-    "ramsukhdasHi": "।।1.3।। हे आचार्य! आपके बुद्धिमान् शिष्य द्रुपदपुत्र धृष्टद्युम्न के द्वारा व्यूहरचना से खड़ी की हुई पाण्डवों की इस बड़ी भारी सेना को देखिये",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.3 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -45,10 +45,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 4,
     "slok": "अत्र शूरा महेष्वासा भीमार्जुनसमा युधि |\nयुयुधानो विराटश्च द्रुपदश्च महारथः ||१-४||",
     "transliteration": "atra śūrā maheṣvāsā bhīmārjunasamā yudhi .\nyuyudhāno virāṭaśca drupadaśca mahārathaḥ ||1-4||",
-    "sivanandaEn": "1.4. Here are heroes, mighty archers, eal in battle to Bhima\nand Arjuna, Yoyudhana (Satyaki), Virata and Drupada, of the great car (mighty\nwarriors).",
-    "gambhiranandaEn": "1.4 Here are the heroes wielding great bows, who in battle are compeers of Bhima and Arjuna: Yuyudhana (Satyaki) and Virata, and the maharatha (great chariot-rider) Drupada;",
-    "purohitEn": "1.4 In it are heroes and great bowmen; the equals in battle of Arjuna and Bheema, Yuyudhana, Virata and Drupada, great soldiers all;",
-    "ramsukhdasHi": "।।1.4 -- 1.6।। यहाँ (पाण्डवों की सेना में) बड़े-बड़े शूरवीर हैं, जिनके बहुत बड़े-बड़े धनुष हैं तथा जो युद्ध में भीम और अर्जुनके समान हैं। उनमें युयुधान (सात्यकि), राजा विराट और महारथी द्रुपद भी हैं। धृष्टकेतु और चेकितान तथा पराक्रमी काशिराज भी हैं। पुरुजित् और कुन्तिभोज--ये दोनों भाई तथा मनुष्योंमें श्रेष्ठ शैब्य भी हैं। पराक्रमी युधामन्यु और पराक्रमी उत्तमौजा भी हैं। सुभद्रापुत्र अभिमन्यु और द्रौपदी के पाँचों पुत्र भी हैं। ये सब-के-सब महारथी हैं।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.4 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -56,10 +56,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 5,
     "slok": "धृष्टकेतुश्चेकितानः काशिराजश्च वीर्यवान् |\nपुरुजित्कुन्तिभोजश्च शैब्यश्च नरपुंगवः ||१-५||",
     "transliteration": "dhṛṣṭaketuścekitānaḥ kāśirājaśca vīryavān .\npurujitkuntibhojaśca śaibyaśca narapuṃgavaḥ ||1-5||",
-    "sivanandaEn": "1.5. \"Dhrishtaketu, chekitana and the valiant king of Kasi, Purujit\nand Kuntibhoja and Saibya, the best men.",
-    "gambhiranandaEn": "1.5 Dhrstaketu, Cekitana, and the valiant king of Kasi (Varanasi); Purujit and Kuntibhoja, and Saibya, the choicest among men;",
-    "purohitEn": "1.5 Dhrishtaketu, Chekitan, the valiant King of Benares, Purujit, Kuntibhoja, Shaibya - a master over many;",
-    "ramsukhdasHi": "।।1.4 -- 1.6।। यहाँ (पाण्डवों की सेना में) बड़े-बड़े शूरवीर हैं, जिनके बहुत बड़े-बड़े धनुष हैं तथा जो युद्ध में भीम और अर्जुनके समान हैं। उनमें युयुधान (सात्यकि), राजा विराट और महारथी द्रुपद भी हैं। धृष्टकेतु और चेकितान तथा पराक्रमी काशिराज भी हैं। पुरुजित् और कुन्तिभोज--ये दोनों भाई तथा मनुष्योंमें श्रेष्ठ शैब्य भी हैं। पराक्रमी युधामन्यु और पराक्रमी उत्तमौजा भी हैं। सुभद्रापुत्र अभिमन्यु और द्रौपदी के पाँचों पुत्र भी हैं। ये सब-के-सब महारथी हैं।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.5 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -67,10 +67,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 6,
     "slok": "युधामन्युश्च विक्रान्त उत्तमौजाश्च वीर्यवान् |\nसौभद्रो द्रौपदेयाश्च सर्व एव महारथाः ||१-६||",
     "transliteration": "yudhāmanyuśca vikrānta uttamaujāśca vīryavān .\nsaubhadro draupadeyāśca sarva eva mahārathāḥ ||1-6||",
-    "sivanandaEn": "1.6. \"The strong Yodhamanyu and the brave Uttamaujas, the son\nof Subhadra (Abhimanyu, the son of Subhadra and Arjuna), and the sons of\nDraupadi, all of great chariots (great heroes).",
-    "gambhiranandaEn": "1.6 And the chivalrous Yudhamanyu, and the valiant Uttamaujas; son of Subhadra (Abhimanyu) and the sons of Draupadi  all (of whom) are, verily, maharathas.",
-    "purohitEn": "1.6 Yudhamanyu, Uttamouja, Soubhadra and the sons of Droupadi, famous men.",
-    "ramsukhdasHi": "।।1.4 -- 1.6।। यहाँ (पाण्डवों की सेना में) बड़े-बड़े शूरवीर हैं, जिनके बहुत बड़े-बड़े धनुष हैं तथा जो युद्ध में भीम और अर्जुनके समान हैं। उनमें युयुधान (सात्यकि), राजा विराट और महारथी द्रुपद भी हैं। धृष्टकेतु और चेकितान तथा पराक्रमी काशिराज भी हैं। पुरुजित् और कुन्तिभोज--ये दोनों भाई तथा मनुष्योंमें श्रेष्ठ शैब्य भी हैं। पराक्रमी युधामन्यु और पराक्रमी उत्तमौजा भी हैं। सुभद्रापुत्र अभिमन्यु और द्रौपदी के पाँचों पुत्र भी हैं। ये सब-के-सब महारथी हैं।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.6 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -78,10 +78,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 7,
     "slok": "अस्माकं तु विशिष्टा ये तान्निबोध द्विजोत्तम |\nनायका मम सैन्यस्य संज्ञार्थं तान्ब्रवीमि ते ||१-७||",
     "transliteration": "asmākaṃ tu viśiṣṭā ye tānnibodha dvijottama .\nnāyakā mama sainyasya saṃjñārthaṃ tānbravīmi te ||1-7||",
-    "sivanandaEn": "1.7. \"Know also, O best among the twice-born! the names of those\nwho are the most distinguished amongst ourselves, the leaders of my army;\nthese I name to thee for thy information.",
-    "gambhiranandaEn": "1.7 But, O best among the Brahmanas, please be appraised of those who are foremost among us, the ?nders of my army. I speak of them to you by way of example.",
-    "purohitEn": "1.7 Further, take note of all those captains who have ranged themselves on our side, O best of Spiritual Guides! The leaders of my army. I will name them for you.",
-    "ramsukhdasHi": "।।1.7।। हे द्विजोत्तम! हमारे पक्ष में भी जो मुख्य हैं, उनपर भी आप ध्यान दीजिये। आपको याद दिलाने के लिये मेरी सेना के जो नायक हैं, उनको मैं कहता हूँ।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.7 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -89,10 +89,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 8,
     "slok": "भवान्भीष्मश्च कर्णश्च कृपश्च समितिञ्जयः |\nअश्वत्थामा विकर्णश्च सौमदत्तिस्तथैव च ||१-८||",
     "transliteration": "bhavānbhīṣmaśca karṇaśca kṛpaśca samitiñjayaḥ .\naśvatthāmā vikarṇaśca saumadattistathaiva ca ||1-8||",
-    "sivanandaEn": "1.8. \"Thyself and Bhishma, and Karna and also Kripa, the victorious\nin war, Asvatthama, Vikarna, and also Bhurisrava, the son of Somadatta.",
-    "gambhiranandaEn": "1.8 (They are:) Your venerable self, Bhisma and Karna, and Krpa who is ever victorious in battle; Asvatthama, Vikarna, Saumadatti and Jayadratha.",
-    "purohitEn": "1.8 You come first; then Bheeshma, Karna, Kripa, great soldiers; Ashwaththama, Vikarna and the son of Somadhatta;",
-    "ramsukhdasHi": "।।1.8।। आप (द्रोणाचार्य) और पितामह भीष्म तथा कर्ण और संग्रामविजयी कृपाचार्य तथा वैसे ही अश्वत्थामा, विकर्ण और सोमदत्त का पुत्र भूरिश्रवा।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.8 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -100,10 +100,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 9,
     "slok": "अन्ये च बहवः शूरा मदर्थे त्यक्तजीविताः |\nनानाशस्त्रप्रहरणाः सर्वे युद्धविशारदाः ||१-९||",
     "transliteration": "anye ca bahavaḥ śūrā madarthe tyaktajīvitāḥ .\nnānāśastrapraharaṇāḥ sarve yuddhaviśāradāḥ ||1-9||",
-    "sivanandaEn": "1.9. \"And also many other heroes who are ready to give up their\nlives for my sake, armed with various weapons and missiles, all well-skilled\nin battle.",
-    "gambhiranandaEn": "1.9 There are many heroes who have dedicated their lives for my sake, who possess various kinds of weapons and missiles, (and) all of whom are skilled in battle.",
-    "purohitEn": "1.9 And many others, all ready to die for my sake; all armed, all skilled in war.",
-    "ramsukhdasHi": "।।1.9।। इनके अतिरिक्त बहुत-से शूरवीर हैं, जिन्होंने मेरे लिये अपने जीने की इच्छा का भी त्याग कर दिया है और जो अनेक प्रकार के शस्त्र-अस्त्रों को चलानेवाले हैं तथा जो सब-के-सब युद्धकला में अत्यन्त चतुर हैं।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.9 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -111,10 +111,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 10,
     "slok": "अपर्याप्तं तदस्माकं बलं भीष्माभिरक्षितम् |\nपर्याप्तं त्विदमेतेषां बलं भीमाभिरक्षितम् ||१-१०||",
     "transliteration": "aparyāptaṃ tadasmākaṃ balaṃ bhīṣmābhirakṣitam .\nparyāptaṃ tvidameteṣāṃ balaṃ bhīmābhirakṣitam ||1-10||",
-    "sivanandaEn": "1.10. \"This army of ours marshalled by Bhishma is insufficient,\nwhereas that army of theirs marshelled by Bhima is sufficient.",
-    "gambhiranandaEn": "1.10 Therefore, our army under the complete protection of Bhisma and others is unlimited. But this army of these (enemies), under the protection of Bhima and others is limited.",
-    "purohitEn": "1.10 Yet our army seems the weaker, though commanded by Bheeshma; their army seems the stronger, though commanded by Bheema.",
-    "ramsukhdasHi": "।।1.10।। वह हमारी सेना पाण्डवों पर विजय करने में अपर्याप्त है, असमर्थ है; क्योंकि उसके संरक्षक (उभयपक्षपाती) भीष्म हैं। परन्तु इन पाण्डवों की सेना हमारे पर विजय करने में पर्याप्त है, समर्थ है; क्योंकि इसके संरक्षक (निजसेनापक्षपाती) भीमसेन हैं।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.10 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -122,10 +122,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 11,
     "slok": "अयनेषु च सर्वेषु यथाभागमवस्थिताः |\nभीष्ममेवाभिरक्षन्तु भवन्तः सर्व एव हि ||१-११||",
     "transliteration": "ayaneṣu ca sarveṣu yathābhāgamavasthitāḥ .\nbhīṣmamevābhirakṣantu bhavantaḥ sarva eva hi ||1-11||",
-    "sivanandaEn": "1.11. \"Therefore do ye all, stationed in your respective positions,\nin the several divisions of the army, protect Bhishma alone.\"",
-    "gambhiranandaEn": "1.11 However, venerable sirs, all of you without exception, while occupying all the positions in the different directions as alloted (to you respectively), please fully protect Bhisma in particular.",
-    "purohitEn": "1.11 Therefore in the rank and file, let stand firm in their posts, according to battalions; and all you generals about Bheeshma.",
-    "ramsukhdasHi": "।।1.11।। आप सब-के-सब लोग सभी मोर्चों पर अपनी-अपनी जगह दृढ़ता से स्थित रहते हुए ही पितामह भीष्म की चारों ओर से रक्षा करें।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.11 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -133,10 +133,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 12,
     "slok": "तस्य सञ्जनयन्हर्षं कुरुवृद्धः पितामहः |\nसिंहनादं विनद्योच्चैः शङ्खं दध्मौ प्रतापवान् ||१-१२||",
     "transliteration": "tasya sañjanayanharṣaṃ kuruvṛddhaḥ pitāmahaḥ .\nsiṃhanādaṃ vinadyoccaiḥ śaṅkhaṃ dadhmau pratāpavān ||1-12||",
-    "sivanandaEn": "1.12. His glorious grandsire (Bhishma), the oldest of the Kauravas,\nin order to cheer Duryodhana, now roared like a lion, and blew his conch.",
-    "gambhiranandaEn": "1.12 The valiant grandfather, the eldest of the Kurus, loudly sounding a lion-roar, blew the conch to raise his (Duryodhana's) spirits.",
-    "purohitEn": "1.12 Then to enliven his spirits, the brave Grandfather Bheeshma, eldest of the Kuru-clan, blew his conch, till it sounded like a lion's roar.",
-    "ramsukhdasHi": "।।1.12।। दुर्योधन के हृदय में हर्ष उत्पन्न करते हुए कुरुवृद्ध प्रभावशाली पितामह भीष्म ने सिंह के समान गरज कर जोर से शंख बजाया।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.12 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -144,10 +144,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 13,
     "slok": "ततः शङ्खाश्च भेर्यश्च पणवानकगोमुखाः |\nसहसैवाभ्यहन्यन्त स शब्दस्तुमुलोऽभवत् ||१-१३||",
     "transliteration": "tataḥ śaṅkhāśca bheryaśca paṇavānakagomukhāḥ .\nsahasaivābhyahanyanta sa śabdastumulo.abhavat ||1-13||",
-    "sivanandaEn": "1.13. Then (following Bhishma), conches and kettledrums, tabors,\ndrums and cow horns blared forth ite suddenly (from the Kaurava side)\nand the sound was tremendous.",
-    "gambhiranandaEn": "1.13  Just immediately after that conchs and kettledrums, and tabors, trumpets and cow-horns blared forth. That sound became tumultuous.",
-    "purohitEn": "1.13 And immediately all the conches and drums, the trumpets and horns, blared forth in tumultuous uproar.",
-    "ramsukhdasHi": "।।1.13।। उसके बाद शंख, भेरी (नगाड़े), ढोल, मृदङ्ग और नरसिंघे बाजे एक साथ बज उठे। उनका वह शब्द बड़ा भयंकर हुआ।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.13 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -155,10 +155,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 14,
     "slok": "ततः श्वेतैर्हयैर्युक्ते महति स्यन्दने स्थितौ |\nमाधवः पाण्डवश्चैव दिव्यौ शङ्खौ प्रदध्मतुः ||१-१४||",
     "transliteration": "tataḥ śvetairhayairyukte mahati syandane sthitau .\nmādhavaḥ pāṇḍavaścaiva divyau śaṅkhau pradadhmatuḥ ||1-14||",
-    "sivanandaEn": "1.14. Then, also, Madhava (Krishna) and the son of Pandu (Arjuna),\nseated in the magnificent chariot, yoked with white horses, blew divine\nconches.",
-    "gambhiranandaEn": "1.14  Then, Madhava (Krsna) and the son of Pandu (Arjuna), stationed in their magnificent chariot with white horses yoked to it, loudly blew their divine conchs.",
-    "purohitEn": "1.14 Then seated in their spacious war chariot, yoked with white horses, Lord Shri Krishna and Arjuna sounded their divine shells.",
-    "ramsukhdasHi": "।।1.14।। उसके बाद सफेद घोड़ों से युक्त महान् रथ पर बैठे हुए लक्ष्मीपति भगवान् श्रीकृष्ण और पाण्डुपुत्र अर्जुन ने दिव्य शंखों को बड़े जोर से बजाया।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.14 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -166,10 +166,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 15,
     "slok": "पाञ्चजन्यं हृषीकेशो देवदत्तं धनञ्जयः |\nपौण्ड्रं दध्मौ महाशङ्खं भीमकर्मा वृकोदरः ||१-१५||",
     "transliteration": "pāñcajanyaṃ hṛṣīkeśo devadattaṃ dhanañjayaḥ .\npauṇḍraṃ dadhmau mahāśaṅkhaṃ bhīmakarmā vṛkodaraḥ ||1-15||",
-    "sivanandaEn": "1.15. Hrishikesha blew the Panchajanya and Arjuna blew the Devadatta\nand Bhima (the wolf-bellied), the doer of terrible deeds, blew the great\nconch Paundra.",
-    "gambhiranandaEn": "1.15  Hrsikesa (Krsna) (blew the conch) Pancajanya; Dhananjaya (Arjuna) (the conch) Devadatta; and Vrkodara (Bhima) of terrible deeds blew the great conch Paundra;",
-    "purohitEn": "1.15 Lord Shri Krishna blew his Panchajanya and Arjuna his Devadatta, brave Bheema his renowned shell, Poundra.",
-    "ramsukhdasHi": "।।1.15।। अन्तर्यामी भगवान् श्रीकृष्ण ने पाञ्चजन्य नामक तथा धनञ्जय अर्जुन ने देवदत्त नामक शंख बजाया; और भयानक कर्म करनेवाले वृकोदर भीम ने पौण्ड्र नामक महाशंख बजाया।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.15 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -177,10 +177,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 16,
     "slok": "अनन्तविजयं राजा कुन्तीपुत्रो युधिष्ठिरः |\nनकुलः सहदेवश्च सुघोषमणिपुष्पकौ ||१-१६||",
     "transliteration": "anantavijayaṃ rājā kuntīputro yudhiṣṭhiraḥ .\nnakulaḥ sahadevaśca sughoṣamaṇipuṣpakau ||1-16||",
-    "sivanandaEn": "1.16. The king Yodhishthira, the son of Kunti, blew the Anantavijaya;\nNakula and Sahadeva blew the Sughosha and the Manipushpaka.",
-    "gambhiranandaEn": "1.16  King Yudhisthira, son of Kunti, (blew) the Anantavijaya; Nakula and Sahadeva, the Sughosa and the Manipuspaka (respectively).",
-    "purohitEn": "1.16 The King Dharmaraja, the son of Kunti, blew the Anantavijaya, Nakalu and Sahadeo, the Sugosh and Manipushpaka, respectively.",
-    "ramsukhdasHi": "।।1.16।। कुन्तीपुत्र राजा युधिष्ठिर ने अनन्तविजय नामक शंख बजाया तथा नकुल और सहदेव ने सुघोष और मणिपुष्पक नामक शंख बजाये।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.16 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -188,10 +188,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 17,
     "slok": "काश्यश्च परमेष्वासः शिखण्डी च महारथः |\nधृष्टद्युम्नो विराटश्च सात्यकिश्चापराजितः ||१-१७||",
     "transliteration": "kāśyaśca parameṣvāsaḥ śikhaṇḍī ca mahārathaḥ .\ndhṛṣṭadyumno virāṭaśca sātyakiścāparājitaḥ ||1-17||",
-    "sivanandaEn": "1.17. The king of Kasi, an exellent archer, Sikhandi, the mighty\ncar-warrior, Dhrishtadyumna and Virata and Satyaki, the unconered.",
-    "gambhiranandaEn": "1.17  And the King of Kasi, wielding a great bow, and the great chariot-rider Sikhandi, Dhrstadyumna and Virata, and Satyaki the unconered;",
-    "purohitEn": "1.17 And the Maharaja of Benares, the great archer, Shikhandi, the great soldier, Dhrishtayumna, Virata and Satyaki, the invincible,",
-    "ramsukhdasHi": "।।1.17 -- 1.18।। हे राजन्! श्रेष्ठ धनुषवाले काशिराज और महारथी शिखण्डी तथा धृष्टद्युम्न एवं राजा विराट और अजेय सात्यकि, राजा द्रुपद और द्रौपदी के पाँचों पुत्र तथा लम्बी-लम्बी भुजाओंवाले सुभद्रा-पुत्र अभिमन्यु - इन सभी ने सब ओर से अलग-अलग (अपने-अपने) शंख बजाये।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.17 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -199,10 +199,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 18,
     "slok": "द्रुपदो द्रौपदेयाश्च सर्वशः पृथिवीपते |\nसौभद्रश्च महाबाहुः शङ्खान्दध्मुः पृथक्पृथक् ||१-१८||",
     "transliteration": "drupado draupadeyāśca sarvaśaḥ pṛthivīpate .\nsaubhadraśca mahābāhuḥ śaṅkhāndadhmuḥ pṛthakpṛthak ||1-18||",
-    "sivanandaEn": "1.18. Drupada and the sons of Draupadi, O Lord of the earth, and\nthe son of Subhadra, the mighty-armed, blew their conches separately.",
-    "gambhiranandaEn": "1.18  Drupada and the sons of Draupadi, and the son of Subhadra, (Abhimanyu) the mighty-armed  all (of them) together, O king, blew their respective conchs.",
-    "purohitEn": "1.18 And O King! Drupada, the sons of Droupadi and Soubhadra, the great soldier, blew their conches.",
-    "ramsukhdasHi": "।।1.17 -- 1.18।। हे राजन्! श्रेष्ठ धनुषवाले काशिराज और महारथी शिखण्डी तथा धृष्टद्युम्न एवं राजा विराट और अजेय सात्यकि, राजा द्रुपद और द्रौपदी के पाँचों पुत्र तथा लम्बी-लम्बी भुजाओंवाले सुभद्रा-पुत्र अभिमन्यु - इन सभी ने सब ओर से अलग-अलग (अपने-अपने) शंख बजाये।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.18 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -210,10 +210,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 19,
     "slok": "स घोषो धार्तराष्ट्राणां हृदयानि व्यदारयत् |\nनभश्च पृथिवीं चैव तुमुलोऽभ्यनुनादयन् (or लोव्यनु) ||१-१९||",
     "transliteration": "sa ghoṣo dhārtarāṣṭrāṇāṃ hṛdayāni vyadārayat .\nnabhaśca pṛthivīṃ caiva tumulo.abhyanunādayan (lo vyanu)||1-19||",
-    "sivanandaEn": "1.19. That tumultuous sound rent the hearts of (the members of)\nDhritarashtra's party, making both the heaven and the earth resound.",
-    "gambhiranandaEn": "1.19  That tremendous sound pierced the hearts of the sons of Dhrtarastra as it reverberated through the sky and the earth.",
-    "purohitEn": "1.19 The tumult rent the hearts of the sons of Dhritarashtra, and violently shook heaven and earth with its echo.",
-    "ramsukhdasHi": "।।1.19।। पाण्डव-सेना के शंखों के उस भयंकर शब्द ने आकाश और पृथ्वी को भी गुँजाते हुए अन्यायपूर्वक राज्य हड़पनेवाले दुर्योधन आदि के हृदय विदीर्ण कर दिये।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.19 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -221,10 +221,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 20,
     "slok": "अथ व्यवस्थितान्दृष्ट्वा धार्तराष्ट्रान् कपिध्वजः |\nप्रवृत्ते शस्त्रसम्पाते धनुरुद्यम्य पाण्डवः |\nहृषीकेशं तदा वाक्यमिदमाह महीपते ||१-२०||",
     "transliteration": "atha vyavasthitāndṛṣṭvā dhārtarāṣṭrān kapidhvajaḥ .\npravṛtte śastrasampāte dhanurudyamya pāṇḍavaḥ ||1-20||",
-    "sivanandaEn": "1.20. Then, seeing the people of Dhritarashtra’s party standing\narrayed and the discharge of weapons about to begin, Arjuna, the son of\nPandu, whose ensign was a monkey, took up his bow and said the following\nto Krishna, O Lord of the earth.",
-    "gambhiranandaEn": "1.20  O king, thereafter, seeing Dhrtarastra's men standing in their positions, when all the weapons were ready for action, the son of Pandu (Arjuna) who had the insignia of Hanuman of his chariot-flag, raising up his bow, said the following to Hrsikesa.",
-    "purohitEn": "1.20 Then beholding the sons of Dhritarashtra, drawn up on the battle- field, ready to fight, Arjuna, whose flag bore the Hanuman,",
-    "ramsukhdasHi": "।।1.20।। हे महीपते! धृतराष्ट्र! अब शस्त्रों के चलने की तैयारी हो ही रही थी कि उस समय अन्यायपूर्वक राज्य को धारण करनेवाले राजाओं और उनके साथियों को व्यवस्थितरूप से सामने खड़े हुए देखकर कपिध्वज पाण्डुपुत्र अर्जुन ने अपना गाण्डीव धनुष उठा लिया और अन्तर्यामी भगवान् श्रीकृष्ण से ये वचन बोले।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.20 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -232,10 +232,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 21,
     "slok": "अर्जुन उवाच |\nसेनयोरुभयोर्मध्ये रथं स्थापय मेऽच्युत ||१-२१||",
     "transliteration": "hṛṣīkeśaṃ tadā vākyamidamāha mahīpate .\narjuna uvāca .\nsenayorubhayormadhye rathaṃ sthāpaya me.acyuta ||1-21||",
-    "sivanandaEn": "1.21 Arjuna said  In the middle between the two armies, place my chariot,\nO krishna, so that I may behold those who stand here desirous to fight,\nand know with whom I must fight, when the battle is about to commence.",
-    "gambhiranandaEn": "1.21  Arjuna said  O Acyuta, please place my chariot between both the armies  .",
-    "purohitEn": "1.21 Raising his bow, spoke this to the Lord Shri Krishna: O Infallible! Lord of the earth! Please draw up my chariot betwixt the two armies,",
-    "ramsukhdasHi": "।।1.21 -- 1.22।। अर्जुन बोले - हे अच्युत! दोनों सेनाओं के मध्य में मेरे रथ को आप तब तक खड़ा कीजिये, जब तक मैं युद्धक्षेत्र में खड़े हुए इन युद्ध की इच्छावालों को देख न लूँ कि इस युद्धरूप उद्योग में मुझे किन-किन के साथ युद्ध करना योग्य है।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.21 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -243,10 +243,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 22,
     "slok": "यावदेतान्निरीक्षेऽहं योद्धुकामानवस्थितान् |\nकैर्मया सह योद्धव्यमस्मिन् रणसमुद्यमे ||१-२२||",
     "transliteration": "yāvadetānnirikṣe.ahaṃ yoddhukāmānavasthitān .\nkairmayā saha yoddhavyamasmin raṇasamudyame ||1-22||",
-    "sivanandaEn": "1.22. Arjuna said  In the middle between the two armies, place my chariot,\nO krishna, so that I may behold those who stand here desirous to fight,\nand know with whom I must fight, when the battle is about to commence.",
-    "gambhiranandaEn": "1.22   until I survey these who stand intent on fighting, and those who are going to engage in battle with me in this impending war.",
-    "purohitEn": "1.22 So that I may observe those who must fight on my side, those who must fight against me;",
-    "ramsukhdasHi": "।।1.21 -- 1.22।। अर्जुन बोले - हे अच्युत! दोनों सेनाओं के मध्य में मेरे रथ को आप तब तक खड़ा कीजिये, जब तक मैं युद्धक्षेत्र में खड़े हुए इन युद्ध की इच्छावालों को देख न लूँ कि इस युद्धरूप उद्योग में मुझे किन-किनके साथ युद्ध करना योग्य है।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.22 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -254,10 +254,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 23,
     "slok": "योत्स्यमानानवेक्षेऽहं य एतेऽत्र समागताः |\nधार्तराष्ट्रस्य दुर्बुद्धेर्युद्धे प्रियचिकीर्षवः ||१-२३||",
     "transliteration": "yotsyamānānavekṣe.ahaṃ ya ete.atra samāgatāḥ .\ndhārtarāṣṭrasya durbuddheryuddhe priyacikīrṣavaḥ ||1-23||",
-    "sivanandaEn": "1.23. For I desire to observe those who are assembled here to fight,\nwishing to please in battle the evil-minded Duryodhana (the son of Dhritarashtra).",
-    "gambhiranandaEn": "1.23  These who have assembled here and want to accomplish in the war what is dear to the perverted son of Dhrtarastra, I find them to be intent on fighting.",
-    "purohitEn": "1.23 And gaze over this array of soldiers, eager to please the sinful sons of Dhritarashtra.\"",
-    "ramsukhdasHi": "।।1.23।। दुष्टबुद्धि दुर्योधन का युद्ध में प्रिय करने की इच्छावाले जो ये राजालोग इस सेना में आये हुए हैं, युद्ध करने को उतावले हुए इन सबको मैं देख लूँ।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.23 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -265,10 +265,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 24,
     "slok": "सञ्जय उवाच |\nएवमुक्तो हृषीकेशो गुडाकेशेन भारत |\nसेनयोरुभयोर्मध्ये स्थापयित्वा रथोत्तमम् ||१-२४||",
     "transliteration": "sañjaya uvāca .\nevamukto hṛṣīkeśo guḍākeśena bhārata .\nsenayorubhayormadhye sthāpayitvā rathottamam ||1-24||",
-    "sivanandaEn": "1.24. Sanjaya said  Thus addressed by Arjuna, Krishna, having stationed that\nbest of chariots, O Dhritarashtra, in the midst of the two armies.",
-    "gambhiranandaEn": "1.24  1.25  Sanjay said  O scion of the line of Bharata (Dhrtararastra), Hrsikesa, being told so by Gudakesa (Arjuna), placed the excellent chariot between the two armies, in front of Bhisma and Drona as also all the rulers of the earth, and said, 'O Partha (Arjuna), see these assempled people of the Kuru dynasty.'",
-    "purohitEn": "1.24 Sanjaya said: \"Having listened to the request of Arjuna, Lord Shri Krishna drew up His bright chariot exactly in the midst between the two armies,",
-    "ramsukhdasHi": "।।1.24 -- 1.25।। संजय बोले - हे भरतवंशी राजन्! निद्राविजयी अर्जुन के द्वारा इस तरह कहने पर अन्तर्यामी भगवान् श्रीकृष्ण ने दोनों सेनाओं के मध्यभाग में पितामह भीष्म और आचार्य द्रोण के सामने तथा सम्पूर्ण राजाओं के सामने श्रेष्ठ रथ को खड़ा करके इस तरह कहा कि 'हे पार्थ! इन इकट्ठे हुए कुरुवंशियोंको देख'।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.24 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -276,10 +276,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 25,
     "slok": "भीष्मद्रोणप्रमुखतः सर्वेषां च महीक्षिताम् |\nउवाच पार्थ पश्यैतान्समवेतान्कुरूनिति ||१-२५||",
     "transliteration": "bhīṣmadroṇapramukhataḥ sarveṣāṃ ca mahīkṣitām .\nuvāca pārtha paśyaitānsamavetānkurūniti ||1-25||",
-    "sivanandaEn": "1.25. In front of Bhishma and Drona, and all the rulers of the\nearth, said: \"O Arjuna (son of Pritha), behold these Kurus gathered together.\"",
-    "gambhiranandaEn": "1.24  1.25 Sanjay said  O scion of the line of Bharata (Dhrtararastra), Hrsikesa, being told so by Gudakesa (Arjuna), placed the excellent chariot between the two armies, in front of Bhisma and Drona as also all the rulers of the earth, and said, 'O Partha (Arjuna), see these assempled people of the Kuru dynasty.'",
-    "purohitEn": "1.25 Whither Bheeshma and Drona had led all the rulers of the earth, and spoke thus: O Arjuna! Behold these members of the family of Kuru assembled.",
-    "ramsukhdasHi": "।।1.24 -- 1.25।। संजय बोले - हे भरतवंशी राजन्! निद्राविजयी अर्जुन के द्वारा इस तरह कहने पर अन्तर्यामी भगवान् श्रीकृष्ण ने दोनों सेनाओं के मध्यभाग में पितामह भीष्म और आचार्य द्रोण के सामने तथा सम्पूर्ण राजाओं के सामने श्रेष्ठ रथको खड़ा करके इस तरह कहा कि 'हे पार्थ! इन इकट्ठे हुए कुरुवंशियोंको देख'।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.25 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -287,10 +287,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 26,
     "slok": "तत्रापश्यत्स्थितान्पार्थः पितॄनथ पितामहान् |\nआचार्यान्मातुलान्भ्रातॄन्पुत्रान्पौत्रान्सखींस्तथा ||१-२६||",
     "transliteration": "tatrāpaśyatsthitānpārthaḥ pitṝnatha pitāmahān .\nācāryānmātulānbhrātṛnputrānpautrānsakhīṃstathā ||1-26||",
-    "sivanandaEn": "1.26. Then, Arjuna (son of Pritha) saw there (in the armies) stationed,\nfathers and grandfathers, teachers, maternal uncles, brothers, sons, grandsons\nand friends too.",
-    "gambhiranandaEn": "1.26 Then Partha (Arjuna) saw, marshalled among both the armies, (his) uncles as also grandfathers, teachers, maternal uncles, brothers (and (cousins), sons, grandsons, as well as comrades and fathers-in-law and friends.",
-    "purohitEn": "1.26 There Arjuna noticed fathers, grandfathers, uncles, cousins, sons, grandsons, teachers, friends;",
-    "ramsukhdasHi": "।।1.26।। उसके बाद पृथानन्दन अर्जुनने उन दोनों ही सेनाओंमें स्थित पिताओंको, पितामहोंको, आचार्योंको, मामाओंको, भाइयोंको, पुत्रोंको, पौत्रोंको तथा मित्रोंको, ससुरोंको और सुहृदोंको भी देखा।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.26 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -298,10 +298,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 27,
     "slok": "श्वशुरान्सुहृदश्चैव सेनयोरुभयोरपि |\nतान्समीक्ष्य स कौन्तेयः सर्वान्बन्धूनवस्थितान् ||१-२७||",
     "transliteration": "śvaśurānsuhṛdaścaiva senayorubhayorapi .\ntānsamīkṣya sa kaunteyaḥ sarvānbandhūnavasthitān ||1-27||",
-    "sivanandaEn": "1.27. (He saw) fathers-in-law and friends also in both the armies.\nThe son of Kunti, Arjuna, seeing all those kinsmen thus standing arrayed,\nspoke this, sorrowfully filled with deep pity.",
-    "gambhiranandaEn": "1.27  The son of Kunti (Ajuna), seeing all those rlatives arrayed (there), became overwhelmed by supreme compassion and said this sorrowfully:",
-    "purohitEn": "1.27 Fathers-in-law and benefactors, arrayed on both sides. Arjuna then gazed at all those kinsmen before him.",
-    "ramsukhdasHi": "।।1.27।। अपनी-अपनी जगह पर स्थित उन सम्पूर्ण बान्धवों को देखकर वे कुन्तीनन्दन अर्जुन अत्यन्त कायरता से युक्त होकर विषाद करते हुए ये वचन बोले।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.27 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -309,10 +309,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 28,
     "slok": "कृपया परयाविष्टो विषीदन्निदमब्रवीत् |\nअर्जुन उवाच |\nदृष्ट्वेमं स्वजनं कृष्ण युयुत्सुं समुपस्थितम् ||१-२८||",
     "transliteration": "kṛpayā parayāviṣṭo viṣīdannidamabravīt .\narjuna uvāca .\ndṛṣṭvemaṃ svajanaṃ kṛṣṇa yuyutsuṃ samupasthitam ||1-28||",
-    "sivanandaEn": "1.28. Arjuna said  Seeing these, my kinsmen, O krishna, arrayed, eager to fight.",
-    "gambhiranandaEn": "1.28 Arjuna said  O Krsna, seeing these relatives and friends who have assembled here with the intention of fighting, my limbs become languid and my mouth becomes completely dry.",
-    "purohitEn": "1.28 And his heart melted with pity and sadly he spoke: O my Lord! When I see all these, my own people, thirsting for battle,",
-    "ramsukhdasHi": "।।1.28 -- 1.30।। अर्जुन बोले - हे कृष्ण! युद्ध की इच्छावाले इस कुटुम्ब-समुदाय को अपने सामने उपस्थित देखकर मेरे अङ्ग शिथिल हो रहे हैं और मुख सूख रहा है तथा मेरे शरीर में कँपकँपी आ रही है एवं रोंगटे खड़े हो रहे हैं। हाथ से गाण्डीव धनुष गिर रहा है और त्वचा भी जल रही है। मेरा मन भ्रमित-सा हो रहा है और मैं खड़े रहने में भी असमर्थ हो रहा हूँ।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.28 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -320,10 +320,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 29,
     "slok": "सीदन्ति मम गात्राणि मुखं च परिशुष्यति |\nवेपथुश्च शरीरे मे रोमहर्षश्च जायते ||१-२९||",
     "transliteration": "sīdanti mama gātrāṇi mukhaṃ ca pariśuṣyati .\nvepathuśca śarīre me romaharṣaśca jāyate ||1-29||",
-    "sivanandaEn": "1.29. My limbs fail and my mouth is parched, my body ivers and\nmy hair stands on end.",
-    "gambhiranandaEn": "1.29 And there is trembling in my body, and there is horripillation; the Gandiva (bow) slips from the hand and even the skin burns intensely.",
-    "purohitEn": "1.29 My limbs fail me and my throat is parched, my body trembles and my hair stands on end.",
-    "ramsukhdasHi": "।।1.28 -- 1.30।। अर्जुन बोले - हे कृष्ण! युद्ध की इच्छावाले इस कुटुम्ब-समुदाय को अपने सामने उपस्थित देखकर मेरे अङ्ग शिथिल हो रहे हैं और मुख सूख रहा है तथा मेरे शरीर में कँपकँपी आ रही है एवं रोंगटे खड़े हो रहे हैं। हाथ से गाण्डीव धनुष गिर रहा है और त्वचा भी जल रही है। मेरा मन भ्रमित-सा हो रहा है और मैं खड़े रहने में भी असमर्थ हो रहा हूँ।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.29 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -331,10 +331,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 30,
     "slok": "गाण्डीवं स्रंसते हस्तात्त्वक्चैव परिदह्यते |\nन च शक्नोम्यवस्थातुं भ्रमतीव च मे मनः ||१-३०||",
     "transliteration": "gāṇḍīvaṃ sraṃsate hastāttvakcaiva paridahyate .\nna ca śaknomyavasthātuṃ bhramatīva ca me manaḥ ||1-30||",
-    "sivanandaEn": "1.30. The (bow) Gandiva slips from my hand, and also my skins burns\nall over; I am unable even to stand and my mind is reeling, as it were.",
-    "gambhiranandaEn": "1.30 Moreover, O Kesava (Krsna), I am not able to stand firmly, and my mind seems to be whirling. And I notice the omens to be adverse.",
-    "purohitEn": "1.30 The bow Gandeeva slips from my hand, and my skin burns. I cannot keep quiet, for my mind is in tumult.",
-    "ramsukhdasHi": "।।1.28 -- 1.30।। अर्जुन बोले - हे कृष्ण! युद्ध की इच्छावाले इस कुटुम्ब-समुदाय को अपने सामने उपस्थित देखकर मेरे अङ्ग शिथिल हो रहे हैं और मुख सूख रहा है तथा मेरे शरीर में कँपकँपी आ रही है एवं रोंगटे खड़े हो रहे हैं। हाथ से गाण्डीव धनुष गिर रहा है और त्वचा भी जल रही है। मेरा मन भ्रमित-सा हो रहा है और मैं खड़े रहने में भी असमर्थ हो रहा हूँ।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.30 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -342,10 +342,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 31,
     "slok": "निमित्तानि च पश्यामि विपरीतानि केशव |\nन च श्रेयोऽनुपश्यामि हत्वा स्वजनमाहवे ||१-३१||",
     "transliteration": "nimittāni ca paśyāmi viparītāni keśava .\nna ca śreyo.anupaśyāmi hatvā svajanamāhave ||1-31||",
-    "sivanandaEn": "1.31. And I see adverse omens, O Kesava. I do not see any good\nin killing my kinsmen in battle.",
-    "gambhiranandaEn": "1.31 Besides, I do not see any good (to be derived) from killing my own people in battle. O Krsna, I do not hanker after victory, nor even a kingdom nor pleasures.",
-    "purohitEn": "1.31 The omens are adverse; what good can come from the slaughter of my people on this battlefield?",
-    "ramsukhdasHi": "।।1.31।। हे केशव! मैं लक्षणों  - (शकुनों) को भी विपरीत देख रहा हूँ और युद्ध में स्वजनोंको मारकर श्रेय (लाभ) भी नहीं देख रहा हूँ।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.31 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -353,10 +353,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 32,
     "slok": "न काङ्क्षे विजयं कृष्ण न च राज्यं सुखानि च |\nकिं नो राज्येन गोविन्द किं भोगैर्जीवितेन वा ||१-३२||",
     "transliteration": "na kāṅkṣe vijayaṃ kṛṣṇa na ca rājyaṃ sukhāni ca .\nkiṃ no rājyena govinda kiṃ bhogairjīvitena vā ||1-32||",
-    "sivanandaEn": "1.32. I desire not victory, O Krishna, nor kingdom, nor pleasures.\nOf what avail is dominion to us, O Krishna, or pleasures or even life?",
-    "gambhiranandaEn": "1.32  1.34  O Govinda! What need do we have of a kingdom, or what (need) of enjoyments and livelihood? Those for whom kingdom, enjoyments and pleasures ae desired by us, viz teachers, uncles, fathers-in-law, grandsons, brothers-in-law as also relatives-those very ones stand arrayed for battle risking their lives and wealth.",
-    "purohitEn": "1.32 Ah my Lord! I crave not for victory, nor for the kingdom, nor for any pleasure. What were a kingdom or happiness or life to me,",
-    "ramsukhdasHi": "।।1.32।। हे कृष्ण! मैं न तो विजय चाहता हूँ, न राज्य चाहता हूँ और न सुखों को ही चाहता हूँ। हे गोविन्द! हमलोगों को राज्य से क्या लाभ? भोगों से क्या लाभ? अथवा जीने से भी क्या लाभ?",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.32 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -364,10 +364,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 33,
     "slok": "येषामर्थे काङ्क्षितं नो राज्यं भोगाः सुखानि च |\nत इमेऽवस्थिता युद्धे प्राणांस्त्यक्त्वा धनानि च ||१-३३||",
     "transliteration": "yeṣāmarthe kāṅkṣitaṃ no rājyaṃ bhogāḥ sukhāni ca .\nta ime.avasthitā yuddhe prāṇāṃstyaktvā dhanāni ca ||1-33||",
-    "sivanandaEn": "1.33. Those for whose sake we desire kingdom, enjoyments and pleasures,\nstand here in battle, having renounced life and wealth.",
-    "gambhiranandaEn": "1.32  1.34 O Govinda! What need do we have of a kingdom, or what (need) of enjoyments and livelihood? Those for whom kingdom, enjoyments and pleasures ae desired by us, viz teachers, uncles, fathers-in-law, grandsons, brothers-in-law as also relatives-those very ones stand arrayed for battle risking their lives and wealth.",
-    "purohitEn": "1.33 When those for whose sake I desire these things stand here about to sacrifice their property and their lives:",
-    "ramsukhdasHi": "।।1.33।। जिनके लिये हमारी राज्य, भोग और सुखकी इच्छा है, वे ही ये सब अपने प्राणों की और धन की आशा का त्याग करके युद्ध में खड़े हैं।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.33 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -375,10 +375,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 34,
     "slok": "आचार्याः पितरः पुत्रास्तथैव च पितामहाः |\nमातुलाः श्वशुराः पौत्राः श्यालाः सम्बन्धिनस्तथा ||१-३४||",
     "transliteration": "ācāryāḥ pitaraḥ putrāstathaiva ca pitāmahāḥ .\nmātulāḥ śvaśurāḥ pautrāḥ śyālāḥ sambandhinastathā ||1-34||",
-    "sivanandaEn": "1.34. Teachers, fathers, sons and also grandfathers, maternal uncles,\nfathers-in-law, grandsons, brothers-in-law and other relatives,-",
-    "gambhiranandaEn": "1.32  1.34 O Govinda! What need do we have of a kingdom, or what (need) of enjoyments and livelihood? Those for whom kingdom, enjoyments and pleasures ae desired by us, viz teachers, uncles, fathers-in-law, grandsons, brothers-in-law as also relatives-those very ones stand arrayed for battle risking their lives and wealth.",
-    "purohitEn": "1.34 Teachers, fathers and grandfathers, sons and grandsons, uncles, father-in-law, brothers-in-law and other relatives.",
-    "ramsukhdasHi": "।।1.34 -- 1.35।। (टिप्पणी प0 24.1) आचार्य, पिता, पुत्र और उसी प्रकार पितामह, मामा, ससुर, पौत्र, साले तथा अन्य जितने भी सम्बन्धी हैं, मुझ पर प्रहार करने पर भी मैं इनको मारना नहीं चाहता, और हे मधुसूदन! मुझे त्रिलोकी का राज्य मिलता हो, तो भी मैं इनको मारना नहीं चाहता, फिर पृथ्वी के लिये तो (मैं इनको मारूँ ही) क्या?",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.34 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -386,10 +386,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 35,
     "slok": "एतान्न हन्तुमिच्छामि घ्नतोऽपि मधुसूदन |\nअपि त्रैलोक्यराज्यस्य हेतोः किं नु महीकृते ||१-३५||",
     "transliteration": "etānna hantumicchāmi ghnato.api madhusūdana .\napi trailokyarājyasya hetoḥ kiṃ nu mahīkṛte ||1-35||",
-    "sivanandaEn": "1.35. These I do not wish to kill, though they kill me, O Krishna,\neven for the sake of dominion over the three worlds; leave alone killing\nthem for the sake of the earth.",
-    "gambhiranandaEn": "1.35 O Madhusudana, even if I am killed, I do not want to kill these even for the sake of a kingdom extending over the three worlds; what to speak of doing so for the earth!",
-    "purohitEn": "1.35 I would not kill them, even for three worlds; why then for this poor earth? It matters not if I myself am killed.",
-    "ramsukhdasHi": "।।1.34 -- 1.35।। (टिप्पणी प0 24.1) आचार्य, पिता, पुत्र और उसी प्रकार पितामह, मामा, ससुर, पौत्र, साले तथा अन्य जितने भी सम्बन्धी हैं, मुझपर प्रहार करने पर भी मैं इनको मारना नहीं चाहता, और हे मधुसूदन! मुझे त्रिलोकी का राज्य मिलता हो, तो भी मैं इनको मारना नहीं चाहता, फिर पृथ्वीके लिये तो (मैं इनको मारूँ ही) क्या?",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.35 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -397,10 +397,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 36,
     "slok": "निहत्य धार्तराष्ट्रान्नः का प्रीतिः स्याज्जनार्दन |\nपापमेवाश्रयेदस्मान्हत्वैतानाततायिनः ||१-३६||",
     "transliteration": "nihatya dhārtarāṣṭrānnaḥ kā prītiḥ syājjanārdana .\npāpamevāśrayedasmānhatvaitānātatāyinaḥ ||1-36||",
-    "sivanandaEn": "1.36. By killing these sons of Dhritarashtra, what pleasure can\nbe ours, O Janardana? Only sin will accrue to us from killing these felons.",
-    "gambhiranandaEn": "1.36  O Janardana, what happiness shall we derive by killing the sons of Dhrtarastra? Sin alone will accrue to us by killing these felons.",
-    "purohitEn": "1.36 My Lord! What happiness can come from the death of these sons of Dhritarashtra? We shall sin if we kill these desperate men.",
-    "ramsukhdasHi": "।।1.36।। हे जनार्दन! इन धृतराष्ट्र-सम्बन्धियों को मारकर हमलोगों को क्या प्रसन्नता होगी? इन आततायियों को मारने से तो हमें पाप ही लगेगा।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.36 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -408,10 +408,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 37,
     "slok": "तस्मान्नार्हा वयं हन्तुं धार्तराष्ट्रान्स्वबान्धवान् |\nस्वजनं हि कथं हत्वा सुखिनः स्याम माधव ||१-३७||",
     "transliteration": "tasmānnārhā vayaṃ hantuṃ dhārtarāṣṭrānsvabāndhavān .\nsvajanaṃ hi kathaṃ hatvā sukhinaḥ syāma mādhava ||1-37||",
-    "sivanandaEn": "1.37. Therefore, we should not kill the sons of Dhritarashtra,\nour relatives; for how can we be happy by killing our own people, O Madhava\n(Krishna)?",
-    "gambhiranandaEn": "1.37  Therefore, it is not proper for us to kill the sons of Dhrtarastra who are our own relatives. For, O Madhava, how can we be happy by killing our kinsmen?",
-    "purohitEn": "1.37 We are worthy of a nobler feat than to slaughter our relatives - the sons of Dhritarashtra; for, my Lord, how can we be happy of we kill our kinsmen?",
-    "ramsukhdasHi": "।।1.37।। इसलिये अपने बान्धव इन धृतराष्ट्र-सम्बन्धियों को मारने के लिये हम योग्य नहीं हैं; क्योंकि हे माधव! अपने कुटुम्बियों को मारकर हम कैसे सुखी होंगे?",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.37 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -419,10 +419,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 38,
     "slok": "यद्यप्येते न पश्यन्ति लोभोपहतचेतसः |\nकुलक्षयकृतं दोषं मित्रद्रोहे च पातकम् ||१-३८||",
     "transliteration": "yadyapyete na paśyanti lobhopahatacetasaḥ .\nkulakṣayakṛtaṃ doṣaṃ mitradrohe ca pātakam ||1-38||",
-    "sivanandaEn": "1.38. Though they, with intelligence overpowered by greed, see\nno evil in the destruction of families, and no sin in hostility to friends,",
-    "gambhiranandaEn": "1.38  1.39  O Janardana, although these people, whose hearts have become perverted by greed, do not see the evil arising from destroying the family and sin in hostility towards, friends, yet how can we who clearly see the evil arising from destroying the family remain unaware of (the need of) abstaining from this sin?",
-    "purohitEn": "1.38 Although these men, blinded by greed, see no guilt in destroying their kin, or fighting against their friends,",
-    "ramsukhdasHi": "।।1.38 -- 1.39।। यद्यपि लोभ के कारण जिनका विवेक-विचार लुप्त हो गया है, ऐसे ये (दुर्योधन आदि) कुल का नाश करने से होनेवाले दोष को और मित्रों के साथ द्वेष करने से होनेवाले पाप को नहीं देखते, (तो भी) हे जनार्दन! कुल का नाश करने से होनेवाले दोष को ठीक-ठीक जाननेवाले हमलोग इस पाप से निवृत्त होने का विचार क्यों न करें?",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.38 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -430,10 +430,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 39,
     "slok": "कथं न ज्ञेयमस्माभिः पापादस्मान्निवर्तितुम् |\nकुलक्षयकृतं दोषं प्रपश्यद्भिर्जनार्दन ||१-३९||",
     "transliteration": "kathaṃ na jñeyamasmābhiḥ pāpādasmānnivartitum .\nkulakṣayakṛtaṃ doṣaṃ prapaśyadbhirjanārdana ||1-39||",
-    "sivanandaEn": "1.39. Why should not we who clearly see evil in the destruction\nof families, learn to turn away from this sin, O Janardana (Krishna)?",
-    "gambhiranandaEn": "1.38  1.39 O Janardana, although these people, whose hearts have become perverted by greed, do not see the evil arising from destroying the family and sin in hostility towards, friends, yet how can we who clearly see the evil arising from destroying the family remain unaware of (the need of) abstaining from this sin?",
-    "purohitEn": "1.39 Should not we, whose eyes are open, who consider it to be wrong to annihilate our house, turn away from so great a crime?",
-    "ramsukhdasHi": "।।1.38 -- 1.39।। यद्यपि लोभ के कारण जिनका विवेक-विचार लुप्त हो गया है, ऐसे ये (दुर्योधन आदि) कुल का नाश करने से होनेवाले दोष को और मित्रों के साथ द्वेष करने से होनेवाले पाप को नहीं देखते, (तो भी) हे जनार्दन! कुल का नाश करने से होनेवाले दोष को ठीक-ठीक जाननेवाले हमलोग इस पाप से निवृत्त होनेका विचार क्यों न करें?",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.39 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -441,10 +441,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 40,
     "slok": "कुलक्षये प्रणश्यन्ति कुलधर्माः सनातनाः |\nधर्मे नष्टे कुलं कृत्स्नमधर्मोऽभिभवत्युत ||१-४०||",
     "transliteration": "kulakṣaye praṇaśyanti kuladharmāḥ sanātanāḥ .\ndharme naṣṭe kulaṃ kṛtsnamadharmo.abhibhavatyuta ||1-40||",
-    "sivanandaEn": "1.40. In the destruction of a family, the immemorial religious\nrites of that family perish; on the destruction of spirituality, impiety,\nindeed, overcomes the whole family.",
-    "gambhiranandaEn": "1.40  From the ruin of the family are totally destroyed the traditional rites and duties of the family. When rites and duties are destroyed, vice overpowers the entire family also.",
-    "purohitEn": "1.40 The destruction of our kindred means the destruction of the traditions of our ancient lineage, and when these are lost, irreligion will overrun our homes.",
-    "ramsukhdasHi": "।।1.40।। कुल का क्षय होने पर सदा से चलते आये कुलधर्म नष्ट हो जाते हैं और धर्म का नाश होनेपर (बचे हुए) सम्पूर्ण कुल को अधर्म दबा लेता है।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.40 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -452,10 +452,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 41,
     "slok": "अधर्माभिभवात्कृष्ण प्रदुष्यन्ति कुलस्त्रियः |\nस्त्रीषु दुष्टासु वार्ष्णेय जायते वर्णसङ्करः ||१-४१||",
     "transliteration": "adharmābhibhavātkṛṣṇa praduṣyanti kulastriyaḥ .\nstrīṣu duṣṭāsu vārṣṇeya jāyate varṇasaṅkaraḥ ||1-41||",
-    "sivanandaEn": "1.41. By the prevalence of impiety, O Krishna, the women of\nthe family become corrupt; and , women being corrupted, O Varshenya (descendant\nof Vrishni), there arises intermingling of castes.",
-    "gambhiranandaEn": "1.41  O Krsna, when vice predominates, the women of the family become corrupt. O descendent of the Vrsnis, when women become corrupted, it results in the intermingling of castes.",
-    "purohitEn": "1.41 When irreligion spreads, the women of the house begin to stray; when they lose their purity, adulteration of the stock follows.",
-    "ramsukhdasHi": "।।1.41।। हे कृष्ण! अधर्म के अधिक बढ़ जाने से कुल की स्त्रियाँ दूषित हो जाती हैं; (और) हे वार्ष्णेय! स्त्रियों के दूषित होने पर वर्णसंकर पैदा हो जाते हैं।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.41 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -463,10 +463,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 42,
     "slok": "सङ्करो नरकायैव कुलघ्नानां कुलस्य च |\nपतन्ति पितरो ह्येषां लुप्तपिण्डोदकक्रियाः ||१-४२||",
     "transliteration": "saṅkaro narakāyaiva kulaghnānāṃ kulasya ca .\npatanti pitaro hyeṣāṃ luptapiṇḍodakakriyāḥ ||1-42||",
-    "sivanandaEn": "1.42. Confusion of castes leads to hell the slayers of the family,\nfor their forefathers fall, deprived of the offerings of rice-ball and\nwater (libations).",
-    "gambhiranandaEn": "1.42  And the intermingling in the family leads the ruiners of the family verily into hell. The forefathers of these fall down (into hell) because of being deprived of the offerings of rice-balls and water.",
-    "purohitEn": "1.42 Promiscuity ruins both the family and those who defile it; while the souls of our ancestors droop, through lack of the funeral cakes and ablutions.",
-    "ramsukhdasHi": "।।1.42।। वर्णसंकर कुलघातियों को और कुल को नरक में ले जानेवाला ही होता है। श्राद्ध और तर्पण न मिलने से इन- (कुलघातियों-) के पितर भी अपने स्थान से गिर जाते हैं।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.42 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -474,10 +474,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 43,
     "slok": "दोषैरेतैः कुलघ्नानां वर्णसङ्करकारकैः |\nउत्साद्यन्ते जातिधर्माः कुलधर्माश्च शाश्वताः ||१-४३||",
     "transliteration": "doṣairetaiḥ kulaghnānāṃ varṇasaṅkarakārakaiḥ .\nutsādyante jātidharmāḥ kuladharmāśca śāśvatāḥ ||1-43||",
-    "sivanandaEn": "1.43. By these evil deeds of the destroyers of the family, which\ncause confusion of castes, the eternal religious rites of the caste and\nthe family are destroyed.",
-    "gambhiranandaEn": "1.43  Due to these misdeeds of the ruiners of the family, which cause intermingling of castes, the traditional rites and duties of the castes and families become destroyed.",
-    "purohitEn": "1.43 By the destruction of our lineage and the pollution of blood, ancient class traditions and family purity alike perish.",
-    "ramsukhdasHi": "।।1.43।। इन वर्णसंकर पैदा करनेवाले दोषोंसे कुलघातियों के सदा से चलते आये कुलधर्म और जातिधर्म नष्ट हो जाते हैं।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.43 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -485,10 +485,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 44,
     "slok": "उत्सन्नकुलधर्माणां मनुष्याणां जनार्दन |\nनरके नियतं वासो भवतीत्यनुशुश्रुम (or नरकेऽनियतं) ||१-४४||",
     "transliteration": "utsannakuladharmāṇāṃ manuṣyāṇāṃ janārdana .\nnarake niyataṃ vāso bhavatītyanuśuśruma ||1-44||",
-    "sivanandaEn": "1.44. We have heard, O Janardana, that inevitable is the dwelling\nfor an unknown period in hell for those men in whose families the religious\npractices have been destroyed.",
-    "gambhiranandaEn": "1.44  O Janardana, we have heard that living in hell becomes inevitable for those persons whose family duties get destroyed.",
-    "purohitEn": "1.44 The wise say, my Lord, that they are forever lost, whose ancient traditions are lost.",
-    "ramsukhdasHi": "।।1.44।। हे जनार्दन! जिनके कुलधर्म नष्ट हो जाते हैं, उन मनुष्यों का बहुत काल तक नरकों में वापस होता है, ऐसा हम सुनते आये हैं।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.44 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -496,10 +496,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 45,
     "slok": "अहो बत महत्पापं कर्तुं व्यवसिता वयम् |\nयद्राज्यसुखलोभेन हन्तुं स्वजनमुद्यताः ||१-४५||",
     "transliteration": "aho bata mahatpāpaṃ kartuṃ vyavasitā vayam .\nyadrājyasukhalobhena hantuṃ svajanamudyatāḥ ||1-45||",
-    "sivanandaEn": "1.45. Alas! We are involved in a great sin, in that we are\nprepared to kill our kinsmen, through greed for the pleasures of a kingdom.",
-    "gambhiranandaEn": "1.45  What a pity that we have resolved to commit a great sin by being eager to kill our own kith and kin, out of greed for the pleasures of a kingdom!",
-    "purohitEn": "1.45 Alas, it is strange that we should be willing to kill our own countrymen and commit a great sin, in order to enjoy the pleasures of a kingdom.",
-    "ramsukhdasHi": "।।1.45।। यह बड़े आश्चर्य और खेद की बात है कि हमलोग बड़ा भारी पाप करने का निश्चय कर बैठे हैं, जो कि राज्य और सुख के लोभ से अपने स्वजनों को मारने के लिये तैयार हो गये हैं!",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.45 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -507,10 +507,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 46,
     "slok": "यदि मामप्रतीकारमशस्त्रं शस्त्रपाणयः |\nधार्तराष्ट्रा रणे हन्युस्तन्मे क्षेमतरं भवेत् ||१-४६||",
     "transliteration": "yadi māmapratīkāramaśastraṃ śastrapāṇayaḥ .\ndhārtarāṣṭrā raṇe hanyustanme kṣemataraṃ bhavet ||1-46||",
-    "sivanandaEn": "1.46. If the sons of Dhritarashtra with weapons in hand should\nslay me in battle, unresisting and unarmed, that would be better for me.",
-    "gambhiranandaEn": "1.46  If, in this battle, the sons of Dhrtarastra armed with weapons kill me who am non-resistant and unarmed, that will be more beneficial to me.",
-    "purohitEn": "1.46 If, on the contrary, the sons of Dhritarashtra, with weapons in their hand, should slay me, unarmed and unresisting, surely that would be better for my welfare!\"",
-    "ramsukhdasHi": "।।1.46।। अगर ये हाथों में शस्त्र-अस्त्र लिये हुए धृतराष्ट्र के पक्षपाती लोग युद्धभूमि में सामना न करनेवाले तथा शस्त्ररहित मुझ को मार भी दें, तो वह मेरे लिये बड़ा ही हितकारक होगा।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.46 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   },
   {
@@ -518,10 +518,10 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "verse": 47,
     "slok": "सञ्जय उवाच |\nएवमुक्त्वार्जुनः सङ्ख्ये रथोपस्थ उपाविशत् |\nविसृज्य सशरं चापं शोकसंविग्नमानसः ||१-४७||",
     "transliteration": "sañjaya uvāca .\nevamuktvārjunaḥ saṅkhye rathopastha upāviśat .\nvisṛjya saśaraṃ cāpaṃ śokasaṃvignamānasaḥ ||1-47||",
-    "sivanandaEn": "1.47. Sanjaya said  Having thus spoken in the midst of the battlefield, Arjuna,\ncasting away his bow and arrow, sat down on the seat of the chariot with\nhis mind overwhelmed with sorrow.",
-    "gambhiranandaEn": "1.47 Sanjaya narrated: Having said so, Arjuna, with a mind afflicted with sorrow, sat down on the chariot in the midst of the battle, casting aside the bow along with the arrows.",
-    "purohitEn": "1.47 Sanjaya said: \"Having spoken thus, in the midst of the armies, Arjuna sank on the seat of the chariot, casting away his bow and arrow; heartbroken with grief.\"",
-    "ramsukhdasHi": "।।1.47।। संजय बोले - ऐसा कहकर शोकाकुल मनवाले अर्जुन बाणसहित धनुष का त्याग करके युद्धभूमि में रथके मध्यभाग में बैठ गये।",
+    "sivanandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
+    "purohitEn": "[Translation withheld pending documented software redistribution permission]",
+    "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
     "shankaraBhashya": "1.47 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
   }
 ];

@@ -1,0 +1,1211 @@
+{
+  "metadata": {
+    "title": "Jafri Sacred Library — Phase 6.3.5 Reconciled Corpus Inventory",
+    "generationTimestamp": "2026-11-25T12:15:38.971Z",
+    "baselineCommit": "5eeb34ac547abdd2172af56a5daa714e7368b903",
+    "reconciliationRule": "Directly generated from active bundled datasets on disk"
+  },
+  "traditions": {
+    "islam": {
+      "canonicalScripture": "The Holy Qur’an",
+      "originalLanguage": "Classical Arabic",
+      "canonicalRecension": "Hafs ‘an ‘Asim (Uthmani Script / Tanzil)",
+      "catalogSurahsCount": 114,
+      "totalCanonicalAyahs": 6236,
+      "bundledOfflineAyahsCount": 10,
+      "remoteOrCachedAyahsCount": 6226,
+      "offlineUnits": [
+        {
+          "id": "isl:quran:1:1",
+          "coordinates": "Surah 1:1",
+          "surah": 1,
+          "ayah": 1,
+          "title": "Al-Fatiha (Bismillah)",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "isl:quran:1:2",
+          "coordinates": "Surah 1:2",
+          "surah": 1,
+          "ayah": 2,
+          "title": "Al-Fatiha (Al-Hamd)",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "isl:quran:2:153",
+          "coordinates": "Surah 2:153",
+          "surah": 2,
+          "ayah": 153,
+          "title": "Al-Baqarah (Patience & Prayer)",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "isl:quran:2:255",
+          "coordinates": "Surah 2:255",
+          "surah": 2,
+          "ayah": 255,
+          "title": "Ayat al-Kursi (The Throne Verse)",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "isl:quran:2:261",
+          "coordinates": "Surah 2:261",
+          "surah": 2,
+          "ayah": 261,
+          "title": "Al-Baqarah (Charity Grain)",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "isl:quran:2:269",
+          "coordinates": "Surah 2:269",
+          "surah": 2,
+          "ayah": 269,
+          "title": "Al-Baqarah (Wisdom)",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "isl:quran:3:134",
+          "coordinates": "Surah 3:134",
+          "surah": 3,
+          "ayah": 134,
+          "title": "Ali Imran (Restraining Anger)",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "isl:quran:14:7",
+          "coordinates": "Surah 14:7",
+          "surah": 14,
+          "ayah": 7,
+          "title": "Ibrahim (Gratitude)",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "isl:quran:21:107",
+          "coordinates": "Surah 21:107",
+          "surah": 21,
+          "ayah": 107,
+          "title": "Al-Anbiya (Mercy to the Worlds)",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "isl:quran:112:1",
+          "coordinates": "Surah 112:1",
+          "surah": 112,
+          "ayah": 1,
+          "title": "Al-Ikhlas (Tawhid)",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        }
+      ]
+    },
+    "christianity": {
+      "canonicalScripture": "The Holy Bible (King James Version 1611)",
+      "canonScope": "66 Canonical Books (1,189 Chapters, 31,102 Verses)",
+      "bundledOfflineVersesCount": 48,
+      "chapterSelectionsCount": 7,
+      "completeChaptersCount": 1,
+      "partialSelectionsCount": 6,
+      "standaloneLandmarkVersesCount": 1,
+      "offlineUnits": [
+        {
+          "id": "chr:kjv:genesis:1:1",
+          "canonicalCoordinate": "Genesis 1:1",
+          "book": "Genesis",
+          "chapter": 1,
+          "verse": 1,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:genesis:1:2",
+          "canonicalCoordinate": "Genesis 1:2",
+          "book": "Genesis",
+          "chapter": 1,
+          "verse": 2,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:genesis:1:3",
+          "canonicalCoordinate": "Genesis 1:3",
+          "book": "Genesis",
+          "chapter": 1,
+          "verse": 3,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:genesis:1:4",
+          "canonicalCoordinate": "Genesis 1:4",
+          "book": "Genesis",
+          "chapter": 1,
+          "verse": 4,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:genesis:1:5",
+          "canonicalCoordinate": "Genesis 1:5",
+          "book": "Genesis",
+          "chapter": 1,
+          "verse": 5,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:genesis:1:26",
+          "canonicalCoordinate": "Genesis 1:26",
+          "book": "Genesis",
+          "chapter": 1,
+          "verse": 26,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:genesis:1:27",
+          "canonicalCoordinate": "Genesis 1:27",
+          "book": "Genesis",
+          "chapter": 1,
+          "verse": 27,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:genesis:1:31",
+          "canonicalCoordinate": "Genesis 1:31",
+          "book": "Genesis",
+          "chapter": 1,
+          "verse": 31,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:psalms:23:1",
+          "canonicalCoordinate": "Psalms 23:1",
+          "book": "Psalms",
+          "chapter": 23,
+          "verse": 1,
+          "chapterCompleteness": "COMPLETE_CHAPTER",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:psalms:23:2",
+          "canonicalCoordinate": "Psalms 23:2",
+          "book": "Psalms",
+          "chapter": 23,
+          "verse": 2,
+          "chapterCompleteness": "COMPLETE_CHAPTER",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:psalms:23:3",
+          "canonicalCoordinate": "Psalms 23:3",
+          "book": "Psalms",
+          "chapter": 23,
+          "verse": 3,
+          "chapterCompleteness": "COMPLETE_CHAPTER",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:psalms:23:4",
+          "canonicalCoordinate": "Psalms 23:4",
+          "book": "Psalms",
+          "chapter": 23,
+          "verse": 4,
+          "chapterCompleteness": "COMPLETE_CHAPTER",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:psalms:23:5",
+          "canonicalCoordinate": "Psalms 23:5",
+          "book": "Psalms",
+          "chapter": 23,
+          "verse": 5,
+          "chapterCompleteness": "COMPLETE_CHAPTER",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:psalms:23:6",
+          "canonicalCoordinate": "Psalms 23:6",
+          "book": "Psalms",
+          "chapter": 23,
+          "verse": 6,
+          "chapterCompleteness": "COMPLETE_CHAPTER",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:psalms:91:1",
+          "canonicalCoordinate": "Psalms 91:1",
+          "book": "Psalms",
+          "chapter": 91,
+          "verse": 1,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:psalms:91:2",
+          "canonicalCoordinate": "Psalms 91:2",
+          "book": "Psalms",
+          "chapter": 91,
+          "verse": 2,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:psalms:91:3",
+          "canonicalCoordinate": "Psalms 91:3",
+          "book": "Psalms",
+          "chapter": 91,
+          "verse": 3,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:psalms:91:4",
+          "canonicalCoordinate": "Psalms 91:4",
+          "book": "Psalms",
+          "chapter": 91,
+          "verse": 4,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:psalms:91:11",
+          "canonicalCoordinate": "Psalms 91:11",
+          "book": "Psalms",
+          "chapter": 91,
+          "verse": 11,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:psalms:91:12",
+          "canonicalCoordinate": "Psalms 91:12",
+          "book": "Psalms",
+          "chapter": 91,
+          "verse": 12,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:matthew:5:1",
+          "canonicalCoordinate": "Matthew 5:1",
+          "book": "Matthew",
+          "chapter": 5,
+          "verse": 1,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:matthew:5:2",
+          "canonicalCoordinate": "Matthew 5:2",
+          "book": "Matthew",
+          "chapter": 5,
+          "verse": 2,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:matthew:5:3",
+          "canonicalCoordinate": "Matthew 5:3",
+          "book": "Matthew",
+          "chapter": 5,
+          "verse": 3,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:matthew:5:4",
+          "canonicalCoordinate": "Matthew 5:4",
+          "book": "Matthew",
+          "chapter": 5,
+          "verse": 4,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:matthew:5:5",
+          "canonicalCoordinate": "Matthew 5:5",
+          "book": "Matthew",
+          "chapter": 5,
+          "verse": 5,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:matthew:5:6",
+          "canonicalCoordinate": "Matthew 5:6",
+          "book": "Matthew",
+          "chapter": 5,
+          "verse": 6,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:matthew:5:7",
+          "canonicalCoordinate": "Matthew 5:7",
+          "book": "Matthew",
+          "chapter": 5,
+          "verse": 7,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:matthew:5:8",
+          "canonicalCoordinate": "Matthew 5:8",
+          "book": "Matthew",
+          "chapter": 5,
+          "verse": 8,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:matthew:5:9",
+          "canonicalCoordinate": "Matthew 5:9",
+          "book": "Matthew",
+          "chapter": 5,
+          "verse": 9,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:matthew:5:14",
+          "canonicalCoordinate": "Matthew 5:14",
+          "book": "Matthew",
+          "chapter": 5,
+          "verse": 14,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:matthew:5:16",
+          "canonicalCoordinate": "Matthew 5:16",
+          "book": "Matthew",
+          "chapter": 5,
+          "verse": 16,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:john:1:1",
+          "canonicalCoordinate": "John 1:1",
+          "book": "John",
+          "chapter": 1,
+          "verse": 1,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:john:1:2",
+          "canonicalCoordinate": "John 1:2",
+          "book": "John",
+          "chapter": 1,
+          "verse": 2,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:john:1:3",
+          "canonicalCoordinate": "John 1:3",
+          "book": "John",
+          "chapter": 1,
+          "verse": 3,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:john:1:4",
+          "canonicalCoordinate": "John 1:4",
+          "book": "John",
+          "chapter": 1,
+          "verse": 4,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:john:1:5",
+          "canonicalCoordinate": "John 1:5",
+          "book": "John",
+          "chapter": 1,
+          "verse": 5,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:john:1:14",
+          "canonicalCoordinate": "John 1:14",
+          "book": "John",
+          "chapter": 1,
+          "verse": 14,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:1 corinthians:13:1",
+          "canonicalCoordinate": "1 Corinthians 13:1",
+          "book": "1 Corinthians",
+          "chapter": 13,
+          "verse": 1,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:1 corinthians:13:2",
+          "canonicalCoordinate": "1 Corinthians 13:2",
+          "book": "1 Corinthians",
+          "chapter": 13,
+          "verse": 2,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:1 corinthians:13:4",
+          "canonicalCoordinate": "1 Corinthians 13:4",
+          "book": "1 Corinthians",
+          "chapter": 13,
+          "verse": 4,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:1 corinthians:13:7",
+          "canonicalCoordinate": "1 Corinthians 13:7",
+          "book": "1 Corinthians",
+          "chapter": 13,
+          "verse": 7,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:1 corinthians:13:8",
+          "canonicalCoordinate": "1 Corinthians 13:8",
+          "book": "1 Corinthians",
+          "chapter": 13,
+          "verse": 8,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:1 corinthians:13:13",
+          "canonicalCoordinate": "1 Corinthians 13:13",
+          "book": "1 Corinthians",
+          "chapter": 13,
+          "verse": 13,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:revelation:21:1",
+          "canonicalCoordinate": "Revelation 21:1",
+          "book": "Revelation",
+          "chapter": 21,
+          "verse": 1,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:revelation:21:2",
+          "canonicalCoordinate": "Revelation 21:2",
+          "book": "Revelation",
+          "chapter": 21,
+          "verse": 2,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:revelation:21:3",
+          "canonicalCoordinate": "Revelation 21:3",
+          "book": "Revelation",
+          "chapter": 21,
+          "verse": 3,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:revelation:21:4",
+          "canonicalCoordinate": "Revelation 21:4",
+          "book": "Revelation",
+          "chapter": 21,
+          "verse": 4,
+          "chapterCompleteness": "PARTIAL_SELECTION",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "chr:kjv:john:3:16",
+          "canonicalCoordinate": "John 3:16",
+          "book": "John",
+          "chapter": 3,
+          "verse": 16,
+          "chapterCompleteness": "STANDALONE_LANDMARK_VERSE",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        }
+      ]
+    },
+    "hinduism": {
+      "canonicalScripture": "Shrimad Bhagavad Gita",
+      "totalCanonicalChapters": 18,
+      "numberingConventions": {
+        "activeStandard": 701,
+        "shankaraCrossReference": 700
+      },
+      "chapter1ShlokasCount": 47,
+      "landmarkCoreShlokasCount": 7,
+      "totalBundledOfflineShlokas": 54,
+      "offlineUnits": [
+        {
+          "id": "hin:gita:1:1",
+          "canonicalCoordinate": "Bhagavad Gita 1:1",
+          "chapter": 1,
+          "verse": 1,
+          "numberingActive": "1.1",
+          "numberingCrossReference": "1.1",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:2",
+          "canonicalCoordinate": "Bhagavad Gita 1:2",
+          "chapter": 1,
+          "verse": 2,
+          "numberingActive": "1.2",
+          "numberingCrossReference": "1.2",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:3",
+          "canonicalCoordinate": "Bhagavad Gita 1:3",
+          "chapter": 1,
+          "verse": 3,
+          "numberingActive": "1.3",
+          "numberingCrossReference": "1.3",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:4",
+          "canonicalCoordinate": "Bhagavad Gita 1:4",
+          "chapter": 1,
+          "verse": 4,
+          "numberingActive": "1.4",
+          "numberingCrossReference": "1.4",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:5",
+          "canonicalCoordinate": "Bhagavad Gita 1:5",
+          "chapter": 1,
+          "verse": 5,
+          "numberingActive": "1.5",
+          "numberingCrossReference": "1.5",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:6",
+          "canonicalCoordinate": "Bhagavad Gita 1:6",
+          "chapter": 1,
+          "verse": 6,
+          "numberingActive": "1.6",
+          "numberingCrossReference": "1.6",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:7",
+          "canonicalCoordinate": "Bhagavad Gita 1:7",
+          "chapter": 1,
+          "verse": 7,
+          "numberingActive": "1.7",
+          "numberingCrossReference": "1.7",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:8",
+          "canonicalCoordinate": "Bhagavad Gita 1:8",
+          "chapter": 1,
+          "verse": 8,
+          "numberingActive": "1.8",
+          "numberingCrossReference": "1.8",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:9",
+          "canonicalCoordinate": "Bhagavad Gita 1:9",
+          "chapter": 1,
+          "verse": 9,
+          "numberingActive": "1.9",
+          "numberingCrossReference": "1.9",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:10",
+          "canonicalCoordinate": "Bhagavad Gita 1:10",
+          "chapter": 1,
+          "verse": 10,
+          "numberingActive": "1.10",
+          "numberingCrossReference": "1.10",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:11",
+          "canonicalCoordinate": "Bhagavad Gita 1:11",
+          "chapter": 1,
+          "verse": 11,
+          "numberingActive": "1.11",
+          "numberingCrossReference": "1.11",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:12",
+          "canonicalCoordinate": "Bhagavad Gita 1:12",
+          "chapter": 1,
+          "verse": 12,
+          "numberingActive": "1.12",
+          "numberingCrossReference": "1.12",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:13",
+          "canonicalCoordinate": "Bhagavad Gita 1:13",
+          "chapter": 1,
+          "verse": 13,
+          "numberingActive": "1.13",
+          "numberingCrossReference": "1.13",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:14",
+          "canonicalCoordinate": "Bhagavad Gita 1:14",
+          "chapter": 1,
+          "verse": 14,
+          "numberingActive": "1.14",
+          "numberingCrossReference": "1.14",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:15",
+          "canonicalCoordinate": "Bhagavad Gita 1:15",
+          "chapter": 1,
+          "verse": 15,
+          "numberingActive": "1.15",
+          "numberingCrossReference": "1.15",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:16",
+          "canonicalCoordinate": "Bhagavad Gita 1:16",
+          "chapter": 1,
+          "verse": 16,
+          "numberingActive": "1.16",
+          "numberingCrossReference": "1.16",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:17",
+          "canonicalCoordinate": "Bhagavad Gita 1:17",
+          "chapter": 1,
+          "verse": 17,
+          "numberingActive": "1.17",
+          "numberingCrossReference": "1.17",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:18",
+          "canonicalCoordinate": "Bhagavad Gita 1:18",
+          "chapter": 1,
+          "verse": 18,
+          "numberingActive": "1.18",
+          "numberingCrossReference": "1.18",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:19",
+          "canonicalCoordinate": "Bhagavad Gita 1:19",
+          "chapter": 1,
+          "verse": 19,
+          "numberingActive": "1.19",
+          "numberingCrossReference": "1.19",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:20",
+          "canonicalCoordinate": "Bhagavad Gita 1:20",
+          "chapter": 1,
+          "verse": 20,
+          "numberingActive": "1.20",
+          "numberingCrossReference": "1.20",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:21",
+          "canonicalCoordinate": "Bhagavad Gita 1:21",
+          "chapter": 1,
+          "verse": 21,
+          "numberingActive": "1.21",
+          "numberingCrossReference": "1.21",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:22",
+          "canonicalCoordinate": "Bhagavad Gita 1:22",
+          "chapter": 1,
+          "verse": 22,
+          "numberingActive": "1.22",
+          "numberingCrossReference": "1.22",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:23",
+          "canonicalCoordinate": "Bhagavad Gita 1:23",
+          "chapter": 1,
+          "verse": 23,
+          "numberingActive": "1.23",
+          "numberingCrossReference": "1.23",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:24",
+          "canonicalCoordinate": "Bhagavad Gita 1:24",
+          "chapter": 1,
+          "verse": 24,
+          "numberingActive": "1.24",
+          "numberingCrossReference": "1.24",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:25",
+          "canonicalCoordinate": "Bhagavad Gita 1:25",
+          "chapter": 1,
+          "verse": 25,
+          "numberingActive": "1.25",
+          "numberingCrossReference": "1.25",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:26",
+          "canonicalCoordinate": "Bhagavad Gita 1:26",
+          "chapter": 1,
+          "verse": 26,
+          "numberingActive": "1.26",
+          "numberingCrossReference": "1.26",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:27",
+          "canonicalCoordinate": "Bhagavad Gita 1:27",
+          "chapter": 1,
+          "verse": 27,
+          "numberingActive": "1.27",
+          "numberingCrossReference": "1.27",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:28",
+          "canonicalCoordinate": "Bhagavad Gita 1:28",
+          "chapter": 1,
+          "verse": 28,
+          "numberingActive": "1.28",
+          "numberingCrossReference": "1.28",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:29",
+          "canonicalCoordinate": "Bhagavad Gita 1:29",
+          "chapter": 1,
+          "verse": 29,
+          "numberingActive": "1.29",
+          "numberingCrossReference": "1.29",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:30",
+          "canonicalCoordinate": "Bhagavad Gita 1:30",
+          "chapter": 1,
+          "verse": 30,
+          "numberingActive": "1.30",
+          "numberingCrossReference": "1.30",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:31",
+          "canonicalCoordinate": "Bhagavad Gita 1:31",
+          "chapter": 1,
+          "verse": 31,
+          "numberingActive": "1.31",
+          "numberingCrossReference": "1.31",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:32",
+          "canonicalCoordinate": "Bhagavad Gita 1:32",
+          "chapter": 1,
+          "verse": 32,
+          "numberingActive": "1.32",
+          "numberingCrossReference": "1.32",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:33",
+          "canonicalCoordinate": "Bhagavad Gita 1:33",
+          "chapter": 1,
+          "verse": 33,
+          "numberingActive": "1.33",
+          "numberingCrossReference": "1.33",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:34",
+          "canonicalCoordinate": "Bhagavad Gita 1:34",
+          "chapter": 1,
+          "verse": 34,
+          "numberingActive": "1.34",
+          "numberingCrossReference": "1.34",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:35",
+          "canonicalCoordinate": "Bhagavad Gita 1:35",
+          "chapter": 1,
+          "verse": 35,
+          "numberingActive": "1.35",
+          "numberingCrossReference": "1.35",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:36",
+          "canonicalCoordinate": "Bhagavad Gita 1:36",
+          "chapter": 1,
+          "verse": 36,
+          "numberingActive": "1.36",
+          "numberingCrossReference": "1.36",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:37",
+          "canonicalCoordinate": "Bhagavad Gita 1:37",
+          "chapter": 1,
+          "verse": 37,
+          "numberingActive": "1.37",
+          "numberingCrossReference": "1.37",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:38",
+          "canonicalCoordinate": "Bhagavad Gita 1:38",
+          "chapter": 1,
+          "verse": 38,
+          "numberingActive": "1.38",
+          "numberingCrossReference": "1.38",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:39",
+          "canonicalCoordinate": "Bhagavad Gita 1:39",
+          "chapter": 1,
+          "verse": 39,
+          "numberingActive": "1.39",
+          "numberingCrossReference": "1.39",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:40",
+          "canonicalCoordinate": "Bhagavad Gita 1:40",
+          "chapter": 1,
+          "verse": 40,
+          "numberingActive": "1.40",
+          "numberingCrossReference": "1.40",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:41",
+          "canonicalCoordinate": "Bhagavad Gita 1:41",
+          "chapter": 1,
+          "verse": 41,
+          "numberingActive": "1.41",
+          "numberingCrossReference": "1.41",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:42",
+          "canonicalCoordinate": "Bhagavad Gita 1:42",
+          "chapter": 1,
+          "verse": 42,
+          "numberingActive": "1.42",
+          "numberingCrossReference": "1.42",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:43",
+          "canonicalCoordinate": "Bhagavad Gita 1:43",
+          "chapter": 1,
+          "verse": 43,
+          "numberingActive": "1.43",
+          "numberingCrossReference": "1.43",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:44",
+          "canonicalCoordinate": "Bhagavad Gita 1:44",
+          "chapter": 1,
+          "verse": 44,
+          "numberingActive": "1.44",
+          "numberingCrossReference": "1.44",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:45",
+          "canonicalCoordinate": "Bhagavad Gita 1:45",
+          "chapter": 1,
+          "verse": 45,
+          "numberingActive": "1.45",
+          "numberingCrossReference": "1.45",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:46",
+          "canonicalCoordinate": "Bhagavad Gita 1:46",
+          "chapter": 1,
+          "verse": 46,
+          "numberingActive": "1.46",
+          "numberingCrossReference": "1.46",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:1:47",
+          "canonicalCoordinate": "Bhagavad Gita 1:47",
+          "chapter": 1,
+          "verse": 47,
+          "numberingActive": "1.47",
+          "numberingCrossReference": "1.47",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:2:47",
+          "canonicalCoordinate": "Bhagavad Gita 2:47",
+          "chapter": 2,
+          "verse": 47,
+          "numberingActive": "2.47",
+          "numberingCrossReference": "2.47",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:4:38",
+          "canonicalCoordinate": "Bhagavad Gita 4:38",
+          "chapter": 4,
+          "verse": 38,
+          "numberingActive": "4.38",
+          "numberingCrossReference": "4.38",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:9:27",
+          "canonicalCoordinate": "Bhagavad Gita 9:27",
+          "chapter": 9,
+          "verse": 27,
+          "numberingActive": "9.27",
+          "numberingCrossReference": "9.27",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:12:13",
+          "canonicalCoordinate": "Bhagavad Gita 12:13",
+          "chapter": 12,
+          "verse": 13,
+          "numberingActive": "12.13",
+          "numberingCrossReference": "12.13",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:16:3",
+          "canonicalCoordinate": "Bhagavad Gita 16:3",
+          "chapter": 16,
+          "verse": 3,
+          "numberingActive": "16.3",
+          "numberingCrossReference": "16.3",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:17:20",
+          "canonicalCoordinate": "Bhagavad Gita 17:20",
+          "chapter": 17,
+          "verse": 20,
+          "numberingActive": "17.20",
+          "numberingCrossReference": "17.20",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "hin:gita:18:66",
+          "canonicalCoordinate": "Bhagavad Gita 18:66",
+          "chapter": 18,
+          "verse": 66,
+          "numberingActive": "18.66",
+          "numberingCrossReference": "18.66",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        }
+      ]
+    },
+    "judaism": {
+      "canonicalScripture": "The Tanakh (Torah, Nevi’im, Ketuvim)",
+      "totalCanonicalBooks": 24,
+      "totalCanonicalChapters": 929,
+      "totalCanonicalVerses": 23214,
+      "completeBundledChaptersCount": 4,
+      "totalBundledVersesCount": 50,
+      "chapters": [
+        {
+          "id": "jud:tanakh:gen:1",
+          "name": "Bereshit (Genesis) Chapter 1",
+          "book": "Genesis",
+          "chapter": 1,
+          "versesCount": 31,
+          "isComplete": true
+        },
+        {
+          "id": "jud:tanakh:ps:23",
+          "name": "Tehillim (Psalms) Chapter 23",
+          "book": "Psalms",
+          "chapter": 23,
+          "versesCount": 6,
+          "isComplete": true
+        },
+        {
+          "id": "jud:tanakh:ps:100",
+          "name": "Tehillim (Psalms) Chapter 100",
+          "book": "Psalms",
+          "chapter": 100,
+          "versesCount": 5,
+          "isComplete": true
+        },
+        {
+          "id": "jud:tanakh:ps:121",
+          "name": "Tehillim (Psalms) Chapter 121",
+          "book": "Psalms",
+          "chapter": 121,
+          "versesCount": 8,
+          "isComplete": true
+        }
+      ]
+    },
+    "sikhism": {
+      "canonicalScripture": "Sri Guru Granth Sahib Ji",
+      "totalCanonicalAngs": 1430,
+      "completeBundledAngsCount": 13,
+      "completeAngsRange": "Ang 1 to 13 (Japji Sahib, So Dar, Kirtan Sohila)",
+      "landmarkIndexedPassagesCount": 5,
+      "landmarkPassages": [
+        {
+          "id": "sik:sggs:ang:471:daya_kapah",
+          "ang": 471,
+          "composition": "Asa di Var",
+          "author": "Guru Nanak Dev Ji",
+          "keyVerse": "Daya Kapah Santokh Soot"
+        },
+        {
+          "id": "sik:sggs:ang:3:dhaul_dharam",
+          "ang": 3,
+          "composition": "Japji Sahib Pauri 16",
+          "author": "Guru Nanak Dev Ji",
+          "keyVerse": "Dhaul Dharam Daya Ka Poot"
+        },
+        {
+          "id": "sik:sggs:ang:1381:salok_78",
+          "ang": 1381,
+          "composition": "Salok Sheikh Farid 78",
+          "author": "Sheikh Farid",
+          "keyVerse": "Khima (Forgiveness)"
+        },
+        {
+          "id": "sik:sggs:ang:1382:salok_85",
+          "ang": 1382,
+          "composition": "Salok Sheikh Farid 85",
+          "author": "Sheikh Farid",
+          "keyVerse": "Dukha Seti Dihu Gaya (Distress & Whirlpool)"
+        },
+        {
+          "id": "sik:sggs:ang:1384:salok_115",
+          "ang": 1384,
+          "composition": "Salok Sheikh Farid 115",
+          "author": "Sheikh Farid",
+          "keyVerse": "Sabr Manjh Kaman (Make Patience Thy Bow)"
+        }
+      ]
+    },
+    "buddhism": {
+      "canonicalScripture": "Khuddaka Nikaya: Dhammapada & Sutta Pitaka",
+      "totalCanonicalDhammapadaVerses": 423,
+      "totalCanonicalVaggas": 26,
+      "bundledOfflineDhammapadaVersesCount": 7,
+      "dhammapadaVerseNumbers": [
+        1,
+        2,
+        5,
+        21,
+        33,
+        197,
+        277
+      ],
+      "totalBundledTextUnitsInProvider": 36
+    },
+    "jainism": {
+      "canonicalScripture": "Tattvartha Sutra & Canonical Agamas",
+      "totalCanonicalAdhyayas": 10,
+      "totalCanonicalSutras": 357,
+      "referenceGroupsCount": 6,
+      "totalIndividualAphorismCoordinates": 14,
+      "referenceGroups": [
+        {
+          "id": "tattvartha:1.1",
+          "title": "Tattvartha Sutra 1.1 (Mokshamarga)",
+          "sutrasCount": 1,
+          "coordinates": [
+            "1.1"
+          ]
+        },
+        {
+          "id": "tattvartha:1.4",
+          "title": "Tattvartha Sutra 1.4 (Sapta Tattva)",
+          "sutrasCount": 1,
+          "coordinates": [
+            "1.4"
+          ]
+        },
+        {
+          "id": "tattvartha:2.8",
+          "title": "Tattvartha Sutra 2.1–8 (Pancha Bhava)",
+          "sutrasCount": 8,
+          "coordinates": [
+            "2.1",
+            "2.2",
+            "2.3",
+            "2.4",
+            "2.5",
+            "2.6",
+            "2.7",
+            "2.8"
+          ]
+        },
+        {
+          "id": "tattvartha:5.21",
+          "title": "Tattvartha Sutra 5.21 (Parasparopagraho Jivanam)",
+          "sutrasCount": 1,
+          "coordinates": [
+            "5.21"
+          ]
+        },
+        {
+          "id": "tattvartha:7.1",
+          "title": "Tattvartha Sutra 7.1 (Pancha Mahavrata)",
+          "sutrasCount": 1,
+          "coordinates": [
+            "7.1"
+          ]
+        },
+        {
+          "id": "tattvartha:9.1",
+          "title": "Tattvartha Sutra 9.1–2 (Samvara & Nirjara)",
+          "sutrasCount": 2,
+          "coordinates": [
+            "9.1",
+            "9.2"
+          ]
+        }
+      ],
+      "totalBundledTextUnitsInProvider": 48
+    }
+  }
+}

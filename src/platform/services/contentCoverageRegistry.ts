@@ -77,7 +77,7 @@ export const AUTHORITATIVE_COVERAGE_REGISTRY: CollectionCoverageRecord[] = [
         publicationReference: 'Dar Abul Qasim, Riyadh, Saudi Arabia',
         sourceReferenceUrl: 'https://saheehinternational.com',
         license: 'Commercial rights reserved by Dar Abul Qasim; formal permission required for unrestricted redistribution',
-        exactLicenceIdentifier: 'PERMISSION_REQUIRED',
+        exactLicenceIdentifier: 'Unknown',
         rightsHolderOrPublisher: 'Dar Abul Qasim / Saheeh International Translation Committee',
         rightsStatus: 'PERMISSION_REQUIRED',
         attributionRequirement: 'Translation provided by Sahih International for educational study; formal redistribution permission required',
@@ -88,7 +88,7 @@ export const AUTHORITATIVE_COVERAGE_REGISTRY: CollectionCoverageRecord[] = [
         offlineBundlingPermission: false,
         requiredCopyrightNotice: 'Translation © 1997 Saheeh International. All rights reserved. Permission required for electronic redistribution.',
         verificationStatus: 'UNKNOWN',
-        rightsReviewerAndEvidence: 'Audit 2026-11-25: No open redistribution licence granted by publisher. Classified as PERMISSION_REQUIRED. Do not inherit Tanzil Arabic CC BY 3.0.',
+        rightsReviewerAndEvidence: 'Audit 2026-11-25: No open redistribution licence granted by publisher. Classified as PERMISSION_REQUIRED with licence Unknown. Do not inherit Tanzil Arabic CC BY 3.0.',
       },
       {
         id: 'tr_quran_jawadi',
@@ -98,7 +98,7 @@ export const AUTHORITATIVE_COVERAGE_REGISTRY: CollectionCoverageRecord[] = [
         publicationReference: 'Tanzeem-ul-Makatib, Lucknow, India',
         sourceReferenceUrl: 'https://tanzeemulmakatib.org',
         license: 'Traditional religious publication; permission required for electronic app bundling',
-        exactLicenceIdentifier: 'PERMISSION_REQUIRED',
+        exactLicenceIdentifier: 'Unknown',
         rightsHolderOrPublisher: 'Tanzeem-ul-Makatib & Estate of Allama Jawadi',
         rightsStatus: 'PERMISSION_REQUIRED',
         attributionRequirement: 'Urdu translation by Allama Syed Zeeshan Haider Jawadi (Permission Required)',
@@ -260,7 +260,7 @@ export const AUTHORITATIVE_COVERAGE_REGISTRY: CollectionCoverageRecord[] = [
     canonicalTitle: 'The Holy Bible (King James Version 1611)',
     nativeTitle: 'The Holy Bible',
     scopeDefinition:
-      'All 66 canonical books (1,189 chapters) cataloged; 7 landmark chapters (48 verses) bundled offline; remaining chapters loaded dynamically via Bolls Life API',
+      'All 66 canonical books (1,189 chapters, 31,102 verses) cataloged; 48 verses across 7 chapter selections (1 complete chapter: Psalm 23 [6 verses]; 6 partial chapter selections: Genesis 1 [8], Psalm 91 [6], Matthew 5 [11], John 1 [6], 1 Corinthians 13 [6], Revelation 21 [4]) plus 1 standalone landmark verse (John 3:16) bundled offline; remaining chapters loaded dynamically via Bolls Life API',
     unitType: 'Chapters',
     indexedUnits: 7,
     totalUnitsInScope: 1189,
@@ -1006,7 +1006,7 @@ export const AUTHORITATIVE_COVERAGE_REGISTRY: CollectionCoverageRecord[] = [
     canonicalTitle: 'Sri Guru Granth Sahib Ji (Damdami Bir Standard)',
     nativeTitle: 'ਸ੍ਰੀ ਗੁਰੂ ਗ੍ਰੰਥ ਸਾਹਿਬ ਜੀ',
     scopeDefinition:
-      'All 1,430 Angs cataloged; Angs 1 to 13 (containing complete Japji Sahib, Sodar Rehras, Kirtan Sohila) bundled complete offline; remaining Angs stream via BaniDB',
+      'All 1,430 Angs cataloged; 13 complete offline Angs (Angs 1 to 13 containing complete Japji Sahib, Sodar Rehras, Kirtan Sohila) bundled complete offline plus 4 landmark indexed passages (Ang 471, Ang 1381, Ang 1382, Ang 1384); remaining Angs stream via BaniDB',
     unitType: 'Angs',
     indexedUnits: 13,
     totalUnitsInScope: 1430,
@@ -1511,7 +1511,7 @@ export const AUTHORITATIVE_COVERAGE_REGISTRY: CollectionCoverageRecord[] = [
     canonicalTitle: 'Tattvartha Sutra (Acharya Umasvati)',
     nativeTitle: 'तत्त्वार्थ सूत्र',
     scopeDefinition:
-      '6 landmark core aphorisms (1:1, 1:4, 2:1-8, 5:21, 7:1, 9:1-2) bundled offline; 357 total aphorisms across 10 Adhyayas',
+      '6 reference groups containing 14 individual aphorism coordinates (1:1, 1:4, 2:1–2:8, 5:21, 7:1, 9:1–9:2) bundled offline; 357 total aphorisms across 10 Adhyayas',
     unitType: 'Core Aphorisms',
     indexedUnits: 6,
     totalUnitsInScope: 357,
