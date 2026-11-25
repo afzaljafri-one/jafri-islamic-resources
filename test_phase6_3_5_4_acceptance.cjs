@@ -786,11 +786,18 @@ async function runAcceptanceSuite() {
     JSON.stringify(results, null, 2),
     'utf8'
   );
-  fs.writeFileSync(
-    path.join(ARTIFACTS_DIR, 'phase6_3_5_4_acceptance_results.json'),
-    JSON.stringify(results, null, 2),
-    'utf8'
-  );
+
+  const artifactsDir = process.env.ARTIFACTS_DIR ||
+    (fs.existsSync('/Users/afzaljafri/.gemini/antigravity/brain/2e0a8a09-f40f-4cdb-bc60-d11e0de6618b')
+      ? '/Users/afzaljafri/.gemini/antigravity/brain/2e0a8a09-f40f-4cdb-bc60-d11e0de6618b'
+      : null);
+  if (artifactsDir && fs.existsSync(artifactsDir)) {
+    fs.writeFileSync(
+      path.join(artifactsDir, 'phase6_3_5_4_acceptance_results.json'),
+      JSON.stringify(results, null, 2),
+      'utf8'
+    );
+  }
 
   if (!results.success) {
     process.exit(1);
