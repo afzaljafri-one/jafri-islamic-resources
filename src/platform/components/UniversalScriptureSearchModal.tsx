@@ -764,7 +764,7 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                           className="text-[11px] text-purple-300/90 font-serif italic mt-0.5"
                         >
                           {result.thematicDisclaimer ||
-                            "This passage has been selected solely for its thematic relevance to this virtue. Inclusion does not imply any theological equivalence, syncretism, or doctrinal endorsement between traditions."}
+                            "This passage has been selected solely for its thematic relevance to this virtue within this tradition's scriptures. The Jafri Sacred Library presents texts in their historical and theological context without syncretism or doctrinal conflation."}
                         </p>
                       )}
                     </div>

@@ -171,8 +171,8 @@ assert(
   `Universal search service enforces mandatory verbatim disclaimer: "${REQUIRED_DISCLAIMER}"`
 );
 
-const MANDATORY_VIRTUES_DISCLAIMER = 'This passage has been selected solely for its thematic relevance to this virtue. Inclusion does not imply any theological equivalence, syncretism, or doctrinal endorsement between traditions.';
-const virtuesDisclaimerCount = (thematicDefsBlock.match(/thematicDisclaimer:\s*['"]This passage has been selected solely/g) || []).length;
+const MANDATORY_VIRTUES_DISCLAIMER = "This passage has been selected solely for its thematic relevance to this virtue within this tradition's scriptures. The Jafri Sacred Library presents texts in their historical and theological context without syncretism or doctrinal conflation.";
+const virtuesDisclaimerCount = (thematicDefsBlock.match(/thematicDisclaimer:\s*(['"]This passage has been selected solely|CANONICAL_THEMATIC_DISCLAIMER)/g) || []).length;
 assert(
   virtuesDisclaimerCount === 49,
   `Every single one of the 49 thematic passages contains the mandatory virtues disclaimer (found ${virtuesDisclaimerCount}/49)`

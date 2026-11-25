@@ -76,6 +76,9 @@ const FORBIDDEN_RESTRICTED_SNIPPETS = [
 
   // 7. Unverified Modern English Shankara Bhashya Translations
   'Sri Sankaracharya did not comment on this sloka',
+
+  // 8. Unsupported Worldwide Public Domain Claims
+  'Public Domain Worldwide',
 ];
 
 // Recognized extensions classification

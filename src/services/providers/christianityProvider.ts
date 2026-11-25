@@ -98,7 +98,7 @@ export const BIBLE_TRANSLATIONS = [
     name: 'King James Version (1611/1769)',
     language: 'English',
     license: 'Public Domain',
-    attribution: 'Standard Authorised Version, Crown copyright expired worldwide.',
+    attribution: 'Standard Authorised Version (Public Domain in US, EU, India; Crown Rights apply in UK).',
   },
   {
     id: 'WEB',
