@@ -23,6 +23,7 @@ import {
   RotateCcw,
   AlertTriangle,
   BookOpen,
+  CheckCircle2,
 } from 'lucide-react';
 import {
   judaismProvider,
@@ -42,6 +43,7 @@ import { YouTubeEmbedModal } from '../../platform/components/audio/YouTubeEmbedM
 import { SACRED_AUDIO_MASTER_CATALOGUE } from '../../platform/data/sacredAudioMasterCatalogue';
 import { AttributionFooter } from '../../platform/components/AttributionFooter';
 import { platformStorageService } from '../../platform/services/storageService';
+import { personalLibraryService } from '../../platform/services/personalLibraryService';
 import { genericAudioService } from '../../platform/services/audioService';
 import {
   multilingualAudioEngine,
@@ -152,6 +154,67 @@ export const JudaismModule: React.FC<JudaismModuleProps> = ({
     });
     return () => unsub();
   }, []);
+
+  // Synchronize Reading Position & Chapter Progress (Phase 6.1)
+  useEffect(() => {
+    if (currentBook) {
+      personalLibraryService.saveReadingPosition({
+        religion: 'judaism',
+        scriptureId: 'tanakh',
+        collectionId: 'tanakh',
+        readingId: `tanakh-${currentBook.id}`,
+        chapterNumber: currentChapter,
+        verseNumber: 1,
+        displayTitle: `${currentBook.enTitle} (${currentBook.heTitle}) — Chapter ${currentChapter}`,
+        displayLocation: `${currentBook.enTitle} ${currentChapter}:1`,
+        updatedAt: new Date().toISOString(),
+        timestamp: Date.now(),
+      });
+      personalLibraryService.recordChapterVisited('judaism', 'tanakh', currentBook.id, currentBook.enTitle);
+    }
+  }, [currentBook, currentChapter]);
+
+  // Book Completion State
+  const [isBookCompleted, setIsBookCompleted] = useState<boolean>(() => {
+    const prog = personalLibraryService.getProgress('judaism', 'tanakh');
+    return prog?.chaptersCompleted?.includes(currentBook.id) || false;
+  });
+
+  useEffect(() => {
+    const prog = personalLibraryService.getProgress('judaism', 'tanakh');
+    setIsBookCompleted(prog?.chaptersCompleted?.includes(currentBook.id) || false);
+  }, [currentBook.id]);
+
+  // Listen for PersonalLibrary updates and navigation events
+  useEffect(() => {
+    const unsub = personalLibraryService.subscribe(() => {
+      setBookmarks(platformStorageService.getBookmarks('judaism'));
+      const prog = personalLibraryService.getProgress('judaism', 'tanakh');
+      setIsBookCompleted(prog?.chaptersCompleted?.includes(currentBook.id) || false);
+    });
+
+    const handleNav = (e: any) => {
+      if (e.detail?.religion === 'judaism') {
+        if (e.detail.collectionId) {
+          const found = TANAKH_BOOKS.find((bk) => bk.id.toLowerCase() === e.detail.collectionId.toLowerCase());
+          if (found) setCurrentBook(found);
+        }
+        if (e.detail.chapterNumber) setCurrentChapter(Number(e.detail.chapterNumber));
+        if (e.detail.verseNumber) {
+          setTimeout(() => {
+            const el = document.getElementById(`verse-${e.detail.verseNumber}`);
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 300);
+        }
+      }
+    };
+    window.addEventListener('jafri-navigate-reading', handleNav);
+
+    return () => {
+      unsub();
+      window.removeEventListener('jafri-navigate-reading', handleNav);
+    };
+  }, [currentBook, currentChapter]);
 
   useEffect(() => {
     if (verses.length === 0) return;
@@ -537,6 +600,21 @@ export const JudaismModule: React.FC<JudaismModuleProps> = ({
 
         <div className="flex items-center space-x-2">
           <button
+            data-testid="mark-completed-toggle-btn"
+            onClick={() => {
+              personalLibraryService.toggleChapterCompleted('judaism', 'tanakh', currentBook.id);
+            }}
+            title={isBookCompleted ? "Book marked as completed. Click to reopen." : "Click to mark this book as completed"}
+            className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition flex items-center space-x-1 cursor-pointer ${
+              isBookCompleted
+                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold'
+                : 'bg-navy-900 border border-slate-700 hover:border-gold-500/50 text-slate-300 hover:text-gold-300'
+            }`}
+          >
+            <CheckCircle2 className={`w-3.5 h-3.5 ${isBookCompleted ? 'text-emerald-400' : 'text-slate-400'}`} />
+            <span className="hidden sm:inline">{isBookCompleted ? 'Book Completed' : 'Mark Done'}</span>
+          </button>
+          <button
             disabled={currentChapter <= 1}
             onClick={handlePreviousChapter}
             className="p-1.5 rounded-lg bg-navy-900 border border-slate-700 text-slate-300 hover:text-gold-400 disabled:opacity-40 disabled:cursor-not-allowed transition"
@@ -697,6 +775,7 @@ export const JudaismModule: React.FC<JudaismModuleProps> = ({
                       )}
                     </button>
                     <button
+                      data-testid="verse-bookmark-btn"
                       onClick={() => handleToggleBookmark(v)}
                       title="Save bookmark"
                       className={`p-1.5 rounded-lg transition ${

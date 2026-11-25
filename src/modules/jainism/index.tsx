@@ -11,6 +11,7 @@ import {
   Bookmark,
   Share2,
   Check,
+  CheckCircle2,
   Search,
   Sliders,
   Volume2,
@@ -37,6 +38,8 @@ import { MultilingualAudioPlayerBar } from '../../platform/components/Multilingu
 import { TypographyControls } from '../../platform/components/TypographyControls';
 import { AttributionFooter } from '../../platform/components/AttributionFooter';
 import { platformStorageService } from '../../platform/services/storageService';
+import { personalLibraryService } from '../../platform/services/personalLibraryService';
+import { BookmarkRecord } from '../../platform/types/personalLibrary';
 import {
   multilingualAudioEngine,
   ScriptureAudioEditionOption,
@@ -131,6 +134,66 @@ export const JainismModule: React.FC<JainismModuleProps> = ({
     return () => unsub();
   }, []);
 
+  // Synchronize Reading Position & Text Progress (Phase 6.1)
+  useEffect(() => {
+    if (selectedText) {
+      const scopeId = (selectedText.id === 'tirthankar_teachings' || selectedText.id === 'tattvartha') ? 'tattvartha' : 'agamas';
+      personalLibraryService.saveReadingPosition({
+        religion: 'jainism',
+        scriptureId: scopeId,
+        collectionId: selectedText.id,
+        readingId: selectedText.id,
+        chapterNumber: selectedText.id,
+        verseNumber: 1,
+        displayTitle: `${selectedText.titleEn} (${selectedText.titlePrakrit})`,
+        displayLocation: selectedText.titleEn,
+        updatedAt: new Date().toISOString(),
+        timestamp: Date.now(),
+      });
+      personalLibraryService.recordChapterVisited('jainism', scopeId, selectedText.id, selectedText.titleEn);
+    }
+  }, [selectedText]);
+
+  // Text Completion State
+  const getJainScope = (textId: string) => (textId === 'tirthankar_teachings' || textId === 'tattvartha') ? 'tattvartha' : 'agamas';
+  const [isTextCompleted, setIsTextCompleted] = useState<boolean>(() => {
+    const scopeId = getJainScope(selectedText.id);
+    const prog = personalLibraryService.getProgress('jainism', scopeId);
+    return prog?.chaptersCompleted?.includes(selectedText.id) || false;
+  });
+
+  useEffect(() => {
+    const scopeId = getJainScope(selectedText.id);
+    const prog = personalLibraryService.getProgress('jainism', scopeId);
+    setIsTextCompleted(prog?.chaptersCompleted?.includes(selectedText.id) || false);
+  }, [selectedText.id]);
+
+  // Listen for PersonalLibrary updates and navigation events
+  useEffect(() => {
+    const unsub = personalLibraryService.subscribe(() => {
+      setBookmarks(platformStorageService.getBookmarks('jainism'));
+      const scopeId = getJainScope(selectedText.id);
+      const prog = personalLibraryService.getProgress('jainism', scopeId);
+      setIsTextCompleted(prog?.chaptersCompleted?.includes(selectedText.id) || false);
+    });
+
+    const handleNav = (e: any) => {
+      if (e.detail?.religion === 'jainism') {
+        const targetId = e.detail.readingId || e.detail.collectionId || e.detail.chapter;
+        if (targetId) {
+          const found = JAIN_CANONICAL_TEXTS.find((tx) => tx.id === targetId);
+          if (found) setSelectedText(found);
+        }
+      }
+    };
+    window.addEventListener('jafri-navigate-reading', handleNav);
+
+    return () => {
+      unsub();
+      window.removeEventListener('jafri-navigate-reading', handleNav);
+    };
+  }, [selectedText.id]);
+
   const units: JainSutraUnit[] = jainismProvider.getUnits(selectedText.id);
 
   useEffect(() => {
@@ -198,30 +261,27 @@ export const JainismModule: React.FC<JainismModuleProps> = ({
   const handleToggleBookmark = (unit: JainSutraUnit) => {
     const bookmarkId = `jai:${selectedText.id}:${unit.unitId}`;
     const exists = bookmarks.some((b) => b.id === bookmarkId);
+    const scopeId = getJainScope(selectedText.id);
 
     if (exists) {
-      platformStorageService.removeBookmark(bookmarkId);
+      personalLibraryService.removeBookmark(bookmarkId);
     } else {
-      const bkm: UniversalBookmark = {
+      const bkm: BookmarkRecord = {
         id: bookmarkId,
-        religionId: 'jainism',
+        religion: 'jainism',
+        scriptureId: scopeId,
         collectionId: selectedText.id,
-        address: {
-          religionId: 'jainism',
-          collectionId: selectedText.id,
-          path: [
-            { levelName: 'Agama', identifier: selectedText.id, label: selectedText.titleEn },
-            { levelName: 'Section', identifier: unit.chapterTitle || 'General' },
-          ],
-          unitIdentifier: unit.unitId,
-        },
+        readingId: selectedText.id,
+        chapterNumber: selectedText.id,
+        verseNumber: unit.unitId,
         displayTitle: `${selectedText.titleEn} [${unit.unitId}]`,
         displaySubtitle: unit.chapterTitle,
-        snippetRootText: unit.prakritText,
-        snippetTranslatedText: unit.englishText,
-        savedAtTimestamp: Date.now(),
+        originalTextReference: unit.prakritText,
+        translationText: unit.englishText,
+        createdAt: new Date().toISOString(),
+        timestamp: Date.now(),
       };
-      platformStorageService.saveBookmark(bkm);
+      personalLibraryService.addBookmark(bkm);
     }
     setBookmarks(platformStorageService.getBookmarks('jainism'));
   };
@@ -450,14 +510,32 @@ export const JainismModule: React.FC<JainismModuleProps> = ({
         )}
 
         <div className="pt-2 border-t border-slate-800/70 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400">
-          <span>
-            <strong>Author/Compiler:</strong> {selectedText.authorOrCompiler}
-          </span>
-          {selectedText.translatorOrCommentator && (
+          <div className="flex flex-wrap items-center gap-2">
             <span>
-              <strong>Scholarly Translation:</strong> {selectedText.translatorOrCommentator}
+              <strong>Author/Compiler:</strong> {selectedText.authorOrCompiler}
             </span>
-          )}
+            {selectedText.translatorOrCommentator && (
+              <span>
+                <strong>Scholarly Translation:</strong> {selectedText.translatorOrCommentator}
+              </span>
+            )}
+          </div>
+          <button
+            data-testid="mark-completed-toggle-btn"
+            onClick={() => {
+              const scopeId = getJainScope(selectedText.id);
+              personalLibraryService.toggleChapterCompleted('jainism', scopeId, selectedText.id);
+            }}
+            title={isTextCompleted ? "Text marked as completed. Click to reopen." : "Click to mark this text as completed"}
+            className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition flex items-center space-x-1 cursor-pointer ${
+              isTextCompleted
+                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold'
+                : 'bg-navy-900 border border-slate-700 hover:border-gold-500/50 text-slate-300 hover:text-gold-300'
+            }`}
+          >
+            <CheckCircle2 className={`w-3.5 h-3.5 ${isTextCompleted ? 'text-emerald-400' : 'text-slate-400'}`} />
+            <span>{isTextCompleted ? 'Text Completed' : 'Mark Text Done'}</span>
+          </button>
         </div>
       </div>
 
@@ -535,6 +613,7 @@ export const JainismModule: React.FC<JainismModuleProps> = ({
                       )}
                     </button>
                     <button
+                      data-testid="verse-bookmark-btn"
                       onClick={() => handleToggleBookmark(unit)}
                       title="Save bookmark"
                       className={`p-1.5 rounded-lg transition ${

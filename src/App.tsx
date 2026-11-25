@@ -25,11 +25,13 @@ import { ReligionId } from './platform/types/religion';
 import { PlatformNavbar } from './platform/components/PlatformNavbar';
 import { PlatformHomepage } from './platform/components/PlatformHomepage';
 import { UniversalBookmarksDrawer } from './platform/components/UniversalBookmarksDrawer';
+import { MyLibraryModal, LibraryTab } from './platform/components/MyLibraryModal';
 import { MultilingualQuranAudioDrawer } from './platform/components/MultilingualQuranAudioDrawer';
 import { SpanishNarrationPilotModal } from './platform/components/SpanishNarrationPilotModal';
 import { MultilingualReadingStudio } from './platform/components/MultilingualReadingStudio';
 import { ScriptureCoverageModal } from './platform/components/ScriptureCoverageModal';
 import { platformStorageService } from './platform/services/storageService';
+import { personalLibraryService } from './platform/services/personalLibraryService';
 import { ALL_RELIGION_IDS } from './platform/config/religionsRegistry';
 
 // Independent Religion Modules (Phase 0 Foundation)
@@ -101,9 +103,92 @@ export const App: React.FC = () => {
   const [isCoverageModalOpen, setIsCoverageModalOpen] = useState(false);
   const [coverageModalReligion, setCoverageModalReligion] = useState<ReligionId>('islam');
 
+  // My Sacred Library State (Phase 6.1)
+  const [isMyLibraryOpen, setIsMyLibraryOpen] = useState(false);
+  const [myLibraryInitialTab, setMyLibraryInitialTab] = useState<LibraryTab>('continue');
+  const [myLibraryInitialReligion, setMyLibraryInitialReligion] = useState<ReligionId | 'all'>('all');
+
+  // Sync bookmarks with personalLibraryService
+  useEffect(() => {
+    const unsub = personalLibraryService.subscribe(() => {
+      setBookmarks(platformStorageService.getBookmarks());
+    });
+    return () => unsub();
+  }, []);
+
+  const handleOpenMyLibrary = (tab: LibraryTab = 'continue', religion: ReligionId | 'all' = 'all') => {
+    setMyLibraryInitialTab(tab);
+    setMyLibraryInitialReligion(religion);
+    setIsMyLibraryOpen(true);
+  };
+
+  const handleNavigateToReading = (
+    religion: ReligionId,
+    params: {
+      collectionId?: string;
+      readingId?: string;
+      chapterNumber?: number | string;
+      verseNumber?: number | string;
+      translationId?: string;
+    }
+  ) => {
+    setIsMyLibraryOpen(false);
+    setIsPlatformBookmarksOpen(false);
+
+    // Build URL query params
+    if (typeof window !== 'undefined' && window.location) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('religion', religion);
+
+      // Clean existing reading coordinates
+      ['surah', 'ayah', 'chapter', 'shloka', 'verse', 'ang', 'sutta', 'book', 'text', 'collection'].forEach(
+        (key) => url.searchParams.delete(key)
+      );
+
+      if (religion === 'islam') {
+        if (params.chapterNumber) url.searchParams.set('surah', String(params.chapterNumber));
+        if (params.verseNumber) url.searchParams.set('ayah', String(params.verseNumber));
+      } else if (religion === 'hinduism') {
+        if (params.collectionId) url.searchParams.set('collection', params.collectionId);
+        if (params.chapterNumber) url.searchParams.set('chapter', String(params.chapterNumber));
+        if (params.verseNumber) url.searchParams.set('shloka', String(params.verseNumber));
+      } else if (religion === 'christianity') {
+        if (params.chapterNumber) url.searchParams.set('chapter', String(params.chapterNumber));
+        if (params.readingId && !isNaN(Number(params.readingId))) {
+          url.searchParams.set('book', String(params.readingId));
+        }
+        if (params.translationId) url.searchParams.set('translation', params.translationId);
+        if (params.verseNumber) url.searchParams.set('verse', String(params.verseNumber));
+      } else if (religion === 'judaism') {
+        if (params.chapterNumber) url.searchParams.set('chapter', String(params.chapterNumber));
+        if (params.collectionId) url.searchParams.set('collection', params.collectionId);
+        if (params.verseNumber) url.searchParams.set('verse', String(params.verseNumber));
+      } else if (religion === 'sikhism') {
+        if (params.chapterNumber) url.searchParams.set('ang', String(params.chapterNumber));
+      } else if (religion === 'buddhism') {
+        if (params.readingId) url.searchParams.set('sutta', params.readingId);
+      } else if (religion === 'jainism') {
+        if (params.collectionId) url.searchParams.set('text', params.collectionId);
+      }
+
+      window.history.replaceState({}, '', url.toString());
+    }
+
+    setCurrentReligion(religion);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Dispatch custom event for live mounted modules
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(
+        new CustomEvent('jafri-navigate-reading', {
+          detail: { religion, ...params },
+        })
+      );
+    }
+  };
+
   const handleOpenPlatformBookmarks = () => {
-    setBookmarks(platformStorageService.getBookmarks());
-    setIsPlatformBookmarksOpen(true);
+    handleOpenMyLibrary('bookmarks');
   };
 
   const handleOpenCoverage = (religionId?: ReligionId) => {
@@ -156,6 +241,7 @@ export const App: React.FC = () => {
             activeReligion="home"
             onSelectReligion={handleSelectReligion}
             onOpenBookmarks={handleOpenPlatformBookmarks}
+            onOpenMyLibrary={handleOpenMyLibrary}
             onOpenCoverage={handleOpenCoverage}
             onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
             onOpenStudio={() => setIsMultilingualStudioOpen(true)}
@@ -165,6 +251,8 @@ export const App: React.FC = () => {
             onSelectReligion={(rel) => handleSelectReligion(rel)}
             onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
             onOpenStudio={() => setIsMultilingualStudioOpen(true)}
+            onOpenMyLibrary={() => handleOpenMyLibrary('continue')}
+            onResumeReading={(pos) => handleNavigateToReading(pos.religion, pos)}
           />
         </>
       )}
@@ -179,6 +267,7 @@ export const App: React.FC = () => {
             activeReligion="islam"
             onSelectReligion={handleSelectReligion}
             onOpenBookmarks={handleOpenPlatformBookmarks}
+            onOpenMyLibrary={handleOpenMyLibrary}
             onOpenCoverage={handleOpenCoverage}
             onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
             onOpenStudio={() => setIsMultilingualStudioOpen(true)}
@@ -441,6 +530,7 @@ export const App: React.FC = () => {
             activeReligion="hinduism"
             onSelectReligion={handleSelectReligion}
             onOpenBookmarks={handleOpenPlatformBookmarks}
+            onOpenMyLibrary={handleOpenMyLibrary}
             onOpenCoverage={handleOpenCoverage}
             onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
             onOpenStudio={() => setIsMultilingualStudioOpen(true)}
@@ -459,6 +549,7 @@ export const App: React.FC = () => {
             activeReligion="christianity"
             onSelectReligion={handleSelectReligion}
             onOpenBookmarks={handleOpenPlatformBookmarks}
+            onOpenMyLibrary={handleOpenMyLibrary}
             onOpenCoverage={handleOpenCoverage}
             onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
             onOpenStudio={() => setIsMultilingualStudioOpen(true)}
@@ -477,6 +568,7 @@ export const App: React.FC = () => {
             activeReligion="judaism"
             onSelectReligion={handleSelectReligion}
             onOpenBookmarks={handleOpenPlatformBookmarks}
+            onOpenMyLibrary={handleOpenMyLibrary}
             onOpenCoverage={handleOpenCoverage}
             onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
             onOpenStudio={() => setIsMultilingualStudioOpen(true)}
@@ -495,6 +587,7 @@ export const App: React.FC = () => {
             activeReligion="sikhism"
             onSelectReligion={handleSelectReligion}
             onOpenBookmarks={handleOpenPlatformBookmarks}
+            onOpenMyLibrary={handleOpenMyLibrary}
             onOpenCoverage={handleOpenCoverage}
             onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
             onOpenStudio={() => setIsMultilingualStudioOpen(true)}
@@ -513,6 +606,7 @@ export const App: React.FC = () => {
             activeReligion="buddhism"
             onSelectReligion={handleSelectReligion}
             onOpenBookmarks={handleOpenPlatformBookmarks}
+            onOpenMyLibrary={handleOpenMyLibrary}
             onOpenCoverage={handleOpenCoverage}
             onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
             onOpenStudio={() => setIsMultilingualStudioOpen(true)}
@@ -531,6 +625,7 @@ export const App: React.FC = () => {
             activeReligion="jainism"
             onSelectReligion={handleSelectReligion}
             onOpenBookmarks={handleOpenPlatformBookmarks}
+            onOpenMyLibrary={handleOpenMyLibrary}
             onOpenCoverage={handleOpenCoverage}
             onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
             onOpenStudio={() => setIsMultilingualStudioOpen(true)}
@@ -549,6 +644,7 @@ export const App: React.FC = () => {
             activeReligion="sacred-audio"
             onSelectReligion={handleSelectReligion}
             onOpenBookmarks={handleOpenPlatformBookmarks}
+            onOpenMyLibrary={handleOpenMyLibrary}
             onOpenCoverage={handleOpenCoverage}
             onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
             onOpenStudio={() => setIsMultilingualStudioOpen(true)}
@@ -559,6 +655,17 @@ export const App: React.FC = () => {
       )}
 
       {/* =========================================================================
+          MY SACRED LIBRARY MODAL (Phase 6.1)
+          ========================================================================= */}
+      <MyLibraryModal
+        isOpen={isMyLibraryOpen}
+        onClose={() => setIsMyLibraryOpen(false)}
+        initialTab={myLibraryInitialTab}
+        initialReligion={myLibraryInitialReligion}
+        onNavigateToReading={handleNavigateToReading}
+      />
+
+      {/* =========================================================================
           UNIVERSAL PLATFORM BOOKMARKS DRAWER
           ========================================================================= */}
       <UniversalBookmarksDrawer
@@ -566,8 +673,14 @@ export const App: React.FC = () => {
         onClose={() => setIsPlatformBookmarksOpen(false)}
         bookmarks={bookmarks}
         onSelectBookmark={(address) => {
-          handleSelectReligion(address.religionId);
-          setIsPlatformBookmarksOpen(false);
+          const ch = address.path?.find((p) =>
+            ['Chapter', 'Book', 'Ang', 'Sutta', 'Section'].includes(p.levelName)
+          );
+          handleNavigateToReading(address.religionId, {
+            collectionId: address.collectionId,
+            chapterNumber: ch?.identifier,
+            verseNumber: address.unitIdentifier,
+          });
         }}
         onRemoveBookmark={(id) => {
           platformStorageService.removeBookmark(id);

@@ -21,6 +21,7 @@ import { RefreshCw, AlertTriangle, CheckCircle2, FileDown, Loader2, Info } from 
 import { quranAudioService, AudioPlayerState } from '../../services/audio';
 import { TwoColumnReadingLayout } from '../../platform/components/layout/TwoColumnReadingLayout';
 import type { ReadingContext } from '../../platform/services/contextualAudioMatcher';
+import { personalLibraryService } from '../../platform/services/personalLibraryService';
 
 export const QuranReader: React.FC = () => {
   // Directory & Selection
@@ -110,7 +111,7 @@ export const QuranReader: React.FC = () => {
     }
   }, [bookmarks]);
 
-  // Save Last Read Position to LocalStorage
+  // Save Last Read Position to LocalStorage and PersonalLibraryService
   const updateLastRead = (surahNum: number, ayahNum: number, sName: string, sEnglish: string) => {
     const pos: LastReadPosition = {
       surahNumber: surahNum,
@@ -125,7 +126,60 @@ export const QuranReader: React.FC = () => {
     } catch {
       // Ignore
     }
+
+    // Sync with PersonalLibraryService (Phase 6.1)
+    personalLibraryService.saveReadingPosition({
+      religion: 'islam',
+      scriptureId: 'quran',
+      collectionId: 'holy-quran',
+      readingId: `surah-${surahNum}`,
+      chapterNumber: surahNum,
+      verseNumber: ayahNum,
+      displayTitle: `Surah ${sEnglish} (${sName})`,
+      displayLocation: `Surah ${surahNum}, Ayah ${ayahNum}`,
+      preferredTranslation: selectedUrduTranslation,
+      preferredFormat: selectedScript,
+      updatedAt: new Date().toISOString(),
+      timestamp: Date.now(),
+    });
+    personalLibraryService.recordChapterVisited('islam', 'quran', surahNum, sEnglish);
   };
+
+  // Chapter Completion Status
+  const [isSurahCompleted, setIsSurahCompleted] = useState<boolean>(() => {
+    const prog = personalLibraryService.getProgress('islam', 'quran');
+    return prog?.chaptersCompleted?.includes(currentSurahNumber) || false;
+  });
+
+  useEffect(() => {
+    const prog = personalLibraryService.getProgress('islam', 'quran');
+    setIsSurahCompleted(prog?.chaptersCompleted?.includes(currentSurahNumber) || false);
+  }, [currentSurahNumber]);
+
+  // Listen for PersonalLibrary updates and navigation events
+  useEffect(() => {
+    const unsub = personalLibraryService.subscribe(() => {
+      const prog = personalLibraryService.getProgress('islam', 'quran');
+      setIsSurahCompleted(prog?.chaptersCompleted?.includes(currentSurahNumber) || false);
+    });
+
+    const handleNav = (e: any) => {
+      if (e.detail?.religion === 'islam' && e.detail?.chapterNumber) {
+        const sNum = Number(e.detail.chapterNumber);
+        const aNum = e.detail.verseNumber ? Number(e.detail.verseNumber) : 1;
+        if (sNum >= 1 && sNum <= 114) {
+          setCurrentSurahNumber(sNum);
+          loadSurah(sNum, aNum);
+        }
+      }
+    };
+    window.addEventListener('jafri-navigate-reading', handleNav);
+
+    return () => {
+      unsub();
+      window.removeEventListener('jafri-navigate-reading', handleNav);
+    };
+  }, [currentSurahNumber]);
 
   // Load Surah Directory on Mount
   useEffect(() => {
@@ -278,16 +332,19 @@ export const QuranReader: React.FC = () => {
     }
   };
 
-  // Bookmark Toggle
+  // Bookmark Toggle (Synced with PersonalLibraryService)
   const handleToggleBookmark = (ayah: UnifiedAyah) => {
-    const id = `${currentSurahNumber}:${ayah.numberInSurah}`;
-    const exists = bookmarks.some((b) => b.id === id);
+    const rawId = `${currentSurahNumber}:${ayah.numberInSurah}`;
+    const canonicalId = `isl:quran:${currentSurahNumber}:${ayah.numberInSurah}`;
+    const exists = bookmarks.some((b) => b.id === rawId || b.id === canonicalId);
 
     if (exists) {
-      setBookmarks((prev) => prev.filter((b) => b.id !== id));
+      setBookmarks((prev) => prev.filter((b) => b.id !== rawId && b.id !== canonicalId));
+      personalLibraryService.removeBookmark(canonicalId);
+      personalLibraryService.removeBookmark(rawId);
     } else {
       const newBookmark: BookmarkItem = {
-        id,
+        id: rawId,
         surahNumber: currentSurahNumber,
         ayahNumber: ayah.numberInSurah,
         surahName: currentSurah?.name || `Surah ${currentSurahNumber}`,
@@ -298,6 +355,23 @@ export const QuranReader: React.FC = () => {
         timestamp: Date.now(),
       };
       setBookmarks((prev) => [newBookmark, ...prev]);
+
+      personalLibraryService.addBookmark({
+        id: canonicalId,
+        religion: 'islam',
+        scriptureId: 'quran',
+        collectionId: 'holy-quran',
+        readingId: `surah-${currentSurahNumber}`,
+        chapterNumber: currentSurahNumber,
+        verseNumber: ayah.numberInSurah,
+        originalTextReference: ayah.arabicText.slice(0, 100),
+        translationId: 'en.sahih',
+        translationText: newBookmark.translationSnippet,
+        displayTitle: `Surah ${currentSurah?.englishName || currentSurahNumber} ${currentSurahNumber}:${ayah.numberInSurah}`,
+        displaySubtitle: currentSurah?.name,
+        createdAt: new Date().toISOString(),
+        timestamp: Date.now(),
+      });
     }
   };
 
@@ -413,6 +487,36 @@ export const QuranReader: React.FC = () => {
           onToggleAudioPlayer={() => setIsAudioPlayerVisible((v) => !v)}
           isAudioActive={isAudioPlayerVisible || audioState.status === 'playing'}
         />
+      )}
+
+      {/* Chapter Completion & Reading Progress Bar (Phase 6.1) */}
+      {currentSurah && (
+        <div className="max-w-7xl mx-auto px-4 lg:px-8">
+          <div className="flex items-center justify-between px-3.5 py-2 rounded-xl bg-navy-900/90 border border-gold-500/20 text-xs shadow-sm">
+            <div className="flex items-center space-x-2">
+              <span className="font-semibold text-slate-200">Surah {currentSurah.number} of 114</span>
+              <span className="text-slate-500">•</span>
+              <span className="text-slate-400">{currentSurah.numberOfAyahs} Ayahs</span>
+              <span className="text-slate-500 hidden sm:inline">•</span>
+              <span className="text-gold-400/80 font-serif hidden sm:inline">{currentSurah.englishNameTranslation}</span>
+            </div>
+
+            <button
+              data-testid="mark-completed-toggle-btn"
+              onClick={() => {
+                personalLibraryService.toggleChapterCompleted('islam', 'quran', currentSurahNumber);
+              }}
+              className={`px-3 py-1 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5 cursor-pointer ${
+                isSurahCompleted
+                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold'
+                  : 'bg-navy-950 border border-slate-700 hover:border-gold-500/50 text-slate-300 hover:text-gold-300'
+              }`}
+            >
+              <CheckCircle2 className={`w-3.5 h-3.5 ${isSurahCompleted ? 'text-emerald-400' : 'text-slate-400'}`} />
+              <span>{isSurahCompleted ? 'Surah Completed' : 'Mark Completed'}</span>
+            </button>
+          </div>
+        </div>
       )}
 
       {/* 2. Provider Routing Status & Disclaimers */}

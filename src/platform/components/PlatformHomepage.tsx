@@ -3,7 +3,7 @@
 // Jafri Religious Books & Audio Platform — Phase 0
 // ==============================================================================
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ShieldCheck,
   Sparkles,
@@ -12,15 +12,21 @@ import {
   Construction,
   Globe,
   Headphones,
+  BookOpen,
+  BookMarked,
 } from 'lucide-react';
 import { ReligionId } from '../types/religion';
 import { RELIGIONS_REGISTRY, ALL_RELIGION_IDS } from '../config/religionsRegistry';
+import { personalLibraryService } from '../services/personalLibraryService';
+import type { ReadingPosition } from '../types/personalLibrary';
 
 interface PlatformHomepageProps {
   onSelectReligion: (religionId: ReligionId | 'sacred-audio') => void;
   onOpenSpanishPilot?: () => void;
   onOpenStudio?: () => void;
   onOpenSacredAudio?: () => void;
+  onOpenMyLibrary?: () => void;
+  onResumeReading?: (pos: ReadingPosition) => void;
 }
 
 export const PlatformHomepage: React.FC<PlatformHomepageProps> = ({
@@ -28,9 +34,71 @@ export const PlatformHomepage: React.FC<PlatformHomepageProps> = ({
   onOpenSpanishPilot,
   onOpenStudio,
   onOpenSacredAudio,
+  onOpenMyLibrary,
+  onResumeReading,
 }) => {
+  const [globalLastRead, setGlobalLastRead] = useState<ReadingPosition | null>(() =>
+    personalLibraryService.getGlobalLastRead()
+  );
+
+  useEffect(() => {
+    const unsub = personalLibraryService.subscribe(() => {
+      setGlobalLastRead(personalLibraryService.getGlobalLastRead());
+    });
+    return () => unsub();
+  }, []);
   return (
     <div className="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-8 space-y-10 animate-in fade-in-50 duration-200">
+      {/* Continue Reading Quick Banner (Phase 6.1) */}
+      {globalLastRead && (
+        <section
+          id="homepage-continue-reading-banner"
+          className="rounded-2xl bg-gradient-to-r from-gold-500/15 via-navy-900 to-navy-950 border border-gold-500/40 p-4 sm:p-5 shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+        >
+          <div className="flex items-start sm:items-center space-x-3.5">
+            <div className="w-10 h-10 rounded-xl bg-gold-500/20 border border-gold-500/40 flex items-center justify-center text-gold-400 flex-shrink-0 shadow-gold-sm">
+              <BookOpen className="w-5 h-5 text-gold-400" />
+            </div>
+            <div>
+              <div className="flex items-center space-x-2">
+                <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-gold-500/20 text-gold-300">
+                  {globalLastRead.religion}
+                </span>
+                <span className="text-xs text-slate-400">Continue where you left off</span>
+              </div>
+              <h3 className="font-serif text-sm sm:text-base font-bold text-slate-100 mt-0.5">
+                {globalLastRead.displayTitle} — <span className="text-gold-300">{globalLastRead.displayLocation}</span>
+              </h3>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-2 flex-shrink-0">
+            <button
+              onClick={() => {
+                if (onResumeReading) {
+                  onResumeReading(globalLastRead);
+                } else {
+                  onSelectReligion(globalLastRead.religion);
+                }
+              }}
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-gold-500 to-gold-400 text-navy-950 font-bold text-xs shadow-gold-sm hover:brightness-110 transition flex items-center space-x-1.5 cursor-pointer"
+            >
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>Resume Reading</span>
+            </button>
+            {onOpenMyLibrary && (
+              <button
+                onClick={onOpenMyLibrary}
+                className="px-3 py-2 rounded-xl bg-navy-950 border border-slate-700 hover:border-gold-500/50 text-slate-300 hover:text-gold-300 text-xs font-medium transition flex items-center space-x-1 cursor-pointer"
+              >
+                <BookMarked className="w-3.5 h-3.5 text-gold-400" />
+                <span className="hidden sm:inline">My Library</span>
+              </button>
+            )}
+          </div>
+        </section>
+      )}
+
       {/* Hero Section */}
       <section className="relative rounded-3xl bg-gradient-to-b from-navy-900 via-navy-900/95 to-navy-950 border border-gold-500/30 p-6 sm:p-10 lg:p-12 shadow-2xl overflow-hidden text-center">
         {/* Subtle radial background glow */}

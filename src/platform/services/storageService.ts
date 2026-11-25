@@ -6,6 +6,8 @@
 
 import { ReligionId } from '../types/religion';
 import { UniversalBookmark, ReadingProgress, UserReadingPreferences } from '../types/user';
+import { personalLibraryService } from './personalLibraryService';
+import { BookmarkRecord } from '../types/personalLibrary';
 
 const STORAGE_KEYS = {
   BOOKMARKS: 'jafri_platform_bookmarks_v1',
@@ -26,11 +28,40 @@ export const DEFAULT_READING_PREFERENCES: UserReadingPreferences = {
 
 class PlatformStorageService {
   // ----------------------------------------------------------------------------
-  // Bookmarks Management (Namespaced & Safe)
+  // Bookmarks Management (Namespaced, Safe & Bridged to PersonalLibraryService)
   // ----------------------------------------------------------------------------
 
   getBookmarks(religionId?: ReligionId): UniversalBookmark[] {
     try {
+      // First check PersonalLibraryService records
+      const unified = personalLibraryService.getBookmarks(religionId);
+      if (unified && unified.length > 0) {
+        return unified.map((u) => ({
+          id: u.id,
+          religionId: u.religion,
+          collectionId: u.collectionId || u.scriptureId,
+          address: {
+            religionId: u.religion,
+            collectionId: u.collectionId || u.scriptureId,
+            path: [
+              {
+                levelName: 'Chapter',
+                identifier: u.chapterNumber || u.readingId,
+                label: u.displaySubtitle,
+              },
+            ],
+            unitIdentifier: u.verseNumber || u.chapterNumber || 1,
+          },
+          displayTitle: u.displayTitle,
+          displaySubtitle: u.displaySubtitle,
+          snippetRootText: u.originalTextReference,
+          snippetTranslatedText: u.translationText,
+          savedAtTimestamp: u.timestamp,
+          userNotes: u.userNotes,
+        }));
+      }
+
+      // Fallback to local key
       const raw = localStorage.getItem(STORAGE_KEYS.BOOKMARKS);
       const bookmarks: UniversalBookmark[] = raw ? JSON.parse(raw) : [];
 
@@ -45,9 +76,34 @@ class PlatformStorageService {
 
   saveBookmark(bookmark: UniversalBookmark): boolean {
     try {
+      // 1. Save in local key
       const existing = this.getBookmarks();
       const updated = [bookmark, ...existing.filter((b) => b.id !== bookmark.id)];
       localStorage.setItem(STORAGE_KEYS.BOOKMARKS, JSON.stringify(updated));
+
+      // 2. Sync to PersonalLibraryService
+      const chPath = bookmark.address?.path?.find((p) =>
+        ['Chapter', 'Book', 'Ang', 'Sutta', 'Section'].includes(p.levelName)
+      );
+
+      const record: BookmarkRecord = {
+        id: bookmark.id,
+        religion: bookmark.religionId,
+        scriptureId: bookmark.collectionId || 'scripture',
+        collectionId: bookmark.collectionId || 'collection',
+        readingId: bookmark.collectionId || 'reading',
+        chapterNumber: chPath?.identifier || bookmark.address?.unitIdentifier,
+        verseNumber: bookmark.address?.unitIdentifier,
+        originalTextReference: bookmark.snippetRootText || '',
+        translationText: bookmark.snippetTranslatedText || '',
+        displayTitle: bookmark.displayTitle,
+        displaySubtitle: bookmark.displaySubtitle,
+        createdAt: new Date(bookmark.savedAtTimestamp || Date.now()).toISOString(),
+        timestamp: bookmark.savedAtTimestamp || Date.now(),
+        userNotes: bookmark.userNotes,
+      };
+
+      personalLibraryService.addBookmark(record);
       return true;
     } catch {
       return false;
@@ -59,6 +115,7 @@ class PlatformStorageService {
       const existing = this.getBookmarks();
       const updated = existing.filter((b) => b.id !== bookmarkId);
       localStorage.setItem(STORAGE_KEYS.BOOKMARKS, JSON.stringify(updated));
+      personalLibraryService.removeBookmark(bookmarkId);
       return true;
     } catch {
       return false;
@@ -73,6 +130,7 @@ class PlatformStorageService {
         const remaining = this.getBookmarks().filter((b) => b.religionId !== religionId);
         localStorage.setItem(STORAGE_KEYS.BOOKMARKS, JSON.stringify(remaining));
       }
+      personalLibraryService.clearBookmarks(religionId);
       return true;
     } catch {
       return false;

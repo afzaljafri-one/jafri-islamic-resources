@@ -43,6 +43,7 @@ import {
 import { ScriptureNavigationDrawer } from '../../platform/components/ScriptureNavigationDrawer';
 import { UniversalSearchModal } from '../../platform/components/UniversalSearchModal';
 import { UniversalBookmarksDrawer } from '../../platform/components/UniversalBookmarksDrawer';
+import { personalLibraryService } from '../../platform/services/personalLibraryService';
 import { AudioNoticeModal } from '../../platform/components/AudioNoticeModal';
 import { ScriptureCoverageModal } from '../../platform/components/ScriptureCoverageModal';
 import { YouTubeEmbedModal } from '../../platform/components/audio/YouTubeEmbedModal';
@@ -288,6 +289,77 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
   const selectedCollection: HinduismCollectionMeta =
     HINDUISM_COLLECTIONS.find((c) => c.id === selectedCollectionId) ||
     HINDUISM_COLLECTIONS[0];
+
+  // Synchronize Reading Position & Chapter Progress (Phase 6.1)
+  useEffect(() => {
+    if (selectedCollectionId === 'gita') {
+      personalLibraryService.saveReadingPosition({
+        religion: 'hinduism',
+        scriptureId: 'gita',
+        collectionId: 'gita',
+        readingId: `gita-${currentChapterNum}`,
+        chapterNumber: currentChapterNum,
+        verseNumber: 1,
+        displayTitle: `Bhagavad Gita — Chapter ${currentChapterNum}`,
+        displayLocation: `Chapter ${currentChapterNum}: ${currentChapter.translation}`,
+        updatedAt: new Date().toISOString(),
+        timestamp: Date.now(),
+      });
+      personalLibraryService.recordChapterVisited('hinduism', 'gita', currentChapterNum, currentChapter.translation);
+    } else {
+      personalLibraryService.saveReadingPosition({
+        religion: 'hinduism',
+        scriptureId: 'bhajans',
+        collectionId: selectedCollectionId,
+        readingId: selectedCollectionId,
+        chapterNumber: 1,
+        displayTitle: selectedCollection.title,
+        displayLocation: selectedCollection.category,
+        updatedAt: new Date().toISOString(),
+        timestamp: Date.now(),
+      });
+      personalLibraryService.recordChapterVisited('hinduism', 'bhajans', selectedCollectionId, selectedCollection.title);
+    }
+  }, [currentChapterNum, selectedCollectionId, currentChapter.translation, selectedCollection.title, selectedCollection.category]);
+
+  // Gita Chapter Completion State
+  const [isChapterCompleted, setIsChapterCompleted] = useState<boolean>(() => {
+    const prog = personalLibraryService.getProgress('hinduism', 'gita');
+    return prog?.chaptersCompleted?.includes(currentChapterNum) || false;
+  });
+
+  useEffect(() => {
+    const prog = personalLibraryService.getProgress('hinduism', 'gita');
+    setIsChapterCompleted(prog?.chaptersCompleted?.includes(currentChapterNum) || false);
+  }, [currentChapterNum]);
+
+  // Listen for PersonalLibrary updates and navigation events
+  useEffect(() => {
+    const unsub = personalLibraryService.subscribe(() => {
+      setBookmarks(platformStorageService.getBookmarks('hinduism'));
+      const prog = personalLibraryService.getProgress('hinduism', 'gita');
+      setIsChapterCompleted(prog?.chaptersCompleted?.includes(currentChapterNum) || false);
+    });
+
+    const handleNav = (e: any) => {
+      if (e.detail?.religion === 'hinduism') {
+        if (e.detail.collectionId) setSelectedCollectionId(e.detail.collectionId);
+        if (e.detail.chapterNumber) setCurrentChapterNum(Number(e.detail.chapterNumber));
+        if (e.detail.verseNumber) {
+          setTimeout(() => {
+            const el = document.getElementById(`verse-${e.detail.verseNumber}`);
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 300);
+        }
+      }
+    };
+    window.addEventListener('jafri-navigate-reading', handleNav);
+
+    return () => {
+      unsub();
+      window.removeEventListener('jafri-navigate-reading', handleNav);
+    };
+  }, [currentChapterNum]);
 
   const nonGitaUnits: HinduismVerseUnit[] =
     selectedCollectionId !== 'gita'
@@ -914,6 +986,21 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
 
           <div className="flex items-center space-x-2">
             <button
+              data-testid="mark-completed-toggle-btn"
+              onClick={() => {
+                personalLibraryService.toggleChapterCompleted('hinduism', 'gita', currentChapterNum);
+              }}
+              title={isChapterCompleted ? "Chapter marked as completed. Click to reopen." : "Click to mark this chapter as completed"}
+              className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition flex items-center space-x-1 cursor-pointer ${
+                isChapterCompleted
+                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold'
+                  : 'bg-navy-900 border border-slate-700 hover:border-gold-500/50 text-slate-300 hover:text-gold-300'
+              }`}
+            >
+              <CheckCircle2 className={`w-3.5 h-3.5 ${isChapterCompleted ? 'text-emerald-400' : 'text-slate-400'}`} />
+              <span className="hidden sm:inline">{isChapterCompleted ? 'Completed' : 'Mark Done'}</span>
+            </button>
+            <button
               disabled={currentChapterNum <= 1}
               onClick={handlePreviousChapter}
               className="p-1.5 rounded-lg bg-navy-900 border border-slate-700 text-slate-300 hover:text-gold-400 disabled:opacity-40 disabled:cursor-not-allowed transition"
@@ -1097,6 +1184,7 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
                         )}
                       </button>
                       <button
+                        data-testid="verse-bookmark-btn"
                         onClick={() => handleToggleBookmark(v)}
                         title="Save bookmark"
                         className={`p-1.5 rounded-lg transition ${
@@ -1235,6 +1323,7 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
                         )}
                       </button>
                       <button
+                        data-testid="verse-bookmark-btn"
                         onClick={() => handleToggleNonGitaBookmark(u)}
                         title="Save bookmark"
                         className={`p-1.5 rounded-lg transition ${

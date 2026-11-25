@@ -105,6 +105,7 @@ export const VerseCard: React.FC<VerseCardProps> = ({
 
           {/* Bookmark Button */}
           <button
+            data-testid="verse-bookmark-btn"
             onClick={() => onToggleBookmark(ayah)}
             title={isBookmarked ? 'Remove Bookmark' : 'Bookmark Ayah'}
             className={`p-1.5 rounded-lg border transition-colors ${

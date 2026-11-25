@@ -11,6 +11,7 @@ import {
   Bookmark,
   Share2,
   Check,
+  CheckCircle2,
   Search,
   Layers,
   Info,
@@ -34,6 +35,7 @@ import {
 import { ScriptureNavigationDrawer } from '../../platform/components/ScriptureNavigationDrawer';
 import { UniversalSearchModal } from '../../platform/components/UniversalSearchModal';
 import { UniversalBookmarksDrawer } from '../../platform/components/UniversalBookmarksDrawer';
+import { personalLibraryService } from '../../platform/services/personalLibraryService';
 import { AudioNoticeModal } from '../../platform/components/AudioNoticeModal';
 import { ScriptureCoverageModal } from '../../platform/components/ScriptureCoverageModal';
 import { TwoColumnReadingLayout } from '../../platform/components/layout/TwoColumnReadingLayout';
@@ -162,6 +164,75 @@ export const ChristianityModule: React.FC<ChristianityModuleProps> = ({
     };
   }, []);
 
+  const currentBook = books.find((b) => b.bookid === currentBookId) || {
+    bookid: currentBookId,
+    name: currentBookId === 1 ? 'Genesis' : `Book ${currentBookId}`,
+    chapters: 50,
+  };
+
+  // Synchronize Reading Position & Chapter Progress (Phase 6.1)
+  useEffect(() => {
+    if (currentBook) {
+      personalLibraryService.saveReadingPosition({
+        religion: 'christianity',
+        scriptureId: 'bible',
+        collectionId: `bible-${selectedTranslation.toLowerCase()}`,
+        readingId: `book-${currentBookId}`,
+        chapterNumber: currentChapter,
+        verseNumber: 1,
+        displayTitle: `${currentBook.name} — Chapter ${currentChapter} (${selectedTranslation})`,
+        displayLocation: `${currentBook.name} ${currentChapter}:1`,
+        preferredTranslation: selectedTranslation,
+        updatedAt: new Date().toISOString(),
+        timestamp: Date.now(),
+      });
+      personalLibraryService.recordChapterVisited('christianity', 'bible', currentBookId, currentBook.name);
+    }
+  }, [currentBookId, currentChapter, selectedTranslation, currentBook.name]);
+
+  // Book Completion State
+  const [isBookCompleted, setIsBookCompleted] = useState<boolean>(() => {
+    const prog = personalLibraryService.getProgress('christianity', 'bible');
+    return prog?.chaptersCompleted?.includes(currentBookId) || false;
+  });
+
+  useEffect(() => {
+    const prog = personalLibraryService.getProgress('christianity', 'bible');
+    setIsBookCompleted(prog?.chaptersCompleted?.includes(currentBookId) || false);
+  }, [currentBookId]);
+
+  // Listen for PersonalLibrary updates and navigation events
+  useEffect(() => {
+    const unsub = personalLibraryService.subscribe(() => {
+      setBookmarks(platformStorageService.getBookmarks('christianity'));
+      const prog = personalLibraryService.getProgress('christianity', 'bible');
+      setIsBookCompleted(prog?.chaptersCompleted?.includes(currentBookId) || false);
+    });
+
+    const handleNav = (e: any) => {
+      if (e.detail?.religion === 'christianity') {
+        if (e.detail.readingId && !isNaN(Number(e.detail.readingId))) {
+          setCurrentBookId(Number(e.detail.readingId));
+        } else if (e.detail.chapterNumber && !isNaN(Number(e.detail.chapterNumber))) {
+          setCurrentChapter(Number(e.detail.chapterNumber));
+        }
+        if (e.detail.translationId) setSelectedTranslation(e.detail.translationId);
+        if (e.detail.verseNumber) {
+          setTimeout(() => {
+            const el = document.getElementById(`verse-${e.detail.verseNumber}`);
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 300);
+        }
+      }
+    };
+    window.addEventListener('jafri-navigate-reading', handleNav);
+
+    return () => {
+      unsub();
+      window.removeEventListener('jafri-navigate-reading', handleNav);
+    };
+  }, [currentBookId, currentChapter]);
+
   // Load Books List
   useEffect(() => {
     let mounted = true;
@@ -222,13 +293,6 @@ export const ChristianityModule: React.FC<ChristianityModuleProps> = ({
       mounted = false;
     };
   }, [currentBookId, currentChapter, selectedTranslation, books, retryTrigger]);
-
-  const currentBook = books.find((b) => b.bookid === currentBookId) || {
-    bookid: 1,
-    name: 'Genesis',
-    chapters: 50,
-    chronorder: 1,
-  };
 
   const currentTransMeta =
     BIBLE_TRANSLATIONS.find((t) => t.id === selectedTranslation) ||
@@ -574,6 +638,21 @@ export const ChristianityModule: React.FC<ChristianityModuleProps> = ({
 
         <div className="flex items-center space-x-2">
           <button
+            data-testid="mark-completed-toggle-btn"
+            onClick={() => {
+              personalLibraryService.toggleChapterCompleted('christianity', 'bible', currentBookId);
+            }}
+            title={isBookCompleted ? "Book marked as completed. Click to reopen." : "Click to mark this book as completed"}
+            className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition flex items-center space-x-1 cursor-pointer ${
+              isBookCompleted
+                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold'
+                : 'bg-navy-900 border border-slate-700 hover:border-gold-500/50 text-slate-300 hover:text-gold-300'
+            }`}
+          >
+            <CheckCircle2 className={`w-3.5 h-3.5 ${isBookCompleted ? 'text-emerald-400' : 'text-slate-400'}`} />
+            <span className="hidden sm:inline">{isBookCompleted ? 'Book Completed' : 'Mark Done'}</span>
+          </button>
+          <button
             data-testid="prev-chapter-btn"
             disabled={currentBookId === 1 && currentChapter === 1}
             onClick={handlePreviousChapter}
@@ -708,6 +787,7 @@ export const ChristianityModule: React.FC<ChristianityModuleProps> = ({
                       )}
                     </button>
                     <button
+                      data-testid="verse-bookmark-btn"
                       onClick={() => handleToggleBookmark(v)}
                       title="Save bookmark"
                       className={`p-1.5 rounded-lg transition ${

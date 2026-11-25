@@ -22,6 +22,7 @@ import {
   RotateCcw,
   AlertTriangle,
   BookOpen,
+  CheckCircle2,
 } from 'lucide-react';
 import {
   sikhismProvider,
@@ -37,6 +38,7 @@ import { MultilingualAudioPlayerBar } from '../../platform/components/Multilingu
 import { TypographyControls } from '../../platform/components/TypographyControls';
 import { AttributionFooter } from '../../platform/components/AttributionFooter';
 import { platformStorageService } from '../../platform/services/storageService';
+import { personalLibraryService } from '../../platform/services/personalLibraryService';
 import {
   multilingualAudioEngine,
   ScriptureAudioEditionOption,
@@ -137,6 +139,60 @@ export const SikhismModule: React.FC<SikhismModuleProps> = ({
     });
     return () => unsub();
   }, []);
+
+  // Synchronize Reading Position & Ang Progress (Phase 6.1)
+  useEffect(() => {
+    personalLibraryService.saveReadingPosition({
+      religion: 'sikhism',
+      scriptureId: 'sggs',
+      collectionId: 'sggs',
+      readingId: `ang-${currentAng}`,
+      chapterNumber: currentAng,
+      verseNumber: 1,
+      displayTitle: `Sri Guru Granth Sahib Ji — Ang ${currentAng}`,
+      displayLocation: `Ang ${currentAng} of 1,430`,
+      updatedAt: new Date().toISOString(),
+      timestamp: Date.now(),
+    });
+    personalLibraryService.recordChapterVisited('sikhism', 'sggs', currentAng, `Ang ${currentAng}`);
+  }, [currentAng]);
+
+  // Ang Completion State
+  const [isAngCompleted, setIsAngCompleted] = useState<boolean>(() => {
+    const prog = personalLibraryService.getProgress('sikhism', 'sggs');
+    return prog?.chaptersCompleted?.includes(currentAng) || false;
+  });
+
+  useEffect(() => {
+    const prog = personalLibraryService.getProgress('sikhism', 'sggs');
+    setIsAngCompleted(prog?.chaptersCompleted?.includes(currentAng) || false);
+  }, [currentAng]);
+
+  // Listen for PersonalLibrary updates and navigation events
+  useEffect(() => {
+    const unsub = personalLibraryService.subscribe(() => {
+      setBookmarks(platformStorageService.getBookmarks('sikhism'));
+      const prog = personalLibraryService.getProgress('sikhism', 'sggs');
+      setIsAngCompleted(prog?.chaptersCompleted?.includes(currentAng) || false);
+    });
+
+    const handleNav = (e: any) => {
+      if (e.detail?.religion === 'sikhism') {
+        if (e.detail.chapterNumber) {
+          const a = Number(e.detail.chapterNumber);
+          if (a >= 1 && a <= 1430) {
+            setCurrentAng(a);
+          }
+        }
+      }
+    };
+    window.addEventListener('jafri-navigate-reading', handleNav);
+
+    return () => {
+      unsub();
+      window.removeEventListener('jafri-navigate-reading', handleNav);
+    };
+  }, [currentAng]);
 
   useEffect(() => {
     if (!angData || angData.lines.length === 0) return;
@@ -468,6 +524,21 @@ export const SikhismModule: React.FC<SikhismModuleProps> = ({
 
         <div className="flex items-center space-x-2 self-end sm:self-auto">
           <button
+            data-testid="mark-completed-toggle-btn"
+            onClick={() => {
+              personalLibraryService.toggleChapterCompleted('sikhism', 'sggs', currentAng);
+            }}
+            title={isAngCompleted ? "Ang marked as completed. Click to reopen." : "Click to mark this Ang as completed"}
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center space-x-1.5 cursor-pointer ${
+              isAngCompleted
+                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold'
+                : 'bg-navy-900 border border-slate-700 hover:border-gold-500/50 text-slate-300 hover:text-gold-300'
+            }`}
+          >
+            <CheckCircle2 className={`w-3.5 h-3.5 ${isAngCompleted ? 'text-emerald-400' : 'text-slate-400'}`} />
+            <span>{isAngCompleted ? 'Ang Completed' : 'Mark Completed'}</span>
+          </button>
+          <button
             disabled={currentAng <= 1}
             onClick={handlePreviousAng}
             className="flex items-center space-x-1 px-3 py-1.5 rounded-xl bg-navy-900 border border-slate-700 text-slate-200 hover:border-gold-500 hover:text-gold-400 disabled:opacity-40 disabled:cursor-not-allowed transition"
@@ -612,6 +683,7 @@ export const SikhismModule: React.FC<SikhismModuleProps> = ({
                       )}
                     </button>
                     <button
+                      data-testid="verse-bookmark-btn"
                       onClick={() => handleToggleBookmark(line)}
                       title="Save bookmark"
                       className={`p-1.5 rounded-lg transition ${

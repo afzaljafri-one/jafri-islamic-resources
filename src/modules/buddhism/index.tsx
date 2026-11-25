@@ -19,6 +19,7 @@ import {
   Play,
   Pause,
   BookOpen,
+  CheckCircle2,
 } from 'lucide-react';
 import {
   buddhismProvider,
@@ -35,6 +36,7 @@ import { MultilingualAudioPlayerBar } from '../../platform/components/Multilingu
 import { TypographyControls } from '../../platform/components/TypographyControls';
 import { AttributionFooter } from '../../platform/components/AttributionFooter';
 import { platformStorageService } from '../../platform/services/storageService';
+import { personalLibraryService } from '../../platform/services/personalLibraryService';
 import {
   multilingualAudioEngine,
   ScriptureAudioEditionOption,
@@ -141,6 +143,62 @@ export const BuddhismModule: React.FC<BuddhismModuleProps> = ({
       multilingualAudioEngine.stop();
     };
   }, []);
+
+  // Synchronize Reading Position & Sutta Progress (Phase 6.1)
+  useEffect(() => {
+    if (selectedSutta) {
+      personalLibraryService.saveReadingPosition({
+        religion: 'buddhism',
+        scriptureId: 'tipitaka',
+        collectionId: 'tipitaka',
+        readingId: selectedSutta.uid || selectedSutta.id,
+        chapterNumber: selectedSutta.uid || selectedSutta.id,
+        verseNumber: 1,
+        displayTitle: `${selectedSutta.titlePali} (${selectedSutta.titleEn})`,
+        displayLocation: selectedSutta.uid,
+        updatedAt: new Date().toISOString(),
+        timestamp: Date.now(),
+      });
+      personalLibraryService.recordChapterVisited('buddhism', 'tipitaka', selectedSutta.id, selectedSutta.titleEn);
+    }
+  }, [selectedSutta]);
+
+  // Sutta Completion State
+  const [isSuttaCompleted, setIsSuttaCompleted] = useState<boolean>(() => {
+    const prog = personalLibraryService.getProgress('buddhism', 'tipitaka');
+    return prog?.chaptersCompleted?.includes(selectedSutta.id) || false;
+  });
+
+  useEffect(() => {
+    const prog = personalLibraryService.getProgress('buddhism', 'tipitaka');
+    setIsSuttaCompleted(prog?.chaptersCompleted?.includes(selectedSutta.id) || false);
+  }, [selectedSutta.id]);
+
+  // Listen for PersonalLibrary updates and navigation events
+  useEffect(() => {
+    const unsub = personalLibraryService.subscribe(() => {
+      setBookmarks(platformStorageService.getBookmarks('buddhism'));
+      const prog = personalLibraryService.getProgress('buddhism', 'tipitaka');
+      setIsSuttaCompleted(prog?.chaptersCompleted?.includes(selectedSutta.id) || false);
+    });
+
+    const handleNav = (e: any) => {
+      if (e.detail?.religion === 'buddhism') {
+        if (e.detail.readingId) {
+          const found = CANONICAL_SUTTAS.find(
+            (st) => st.id === e.detail.readingId || st.uid === e.detail.readingId
+          );
+          if (found) setSelectedSutta(found);
+        }
+      }
+    };
+    window.addEventListener('jafri-navigate-reading', handleNav);
+
+    return () => {
+      unsub();
+      window.removeEventListener('jafri-navigate-reading', handleNav);
+    };
+  }, [selectedSutta.id]);
 
   const handleSelectSutta = (sutta: SuttaMeta) => {
     multilingualAudioEngine.stop();
@@ -489,14 +547,32 @@ export const BuddhismModule: React.FC<BuddhismModuleProps> = ({
         )}
 
         <div className="pt-2 border-t border-slate-800/70 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400">
-          <span>
-            <strong>Author/Compiler:</strong> {selectedSutta.authorOrCompiler}
-          </span>
-          {selectedSutta.translatorOrCommentator && (
+          <div className="flex flex-wrap items-center gap-2">
             <span>
-              <strong>Translation/Edition:</strong> {selectedSutta.translatorOrCommentator}
+              <strong>Author/Compiler:</strong> {selectedSutta.authorOrCompiler}
             </span>
-          )}
+            {selectedSutta.translatorOrCommentator && (
+              <span>
+                <strong>Translation/Edition:</strong> {selectedSutta.translatorOrCommentator}
+              </span>
+            )}
+          </div>
+
+          <button
+            data-testid="mark-completed-toggle-btn"
+            onClick={() => {
+              personalLibraryService.toggleChapterCompleted('buddhism', 'tipitaka', selectedSutta.id);
+            }}
+            title={isSuttaCompleted ? "Sutta marked as completed. Click to reopen." : "Click to mark this Sutta as completed"}
+            className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition flex items-center space-x-1 cursor-pointer ${
+              isSuttaCompleted
+                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold'
+                : 'bg-navy-900 border border-slate-700 hover:border-gold-500/50 text-slate-300 hover:text-gold-300'
+            }`}
+          >
+            <CheckCircle2 className={`w-3.5 h-3.5 ${isSuttaCompleted ? 'text-emerald-400' : 'text-slate-400'}`} />
+            <span>{isSuttaCompleted ? 'Sutta Completed' : 'Mark Sutta Done'}</span>
+          </button>
         </div>
       </div>
 
@@ -596,6 +672,7 @@ export const BuddhismModule: React.FC<BuddhismModuleProps> = ({
                       )}
                     </button>
                     <button
+                      data-testid="verse-bookmark-btn"
                       onClick={() => handleToggleBookmark(seg)}
                       title="Save bookmark"
                       className={`p-1.5 rounded-lg transition ${

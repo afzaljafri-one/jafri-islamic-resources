@@ -4,7 +4,7 @@
 // ==============================================================================
 
 import React from 'react';
-import { Home, Bookmark, Globe, ChevronDown, Headphones, BookOpen } from 'lucide-react';
+import { Home, Bookmark, Globe, ChevronDown, Headphones, BookOpen, BookMarked } from 'lucide-react';
 import { ReligionId } from '../types/religion';
 import { RELIGIONS_REGISTRY, ALL_RELIGION_IDS } from '../config/religionsRegistry';
 
@@ -12,6 +12,7 @@ interface PlatformNavbarProps {
   activeReligion: ReligionId | 'home' | 'sacred-audio';
   onSelectReligion: (rel: ReligionId | 'home' | 'sacred-audio') => void;
   onOpenBookmarks?: () => void;
+  onOpenMyLibrary?: (initialTab?: 'continue' | 'bookmarks' | 'history' | 'progress') => void;
   onOpenCoverage?: () => void;
   onOpenSpanishPilot?: () => void;
   onOpenStudio?: () => void;
@@ -23,6 +24,7 @@ export const PlatformNavbar: React.FC<PlatformNavbarProps> = ({
   activeReligion,
   onSelectReligion,
   onOpenBookmarks,
+  onOpenMyLibrary,
   onOpenCoverage,
   onOpenSpanishPilot,
   onOpenStudio,
@@ -144,21 +146,38 @@ export const PlatformNavbar: React.FC<PlatformNavbarProps> = ({
             </button>
           )}
 
-          {/* Bookmarks Toggle */}
-          {onOpenBookmarks && (
+          {/* My Library & Bookmarks Toggle (Phase 6.1) */}
+          {onOpenMyLibrary ? (
             <button
-              onClick={onOpenBookmarks}
-              title="Saved Bookmarks"
-              className="flex items-center space-x-1 px-2.5 sm:px-3 py-1.5 rounded-xl bg-navy-950 border border-slate-700 hover:border-gold-500 text-slate-300 hover:text-gold-400 text-xs font-semibold transition"
+              id="platform-nav-my-library-btn"
+              onClick={() => onOpenMyLibrary('continue')}
+              title="My Sacred Library (Bookmarks, Reading History & Chapter Progress)"
+              className="flex items-center space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-navy-950 border border-gold-500/40 hover:border-gold-400 text-gold-300 hover:text-gold-200 text-xs font-semibold transition cursor-pointer"
             >
-              <Bookmark className="w-3.5 h-3.5 text-gold-400" />
-              <span className="hidden md:inline">Bookmarks</span>
+              <BookMarked className="w-3.5 h-3.5 text-gold-400" />
+              <span className="hidden md:inline">My Library</span>
               {bookmarksCount > 0 && (
                 <span className="ml-1 px-1.5 py-0.2 rounded-full bg-gold-500/20 text-gold-400 text-[10px] font-mono">
                   {bookmarksCount}
                 </span>
               )}
             </button>
+          ) : (
+            onOpenBookmarks && (
+              <button
+                onClick={onOpenBookmarks}
+                title="Saved Bookmarks"
+                className="flex items-center space-x-1 px-2.5 sm:px-3 py-1.5 rounded-xl bg-navy-950 border border-slate-700 hover:border-gold-500 text-slate-300 hover:text-gold-400 text-xs font-semibold transition"
+              >
+                <Bookmark className="w-3.5 h-3.5 text-gold-400" />
+                <span className="hidden md:inline">Bookmarks</span>
+                {bookmarksCount > 0 && (
+                  <span className="ml-1 px-1.5 py-0.2 rounded-full bg-gold-500/20 text-gold-400 text-[10px] font-mono">
+                    {bookmarksCount}
+                  </span>
+                )}
+              </button>
+            )
           )}
         </div>
       </div>
