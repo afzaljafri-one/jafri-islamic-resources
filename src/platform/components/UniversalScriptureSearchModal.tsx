@@ -78,7 +78,7 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
     }
   }, [isOpen]);
 
-  // Accessibility: Handle Escape key to close and restore focus
+  // Accessibility: Handle Escape key to close, and Tab focus trap within modal
   useEffect(() => {
     if (!isOpen) return;
 
@@ -86,6 +86,35 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
       if (e.key === 'Escape') {
         e.preventDefault();
         onClose();
+        return;
+      }
+
+      if (e.key === 'Tab') {
+        const dialog = document.getElementById('universal-scripture-search-modal');
+        if (!dialog) return;
+
+        const focusableElements = dialog.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        const focusable = Array.from(focusableElements).filter(
+          (el) => !el.hasAttribute('disabled') && el.offsetParent !== null
+        );
+        if (focusable.length === 0) return;
+
+        const firstElement = focusable[0];
+        const lastElement = focusable[focusable.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
       }
     };
 
@@ -605,6 +634,26 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                             <span>Grouped ({result.groupedUnitsCount} Units)</span>
                           </span>
                         )}
+
+                        {/* Quotation Type Badge */}
+                        {result.quotationType && (
+                          <span
+                            data-testid="quotation-type-badge"
+                            className={`text-[10px] font-mono px-2 py-0.2 rounded-full border ${
+                              result.quotationType === 'direct_quotation'
+                                ? 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30'
+                                : result.quotationType === 'scholarly_translation'
+                                ? 'bg-indigo-500/10 text-indigo-300 border-indigo-500/30'
+                                : 'bg-purple-500/10 text-purple-300 border-purple-500/30'
+                            }`}
+                          >
+                            {result.quotationType === 'direct_quotation'
+                              ? 'Direct Text'
+                              : result.quotationType === 'scholarly_translation'
+                              ? 'Scholarly Translation'
+                              : 'Contextual Reflection'}
+                          </span>
+                        )}
                       </div>
 
                       {/* Match Type Badge */}
@@ -695,9 +744,21 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
 
                     {/* Attribution & Actions Footer */}
                     <div className="pt-2 border-t border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-                      <span className="text-[11px] text-slate-500 font-mono">
-                        {result.sourceAttribution}
-                      </span>
+                      <div className="space-y-0.5">
+                        <div className="text-[11px] text-slate-400 font-mono flex items-center space-x-1.5 flex-wrap">
+                          <span>{result.sourceAttribution}</span>
+                          {result.canonicalRecension && (
+                            <span className="text-[10px] text-slate-500">
+                              • Recension: {result.canonicalRecension}
+                            </span>
+                          )}
+                        </div>
+                        {result.provenanceNotes && (
+                          <p className="text-[10px] text-slate-500 font-serif italic">
+                            {result.provenanceNotes}
+                          </p>
+                        )}
+                      </div>
 
                       <div className="flex items-center space-x-2 flex-shrink-0">
                         {/* Bookmark Button */}

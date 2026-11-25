@@ -24,6 +24,10 @@ export interface ParallelTranslationRecord {
   translator: string;
   language: string;
   text: string;
+  publicationReference?: string;
+  sourceReferenceUrl?: string;
+  license?: string;
+  verificationStatus?: 'VERIFIED' | 'PARTIAL_VERIFIED' | 'UNKNOWN';
 }
 
 /**
@@ -51,12 +55,16 @@ export interface UniversalSearchResult {
   isOfflineAvailable: boolean; // Indicates if passage is available in bundled/cached offline storage
   score: number; // Relevance ranking score
 
-  /** Phase 6.3.1: Content Coverage Transparency & Grouping Metadata */
+  /** Phase 6.3.1 & 6.3.2: Content Coverage Transparency, Grouping & Provenance Metadata */
   availabilityStatus?: CoverageAvailabilityStatus;
   scopeNotes?: string;
   parentWorkTitle?: string;
   groupedUnitsCount?: number;
   parallelTranslations?: ParallelTranslationRecord[];
+  quotationType?: 'direct_quotation' | 'scholarly_translation' | 'contextual_interpretation';
+  provenanceNotes?: string;
+  canonicalRecension?: string;
+  sourceReferenceUrl?: string;
 }
 
 /**

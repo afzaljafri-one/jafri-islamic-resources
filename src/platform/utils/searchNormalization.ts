@@ -1,24 +1,37 @@
 // ==============================================================================
 // Search Normalization & Reference Parsing Utilities
 // Multilingual Unicode-Aware Search for 7 Religious Traditions
-// Jafri Religious Resources — Phase 6.3.1 (Integrity & Hardening)
+// Jafri Religious Resources — Phase 6.3.2 (Integrity, Provenance & Validation)
 // ==============================================================================
 
 import { ParsedReference } from '../types/search';
 
 /**
- * Normalizes Arabic script:
- * - Strips tashkeel (fatha, damma, kasra, sukun, shadda, tanween, dagger alif, Quranic signs)
+ * 1. CANONICAL UNICODE NORMALIZATION (NFC)
+ * Normalizes all incoming text to standard Unicode Normalization Form C (NFC).
+ * Resolves decomposed combining sequences into canonical precomposed characters
+ * without altering linguistically meaningful characters.
+ */
+export function normalizeUnicodeNFC(text: string): string {
+  if (!text) return '';
+  return text.normalize('NFC');
+}
+
+/**
+ * 2. ARABIC SCRIPT NORMALIZATION (SCRIPT-SPECIFIC)
+ * - Strips vocalization/tashkeel (fatha, damma, kasra, sukun, shadda, tanween, dagger alif, Quranic stop signs)
  * - Normalizes Alif variants (إ, أ, آ) to bare Alif (ا)
- * - Normalizes Yaa and Alif Maqsurah (ى) to ي
+ * - Normalizes Yaa / Alif Maqsurah (ى) to ي
  * - Normalizes Taa Marbutah (ة) to ه
  * - Strips tatweel (ـ) and Quranic verse end symbols
- * - Preserves Arabic letters and roots
+ * - Strictly preserves Arabic root letters and consonants
+ * Note: Never modifies the original displayed Quranic or Hadith text!
  */
 export function normalizeArabic(text: string): string {
   if (!text) return '';
-  return text
-    // Remove Quranic and standard Arabic harakat / diacritics
+  const nfc = normalizeUnicodeNFC(text);
+  return nfc
+    // Remove Quranic and standard Arabic harakat / vocalization marks
     .replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g, '')
     // Remove Tatweel (kashida)
     .replace(/\u0640/g, '')
@@ -28,21 +41,23 @@ export function normalizeArabic(text: string): string {
     .replace(/[ى]/g, 'ي')
     // Normalize Taa Marbuta
     .replace(/ة/g, 'ه')
-    // Strip Quranic verse markers and brackets
+    // Strip Quranic verse markers, brackets, and punctuation
     .replace(/[\u06DD\uFD3E\uFD3F\(\)\[\]،؛؟.\-–—]/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
 }
 
 /**
- * Normalizes Devanagari script:
- * - Strips Vedic accents (\u0951, \u0952, \u0953, \u0954)
- * - Strips danda (।) and double danda (॥)
- * - Preserves consonants, conjuncts (virama), and matras (\p{M})
+ * 3. DEVANAGARI SCRIPT NORMALIZATION (SCRIPT-SPECIFIC)
+ * - Strips Vedic svara accents (\u0951, \u0952, \u0953, \u0954)
+ * - Strips single danda (।) and double danda (॥)
+ * - Preserves all consonants, conjuncts (virama \u094D), and matras (\u093E-\u094C)
+ * - Never mutates original Sanskrit or Hindi texts
  */
 export function normalizeDevanagari(text: string): string {
   if (!text) return '';
-  return text
+  const nfc = normalizeUnicodeNFC(text);
+  return nfc
     .replace(/[\u0951\u0952\u0953\u0954]/g, '') // Vedic svara accents
     .replace(/[।॥|]/g, ' ') // Dandas
     .replace(/[\(\)\[\],.;:?\-–—]/g, ' ')
@@ -51,13 +66,15 @@ export function normalizeDevanagari(text: string): string {
 }
 
 /**
- * Normalizes Hebrew script:
- * - Strips Niqqud (vowels) and cantillation marks (\u0591-\u05BD, \u05BF-\u05C5, \u05C7)
- * - Preserves Hebrew square letters (Alef through Tav)
+ * 4. HEBREW SCRIPT NORMALIZATION (SCRIPT-SPECIFIC)
+ * - Strips Niqqud (vowel points) and cantillation trop marks (\u0591-\u05BD, \u05BF-\u05C5, \u05C7)
+ * - Preserves Hebrew square letters (Alef through Tav \u05D0-\u05EA)
+ * - Equates vocalized (e.g. שָׁלוֹם) with unvocalized (שלום) queries
  */
 export function normalizeHebrew(text: string): string {
   if (!text) return '';
-  return text
+  const nfc = normalizeUnicodeNFC(text);
+  return nfc
     .replace(/[\u0591-\u05BD\u05BF-\u05C5\u05C7]/g, '')
     .replace(/[\(\)\[\],.;:?\-–—]/g, ' ')
     .replace(/\s+/g, ' ')
@@ -65,13 +82,14 @@ export function normalizeHebrew(text: string): string {
 }
 
 /**
- * Normalizes Gurmukhi script:
+ * 5. GURMUKHI SCRIPT NORMALIZATION (SCRIPT-SPECIFIC)
  * - Strips dandas, brackets, and non-letter punctuation
- * - Preserves consonants, vowel signs, and root letters
+ * - Preserves consonants, vowel signs, and root Gurbani characters
  */
 export function normalizeGurmukhi(text: string): string {
   if (!text) return '';
-  return text
+  const nfc = normalizeUnicodeNFC(text);
+  return nfc
     .replace(/[।॥|]/g, ' ')
     .replace(/[\(\)\[\],.;:?\-–—]/g, ' ')
     .replace(/\s+/g, ' ')
@@ -79,14 +97,16 @@ export function normalizeGurmukhi(text: string): string {
 }
 
 /**
- * Normalizes Latin-script and IAST / Pali / Romanized transliterations:
- * - Decomposes and replaces IAST / Pali accented vowels & consonants (ā->a, ī->i, ū->u, ṛ->r, ś->s, ṣ->s, etc.)
+ * 6. LATIN & TRANSLITERATION NORMALIZATION
+ * - Decomposes and folds IAST / Pali / Romanized accented vowels & consonants (ā->a, ī->i, ū->u, ṛ->r, ś->s, ṣ->s, etc.)
  * - Strips punctuation, dashes, quotes
- * - PRESERVES Unicode letters (\p{L}), marks (\p{M}), and numbers (\p{N}) across all 7 script systems!
+ * - Strictly retains Unicode letters (\p{L}), marks (\p{M}), and numbers (\p{N}) across all 7 script systems!
+ * - Never applies Latin folding to native Arabic, Devanagari, Hebrew, or Gurmukhi scripts
  */
 export function normalizeLatinAndTransliteration(text: string): string {
   if (!text) return '';
-  return text
+  const nfc = normalizeUnicodeNFC(text);
+  return nfc
     .toLowerCase()
     // Explicit IAST & Pali mappings
     .replace(/ā/g, 'a')
@@ -115,16 +135,25 @@ export function normalizeLatinAndTransliteration(text: string): string {
 }
 
 /**
- * Unified search token normalizer:
- * Safely normalizes across all 7 world traditions without destroying non-Latin characters.
+ * 7. UNIFIED SEARCH COMPARISON KEY GENERATOR
+ * Safely generates normalized comparison keys across all 7 world traditions.
+ * Never mutates original displayed scripture!
  */
-export function normalizeForSearch(text: string): string {
+export function generateSearchComparisonKey(text: string): string {
   if (!text) return '';
-  const arabicNorm = normalizeArabic(text);
+  const nfc = normalizeUnicodeNFC(text);
+  const arabicNorm = normalizeArabic(nfc);
   const devanagariNorm = normalizeDevanagari(arabicNorm);
   const hebrewNorm = normalizeHebrew(devanagariNorm);
   const gurmukhiNorm = normalizeGurmukhi(hebrewNorm);
   return normalizeLatinAndTransliteration(gurmukhiNorm);
+}
+
+/**
+ * Backwards-compatible alias for generateSearchComparisonKey
+ */
+export function normalizeForSearch(text: string): string {
+  return generateSearchComparisonKey(text);
 }
 
 /**
