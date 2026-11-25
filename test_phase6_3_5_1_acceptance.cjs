@@ -9,6 +9,7 @@
 const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 
 const ARTIFACTS_DIR =
   process.env.ARTIFACTS_DIR ||
@@ -20,7 +21,7 @@ const EVIDENCE_DIR = path.join(ARTIFACTS_DIR, 'phase6_3_5_1_evidence');
 fs.mkdirSync(EVIDENCE_DIR, { recursive: true });
 
 function findChrome() {
-  if (process.env.CHROME_BIN) return process.env.CHROME_BIN;
+  if (process.env.CHROME_BIN && fs.existsSync(process.env.CHROME_BIN)) return process.env.CHROME_BIN;
   if (process.platform === 'darwin') {
     const macPath = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
     if (fs.existsSync(macPath)) return macPath;
@@ -30,11 +31,12 @@ function findChrome() {
     '/usr/bin/google-chrome-stable',
     '/usr/bin/chromium',
     '/usr/bin/chromium-browser',
+    '/snap/bin/chromium',
   ];
   for (const p of linuxPaths) {
     if (fs.existsSync(p)) return p;
   }
-  return 'google-chrome';
+  return process.env.CHROME_BIN || 'google-chrome';
 }
 
 const PORT = 4198;
@@ -210,37 +212,60 @@ async function runAcceptanceTest() {
   // Launch Chrome
   const chromeBinary = findChrome();
   console.log(`Using Chrome binary: ${chromeBinary}`);
+  const chromePort = 9224 + Math.floor(Math.random() * 50);
+  const tempProfileDir = path.join(
+    os.tmpdir(),
+    `chrome_phase6_3_5_1_${Date.now()}_${Math.random().toString(36).slice(2)}`
+  );
+  fs.mkdirSync(tempProfileDir, { recursive: true });
+
   const chrome = spawn(
     chromeBinary,
     [
       '--headless=new',
-      '--remote-debugging-port=9224',
+      `--remote-debugging-port=${chromePort}`,
+      '--remote-allow-origins=*',
       '--no-sandbox',
+      '--disable-setuid-sandbox',
       '--disable-gpu',
       '--disable-dev-shm-usage',
+      '--no-first-run',
+      '--no-default-browser-check',
       '--window-size=1440,900',
+      `--user-data-dir=${tempProfileDir}`,
+      'about:blank',
     ],
-    { stdio: 'ignore' }
+    { stdio: ['ignore', 'pipe', 'pipe'] }
   );
 
+  chrome.stderr.on('data', (d) => console.error('[chrome stderr]', d.toString().trim()));
+  chrome.on('exit', (code, sig) => {
+    if (code !== null && code !== 0) {
+      console.log(`[chrome exit] code=${code} sig=${sig}`);
+    }
+  });
+
   let wsEndpoint = null;
-  for (let i = 0; i < 30; i++) {
-    await new Promise((r) => setTimeout(r, 300));
+  for (let i = 0; i < 40; i++) {
+    await new Promise((r) => setTimeout(r, 250));
     try {
-      const r = await fetch('http://127.0.0.1:9224/json/version');
-      const data = await r.json();
-      if (data.webSocketDebuggerUrl) {
-        wsEndpoint = data.webSocketDebuggerUrl;
-        console.log('Chrome remote debugging connected:', wsEndpoint);
-        break;
+      const r = await fetch(`http://127.0.0.1:${chromePort}/json/version`);
+      if (r.ok) {
+        const data = await r.json();
+        if (data.webSocketDebuggerUrl) {
+          wsEndpoint = data.webSocketDebuggerUrl;
+          console.log(`Chrome remote debugging connected on port ${chromePort}:`, wsEndpoint);
+          break;
+        }
       }
     } catch (_) {}
   }
 
   if (!wsEndpoint) {
-    chrome.kill();
-    preview.kill();
-    throw new Error('Failed to connect to Chrome debugging endpoint');
+    try { chrome.kill(); } catch (_) {}
+    try { preview.kill(); } catch (_) {}
+    try { fs.rmSync(tempProfileDir, { recursive: true, force: true }); } catch (_) {}
+    throw new Error(`Failed to connect to Chrome debugging endpoint on port ${chromePort}`);
   }
 
   const WS = globalThis.WebSocket;
@@ -615,9 +640,10 @@ async function runAcceptanceTest() {
     await closeSearchModal();
 
   } finally {
-    ws.close();
-    chrome.kill();
-    preview.kill();
+    try { ws.close(); } catch (_) {}
+    try { chrome.kill(); } catch (_) {}
+    try { preview.kill(); } catch (_) {}
+    try { fs.rmSync(tempProfileDir, { recursive: true, force: true }); } catch (_) {}
   }
 
   // ---------------------------------------------------------------------------
