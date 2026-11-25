@@ -654,6 +654,23 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                               : 'Contextual Reflection'}
                           </span>
                         )}
+
+                        {/* Rights & Licence Badge (Phase 6.3.3) */}
+                        {result.exactLicenceIdentifier && (
+                          <span
+                            data-testid="rights-licence-badge"
+                            className={`text-[10px] font-mono px-2 py-0.2 rounded-full border ${
+                              result.rightsStatus === 'VERIFIED'
+                                ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30'
+                                : result.rightsStatus === 'RESTRICTED'
+                                ? 'bg-amber-500/10 text-amber-300 border-amber-500/30'
+                                : 'bg-slate-700/40 text-slate-400 border-slate-700'
+                            }`}
+                            title={`Rights Status: ${result.rightsStatus || 'VERIFIED'} • Rights Holder: ${result.rightsHolderOrPublisher || 'Public Domain'}`}
+                          >
+                            {result.exactLicenceIdentifier}
+                          </span>
+                        )}
                       </div>
 
                       {/* Match Type Badge */}
@@ -678,6 +695,24 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                         </p>
                       )}
                     </div>
+
+                    {/* Numbering Convention & Cross-References (Phase 6.3.3) */}
+                    {result.numberingConvention && (
+                      <div
+                        data-testid="numbering-convention-badge"
+                        className="text-[10px] font-mono text-slate-400 bg-navy-900/50 p-2 rounded-lg border border-slate-800 space-y-0.5"
+                      >
+                        <div className="flex items-center space-x-1.5 flex-wrap">
+                          <span className="text-gold-400/90 font-semibold">Numbering:</span>
+                          <span>{result.numberingConvention}</span>
+                        </div>
+                        {result.alternateNumberingCrossReference && (
+                          <p className="text-slate-400 italic text-[10px] font-serif">
+                            {result.alternateNumberingCrossReference}
+                          </p>
+                        )}
+                      </div>
+                    )}
 
                     {/* Original Authentic Language Script */}
                     {result.originalText && (
@@ -731,10 +766,17 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                         </span>
                         <div className="grid gap-2 sm:grid-cols-2">
                           {result.parallelTranslations.map((tr) => (
-                            <div key={tr.id} className="p-2 rounded-lg bg-navy-950/60 border border-slate-850 text-xs">
-                              <span className="text-[10px] font-mono text-slate-400 block mb-0.5 font-semibold">
-                                {tr.translationName} ({tr.language}):
-                              </span>
+                            <div key={tr.id} className="p-2 rounded-lg bg-navy-950/60 border border-slate-850 text-xs space-y-1">
+                              <div className="flex items-center justify-between text-[10px] font-mono text-slate-400">
+                                <span className="font-semibold text-gold-400/90">
+                                  {tr.translationName} ({tr.language})
+                                </span>
+                                {tr.exactLicenceIdentifier && (
+                                  <span className="text-[9px] text-emerald-400/80 bg-emerald-950/40 px-1 py-0.2 rounded border border-emerald-500/20">
+                                    {tr.exactLicenceIdentifier}
+                                  </span>
+                                )}
+                              </div>
                               <p className="text-slate-200 font-serif leading-relaxed text-xs">{tr.text}</p>
                             </div>
                           ))}
@@ -750,6 +792,11 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                           {result.canonicalRecension && (
                             <span className="text-[10px] text-slate-500">
                               • Recension: {result.canonicalRecension}
+                            </span>
+                          )}
+                          {result.rightsHolderOrPublisher && (
+                            <span className="text-[10px] text-slate-500">
+                              • Rights: {result.rightsHolderOrPublisher}
                             </span>
                           )}
                         </div>

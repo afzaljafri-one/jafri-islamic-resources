@@ -205,6 +205,7 @@ export const MyLibraryModal: React.FC<MyLibraryModalProps> = ({
       {/* Modal Dialog */}
       <div
         id="my-library-modal"
+        data-testid="personal-library-modal"
         role="dialog"
         aria-modal="true"
         aria-label="My Sacred Library"

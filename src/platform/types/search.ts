@@ -4,7 +4,7 @@
 // ==============================================================================
 
 import { ReligionId } from './religion';
-import { CoverageAvailabilityStatus } from './coverage';
+import { CoverageAvailabilityStatus, RightsStatus } from './coverage';
 
 /**
  * Four mutually exclusive search match categories defined by Phase 6.3 specification
@@ -27,6 +27,9 @@ export interface ParallelTranslationRecord {
   publicationReference?: string;
   sourceReferenceUrl?: string;
   license?: string;
+  exactLicenceIdentifier?: string;
+  rightsHolderOrPublisher?: string;
+  rightsStatus?: RightsStatus;
   verificationStatus?: 'VERIFIED' | 'PARTIAL_VERIFIED' | 'UNKNOWN';
 }
 
@@ -41,7 +44,7 @@ export interface UniversalSearchResult {
   readingId?: string;
   chapterNumber?: number | string;
   verseNumber?: number | string;
-  displayCoordinates: string; // e.g. "John 3:16", "Quran 2:255", "Bhagavad Gita 2:47", "SGGS Ang 1"
+  displayCoordinates: string; // e.g. "John 3:16", "Quran 2:255", "Bhagavad Gita 2:47", "SGGS Ang 471"
   displayTitle: string; // e.g. "Ayat al-Kursi (The Throne Verse)", "The Shepherd Psalm"
   originalText: string; // Authentic, untouched original script
   translationText: string; // English / primary translation
@@ -55,7 +58,7 @@ export interface UniversalSearchResult {
   isOfflineAvailable: boolean; // Indicates if passage is available in bundled/cached offline storage
   score: number; // Relevance ranking score
 
-  /** Phase 6.3.1 & 6.3.2: Content Coverage Transparency, Grouping & Provenance Metadata */
+  /** Phase 6.3.1, 6.3.2 & 6.3.3: Content Coverage Transparency, Grouping, Provenance & Rights Metadata */
   availabilityStatus?: CoverageAvailabilityStatus;
   scopeNotes?: string;
   parentWorkTitle?: string;
@@ -65,6 +68,13 @@ export interface UniversalSearchResult {
   provenanceNotes?: string;
   canonicalRecension?: string;
   sourceReferenceUrl?: string;
+
+  /** Phase 6.3.3: Numbering Conventions & Rights Remediation */
+  numberingConvention?: string;
+  alternateNumberingCrossReference?: string;
+  exactLicenceIdentifier?: string;
+  rightsHolderOrPublisher?: string;
+  rightsStatus?: RightsStatus;
 }
 
 /**
