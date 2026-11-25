@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Jafri Sacred Library — Phase 6.3.5 Reconciled Corpus Inventory",
-    "generationTimestamp": "2026-11-25T13:41:58.020Z",
+    "generationTimestamp": "2026-11-25T14:32:02.986Z",
     "baselineCommit": "5eeb34ac547abdd2172af56a5daa714e7368b903",
     "reconciliationRule": "Directly generated from active bundled datasets on disk"
   },
@@ -12,15 +12,15 @@
       "canonicalRecension": "Hafs ‘an ‘Asim (Uthmani Script / Tanzil)",
       "catalogSurahsCount": 114,
       "totalCanonicalAyahs": 6236,
-      "bundledOfflineAyahsCount": 10,
-      "remoteOrCachedAyahsCount": 6226,
+      "bundledOfflineAyahsCount": 11,
+      "remoteOrCachedAyahsCount": 6225,
       "offlineUnits": [
         {
           "id": "isl:quran:1:1",
           "coordinates": "Surah 1:1",
           "surah": 1,
           "ayah": 1,
-          "title": "Al-Fatiha (Bismillah)",
+          "title": "Surah Al-Faatiha — Ayah 1 (Bismillah)",
           "offlineStatus": "BUNDLED_OFFLINE"
         },
         {
@@ -28,7 +28,7 @@
           "coordinates": "Surah 1:2",
           "surah": 1,
           "ayah": 2,
-          "title": "Al-Fatiha (Al-Hamd)",
+          "title": "Surah Al-Faatiha — Ayah 2 (Al-Hamd)",
           "offlineStatus": "BUNDLED_OFFLINE"
         },
         {
@@ -36,7 +36,7 @@
           "coordinates": "Surah 2:153",
           "surah": 2,
           "ayah": 153,
-          "title": "Al-Baqarah (Patience & Prayer)",
+          "title": "Surah Al-Baqarah — Ayah 153 (Patience & Prayer)",
           "offlineStatus": "BUNDLED_OFFLINE"
         },
         {
@@ -44,7 +44,7 @@
           "coordinates": "Surah 2:255",
           "surah": 2,
           "ayah": 255,
-          "title": "Ayat al-Kursi (The Throne Verse)",
+          "title": "Ayat al-Kursi (The Throne Verse) — Surah Al-Baqarah 2:255",
           "offlineStatus": "BUNDLED_OFFLINE"
         },
         {
@@ -52,7 +52,7 @@
           "coordinates": "Surah 2:261",
           "surah": 2,
           "ayah": 261,
-          "title": "Al-Baqarah (Charity Grain)",
+          "title": "Surah Al-Baqarah — Ayah 261 (Charity & Generosity)",
           "offlineStatus": "BUNDLED_OFFLINE"
         },
         {
@@ -60,7 +60,7 @@
           "coordinates": "Surah 2:269",
           "surah": 2,
           "ayah": 269,
-          "title": "Al-Baqarah (Wisdom)",
+          "title": "Surah Al-Baqarah — Ayah 269 (Gift of Wisdom)",
           "offlineStatus": "BUNDLED_OFFLINE"
         },
         {
@@ -68,7 +68,7 @@
           "coordinates": "Surah 3:134",
           "surah": 3,
           "ayah": 134,
-          "title": "Ali Imran (Restraining Anger)",
+          "title": "Surah Ali ‘Imran — Ayah 134 (Forgiveness & Restraint)",
           "offlineStatus": "BUNDLED_OFFLINE"
         },
         {
@@ -76,7 +76,7 @@
           "coordinates": "Surah 14:7",
           "surah": 14,
           "ayah": 7,
-          "title": "Ibrahim (Gratitude)",
+          "title": "Surah Ibrahim — Ayah 7 (Promise of Gratitude)",
           "offlineStatus": "BUNDLED_OFFLINE"
         },
         {
@@ -84,7 +84,15 @@
           "coordinates": "Surah 21:107",
           "surah": 21,
           "ayah": 107,
-          "title": "Al-Anbiya (Mercy to the Worlds)",
+          "title": "Surah Al-Anbiya — Ayah 107 (Mercy to all Worlds)",
+          "offlineStatus": "BUNDLED_OFFLINE"
+        },
+        {
+          "id": "isl:quran:25:63",
+          "coordinates": "Surah 25:63",
+          "surah": 25,
+          "ayah": 63,
+          "title": "Surah Al-Furqan — Ayah 63 (Servants of the Merciful & Peace)",
           "offlineStatus": "BUNDLED_OFFLINE"
         },
         {
@@ -92,7 +100,7 @@
           "coordinates": "Surah 112:1",
           "surah": 112,
           "ayah": 1,
-          "title": "Al-Ikhlas (Tawhid)",
+          "title": "Surah Al-Ikhlas — Ayah 1 (The Purity of Faith)",
           "offlineStatus": "BUNDLED_OFFLINE"
         }
       ]

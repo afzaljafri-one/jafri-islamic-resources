@@ -176,10 +176,61 @@ export const FOUNDATIONAL_GITA_VERSES: Record<string, GitaVerseData> = {
   },
 };
 
+export const WITHHELD_GITA_COMMENTARY_EN = '[Translation withheld pending documented software redistribution permission]';
+export const WITHHELD_GITA_COMMENTARY_HI = '[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]';
+export const WITHHELD_GITA_BHASHYA = '[Commentary translation withheld pending documented software redistribution permission]';
+
+/**
+ * Phase 6.3.5.2 Central Gita Verse Sanitizer
+ * Every Gita verse from every retrieval or caching path (offline bundle, memory cache,
+ * static JSON, remote API, IndexedDB reads and writes) must pass through this boundary.
+ * Strictly guarantees that unverified modern commentaries are suppressed and that only
+ * verified public domain translations (e.g. Sir Edwin Arnold 1885) are exposed.
+ */
+export function sanitizeGitaVerse(rawVerse: any): GitaVerseData {
+  if (!rawVerse) {
+    throw new Error('sanitizeGitaVerse called with null/undefined verse');
+  }
+  const chapter = Number(rawVerse.chapter);
+  const verse = Number(rawVerse.verse);
+  const key = `${chapter}:${verse}`;
+  const foundational = FOUNDATIONAL_GITA_VERSES[key];
+
+  // Verified English translation (Edwin Arnold 1885 Public Domain)
+  const verifiedArnold =
+    foundational?.edwinArnoldEn ||
+    foundational?.translationEn ||
+    (rawVerse.edwinArnoldEn &&
+    !rawVerse.edwinArnoldEn.includes('withheld') &&
+    !rawVerse.edwinArnoldEn.includes('Sivananda') &&
+    !rawVerse.edwinArnoldEn.includes('Gambhirananda')
+      ? rawVerse.edwinArnoldEn
+      : undefined);
+
+  return {
+    chapter,
+    verse,
+    slok: rawVerse.slok || foundational?.slok || '',
+    transliteration: rawVerse.transliteration || foundational?.transliteration || '',
+    translationEn: verifiedArnold,
+    edwinArnoldEn: verifiedArnold,
+    sivanandaEn: WITHHELD_GITA_COMMENTARY_EN,
+    gambhiranandaEn: WITHHELD_GITA_COMMENTARY_EN,
+    purohitEn: WITHHELD_GITA_COMMENTARY_EN,
+    ramsukhdasHi: WITHHELD_GITA_COMMENTARY_HI,
+    shankaraBhashya: WITHHELD_GITA_BHASHYA,
+  };
+}
+
+export function sanitizeGitaChapter(verses: any[]): GitaVerseData[] {
+  if (!Array.isArray(verses)) return [];
+  return verses.map(sanitizeGitaVerse);
+}
+
 class HinduismProvider {
   private verseCache: Record<string, GitaVerseData> = {};
   private chapterCache: Record<number, GitaVerseData[]> = {
-    1: GITA_CHAPTER_1_OFFLINE,
+    1: sanitizeGitaChapter(GITA_CHAPTER_1_OFFLINE),
   };
 
   constructor() {
@@ -187,21 +238,24 @@ class HinduismProvider {
     for (const v of GITA_CHAPTER_1_OFFLINE) {
       const key = `1:${v.verse}`;
       const found = FOUNDATIONAL_GITA_VERSES[key];
-      this.verseCache[key] = found ? { ...v, ...found } : v;
+      const merged = found ? { ...v, ...found } : v;
+      this.verseCache[key] = sanitizeGitaVerse(merged);
     }
     // Seed foundational verses
     for (const [key, val] of Object.entries(FOUNDATIONAL_GITA_VERSES)) {
       if (!this.verseCache[key]) {
-        this.verseCache[key] = val;
+        this.verseCache[key] = sanitizeGitaVerse(val);
       } else {
-        this.verseCache[key] = { ...this.verseCache[key], ...val };
+        this.verseCache[key] = sanitizeGitaVerse({ ...this.verseCache[key], ...val });
       }
     }
-    // Also update chapter 1 cache with merged verses
-    this.chapterCache[1] = GITA_CHAPTER_1_OFFLINE.map((v) => {
-      const found = FOUNDATIONAL_GITA_VERSES[`1:${v.verse}`];
-      return found ? { ...v, ...found } : v;
-    });
+    // Also update chapter 1 cache with sanitized merged verses
+    this.chapterCache[1] = sanitizeGitaChapter(
+      GITA_CHAPTER_1_OFFLINE.map((v) => {
+        const found = FOUNDATIONAL_GITA_VERSES[`1:${v.verse}`];
+        return found ? { ...v, ...found } : v;
+      })
+    );
   }
 
   getCollections(): HinduismCollectionMeta[] {
@@ -219,15 +273,16 @@ class HinduismProvider {
   async getVerse(chapter: number, verse: number): Promise<GitaVerseData | null> {
     const key = `${chapter}:${verse}`;
     if (this.verseCache[key]) {
-      return this.verseCache[key];
+      return sanitizeGitaVerse(this.verseCache[key]);
     }
 
     // Tier 1: Check Chapter 1 offline bundle
     if (chapter === 1) {
       const offlineV = GITA_CHAPTER_1_OFFLINE.find((v) => v.verse === verse);
       if (offlineV) {
-        this.verseCache[key] = offlineV;
-        return offlineV;
+        const sanitized = sanitizeGitaVerse(offlineV);
+        this.verseCache[key] = sanitized;
+        return sanitized;
       }
     }
 
@@ -235,8 +290,9 @@ class HinduismProvider {
     if (this.chapterCache[chapter]) {
       const found = this.chapterCache[chapter].find((v) => v.verse === verse);
       if (found) {
-        this.verseCache[key] = found;
-        return found;
+        const sanitized = sanitizeGitaVerse(found);
+        this.verseCache[key] = sanitized;
+        return sanitized;
       }
     }
 
@@ -247,13 +303,14 @@ class HinduismProvider {
       const staticUrl = `${cleanBase}data/gita/chapter_${chapter}.json`;
       const res = await fetch(staticUrl);
       if (res.ok) {
-        const data: GitaVerseData[] = await res.json();
+        const data: any[] = await res.json();
         if (Array.isArray(data) && data.length > 0) {
-          this.chapterCache[chapter] = data;
-          data.forEach((v) => {
+          const sanitizedChapter = sanitizeGitaChapter(data);
+          this.chapterCache[chapter] = sanitizedChapter;
+          sanitizedChapter.forEach((v) => {
             this.verseCache[`${chapter}:${v.verse}`] = v;
           });
-          const match = data.find((v) => v.verse === verse);
+          const match = sanitizedChapter.find((v) => v.verse === verse);
           if (match) return match;
         }
       }
@@ -272,25 +329,21 @@ class HinduismProvider {
       // Remote fields (data.siva?.et, data.gambir?.et, data.purohit?.et, data.rams?.ht)
       // are never allowed into memory cache, IndexedDB cache, or reader output!
       const known = FOUNDATIONAL_GITA_VERSES[key];
-      const vData: GitaVerseData = {
+      const rawObj = {
         chapter,
         verse,
         slok: data.slok || known?.slok || '',
         transliteration: data.transliteration || known?.transliteration || '',
         translationEn: known?.translationEn || known?.edwinArnoldEn,
         edwinArnoldEn: known?.edwinArnoldEn,
-        sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
-        gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
-        purohitEn: '[Translation withheld pending documented software redistribution permission]',
-        ramsukhdasHi: '[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]',
-        shankaraBhashya: data.sankar?.et || data.sankar?.ht || known?.shankaraBhashya || '',
       };
 
-      this.verseCache[key] = vData;
-      return vData;
+      const sanitized = sanitizeGitaVerse(rawObj);
+      this.verseCache[key] = sanitized;
+      return sanitized;
     } catch {
       if (FOUNDATIONAL_GITA_VERSES[key]) {
-        return FOUNDATIONAL_GITA_VERSES[key];
+        return sanitizeGitaVerse(FOUNDATIONAL_GITA_VERSES[key]);
       }
       return null;
     }
@@ -302,24 +355,55 @@ class HinduismProvider {
 
     // Tier 1: In-Memory Chapter Cache (must have full verse count)
     if (this.chapterCache[chapter] && this.chapterCache[chapter].length === expectedCount) {
-      return this.chapterCache[chapter];
+      return sanitizeGitaChapter(this.chapterCache[chapter]);
     }
 
     // Tier 2: Bundled Offline Chapter 1
     if (chapter === 1 && GITA_CHAPTER_1_OFFLINE.length === expectedCount) {
-      this.chapterCache[1] = GITA_CHAPTER_1_OFFLINE;
-      return GITA_CHAPTER_1_OFFLINE;
+      const sanitizedCh1 = sanitizeGitaChapter(GITA_CHAPTER_1_OFFLINE);
+      this.chapterCache[1] = sanitizedCh1;
+      return sanitizedCh1;
     }
 
-    // Tier 3: Multi-Tier Persistent Cache (IndexedDB)
+    // Tier 3: Multi-Tier Persistent Cache (IndexedDB) with Automatic Sanitization & Migration
     try {
       const cached = await cacheService.getIndexedDB<GitaVerseData[]>(`gita_chapter_${chapter}`);
       if (cached && Array.isArray(cached) && cached.length === expectedCount) {
-        this.chapterCache[chapter] = cached;
-        cached.forEach((v) => {
+        // Enforce central sanitization on all IndexedDB reads
+        const sanitized = sanitizeGitaChapter(cached);
+
+        // Detect if old cache contained unsanitized proprietary commentary text
+        const getStr = (c: any): string => {
+          if (!c) return '';
+          if (typeof c === 'string') return c;
+          return c.translation || c.et || '';
+        };
+
+        const hadUnsafeData = cached.some((v: any) => {
+          const s = getStr(v.sivanandaEn);
+          const g = getStr(v.gambhiranandaEn);
+          const p = getStr(v.purohitEn);
+          const r = getStr(v.ramsukhdasHi);
+          const sh = getStr(v.shankaraBhashya);
+          return (
+            (s && !s.includes('withheld')) ||
+            (g && !g.includes('withheld')) ||
+            (p && !p.includes('withheld')) ||
+            (r && !r.includes('स्थगित') && !r.includes('withheld')) ||
+            (sh && !sh.includes('withheld'))
+          );
+        });
+
+        if (hadUnsafeData) {
+          // Immediately purge old unsafe data by overwriting IndexedDB with sanitized records
+          await cacheService.setIndexedDB(`gita_chapter_${chapter}`, sanitized);
+        }
+
+        this.chapterCache[chapter] = sanitized;
+        sanitized.forEach((v) => {
           this.verseCache[`${chapter}:${v.verse}`] = v;
         });
-        return cached;
+        return sanitized;
       }
     } catch {
       // Continue to local static tier
@@ -332,14 +416,17 @@ class HinduismProvider {
       const staticUrl = `${cleanBase}data/gita/chapter_${chapter}.json`;
       const res = await fetch(staticUrl);
       if (res.ok) {
-        const data: GitaVerseData[] = await res.json();
+        const data: any[] = await res.json();
         if (Array.isArray(data) && data.length > 0) {
-          this.chapterCache[chapter] = data;
-          data.forEach((v) => {
+          // Enforce central sanitization on static JSON assets
+          const sanitized = sanitizeGitaChapter(data);
+          this.chapterCache[chapter] = sanitized;
+          sanitized.forEach((v) => {
             this.verseCache[`${chapter}:${v.verse}`] = v;
           });
-          await cacheService.setIndexedDB(`gita_chapter_${chapter}`, data);
-          return data;
+          // Write only sanitized records to IndexedDB
+          await cacheService.setIndexedDB(`gita_chapter_${chapter}`, sanitized);
+          return sanitized;
         }
       }
     } catch {
@@ -355,11 +442,13 @@ class HinduismProvider {
       const results = await Promise.all(promises);
       const verses = results.filter((v): v is GitaVerseData => v !== null);
       if (verses.length > 0) {
-        this.chapterCache[chapter] = verses;
-        if (verses.length === expectedCount) {
-          await cacheService.setIndexedDB(`gita_chapter_${chapter}`, verses);
+        const sanitized = sanitizeGitaChapter(verses);
+        this.chapterCache[chapter] = sanitized;
+        if (sanitized.length === expectedCount) {
+          // Write only sanitized records to IndexedDB
+          await cacheService.setIndexedDB(`gita_chapter_${chapter}`, sanitized);
         }
-        return verses;
+        return sanitized;
       }
     } catch {
       // Upstream failed
@@ -370,7 +459,7 @@ class HinduismProvider {
     for (let v = 1; v <= expectedCount; v++) {
       const cached = this.verseCache[`${chapter}:${v}`] || FOUNDATIONAL_GITA_VERSES[`${chapter}:${v}`];
       if (cached) {
-        partialVerses.push(cached);
+        partialVerses.push(sanitizeGitaVerse(cached));
       }
     }
     return partialVerses;

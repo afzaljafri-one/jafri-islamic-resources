@@ -38,10 +38,10 @@ const traditions = inventory.traditions;
 
 // Qur'an
 assert(
-  traditions.islam.bundledOfflineAyahsCount === 10 &&
-    traditions.islam.remoteOrCachedAyahsCount === 6226 &&
+  traditions.islam.bundledOfflineAyahsCount === 11 &&
+    traditions.islam.remoteOrCachedAyahsCount === 6225 &&
     traditions.islam.catalogSurahsCount === 114,
-  "Qur'an: 10 foundational Ayahs bundled offline, 6,226 remote/cached, 114 Surahs cataloged"
+  "Qur'an: 11 foundational Ayahs bundled offline, 6,225 remote/cached, 114 Surahs cataloged"
 );
 
 // Bible

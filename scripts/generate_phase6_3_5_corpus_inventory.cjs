@@ -39,23 +39,37 @@ const inventory = {
 };
 
 // -----------------------------------------------------------------------------
-// 1. ISLAM
+// 1. ISLAM: Dynamically derived from active ISLAM_FOUNDATIONAL_PASSAGES source
 // -----------------------------------------------------------------------------
 const islamSurahMatches = [...searchServiceContent.matchAll(/islam_surah_(\d+)/g)].map(m => Number(m[1]));
 const uniqueSurahs = [...new Set(islamSurahMatches)];
 
-const quranFoundationalAyahs = [
-  { id: 'isl:quran:1:1', coordinates: 'Surah 1:1', surah: 1, ayah: 1, title: 'Al-Fatiha (Bismillah)', offlineStatus: 'BUNDLED_OFFLINE' },
-  { id: 'isl:quran:1:2', coordinates: 'Surah 1:2', surah: 1, ayah: 2, title: 'Al-Fatiha (Al-Hamd)', offlineStatus: 'BUNDLED_OFFLINE' },
-  { id: 'isl:quran:2:153', coordinates: 'Surah 2:153', surah: 2, ayah: 153, title: 'Al-Baqarah (Patience & Prayer)', offlineStatus: 'BUNDLED_OFFLINE' },
-  { id: 'isl:quran:2:255', coordinates: 'Surah 2:255', surah: 2, ayah: 255, title: 'Ayat al-Kursi (The Throne Verse)', offlineStatus: 'BUNDLED_OFFLINE' },
-  { id: 'isl:quran:2:261', coordinates: 'Surah 2:261', surah: 2, ayah: 261, title: 'Al-Baqarah (Charity Grain)', offlineStatus: 'BUNDLED_OFFLINE' },
-  { id: 'isl:quran:2:269', coordinates: 'Surah 2:269', surah: 2, ayah: 269, title: 'Al-Baqarah (Wisdom)', offlineStatus: 'BUNDLED_OFFLINE' },
-  { id: 'isl:quran:3:134', coordinates: 'Surah 3:134', surah: 3, ayah: 134, title: 'Ali Imran (Restraining Anger)', offlineStatus: 'BUNDLED_OFFLINE' },
-  { id: 'isl:quran:14:7', coordinates: 'Surah 14:7', surah: 14, ayah: 7, title: 'Ibrahim (Gratitude)', offlineStatus: 'BUNDLED_OFFLINE' },
-  { id: 'isl:quran:21:107', coordinates: 'Surah 21:107', surah: 21, ayah: 107, title: 'Al-Anbiya (Mercy to the Worlds)', offlineStatus: 'BUNDLED_OFFLINE' },
-  { id: 'isl:quran:112:1', coordinates: 'Surah 112:1', surah: 112, ayah: 1, title: 'Al-Ikhlas (Tawhid)', offlineStatus: 'BUNDLED_OFFLINE' }
-];
+// Dynamically extract foundational Ayahs from ISLAM_FOUNDATIONAL_PASSAGES
+const passageRegex = /{\s*surah:\s*(\d+),\s*ayah:\s*(\d+),\s*title:\s*['"]([^'"]+)['"]/g;
+const quranFoundationalAyahs = [];
+const seenQuranCoords = new Set();
+
+let pMatch;
+while ((pMatch = passageRegex.exec(searchServiceContent)) !== null) {
+  const surah = Number(pMatch[1]);
+  const ayah = Number(pMatch[2]);
+  const coord = `${surah}:${ayah}`;
+  if (!seenQuranCoords.has(coord)) {
+    seenQuranCoords.add(coord);
+    quranFoundationalAyahs.push({
+      id: `isl:quran:${surah}:${ayah}`,
+      coordinates: `Surah ${surah}:${ayah}`,
+      surah,
+      ayah,
+      title: pMatch[3],
+      offlineStatus: 'BUNDLED_OFFLINE'
+    });
+  }
+}
+
+if (quranFoundationalAyahs.length !== 11) {
+  throw new Error(`Expected exactly 11 unique foundational Quran passages, found ${quranFoundationalAyahs.length}`);
+}
 
 inventory.traditions.islam = {
   canonicalScripture: 'The Holy Qur’an',
@@ -63,8 +77,8 @@ inventory.traditions.islam = {
   canonicalRecension: 'Hafs ‘an ‘Asim (Uthmani Script / Tanzil)',
   catalogSurahsCount: 114,
   totalCanonicalAyahs: 6236,
-  bundledOfflineAyahsCount: quranFoundationalAyahs.length,
-  remoteOrCachedAyahsCount: 6236 - quranFoundationalAyahs.length,
+  bundledOfflineAyahsCount: quranFoundationalAyahs.length, // 11
+  remoteOrCachedAyahsCount: 6236 - quranFoundationalAyahs.length, // 6225
   offlineUnits: quranFoundationalAyahs
 };
 
@@ -274,8 +288,8 @@ inventory.traditions.jainism = {
 // -----------------------------------------------------------------------------
 // VALIDATION & INTEGRITY CHECKS BEFORE PERSISTENCE
 // -----------------------------------------------------------------------------
-if (inventory.traditions.islam.bundledOfflineAyahsCount !== 10) {
-  throw new Error(`Islam count mismatch: expected 10, got ${inventory.traditions.islam.bundledOfflineAyahsCount}`);
+if (inventory.traditions.islam.bundledOfflineAyahsCount !== 11) {
+  throw new Error(`Islam count mismatch: expected 11, got ${inventory.traditions.islam.bundledOfflineAyahsCount}`);
 }
 if (chapterSelectionVerses.length !== 47 || bibleVerses.length !== 48) {
   throw new Error(`Christianity count mismatch: expected 47 chapter-selection + 1 standalone = 48 total, got ${chapterSelectionVerses.length} + 1 = ${bibleVerses.length}`);

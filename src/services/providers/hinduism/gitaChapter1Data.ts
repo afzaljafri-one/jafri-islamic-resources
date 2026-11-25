@@ -16,7 +16,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.1 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -27,7 +27,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.2 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -38,7 +38,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.3 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -49,7 +49,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.4 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -60,7 +60,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.5 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -71,7 +71,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.6 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -82,7 +82,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.7 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -93,7 +93,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.8 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -104,7 +104,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.9 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -115,7 +115,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.10 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -126,7 +126,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.11 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -137,7 +137,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.12 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -148,7 +148,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.13 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -159,7 +159,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.14 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -170,7 +170,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.15 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -181,7 +181,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.16 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -192,7 +192,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.17 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -203,7 +203,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.18 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -214,7 +214,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.19 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -225,7 +225,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.20 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -236,7 +236,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.21 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -247,7 +247,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.22 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -258,7 +258,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.23 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -269,7 +269,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.24 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -280,7 +280,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.25 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -291,7 +291,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.26 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -302,7 +302,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.27 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -313,7 +313,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.28 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -324,7 +324,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.29 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -335,7 +335,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.30 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -346,7 +346,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.31 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -357,7 +357,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.32 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -368,7 +368,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.33 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -379,7 +379,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.34 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -390,7 +390,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.35 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -401,7 +401,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.36 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -412,7 +412,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.37 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -423,7 +423,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.38 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -434,7 +434,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.39 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -445,7 +445,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.40 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -456,7 +456,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.41 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -467,7 +467,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.42 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -478,7 +478,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.43 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -489,7 +489,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.44 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -500,7 +500,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.45 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -511,7 +511,7 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.46 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   },
   {
     "chapter": 1,
@@ -522,6 +522,6 @@ export const GITA_CHAPTER_1_OFFLINE: GitaVerseData[] = [
     "gambhiranandaEn": "[Translation withheld pending documented software redistribution permission]",
     "purohitEn": "[Translation withheld pending documented software redistribution permission]",
     "ramsukhdasHi": "[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]",
-    "shankaraBhashya": "1.47 Sri Sankaracharya did not comment on this sloka. The commentary starts from 2.10."
+    "shankaraBhashya": "[Commentary translation withheld pending documented software redistribution permission]"
   }
 ];
