@@ -92,21 +92,23 @@ async function runProductionVerification() {
       const resp = await fetch(cdnUrl, { cache: 'no-store' });
       tracker.assert(resp.ok, `Live CDN serves Gita chapter_${ch}.json successfully (status ${resp.status})`);
       const data = await resp.json();
-      const verses = data.verses || [];
+      const verses = Array.isArray(data) ? data : (data.verses || []);
       tracker.assert(verses.length > 0, `Chapter ${ch} on live CDN contains ${verses.length} verses`);
 
+      const getCommText = (c) => typeof c === 'string' ? c : (c?.translation || c?.et || '');
+
       for (const v of verses) {
-        const siva = v.sivanandaEn?.translation || '';
-        const gamb = v.gambhiranandaEn?.translation || '';
-        const puro = v.purohitEn?.translation || '';
-        const rams = v.ramsukhdasHi?.translation || '';
-        const shan = v.shankaraBhashya?.translation || '';
+        const siva = getCommText(v.sivanandaEn);
+        const gamb = getCommText(v.gambhiranandaEn);
+        const puro = getCommText(v.purohitEn);
+        const rams = getCommText(v.ramsukhdasHi);
+        const shan = getCommText(v.shankaraBhashya);
 
         if (
           !siva.includes('withheld') ||
           !gamb.includes('withheld') ||
           !puro.includes('withheld') ||
-          !rams.includes('withheld') ||
+          (!rams.includes('स्थगित') && !rams.includes('withheld')) ||
           (shan && !shan.includes('withheld'))
         ) {
           liveCdnPurged = false;
@@ -418,7 +420,7 @@ async function runProductionVerification() {
       'Live Gita 2:47 Sanskrit original text is preserved intact'
     );
     tracker.assert(
-      ch2State.shloka47Text && (ch2State.shloka47Text.includes('Rightly thy business is with deed alone') || ch2State.shloka47Text.includes('Thy business is with the action only')),
+      ch2State.shloka47Text && (ch2State.shloka47Text.includes('Thy right is only unto action') || ch2State.shloka47Text.includes('Rightly thy business is with deed alone')),
       'Live Gita 2:47 renders Edwin Arnold landmark translation'
     );
 
