@@ -24,6 +24,11 @@ import {
   FOUNDATIONAL_GITA_VERSES,
   GitaVerseData,
 } from '../../services/providers/hinduismProvider';
+import {
+  EDWIN_ARNOLD_ALLOWLIST,
+  WITHHELD_GITA_COMMENTARY_EN,
+  WITHHELD_GITA_COMMENTARY_HI,
+} from '../../services/providers/hinduism/edwinArnoldAllowlist';
 import { GITA_CHAPTER_1_OFFLINE } from '../../services/providers/hinduism/gitaChapter1Data';
 import { HINDUISM_COLLECTIONS } from '../../services/providers/hinduism/hinduismCollections';
 import { HINDUISM_TEXT_DATA, HinduismVerseUnit } from '../../services/providers/hinduism/hinduismTextData';
@@ -483,6 +488,7 @@ export class UniversalScriptureSearchService {
     (Object.entries(FOUNDATIONAL_GITA_VERSES) as [string, GitaVerseData][]).forEach(([key, verse]) => {
       const [ch, v] = key.split(':').map(Number);
       const isGita247 = ch === 2 && v === 47;
+      const approvedArnold = EDWIN_ARNOLD_ALLOWLIST[key];
       index.push({
         id: `hinduism_gita_shloka_${ch}_${v}`,
         religion: 'hinduism',
@@ -493,15 +499,13 @@ export class UniversalScriptureSearchService {
         displayCoordinates: `Bhagavad Gita ${ch}:${v}`,
         displayTitle: `Gita ${ch}:${v} — ${isGita247 ? 'Karmanye Vadhikaraste (Yoga of Action)' : 'Universal Gita Shloka'}`,
         originalText: verse.slok,
-        translationText: isGita247
-          ? (verse.edwinArnoldEn || 'Thy right is only unto action, not unto the fruits thereof; let not the fruit of action be thy motive, neither let there be in thee attachment to inaction.')
-          : (verse.edwinArnoldEn || verse.translationEn || verse.sivanandaEn),
-        secondaryTranslationText: isGita247 ? '[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]' : verse.ramsukhdasHi,
+        translationText: approvedArnold ? approvedArnold.text : WITHHELD_GITA_COMMENTARY_EN,
+        secondaryTranslationText: WITHHELD_GITA_COMMENTARY_HI,
         transliterationText: verse.transliteration,
         languageCode: 'sa',
-        sourceAttribution: isGita247
-          ? 'Sir Edwin Arnold (1885 The Song Celestial) • Public Domain'
-          : 'Shrimad Bhagavad Gita • Public Domain Translation',
+        sourceAttribution: approvedArnold
+          ? 'Sir Edwin Arnold (1885 The Song Celestial) • Territory-Specific Public Domain'
+          : 'Shrimad Bhagavad Gita • Sanskrit Public Domain (English Translation Withheld)',
         matchType: 'exact_reference',
         thematicKeyword: isGita247 ? 'Wisdom' : ch === 12 && v === 13 ? 'Compassion' : undefined,
         isOfflineAvailable: true,
@@ -509,15 +513,15 @@ export class UniversalScriptureSearchService {
         availabilityStatus: gitaCov.availabilityStatus,
         quotationType: 'scholarly_translation',
         canonicalRecension: 'Standard 701-Verse Recension (Mahabharata Bhishma Parva)',
-        provenanceNotes: isGita247
-          ? 'Sir Edwin Arnold translation (1885, Public Domain). Parallel translations (Sivananda, Gambhirananda, Purohit, Ramsukhdas) withheld pending documented software redistribution permission.'
-          : 'Sanskrit text in Public Domain. Modern proprietary translations withheld pending documented software redistribution permission.',
+        provenanceNotes: approvedArnold
+          ? 'Sir Edwin Arnold translation (1885 The Song Celestial, Territory-Specific Public Domain: US, UK, EU). Parallel modern commentaries withheld pending documented software redistribution permission.'
+          : 'Sanskrit text in Public Domain. Modern proprietary commentary translations withheld pending documented software redistribution permission.',
         scopeNotes: gitaCov.scopeNotes,
         numberingConvention: '701-Verse Standard (Mahabharata Bhishma Parva counting 13:1 Arjuna inquiry as a numbered verse)',
         alternateNumberingCrossReference:
           '700-Verse Recension (Adi Shankara Advaita Vedanta recension treats 13:1 as an unnumbered inquiry; subsequent Chapter 13 verses are shifted by -1 in 700-verse editions)',
-        exactLicenceIdentifier: 'Public Domain',
-        rightsHolderOrPublisher: 'Mahabharata Bhishma Parva / Sir Edwin Arnold (1885)',
+        exactLicenceIdentifier: approvedArnold ? 'Public Domain' : 'Public Domain',
+        rightsHolderOrPublisher: approvedArnold ? 'Sir Edwin Arnold (1885 The Song Celestial)' : 'Mahabharata Bhishma Parva (Public Domain)',
         rightsStatus: 'VERIFIED',
         canonicalTextRights: {
           componentName: 'Original Sanskrit (Bhagavad Gita)',
@@ -526,16 +530,23 @@ export class UniversalScriptureSearchService {
           rightsHolderOrPublisher: 'Ancient Sanskrit Tradition (Bhishma Parva)',
           isAvailable: true,
         },
-        primaryTranslationRights: isGita247
+        primaryTranslationRights: approvedArnold
           ? {
               componentName: 'English Translation (Sir Edwin Arnold 1885)',
               rightsStatus: 'VERIFIED',
               exactLicenceIdentifier: 'Public Domain',
-              rightsHolderOrPublisher: 'Public Domain Worldwide (Published 1885)',
+              rightsHolderOrPublisher: 'Trübner & Co. 1885 (US, UK, EU Public Domain)',
               translatorOrSource: 'Sir Edwin Arnold',
               isAvailable: true,
             }
-          : undefined,
+          : {
+              componentName: 'English Translation (Withheld)',
+              rightsStatus: 'RESTRICTED',
+              exactLicenceIdentifier: 'Custom Terms',
+              rightsHolderOrPublisher: 'Pending Documented Permission',
+              translatorOrSource: 'Withheld',
+              isAvailable: false,
+            },
         parallelTranslations: isGita247
           ? [
               {
@@ -604,11 +615,15 @@ export class UniversalScriptureSearchService {
         displayCoordinates: `Bhagavad Gita 1:${shloka.verse}`,
         displayTitle: `Gita 1:${shloka.verse} — Arjuna Visada Yoga`,
         originalText: shloka.slok,
-        translationText: shloka.sivanandaEn,
-        secondaryTranslationText: shloka.ramsukhdasHi,
+        translationText: shloka.verse === 1 && EDWIN_ARNOLD_ALLOWLIST['1:1']
+          ? EDWIN_ARNOLD_ALLOWLIST['1:1'].text
+          : WITHHELD_GITA_COMMENTARY_EN,
+        secondaryTranslationText: WITHHELD_GITA_COMMENTARY_HI,
         transliterationText: shloka.transliteration,
         languageCode: 'sa',
-        sourceAttribution: 'Swami Sivananda & Shri Purohit Swami',
+        sourceAttribution: shloka.verse === 1 && EDWIN_ARNOLD_ALLOWLIST['1:1']
+          ? 'Sir Edwin Arnold (1885 The Song Celestial) • Territory-Specific Public Domain'
+          : 'Shrimad Bhagavad Gita • Sanskrit Public Domain (English Translation Withheld)',
         matchType: 'word_match',
         isOfflineAvailable: true,
         score: 80,
@@ -618,8 +633,34 @@ export class UniversalScriptureSearchService {
         alternateNumberingCrossReference:
           '700-Verse Recension (Adi Shankara Advaita Vedanta recension treats 13:1 as an unnumbered inquiry; subsequent Chapter 13 verses are shifted by -1 in 700-verse editions)',
         exactLicenceIdentifier: 'Public Domain',
-        rightsHolderOrPublisher: 'Mahabharata Bhishma Parva / Gita Press & Divine Life Society',
+        rightsHolderOrPublisher: shloka.verse === 1 && EDWIN_ARNOLD_ALLOWLIST['1:1']
+          ? 'Sir Edwin Arnold (1885) / Ancient Sanskrit Tradition'
+          : 'Mahabharata Bhishma Parva (Sanskrit Public Domain)',
         rightsStatus: 'VERIFIED',
+        canonicalTextRights: {
+          componentName: 'Original Sanskrit (Bhagavad Gita)',
+          rightsStatus: 'VERIFIED',
+          exactLicenceIdentifier: 'Public Domain',
+          rightsHolderOrPublisher: 'Ancient Sanskrit Tradition (Bhishma Parva)',
+          isAvailable: true,
+        },
+        primaryTranslationRights: shloka.verse === 1 && EDWIN_ARNOLD_ALLOWLIST['1:1']
+          ? {
+              componentName: 'English Translation (Sir Edwin Arnold 1885)',
+              rightsStatus: 'VERIFIED',
+              exactLicenceIdentifier: 'Public Domain',
+              rightsHolderOrPublisher: 'Trübner & Co. 1885 (US, UK, EU Public Domain)',
+              translatorOrSource: 'Sir Edwin Arnold',
+              isAvailable: true,
+            }
+          : {
+              componentName: 'English Translation (Withheld)',
+              rightsStatus: 'RESTRICTED',
+              exactLicenceIdentifier: 'Custom Terms',
+              rightsHolderOrPublisher: 'Pending Documented Permission',
+              translatorOrSource: 'Withheld',
+              isAvailable: false,
+            },
       });
     });
 
@@ -1539,18 +1580,18 @@ export class UniversalScriptureSearchService {
             displayCoordinates: 'Bhagavad Gita 12:13',
             displayTitle: 'The Compassionate Devotee (Karuna Eva Cha)',
             originalText: 'अद्वेष्टा सर्वभूतानां मैत्रः करुण एव च । निर्ममो निरहङ्कारः समदुःखसुखः क्षमी ॥',
-            translationText: 'He who hates no being, who is friendly and compassionate to all, who is free from attachment and egoism, balanced in pleasure and pain, and forgiving.',
+            translationText: 'Who hateth nought of all which lives, living himself benign, compassionate, from arrogance exempt, exempt from love of self, unchangeable by good or ill; patient, contented, firm in faith... That man I love!',
             languageCode: 'sa',
-            sourceAttribution: 'Sir Edwin Arnold (1885 The Song Celestial) • Public Domain',
+            sourceAttribution: 'Sir Edwin Arnold (1885 The Song Celestial) • Territory-Specific Public Domain',
             matchType: 'thematic_result',
             thematicKeyword: 'Compassion',
             isOfflineAvailable: true,
             score: 70,
             quotationType: 'scholarly_translation',
             canonicalRecension: 'Standard 701-Verse Recension',
-            provenanceNotes: 'Canonical Sanskrit text in Public Domain. English translation by Sir Edwin Arnold (1885, Public Domain).',
+            provenanceNotes: 'Canonical Sanskrit text in Public Domain. English translation by Sir Edwin Arnold (1885 The Song Celestial, Territory-Specific Public Domain: US, UK, EU; other jurisdictions UNKNOWN / PERMISSION_REQUIRED).',
             exactLicenceIdentifier: 'Public Domain',
-            rightsHolderOrPublisher: 'Public Domain Worldwide (Published 1885)',
+            rightsHolderOrPublisher: 'Sir Edwin Arnold / Trübner & Co. 1885 (US, UK, EU Public Domain)',
             rightsStatus: 'VERIFIED',
             thematicDisclaimer: 'This passage has been selected solely for its thematic relevance to this virtue. Inclusion does not imply any theological equivalence, syncretism, or doctrinal endorsement between traditions.',
             canonicalTextRights: {
@@ -1564,7 +1605,7 @@ export class UniversalScriptureSearchService {
               componentName: 'English Translation (Sir Edwin Arnold 1885)',
               rightsStatus: 'VERIFIED',
               exactLicenceIdentifier: 'Public Domain',
-              rightsHolderOrPublisher: 'Public Domain Worldwide (Published 1885)',
+              rightsHolderOrPublisher: 'Trübner & Co. 1885 (US, UK, EU Public Domain)',
               translatorOrSource: 'Sir Edwin Arnold',
               isAvailable: true,
             },
@@ -1918,18 +1959,18 @@ export class UniversalScriptureSearchService {
             displayCoordinates: 'Bhagavad Gita 16:3',
             displayTitle: 'Kshama: Divine Quality of Forgiveness and Fortitude',
             originalText: 'तेजः क्षमा धृतिः शौचमद्रोहो नातिमानिता । भवन्ति सम्पदं दैवीमभिजातस्य भारत ॥',
-            translationText: 'Purity of heart, steadfastness in knowledge, charity, restraint and sacrifice, forgiveness and absence of pride — these belong to one born for a divine state.',
+            translationText: 'With patience, fortitude, and purity; an unrevengeful spirit, never given to rate itself too high; — such be the signs, O Indian Prince! of him whose feet are set on that fair path which leads to heavenly birth!',
             languageCode: 'sa',
-            sourceAttribution: 'Sir Edwin Arnold (1885 The Song Celestial) • Public Domain',
+            sourceAttribution: 'Sir Edwin Arnold (1885 The Song Celestial) • Territory-Specific Public Domain',
             matchType: 'thematic_result',
             thematicKeyword: 'Forgiveness',
             isOfflineAvailable: true,
             score: 70,
             quotationType: 'scholarly_translation',
             canonicalRecension: 'Standard 701-Verse Recension',
-            provenanceNotes: 'Canonical Sanskrit text in Public Domain. English translation by Sir Edwin Arnold (1885, Public Domain).',
+            provenanceNotes: 'Canonical Sanskrit text in Public Domain. English translation by Sir Edwin Arnold (1885 The Song Celestial, Territory-Specific Public Domain: US, UK, EU; other jurisdictions UNKNOWN / PERMISSION_REQUIRED).',
             exactLicenceIdentifier: 'Public Domain',
-            rightsHolderOrPublisher: 'Mahabharata Bhishma Parva / Sir Edwin Arnold (1885)',
+            rightsHolderOrPublisher: 'Sir Edwin Arnold / Trübner & Co. 1885 (US, UK, EU Public Domain)',
             rightsStatus: 'VERIFIED',
             thematicDisclaimer: 'This passage has been selected solely for its thematic relevance to this virtue. Inclusion does not imply any theological equivalence, syncretism, or doctrinal endorsement between traditions.',
             canonicalTextRights: {
@@ -1943,7 +1984,7 @@ export class UniversalScriptureSearchService {
               "componentName": "English Translation (Sir Edwin Arnold 1885)",
               "rightsStatus": "VERIFIED",
               "exactLicenceIdentifier": "Public Domain",
-              "rightsHolderOrPublisher": "Public Domain Worldwide (Published 1885)",
+              "rightsHolderOrPublisher": "Trübner & Co. 1885 (US, UK, EU Public Domain)",
               "translatorOrSource": "Sir Edwin Arnold",
               "isAvailable": true
             },
@@ -2173,36 +2214,36 @@ export class UniversalScriptureSearchService {
             collectionTitle: 'Vedic Mantras & Shanti Suktas',
             chapterNumber: 1,
             verseNumber: 1,
-            displayCoordinates: 'Brihadaranyaka Upanishad 1.4.14',
-            displayTitle: 'The Universal Shanti Invocation',
+            displayCoordinates: 'Brihadaranyaka Upanishad 1.4.14 / Shukla Yajur Veda 36.17',
+            displayTitle: 'The Universal Shanti Invocation (Om Dyauh Shantir)',
             originalText: 'ॐ द्यौः शान्तिरन्तरिक्षं शान्तिः पृथिवी शान्तिरापः शान्तिरोषधयः शान्तिः । ॐ शान्तिः शान्तिः शान्तिः ॥',
             translationText: 'May peace radiate in the sky as well as in the vast ethereal space! May peace reign in the earth, in the waters, in all herbs and trees! May peace pervade the universe!',
             languageCode: 'sa',
-            sourceAttribution: 'Sir Edwin Arnold (1885 The Song Celestial) • Public Domain',
+            sourceAttribution: 'Vedic Shanti Mantra • Traditional Liturgical Translation • Public Domain',
             matchType: 'thematic_result',
             thematicKeyword: 'Peace',
             isOfflineAvailable: true,
             score: 70,
             quotationType: 'scholarly_translation',
-            canonicalRecension: 'Traditional Vedic Samhita Recension',
-            provenanceNotes: 'Canonical Sanskrit text in Public Domain. English translation by Sir Edwin Arnold (1885, Public Domain).',
+            canonicalRecension: 'Vedic Samhita Recension (Shukla Yajur Veda 36.17 / Brihadaranyaka Upanishad)',
+            provenanceNotes: 'Canonical Vedic Sanskrit text and traditional liturgical English translation in Public Domain worldwide.',
             exactLicenceIdentifier: 'Public Domain',
-            rightsHolderOrPublisher: 'Mahabharata Bhishma Parva / Sir Edwin Arnold (1885)',
+            rightsHolderOrPublisher: 'Vedic Canonical Tradition / Traditional Liturgy (Public Domain)',
             rightsStatus: 'VERIFIED',
             thematicDisclaimer: 'This passage has been selected solely for its thematic relevance to this virtue. Inclusion does not imply any theological equivalence, syncretism, or doctrinal endorsement between traditions.',
             canonicalTextRights: {
-              "componentName": "Original Sanskrit (Bhagavad Gita)",
+              "componentName": "Original Sanskrit (Shukla Yajur Veda 36.17 / Brihadaranyaka Upanishad)",
               "rightsStatus": "VERIFIED",
               "exactLicenceIdentifier": "Public Domain",
-              "rightsHolderOrPublisher": "Ancient Sanskrit Tradition (Bhishma Parva)",
+              "rightsHolderOrPublisher": "Vedic Canonical Tradition",
               "isAvailable": true
             },
             primaryTranslationRights: {
-              "componentName": "English Translation (Sir Edwin Arnold 1885)",
+              "componentName": "English Translation (Vedic Shanti Invocation)",
               "rightsStatus": "VERIFIED",
               "exactLicenceIdentifier": "Public Domain",
-              "rightsHolderOrPublisher": "Public Domain Worldwide (Published 1885)",
-              "translatorOrSource": "Sir Edwin Arnold",
+              "rightsHolderOrPublisher": "Traditional Vedic Liturgy (Public Domain)",
+              "translatorOrSource": "Traditional Vedic Shanti Liturgy",
               "isAvailable": true
             },
           },
@@ -2394,18 +2435,18 @@ export class UniversalScriptureSearchService {
             displayCoordinates: 'Bhagavad Gita 2:14',
             displayTitle: 'Endure Heat and Cold (Tams Titikshasva Bharata)',
             originalText: 'मात्रास्पर्शास्तु कौन्तेय शीतोष्णसुखदुःखदाः । आगमापायिनोऽनित्यास्तांस्तितिक्षस्व भारत ॥',
-            translationText: 'The contacts of the senses with their objects give rise to cold and heat, pleasure and pain. They come and go, and are impermanent; endure them bravely, O Bharata!',
+            translationText: 'This that irks — thy sense-life, thrilling to the elements — bringing thee heat and cold, sorrows and joys, \'tis brief and mutable! Bear with it, Prince! As the wise bear.',
             languageCode: 'sa',
-            sourceAttribution: 'Sir Edwin Arnold (1885 The Song Celestial) • Public Domain',
+            sourceAttribution: 'Sir Edwin Arnold (1885 The Song Celestial) • Territory-Specific Public Domain',
             matchType: 'thematic_result',
             thematicKeyword: 'Patience',
             isOfflineAvailable: true,
             score: 70,
             quotationType: 'scholarly_translation',
             canonicalRecension: 'Standard 701-Verse Recension',
-            provenanceNotes: 'Canonical Sanskrit text in Public Domain. English translation by Sir Edwin Arnold (1885, Public Domain).',
+            provenanceNotes: 'Canonical Sanskrit text in Public Domain. English translation by Sir Edwin Arnold (1885 The Song Celestial, Territory-Specific Public Domain: US, UK, EU; other jurisdictions UNKNOWN / PERMISSION_REQUIRED).',
             exactLicenceIdentifier: 'Public Domain',
-            rightsHolderOrPublisher: 'Mahabharata Bhishma Parva / Sir Edwin Arnold (1885)',
+            rightsHolderOrPublisher: 'Sir Edwin Arnold / Trübner & Co. 1885 (US, UK, EU Public Domain)',
             rightsStatus: 'VERIFIED',
             thematicDisclaimer: 'This passage has been selected solely for its thematic relevance to this virtue. Inclusion does not imply any theological equivalence, syncretism, or doctrinal endorsement between traditions.',
             canonicalTextRights: {
@@ -2419,7 +2460,7 @@ export class UniversalScriptureSearchService {
               "componentName": "English Translation (Sir Edwin Arnold 1885)",
               "rightsStatus": "VERIFIED",
               "exactLicenceIdentifier": "Public Domain",
-              "rightsHolderOrPublisher": "Public Domain Worldwide (Published 1885)",
+              "rightsHolderOrPublisher": "Trübner & Co. 1885 (US, UK, EU Public Domain)",
               "translatorOrSource": "Sir Edwin Arnold",
               "isAvailable": true
             },
@@ -2772,18 +2813,18 @@ export class UniversalScriptureSearchService {
             displayCoordinates: 'Bhagavad Gita 9:27',
             displayTitle: 'Devotional Offering and Gratitude in Action',
             originalText: 'यत्करोषि यदश्नासि यज्जुहोषि ददासि यत् । यत्तपस्यसि कौन्तेय तत्कुरुष्व मदर्पणम् ॥',
-            translationText: 'Whatever thou doest, whatever thou eatest, whatever thou offerest in sacrifice, whatever thou givest away, whatever austerity thou practisest, do that as an offering unto Me!',
+            translationText: 'Whate\'er thou doest, Prince! Eating or sacrificing, giving gifts, praying or fasting, let it all be done for Me, as Mine.',
             languageCode: 'sa',
-            sourceAttribution: 'Sir Edwin Arnold (1885 The Song Celestial) • Public Domain',
+            sourceAttribution: 'Sir Edwin Arnold (1885 The Song Celestial) • Territory-Specific Public Domain',
             matchType: 'thematic_result',
             thematicKeyword: 'Gratitude',
             isOfflineAvailable: true,
             score: 70,
             quotationType: 'scholarly_translation',
             canonicalRecension: 'Standard 701-Verse Recension',
-            provenanceNotes: 'Canonical Sanskrit text in Public Domain. English translation by Sir Edwin Arnold (1885, Public Domain).',
+            provenanceNotes: 'Canonical Sanskrit text in Public Domain. English translation by Sir Edwin Arnold (1885 The Song Celestial, Territory-Specific Public Domain: US, UK, EU; other jurisdictions UNKNOWN / PERMISSION_REQUIRED).',
             exactLicenceIdentifier: 'Public Domain',
-            rightsHolderOrPublisher: 'Mahabharata Bhishma Parva / Sir Edwin Arnold (1885)',
+            rightsHolderOrPublisher: 'Sir Edwin Arnold / Trübner & Co. 1885 (US, UK, EU Public Domain)',
             rightsStatus: 'VERIFIED',
             thematicDisclaimer: 'This passage has been selected solely for its thematic relevance to this virtue. Inclusion does not imply any theological equivalence, syncretism, or doctrinal endorsement between traditions.',
             canonicalTextRights: {
@@ -2797,7 +2838,7 @@ export class UniversalScriptureSearchService {
               "componentName": "English Translation (Sir Edwin Arnold 1885)",
               "rightsStatus": "VERIFIED",
               "exactLicenceIdentifier": "Public Domain",
-              "rightsHolderOrPublisher": "Public Domain Worldwide (Published 1885)",
+              "rightsHolderOrPublisher": "Trübner & Co. 1885 (US, UK, EU Public Domain)",
               "translatorOrSource": "Sir Edwin Arnold",
               "isAvailable": true
             },
@@ -3030,18 +3071,18 @@ export class UniversalScriptureSearchService {
             displayCoordinates: 'Bhagavad Gita 17:20',
             displayTitle: 'Sattvic Charity Given Expecting No Return',
             originalText: 'दातव्यमिति यद्दानं दीयतेऽनुपकारिणे । देशे काले च पात्रे च तद्दानं सात्त्विकं स्मृतम् ॥',
-            translationText: 'That gift which is given to one from whom no return is expected, with the feeling that it is one’s duty to give, at the right place and time, is held to be pure.',
+            translationText: 'The gift lovingly given, when one shall say "Now must I gladly give!" when he who takes can render nothing back; made in due place, due time, and to a meet recipient, is gift of Sattwan, fair and profitable.',
             languageCode: 'sa',
-            sourceAttribution: 'Sir Edwin Arnold (1885 The Song Celestial) • Public Domain',
+            sourceAttribution: 'Sir Edwin Arnold (1885 The Song Celestial) • Territory-Specific Public Domain',
             matchType: 'thematic_result',
             thematicKeyword: 'Charity',
             isOfflineAvailable: true,
             score: 70,
             quotationType: 'scholarly_translation',
             canonicalRecension: 'Standard 701-Verse Recension',
-            provenanceNotes: 'Canonical Sanskrit text in Public Domain. English translation by Sir Edwin Arnold (1885, Public Domain).',
+            provenanceNotes: 'Canonical Sanskrit text in Public Domain. English translation by Sir Edwin Arnold (1885 The Song Celestial, Territory-Specific Public Domain: US, UK, EU; other jurisdictions UNKNOWN / PERMISSION_REQUIRED).',
             exactLicenceIdentifier: 'Public Domain',
-            rightsHolderOrPublisher: 'Mahabharata Bhishma Parva / Sir Edwin Arnold (1885)',
+            rightsHolderOrPublisher: 'Sir Edwin Arnold / Trübner & Co. 1885 (US, UK, EU Public Domain)',
             rightsStatus: 'VERIFIED',
             thematicDisclaimer: 'This passage has been selected solely for its thematic relevance to this virtue. Inclusion does not imply any theological equivalence, syncretism, or doctrinal endorsement between traditions.',
             canonicalTextRights: {
@@ -3055,7 +3096,7 @@ export class UniversalScriptureSearchService {
               "componentName": "English Translation (Sir Edwin Arnold 1885)",
               "rightsStatus": "VERIFIED",
               "exactLicenceIdentifier": "Public Domain",
-              "rightsHolderOrPublisher": "Public Domain Worldwide (Published 1885)",
+              "rightsHolderOrPublisher": "Trübner & Co. 1885 (US, UK, EU Public Domain)",
               "translatorOrSource": "Sir Edwin Arnold",
               "isAvailable": true
             },
@@ -3288,18 +3329,18 @@ export class UniversalScriptureSearchService {
             displayCoordinates: 'Bhagavad Gita 4:38',
             displayTitle: 'No Purifier Like Spiritual Knowledge',
             originalText: 'न हि ज्ञानेन सदृशं पवित्रमिह विद्यते । तत्स्वयं योगसंसिद्धः कालेनात्मनि विन्दति ॥',
-            translationText: 'Truly, there is no purifier in this world like wisdom. He who is perfected in Yoga finds it within himself in the fullness of time.',
+            translationText: 'There is no purifier like thereto in all this world, and he who seeketh it shall find it — being grown perfect — in himself.',
             languageCode: 'sa',
-            sourceAttribution: 'Sir Edwin Arnold (1885 The Song Celestial) • Public Domain',
+            sourceAttribution: 'Sir Edwin Arnold (1885 The Song Celestial) • Territory-Specific Public Domain',
             matchType: 'thematic_result',
             thematicKeyword: 'Wisdom',
             isOfflineAvailable: true,
             score: 70,
             quotationType: 'scholarly_translation',
             canonicalRecension: 'Standard 701-Verse Recension',
-            provenanceNotes: 'Canonical Sanskrit text in Public Domain. English translation by Sir Edwin Arnold (1885, Public Domain).',
+            provenanceNotes: 'Canonical Sanskrit text in Public Domain. English translation by Sir Edwin Arnold (1885 The Song Celestial, Territory-Specific Public Domain: US, UK, EU; other jurisdictions UNKNOWN / PERMISSION_REQUIRED).',
             exactLicenceIdentifier: 'Public Domain',
-            rightsHolderOrPublisher: 'Mahabharata Bhishma Parva / Sir Edwin Arnold (1885)',
+            rightsHolderOrPublisher: 'Sir Edwin Arnold / Trübner & Co. 1885 (US, UK, EU Public Domain)',
             rightsStatus: 'VERIFIED',
             thematicDisclaimer: 'This passage has been selected solely for its thematic relevance to this virtue. Inclusion does not imply any theological equivalence, syncretism, or doctrinal endorsement between traditions.',
             canonicalTextRights: {
@@ -3313,7 +3354,7 @@ export class UniversalScriptureSearchService {
               "componentName": "English Translation (Sir Edwin Arnold 1885)",
               "rightsStatus": "VERIFIED",
               "exactLicenceIdentifier": "Public Domain",
-              "rightsHolderOrPublisher": "Public Domain Worldwide (Published 1885)",
+              "rightsHolderOrPublisher": "Trübner & Co. 1885 (US, UK, EU Public Domain)",
               "translatorOrSource": "Sir Edwin Arnold",
               "isAvailable": true
             },

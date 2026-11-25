@@ -54,6 +54,11 @@ const FORBIDDEN_RESTRICTED_SNIPPETS = [
   'The Blessed Lord said: Time I am, the great destroyer of the worlds',
   'Duryodhana then approached his teacher (Drona)',
   'Behold, O Teacher! this mighty army of the sons of Pandu',
+  'Truly, there is no purifier in this world like wisdom',
+
+  // 3b. A.C. Bhaktivedanta Swami Prabhupada (1972 ISKCON)
+  'Abandoning all varieties of dharmas',
+  'Abandon all varieties of religion and just surrender unto Me',
 
   // 4. Swami Gambhirananda Modern Translation
   "what did my sons (and others) and Pandu's sons (and others) actually do",

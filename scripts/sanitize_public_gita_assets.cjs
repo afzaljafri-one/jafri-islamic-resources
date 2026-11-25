@@ -44,6 +44,9 @@ function sanitizeChapterFile(filePath) {
     if (approved) {
       verseObj.translationEn = approved.text;
       verseObj.edwinArnoldEn = approved.text;
+    } else {
+      verseObj.translationEn = WITHHELD_GITA_COMMENTARY_EN;
+      verseObj.edwinArnoldEn = WITHHELD_GITA_COMMENTARY_EN;
     }
 
     // Always withhold unverified modern proprietary commentaries

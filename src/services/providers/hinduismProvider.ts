@@ -20,9 +20,19 @@ import { cacheService } from '../cacheService';
 import {
   EDWIN_ARNOLD_ALLOWLIST,
   EdwinArnoldAllowlistEntry,
+  WITHHELD_GITA_COMMENTARY_EN,
+  WITHHELD_GITA_COMMENTARY_HI,
+  WITHHELD_GITA_BHASHYA,
 } from './hinduism/edwinArnoldAllowlist';
 
-export { HINDUISM_COLLECTIONS, HINDUISM_TEXT_DATA, EDWIN_ARNOLD_ALLOWLIST };
+export {
+  HINDUISM_COLLECTIONS,
+  HINDUISM_TEXT_DATA,
+  EDWIN_ARNOLD_ALLOWLIST,
+  WITHHELD_GITA_COMMENTARY_EN,
+  WITHHELD_GITA_COMMENTARY_HI,
+  WITHHELD_GITA_BHASHYA,
+};
 export type { HinduismCollectionMeta, HinduismVerseUnit, EdwinArnoldAllowlistEntry };
 
 export interface GitaChapterMeta {
@@ -75,8 +85,8 @@ export const FOUNDATIONAL_GITA_VERSES: Record<string, GitaVerseData> = {
     verse: 1,
     slok: 'धृतराष्ट्र उवाच |\nधर्मक्षेत्रे कुरुक्षेत्रे समवेता युयुत्सवः |\nमामकाः पाण्डवाश्चैव किमकुर्वत सञ्जय || १ ||',
     transliteration: 'dhṛtarāṣṭra uvāca |\ndharmakṣetre kurukṣetre samavetā yuyutsavaḥ |\nmāmakāḥ pāṇḍavāścaiva kimakurvata sañjaya || 1 ||',
-    translationEn: EDWIN_ARNOLD_ALLOWLIST['1:1'].text,
-    edwinArnoldEn: EDWIN_ARNOLD_ALLOWLIST['1:1'].text,
+    translationEn: EDWIN_ARNOLD_ALLOWLIST['1:1'] ? EDWIN_ARNOLD_ALLOWLIST['1:1'].text : WITHHELD_GITA_COMMENTARY_EN,
+    edwinArnoldEn: EDWIN_ARNOLD_ALLOWLIST['1:1'] ? EDWIN_ARNOLD_ALLOWLIST['1:1'].text : WITHHELD_GITA_COMMENTARY_EN,
     sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
     gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
     purohitEn: '[Translation withheld pending documented software redistribution permission]',
@@ -87,8 +97,8 @@ export const FOUNDATIONAL_GITA_VERSES: Record<string, GitaVerseData> = {
     verse: 2,
     slok: 'सञ्जय उवाच |\nदृष्ट्वा तु पाण्डवानीकं व्यूढं दुर्योधनस्तदा |\nआचार्यमुपसङ्गम्य राजा वचनमब्रवीत् || २ ||',
     transliteration: 'sañjaya uvāca |\ndṛṣṭvā tu pāṇḍavānīkaṁ vyūḍhaṁ duryodhanastadā |\nācāryamupasaṅgamya rājā vacanamabravīt || 2 ||',
-    translationEn: EDWIN_ARNOLD_ALLOWLIST['1:2'].text,
-    edwinArnoldEn: EDWIN_ARNOLD_ALLOWLIST['1:2'].text,
+    translationEn: WITHHELD_GITA_COMMENTARY_EN,
+    edwinArnoldEn: WITHHELD_GITA_COMMENTARY_EN,
     sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
     gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
     purohitEn: '[Translation withheld pending documented software redistribution permission]',
@@ -99,8 +109,8 @@ export const FOUNDATIONAL_GITA_VERSES: Record<string, GitaVerseData> = {
     verse: 47,
     slok: 'कर्मण्येवाधिकारस्ते मा फलेषु कदाचन |\nमा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि ||',
     transliteration: 'karmaṇyevādhikāraste mā phaleṣu kadācana |\nmā karmaphalaheturbhūrmā te saṅgo\'stvakarmaṇi ||',
-    translationEn: EDWIN_ARNOLD_ALLOWLIST['2:47'].text,
-    edwinArnoldEn: EDWIN_ARNOLD_ALLOWLIST['2:47'].text,
+    translationEn: WITHHELD_GITA_COMMENTARY_EN,
+    edwinArnoldEn: WITHHELD_GITA_COMMENTARY_EN,
     sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
     gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
     purohitEn: '[Translation withheld pending documented software redistribution permission]',
@@ -111,8 +121,8 @@ export const FOUNDATIONAL_GITA_VERSES: Record<string, GitaVerseData> = {
     verse: 38,
     slok: 'न हि ज्ञानेन सदृशं पवित्रमिह विद्यते |\nतत्स्वयं योगसंसिद्धः कालेनात्मनि विन्दति ||',
     transliteration: 'na hi jñānena sadṛśaṁ pavitramiha vidyate |\ntatsvayaṁ yogasaṁsiddhaḥ kālenātmani vindati ||',
-    translationEn: EDWIN_ARNOLD_ALLOWLIST['4:38'].text,
-    edwinArnoldEn: EDWIN_ARNOLD_ALLOWLIST['4:38'].text,
+    translationEn: EDWIN_ARNOLD_ALLOWLIST['4:38'] ? EDWIN_ARNOLD_ALLOWLIST['4:38'].text : WITHHELD_GITA_COMMENTARY_EN,
+    edwinArnoldEn: EDWIN_ARNOLD_ALLOWLIST['4:38'] ? EDWIN_ARNOLD_ALLOWLIST['4:38'].text : WITHHELD_GITA_COMMENTARY_EN,
     sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
     gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
     purohitEn: '[Translation withheld pending documented software redistribution permission]',
@@ -123,8 +133,8 @@ export const FOUNDATIONAL_GITA_VERSES: Record<string, GitaVerseData> = {
     verse: 26,
     slok: 'पत्रं पुष्पं फलं तोयं यो मे भक्त्या प्रयच्छति |\nतदहं भक्त्युपहृतमश्नामि प्रयतात्मनः ||',
     transliteration: 'patraṁ puṣpaṁ phalaṁ toyaṁ yo me bhaktyā prayacchati |\ntadahaṁ bhaktyupahṛtamaśnāmi prayatātmanaḥ ||',
-    translationEn: EDWIN_ARNOLD_ALLOWLIST['9:26'].text,
-    edwinArnoldEn: EDWIN_ARNOLD_ALLOWLIST['9:26'].text,
+    translationEn: EDWIN_ARNOLD_ALLOWLIST['9:26'] ? EDWIN_ARNOLD_ALLOWLIST['9:26'].text : WITHHELD_GITA_COMMENTARY_EN,
+    edwinArnoldEn: EDWIN_ARNOLD_ALLOWLIST['9:26'] ? EDWIN_ARNOLD_ALLOWLIST['9:26'].text : WITHHELD_GITA_COMMENTARY_EN,
     sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
     gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
     purohitEn: '[Translation withheld pending documented software redistribution permission]',
@@ -135,8 +145,8 @@ export const FOUNDATIONAL_GITA_VERSES: Record<string, GitaVerseData> = {
     verse: 13,
     slok: 'अद्वेष्टा सर्वभूतानां मैत्रः करुण एव च |\nनिर्ममो निरहङ्कारः समदुःखसुखः क्षमी ||',
     transliteration: 'adveṣṭā sarvabhūtānāṁ maitraḥ karuṇa eva ca |\nnirmamo nirahaṅkāraḥ samaduḥkhasukhaḥ kṣamī ||',
-    translationEn: EDWIN_ARNOLD_ALLOWLIST['12:13'].text,
-    edwinArnoldEn: EDWIN_ARNOLD_ALLOWLIST['12:13'].text,
+    translationEn: WITHHELD_GITA_COMMENTARY_EN,
+    edwinArnoldEn: WITHHELD_GITA_COMMENTARY_EN,
     sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
     gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
     purohitEn: '[Translation withheld pending documented software redistribution permission]',
@@ -147,8 +157,8 @@ export const FOUNDATIONAL_GITA_VERSES: Record<string, GitaVerseData> = {
     verse: 3,
     slok: 'तेजः क्षमा धृतिः शौचमद्रोहो नातिमानिता |\nभवन्ति सम्पदं दैवीमभिजातस्य भारत ||',
     transliteration: 'tejaḥ kṣamā dhṛtiḥ śaucamadroho nātimānitā |\nbhavanti sampadaṁ daivīmabhijātasya bhārata ||',
-    translationEn: EDWIN_ARNOLD_ALLOWLIST['16:3'].text,
-    edwinArnoldEn: EDWIN_ARNOLD_ALLOWLIST['16:3'].text,
+    translationEn: WITHHELD_GITA_COMMENTARY_EN,
+    edwinArnoldEn: WITHHELD_GITA_COMMENTARY_EN,
     sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
     gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
     purohitEn: '[Translation withheld pending documented software redistribution permission]',
@@ -159,8 +169,8 @@ export const FOUNDATIONAL_GITA_VERSES: Record<string, GitaVerseData> = {
     verse: 20,
     slok: 'दातव्यमिति यद्दानं दीयतेऽनुپकारिणे |\nदेशे काले च पात्रे च तद्दानं सात्त्विकं स्मृतम् ||',
     transliteration: 'dātavyamiti yaddānaṁ dīyate’nupakāriṇe |\ndeśe kāle ca pātre ca taddānaṁ sāttvikaṁ smṛtam ||',
-    translationEn: EDWIN_ARNOLD_ALLOWLIST['17:20'].text,
-    edwinArnoldEn: EDWIN_ARNOLD_ALLOWLIST['17:20'].text,
+    translationEn: EDWIN_ARNOLD_ALLOWLIST['17:20'] ? EDWIN_ARNOLD_ALLOWLIST['17:20'].text : WITHHELD_GITA_COMMENTARY_EN,
+    edwinArnoldEn: EDWIN_ARNOLD_ALLOWLIST['17:20'] ? EDWIN_ARNOLD_ALLOWLIST['17:20'].text : WITHHELD_GITA_COMMENTARY_EN,
     sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
     gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
     purohitEn: '[Translation withheld pending documented software redistribution permission]',
@@ -171,18 +181,14 @@ export const FOUNDATIONAL_GITA_VERSES: Record<string, GitaVerseData> = {
     verse: 66,
     slok: 'सर्वधर्मान्परित्यज्य मामेकं शरणं व्रज |\nअहं त्वा सर्वपापेभ्यो मोक्षयिष्यामि मा शुचः ||',
     transliteration: 'sarvadharmānparityajya māmekaṁ śaraṇaṁ vraja |\nahaṁ tvā sarvapāpebhyo mokṣayiṣyāmi mā śucaḥ ||',
-    translationEn: EDWIN_ARNOLD_ALLOWLIST['18:66'].text,
-    edwinArnoldEn: EDWIN_ARNOLD_ALLOWLIST['18:66'].text,
+    translationEn: EDWIN_ARNOLD_ALLOWLIST['18:66'] ? EDWIN_ARNOLD_ALLOWLIST['18:66'].text : WITHHELD_GITA_COMMENTARY_EN,
+    edwinArnoldEn: EDWIN_ARNOLD_ALLOWLIST['18:66'] ? EDWIN_ARNOLD_ALLOWLIST['18:66'].text : WITHHELD_GITA_COMMENTARY_EN,
     sivanandaEn: '[Translation withheld pending documented software redistribution permission]',
     gambhiranandaEn: '[Translation withheld pending documented software redistribution permission]',
     purohitEn: '[Translation withheld pending documented software redistribution permission]',
     ramsukhdasHi: '[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]',
   },
 };
-
-export const WITHHELD_GITA_COMMENTARY_EN = '[Translation withheld pending documented software redistribution permission]';
-export const WITHHELD_GITA_COMMENTARY_HI = '[अनुवाद का वितरण अनुमति दस्तावेज़ीकरण तक स्थगित है]';
-export const WITHHELD_GITA_BHASHYA = '[Commentary translation withheld pending documented software redistribution permission]';
 
 /**
  * Phase 6.3.5.3 Central Gita Verse Sanitizer & Fail-Closed Translation Whitelist
