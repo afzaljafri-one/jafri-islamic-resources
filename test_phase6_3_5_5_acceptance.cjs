@@ -437,7 +437,8 @@ async function runAcceptanceSuite() {
   );
 
   let wsUrl = null;
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 120; i++) {
+    await new Promise((r) => setTimeout(r, 250));
     try {
       const resp = await new Promise((res, rej) => {
         const req = http.get(`http://127.0.0.1:${cdpPort}/json/version`, (r) => {
@@ -451,8 +452,22 @@ async function runAcceptanceSuite() {
       const data = JSON.parse(resp);
       wsUrl = data.webSocketDebuggerUrl;
       if (wsUrl) break;
-    } catch (_) {
-      await new Promise((r) => setTimeout(r, 200));
+    } catch (_) {}
+    if (!wsUrl) {
+      try {
+        const resp2 = await new Promise((res, rej) => {
+          const req2 = http.get(`http://localhost:${cdpPort}/json/version`, (r) => {
+            let body = '';
+            r.on('data', (c) => (body += c));
+            r.on('end', () => res(body));
+          });
+          req2.on('error', rej);
+          req2.setTimeout(500, () => req2.destroy());
+        });
+        const data2 = JSON.parse(resp2);
+        wsUrl = data2.webSocketDebuggerUrl;
+        if (wsUrl) break;
+      } catch (_) {}
     }
   }
 
