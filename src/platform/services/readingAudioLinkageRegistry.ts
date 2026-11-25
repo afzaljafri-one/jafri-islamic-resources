@@ -31,6 +31,76 @@ export interface AudioReadingLinkage {
 
 export const READING_AUDIO_LINKAGES: readonly AudioReadingLinkage[] = [
   {
+    "requirementId": "REQ-ISL-002",
+    "tradition": "islam",
+    "targetScriptureId": "quran",
+    "targetCollectionId": "quran_surahs_arabic",
+    "targetChapterId": 2,
+    "targetReadingId": "surah-2",
+    "matchScope": "EXACT",
+    "canonicalLabel": "Surah 2: Al-Baqarah (البقرة)"
+  },
+  {
+    "requirementId": "REQ-ISL-003",
+    "tradition": "islam",
+    "targetScriptureId": "quran",
+    "targetCollectionId": "quran_surahs_arabic",
+    "targetChapterId": 3,
+    "targetReadingId": "surah-3",
+    "matchScope": "EXACT",
+    "canonicalLabel": "Surah 3: Ali 'Imran (آل عمران)"
+  },
+  {
+    "requirementId": "REQ-ISL-018",
+    "tradition": "islam",
+    "targetScriptureId": "quran",
+    "targetCollectionId": "quran_surahs_arabic",
+    "targetChapterId": 18,
+    "targetReadingId": "surah-18",
+    "matchScope": "EXACT",
+    "canonicalLabel": "Surah 18: Al-Kahf (الكهف)"
+  },
+  {
+    "requirementId": "REQ-ISL-036",
+    "tradition": "islam",
+    "targetScriptureId": "quran",
+    "targetCollectionId": "quran_surahs_arabic",
+    "targetChapterId": 36,
+    "targetReadingId": "surah-36",
+    "matchScope": "EXACT",
+    "canonicalLabel": "Surah 36: Ya-Sin (يس)"
+  },
+  {
+    "requirementId": "REQ-ISL-055",
+    "tradition": "islam",
+    "targetScriptureId": "quran",
+    "targetCollectionId": "quran_surahs_arabic",
+    "targetChapterId": 55,
+    "targetReadingId": "surah-55",
+    "matchScope": "EXACT",
+    "canonicalLabel": "Surah 55: Ar-Rahman (الرحمن)"
+  },
+  {
+    "requirementId": "REQ-ISL-056",
+    "tradition": "islam",
+    "targetScriptureId": "quran",
+    "targetCollectionId": "quran_surahs_arabic",
+    "targetChapterId": 56,
+    "targetReadingId": "surah-56",
+    "matchScope": "EXACT",
+    "canonicalLabel": "Surah 56: Al-Waqi'ah (الواقعة)"
+  },
+  {
+    "requirementId": "REQ-ISL-114",
+    "tradition": "islam",
+    "targetScriptureId": "quran",
+    "targetCollectionId": "quran_surahs_arabic",
+    "targetChapterId": 114,
+    "targetReadingId": "surah-114",
+    "matchScope": "EXACT",
+    "canonicalLabel": "Surah 114: An-Nas (الناس)"
+  },
+  {
     "requirementId": "REQ-ISL-001",
     "tradition": "islam",
     "targetScriptureId": "quran",
@@ -1756,14 +1826,12 @@ export function resolveReadingAudioMatches(
     const matchesBookOrCollection = (): boolean => {
       if (linkBookId) {
         return (
-          normBookId === linkBookId ||
-          normBookName === linkBookId ||
-          normBookName.includes(linkBookId) ||
-          linkBookId.includes(normBookName)
+          Boolean(normBookId && (normBookId === linkBookId || normBookId.includes(linkBookId) || linkBookId.includes(normBookId))) ||
+          Boolean(normBookName && (normBookName === linkBookId || normBookName.includes(linkBookId) || linkBookId.includes(normBookName)))
         );
       }
       if (linkCollectionId) {
-        return normCollectionId === linkCollectionId;
+        return Boolean(normCollectionId && normCollectionId === linkCollectionId);
       }
       return false;
     };
