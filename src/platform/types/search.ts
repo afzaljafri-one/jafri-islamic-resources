@@ -4,6 +4,7 @@
 // ==============================================================================
 
 import { ReligionId } from './religion';
+import { CoverageAvailabilityStatus } from './coverage';
 
 /**
  * Four mutually exclusive search match categories defined by Phase 6.3 specification
@@ -13,6 +14,17 @@ export type SearchMatchType =
   | 'exact_phrase'    // Exact contiguous phrase match in original text or translation
   | 'word_match'       // Multi-word or root keyword match
   | 'thematic_result'; // Thematic / subject discovery (e.g., Compassion, Peace, Forgiveness)
+
+/**
+ * Parallel Translation/Edition Variant
+ */
+export interface ParallelTranslationRecord {
+  id: string;
+  translationName: string;
+  translator: string;
+  language: string;
+  text: string;
+}
 
 /**
  * Standard Universal Scripture Search Result Unit
@@ -38,6 +50,13 @@ export interface UniversalSearchResult {
   matchedSnippet?: string; // Highlighted or matching excerpt
   isOfflineAvailable: boolean; // Indicates if passage is available in bundled/cached offline storage
   score: number; // Relevance ranking score
+
+  /** Phase 6.3.1: Content Coverage Transparency & Grouping Metadata */
+  availabilityStatus?: CoverageAvailabilityStatus;
+  scopeNotes?: string;
+  parentWorkTitle?: string;
+  groupedUnitsCount?: number;
+  parallelTranslations?: ParallelTranslationRecord[];
 }
 
 /**
@@ -51,6 +70,7 @@ export interface ParsedReference {
   verseNumber?: number | string;
   rawQuery: string;
   isExactCitation: boolean;
+  citationType?: 'verse' | 'chapter' | 'composition' | 'collection';
 }
 
 /**

@@ -126,12 +126,17 @@ export const App: React.FC = () => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
         setIsUniversalSearchOpen((prev) => !prev);
-      } else if (
-        e.key === '/' &&
-        !['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement)?.tagName)
-      ) {
-        e.preventDefault();
-        setIsUniversalSearchOpen(true);
+      } else if (e.key === '/') {
+        const target = e.target as HTMLElement | null;
+        const isEditable = target && (
+          ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName) ||
+          target.isContentEditable ||
+          target.getAttribute('contenteditable') === 'true'
+        );
+        if (!isEditable) {
+          e.preventDefault();
+          setIsUniversalSearchOpen(true);
+        }
       }
     };
     window.addEventListener('keydown', handleKeyDown);

@@ -1,7 +1,7 @@
 // ==============================================================================
 // Universal Scripture Search Modal
 // Unified Multilingual Search across All Seven World Religious Traditions
-// Jafri Religious Resources — Phase 6.3
+// Jafri Religious Resources — Phase 6.3.1 (Integrity, Accessibility & Transparency)
 // ==============================================================================
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
@@ -17,6 +17,7 @@ import {
   History,
   ArrowRight,
   Filter,
+  Layers,
 } from 'lucide-react';
 import { ReligionId } from '../types/religion';
 import { ALL_RELIGION_IDS, RELIGIONS_REGISTRY } from '../config/religionsRegistry';
@@ -62,18 +63,38 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
   const [actionNotice, setActionNotice] = useState<string | null>(null);
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const lastFocusedElementRef = useRef<HTMLElement | null>(null);
   const debounceTimerRef = useRef<any>(null);
 
   // Focus input and load recents when opened
   useEffect(() => {
     if (isOpen) {
+      lastFocusedElementRef.current = document.activeElement as HTMLElement;
       setRecentSearches(universalScriptureSearchService.getRecentSearches());
-      setTimeout(() => inputRef.current?.focus(), 100);
+      setTimeout(() => inputRef.current?.focus(), 80);
       if (initialQuery.trim()) {
         executeSearch(initialQuery.trim(), selectedReligion, selectedMatchType);
       }
     }
   }, [isOpen]);
+
+  // Accessibility: Handle Escape key to close and restore focus
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleModalKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleModalKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleModalKeyDown);
+      lastFocusedElementRef.current?.focus();
+    };
+  }, [isOpen, onClose]);
 
   // Execute Search
   const executeSearch = async (
@@ -230,10 +251,16 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
 
   if (!isOpen) return null;
 
+  const exactRefCount = results.filter((r) => r.matchType === 'exact_reference').length;
+
   return (
     <div
       id="universal-scripture-search-modal"
       data-testid="universal-scripture-search-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="universal-search-title"
+      aria-describedby="universal-search-desc"
       className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6"
     >
       {/* Backdrop */}
@@ -250,13 +277,16 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
             <div className="flex items-center space-x-2">
               <Search className="w-5 h-5 text-gold-400" />
               <div>
-                <h3 className="font-serif text-base sm:text-lg font-bold text-slate-100 flex items-center space-x-2">
+                <h3
+                  id="universal-search-title"
+                  className="font-serif text-base sm:text-lg font-bold text-slate-100 flex items-center space-x-2"
+                >
                   <span>Universal Scripture Search</span>
                   <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-gold-500/10 text-gold-400 border border-gold-500/30">
                     7 Traditions
                   </span>
                 </h3>
-                <p className="text-xs text-slate-400">
+                <p id="universal-search-desc" className="text-xs text-slate-400">
                   Search across verified passages, citations, prayers, hymns, and spiritual themes.
                 </p>
               </div>
@@ -265,8 +295,9 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
             <button
               onClick={onClose}
               data-testid="close-search-modal-btn"
-              className="p-1.5 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 transition"
+              className="p-1.5 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-slate-800 transition cursor-pointer"
               title="Close Search (Escape)"
+              aria-label="Close Scripture Search"
             >
               <X className="w-5 h-5" />
             </button>
@@ -281,9 +312,11 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
               type="text"
               value={query}
               onChange={(e) => handleQueryChange(e.target.value)}
-              placeholder="Search reference (John 3:16, Quran 2:255, Gita 2:47), phrase, or theme (Compassion, Peace)..."
-              className="w-full bg-navy-950 border border-slate-700 focus:border-gold-500 rounded-2xl pl-11 pr-24 py-3 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-gold-500 shadow-inner"
+              placeholder='Search by reference (e.g. "John 3:16", "Quran 2:255", "Gita 2:47", "Psalm 23") or theme ("Peace", "Compassion")...'
+              aria-label="Search Scripture Query"
+              className="w-full pl-11 pr-24 py-3 rounded-2xl bg-navy-950/90 border border-slate-700/80 focus:border-gold-500/70 focus:outline-none focus:ring-1 focus:ring-gold-500/30 text-slate-100 placeholder-slate-500 text-sm transition shadow-inner font-sans"
             />
+
             <div className="absolute right-3 flex items-center space-x-1.5">
               {query && (
                 <button
@@ -295,8 +328,9 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                     setHasSearched(false);
                     inputRef.current?.focus();
                   }}
-                  className="p-1 text-slate-500 hover:text-slate-300 transition"
-                  title="Clear input"
+                  className="p-1 text-slate-400 hover:text-slate-200 transition rounded-lg hover:bg-slate-800"
+                  title="Clear query"
+                  aria-label="Clear Search Input"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -304,64 +338,65 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
               <button
                 type="submit"
                 data-testid="universal-search-submit-btn"
-                className="px-3 py-1.5 rounded-xl bg-gold-500 hover:bg-gold-400 text-navy-950 font-bold text-xs transition shadow-gold-sm flex items-center space-x-1"
-                title="Search"
+                className="px-3 py-1.5 rounded-xl bg-gold-500 hover:bg-gold-400 text-navy-950 font-bold text-xs transition shadow-gold-sm"
               >
-                <span>Search</span>
+                Search
               </button>
             </div>
           </form>
 
-          {/* Action Notice Banner */}
+          {/* Action / Notification Banner */}
           {actionNotice && (
-            <div className="px-3 py-1.5 rounded-xl bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-xs flex items-center justify-between animate-in fade-in-50">
-              <div className="flex items-center space-x-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                <span>{actionNotice}</span>
-              </div>
-              <button onClick={() => setActionNotice(null)} className="text-emerald-400 hover:text-emerald-200">
-                ✕
-              </button>
+            <div className="p-2.5 rounded-xl bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-xs flex items-center space-x-2 animate-in fade-in">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+              <span>{actionNotice}</span>
             </div>
           )}
 
-          {/* Filters Bar: Religion Pills */}
-          <div className="flex items-center space-x-1 overflow-x-auto pb-1 pt-1 scrollbar-none text-xs">
+          {/* Tradition Filter Pills */}
+          <div className="flex items-center space-x-1.5 overflow-x-auto scrollbar-none pb-1 pt-1">
             <button
               data-testid="filter-religion-all"
               onClick={() => handleSelectReligion('all')}
-              className={`px-3 py-1.5 rounded-xl font-medium transition flex items-center space-x-1.5 flex-shrink-0 ${
+              className={`px-3 py-1 rounded-xl text-xs font-semibold whitespace-nowrap transition cursor-pointer flex items-center space-x-1.5 ${
                 selectedReligion === 'all'
-                  ? 'bg-gold-500 text-navy-950 font-bold shadow-gold-sm'
-                  : 'bg-navy-950 text-slate-400 border border-slate-800 hover:text-slate-200'
+                  ? 'bg-gold-500 text-navy-950 shadow-gold-sm font-bold'
+                  : 'bg-navy-900/80 text-slate-300 hover:bg-slate-800 border border-slate-800'
               }`}
             >
               <span>All Traditions</span>
               {hasSearched && (
-                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-navy-900/50 text-slate-300">
-                  {religionCounts.all}
+                <span
+                  className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
+                    selectedReligion === 'all'
+                      ? 'bg-navy-950 text-gold-300'
+                      : 'bg-slate-800 text-slate-400'
+                  }`}
+                >
+                  {religionCounts.all || 0}
                 </span>
               )}
             </button>
 
             {ALL_RELIGION_IDS.map((relId) => {
-              const meta = RELIGIONS_REGISTRY[relId];
+              const relMeta = RELIGIONS_REGISTRY[relId];
               const isSelected = selectedReligion === relId;
               const count = religionCounts[relId] || 0;
+
               return (
                 <button
                   key={relId}
                   data-testid={`filter-religion-${relId}`}
                   onClick={() => handleSelectReligion(relId)}
-                  className={`px-2.5 py-1.5 rounded-xl font-medium transition flex items-center space-x-1 flex-shrink-0 ${
+                  className={`px-2.5 py-1 rounded-xl text-xs font-medium whitespace-nowrap transition cursor-pointer flex items-center space-x-1.5 border ${
                     isSelected
-                      ? 'bg-gold-500 text-navy-950 font-bold shadow-gold-sm'
-                      : 'bg-navy-950 text-slate-400 border border-slate-800 hover:text-slate-200'
+                      ? 'bg-slate-800 text-gold-400 border-gold-500/60 font-bold'
+                      : 'bg-navy-900/60 text-slate-400 hover:text-slate-200 border-slate-800 hover:border-slate-700'
                   }`}
                 >
-                  <span>{meta.name}</span>
-                  {hasSearched && (
-                    <span className="text-[10px] font-mono px-1 py-0.2 rounded-full bg-slate-800/80 text-slate-300">
+                  <span>{relMeta.name}</span>
+                  {hasSearched && count > 0 && (
+                    <span className="text-[10px] px-1 py-0.2 rounded-full bg-slate-800/80 text-slate-300 font-mono">
                       {count}
                     </span>
                   )}
@@ -370,43 +405,41 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
             })}
           </div>
 
-          {/* Match Type Secondary Tabs (Visible when search is active) */}
-          {hasSearched && results.length > 0 && (
-            <div className="flex items-center space-x-1.5 pt-1 text-[11px] overflow-x-auto scrollbar-none border-t border-slate-800/60">
-              <span className="text-slate-500 font-medium mr-1 flex items-center space-x-1">
-                <Filter className="w-3 h-3" />
-                <span>Match:</span>
-              </span>
-              {[
-                { id: 'all', label: 'All Results' },
-                { id: 'exact_reference', label: 'Exact References' },
-                { id: 'exact_phrase', label: 'Phrases' },
-                { id: 'word_match', label: 'Words' },
-                { id: 'thematic_result', label: 'Thematic Discovery' },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  data-testid={`filter-match-${tab.id}`}
-                  onClick={() => handleSelectMatchType(tab.id as any)}
-                  className={`px-2 py-0.5 rounded-lg transition ${
-                    selectedMatchType === tab.id
-                      ? 'bg-slate-800 text-gold-400 font-bold border border-gold-500/30'
-                      : 'text-slate-400 hover:text-slate-200'
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-          )}
+          {/* Match Category Tabs */}
+          <div className="flex items-center space-x-1.5 pt-1 text-[11px] overflow-x-auto scrollbar-none border-t border-slate-800/60">
+            <span className="text-slate-500 font-medium mr-1 flex items-center space-x-1">
+              <Filter className="w-3 h-3" />
+              <span>Match:</span>
+            </span>
+            {[
+              { id: 'all', label: 'All Results' },
+              { id: 'exact_reference', label: 'Exact References' },
+              { id: 'exact_phrase', label: 'Phrases' },
+              { id: 'word_match', label: 'Words' },
+              { id: 'thematic_result', label: 'Thematic Discovery' },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                data-testid={`filter-match-${tab.id}`}
+                onClick={() => handleSelectMatchType(tab.id as any)}
+                className={`px-2 py-0.5 rounded-lg transition ${
+                  selectedMatchType === tab.id
+                    ? 'bg-slate-800 text-gold-400 font-bold border border-gold-500/30'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Modal Body / Results Area */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-3">
-          {/* STATE 1: Empty Query — Show Suggestions & Recents */}
+        {/* Modal Scrollable Body */}
+        <div className="p-4 sm:p-5 overflow-y-auto space-y-4 max-h-[60vh] islamic-pattern-bg">
+          {/* Quick Suggestions & Recents (When query is empty) */}
           {!hasSearched && !isSearching && (
-            <div className="space-y-6 py-2">
-              {/* Quick Search Suggestions */}
+            <div className="space-y-5">
+              {/* Suggested Citations */}
               <div className="space-y-2.5">
                 <div className="flex items-center space-x-2 text-xs font-semibold text-slate-300">
                   <Sparkles className="w-4 h-4 text-gold-400" />
@@ -433,96 +466,92 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
 
               {/* Recent Searches */}
               {recentSearches.length > 0 && (
-                <div className="space-y-2.5 pt-4 border-t border-slate-800">
+                <div className="space-y-2.5 pt-3 border-t border-slate-800/80">
                   <div className="flex items-center justify-between text-xs text-slate-400">
-                    <div className="flex items-center space-x-1.5 font-semibold text-slate-300">
-                      <History className="w-4 h-4 text-slate-400" />
+                    <span className="flex items-center space-x-1.5 font-medium">
+                      <History className="w-3.5 h-3.5 text-slate-500" />
                       <span>Recent Searches</span>
-                    </div>
+                    </span>
                     <button
                       data-testid="clear-recent-searches-btn"
                       onClick={() => {
                         universalScriptureSearchService.clearRecentSearches();
                         setRecentSearches([]);
                       }}
-                      className="text-[11px] text-slate-500 hover:text-rose-400 transition"
+                      className="text-[11px] text-slate-500 hover:text-slate-300 hover:underline"
                     >
-                      Clear history
+                      Clear
                     </button>
                   </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {recentSearches.map((rec) => (
+
+                  <div className="flex flex-wrap gap-2">
+                    {recentSearches.map((item) => (
                       <button
-                        key={rec.id}
+                        key={item.id}
                         data-testid="recent-search-chip"
                         onClick={() => {
-                          setQuery(rec.query);
-                          if (rec.religion) setSelectedReligion(rec.religion);
-                          executeSearch(rec.query, rec.religion || 'all', 'all');
+                          setQuery(item.query);
+                          if (item.religion) setSelectedReligion(item.religion);
+                          executeSearch(item.query, item.religion || 'all', 'all');
                         }}
-                        className="px-2.5 py-1 rounded-lg bg-navy-950 border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-slate-200 text-xs font-mono transition flex items-center space-x-1.5"
+                        className="px-2.5 py-1 rounded-lg bg-navy-950/60 hover:bg-slate-800 border border-slate-850 text-slate-400 hover:text-slate-200 text-xs transition flex items-center space-x-1.5"
                       >
                         <Clock className="w-3 h-3 text-slate-500" />
-                        <span>{rec.query}</span>
+                        <span>{item.query}</span>
                       </button>
                     ))}
                   </div>
                 </div>
               )}
 
-              {/* Search Instruction Guide */}
-              <div className="p-4 rounded-2xl bg-navy-950/50 border border-slate-800/80 space-y-2 text-xs text-slate-400">
-                <span className="font-semibold text-slate-300 block">Supported Search Formats:</span>
-                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] list-disc list-inside text-slate-400">
-                  <li><strong>Exact Citations:</strong> John 3:16, Quran 2:255, Gita 2:47</li>
-                  <li><strong>Phrases:</strong> "The LORD is my shepherd", "Bismillah"</li>
-                  <li><strong>Original Languages:</strong> Arabic, Sanskrit, Hebrew, Gurmukhi, Pali</li>
-                  <li><strong>Transliterations:</strong> IAST, Roman Gurmukhi, Roman Arabic</li>
-                  <li><strong>Spiritual Themes:</strong> Compassion, Forgiveness, Peace, Patience</li>
-                </ul>
+              {/* Coverage Transparency Note */}
+              <div className="p-3.5 rounded-2xl bg-navy-950/70 border border-slate-800/80 space-y-1.5 text-xs text-slate-400">
+                <span className="font-semibold text-slate-300 flex items-center space-x-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Authoritative Corpus Coverage</span>
+                </span>
+                <p className="leading-relaxed text-[11px] text-slate-400">
+                  Search covers authentic canonical collections across Islam, Christianity, Hinduism, Judaism, Sikhism,
+                  Buddhism, and Jainism. All results distinguish exact references from related word and thematic matches.
+                </p>
               </div>
             </div>
           )}
 
-          {/* STATE 2: Loading State */}
+          {/* Loading Indicator */}
           {isSearching && (
-            <div className="py-16 text-center space-y-3">
-              <div className="w-8 h-8 rounded-full border-2 border-gold-400 border-t-transparent animate-spin mx-auto" />
-              <p className="text-xs text-slate-400 font-medium">Searching scripture corpus across 7 traditions...</p>
+            <div className="py-12 flex flex-col items-center justify-center space-y-3 text-slate-400">
+              <div className="w-7 h-7 border-2 border-gold-500 border-t-transparent rounded-full animate-spin" />
+              <p className="text-xs font-mono">Searching verified scriptures...</p>
             </div>
           )}
 
-          {/* STATE 3: No Matches Found */}
+          {/* Empty Search State */}
           {hasSearched && !isSearching && results.length === 0 && (
-            <div className="py-16 text-center space-y-3 max-w-md mx-auto">
-              <div className="w-12 h-12 rounded-full bg-navy-950 border border-slate-800 flex items-center justify-center mx-auto text-slate-500">
-                <AlertCircle className="w-6 h-6 text-slate-400" />
-              </div>
-              <h4 className="font-semibold text-sm text-slate-200">No Scripture Matches Found</h4>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                No verified passages found for "{query}". Try checking the reference spelling (e.g., <em>John 3:16</em>, <em>Quran 2:255</em>, <em>Gita 2:47</em>), or search by broad spiritual themes like <em>Compassion</em> or <em>Peace</em>.
+            <div className="py-12 text-center space-y-3">
+              <AlertCircle className="w-8 h-8 text-amber-400/80 mx-auto" />
+              <h4 className="font-serif text-base font-bold text-slate-200">
+                No Scripture Matches Found
+              </h4>
+              <p className="text-xs text-slate-400 max-w-md mx-auto leading-relaxed">
+                No verified passage matched "{query}". Try searching by standard citation (e.g. "John 3:16", "Quran 2:255", "Gita 2:47", "Psalm 23") or by spiritual theme.
               </p>
-              <div className="pt-2">
-                <button
-                  onClick={() => {
-                    setQuery('Compassion');
-                    executeSearch('Compassion', 'all', 'all');
-                  }}
-                  className="px-3.5 py-1.5 rounded-xl bg-gold-500/20 text-gold-300 border border-gold-500/40 text-xs font-semibold hover:bg-gold-500 hover:text-navy-950 transition"
-                >
-                  Explore Theme: Compassion
-                </button>
-              </div>
             </div>
           )}
 
-          {/* STATE 4: Search Results List */}
+          {/* Search Results List */}
           {hasSearched && !isSearching && results.length > 0 && (
             <div className="space-y-3">
+              {/* Result Summary Bar */}
               <div className="flex items-center justify-between text-xs text-slate-400 pb-1">
                 <span>
-                  Found <strong>{results.length}</strong> verified passages across{' '}
-                  {selectedReligion === 'all' ? 'all traditions' : selectedReligion}
+                  Found <strong>{results.length}</strong> {results.length === 1 ? 'passage' : 'passages'}
+                  {exactRefCount > 0 && (
+                    <span className="text-gold-400 ml-1 font-semibold">
+                      ({exactRefCount} Exact Reference)
+                    </span>
+                  )}
+                  {' '}across {selectedReligion === 'all' ? 'all traditions' : selectedReligion}
                 </span>
                 <span className="text-[11px] font-mono text-slate-500">Local-first & offline resilient</span>
               </div>
@@ -548,9 +577,32 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                         <span className="text-xs font-medium text-slate-400 font-serif">
                           {result.collectionTitle}
                         </span>
-                        {result.isOfflineAvailable && (
-                          <span className="text-[10px] font-mono text-emerald-400 px-1.5 py-0.2 rounded bg-emerald-500/10 border border-emerald-500/30">
-                            Offline Ready
+
+                        {/* Availability Transparency Badge */}
+                        {result.availabilityStatus && (
+                          <span
+                            title={result.scopeNotes || ''}
+                            className={`text-[10px] font-mono px-1.5 py-0.2 rounded border ${
+                              result.availabilityStatus === 'FULL'
+                                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                                : result.availabilityStatus === 'PARTIAL'
+                                ? 'bg-amber-500/10 text-amber-300 border-amber-500/30'
+                                : 'bg-slate-700/40 text-slate-400 border-slate-700'
+                            }`}
+                          >
+                            {result.availabilityStatus === 'FULL'
+                              ? 'Full Text Offline'
+                              : result.availabilityStatus === 'PARTIAL'
+                              ? 'Curated Core'
+                              : 'Catalog Reference'}
+                          </span>
+                        )}
+
+                        {/* Grouped Composition Indicator */}
+                        {result.groupedUnitsCount && (
+                          <span className="text-[10px] font-mono px-2 py-0.2 rounded-full font-bold bg-gold-500/15 text-gold-300 border border-gold-500/40 flex items-center space-x-1">
+                            <Layers className="w-2.5 h-2.5 text-gold-400" />
+                            <span>Grouped ({result.groupedUnitsCount} Units)</span>
                           </span>
                         )}
                       </div>
@@ -569,7 +621,10 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                         {result.displayCoordinates} — {result.displayTitle}
                       </h4>
                       {result.matchType === 'thematic_result' && (
-                        <p className="text-[11px] text-purple-300/90 font-serif italic mt-0.5">
+                        <p
+                          data-testid="thematic-result-note"
+                          className="text-[11px] text-purple-300/90 font-serif italic mt-0.5"
+                        >
                           Thematic discovery — contextual spiritual reflection, not direct scriptural equivalence.
                         </p>
                       )}
@@ -619,6 +674,25 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                       )}
                     </div>
 
+                    {/* Parallel Translations Section (if present) */}
+                    {result.parallelTranslations && result.parallelTranslations.length > 0 && (
+                      <div className="p-3 rounded-xl bg-navy-900/60 border border-slate-800 space-y-2">
+                        <span className="text-[10px] font-mono text-gold-400 font-semibold uppercase tracking-wider block">
+                          Parallel Translations ({result.parallelTranslations.length} Editions)
+                        </span>
+                        <div className="grid gap-2 sm:grid-cols-2">
+                          {result.parallelTranslations.map((tr) => (
+                            <div key={tr.id} className="p-2 rounded-lg bg-navy-950/60 border border-slate-850 text-xs">
+                              <span className="text-[10px] font-mono text-slate-400 block mb-0.5 font-semibold">
+                                {tr.translationName} ({tr.language}):
+                              </span>
+                              <p className="text-slate-200 font-serif leading-relaxed text-xs">{tr.text}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
                     {/* Attribution & Actions Footer */}
                     <div className="pt-2 border-t border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
                       <span className="text-[11px] text-slate-500 font-mono">
@@ -630,8 +704,9 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                         <button
                           data-testid="search-result-bookmark-btn"
                           onClick={() => handleBookmarkResult(result)}
-                          className="px-2.5 py-1.5 rounded-lg bg-navy-900 hover:bg-slate-800 border border-slate-700 hover:border-gold-500/50 text-slate-300 hover:text-gold-300 text-xs font-medium transition flex items-center space-x-1"
+                          className="px-2.5 py-1.5 rounded-lg bg-navy-900 hover:bg-slate-800 border border-slate-700 hover:border-gold-500/50 text-slate-300 hover:text-gold-300 text-xs font-medium transition flex items-center space-x-1 cursor-pointer"
                           title="Save this passage to My Sacred Library Bookmarks"
+                          aria-label={`Bookmark ${result.displayCoordinates}`}
                         >
                           <BookMarked className="w-3.5 h-3.5 text-gold-400" />
                           <span>Bookmark</span>
@@ -641,8 +716,9 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                         <button
                           data-testid="search-result-read-btn"
                           onClick={() => handleSelectResult(result)}
-                          className="px-3.5 py-1.5 rounded-lg bg-gold-500 hover:bg-gold-400 text-navy-950 font-bold text-xs transition shadow-gold-sm flex items-center space-x-1.5"
+                          className="px-3.5 py-1.5 rounded-lg bg-gold-500 hover:bg-gold-400 text-navy-950 font-bold text-xs transition shadow-gold-sm flex items-center space-x-1.5 cursor-pointer"
                           title="Open in reader (keeps audio paused)"
+                          aria-label={`Read ${result.displayCoordinates}`}
                         >
                           <BookOpen className="w-3.5 h-3.5" />
                           <span>Read Passage</span>
@@ -654,6 +730,14 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
               })}
             </div>
           )}
+        </div>
+
+        {/* Modal Footer */}
+        <div className="p-3 border-t border-slate-800 bg-navy-950 flex items-center justify-between text-[11px] text-slate-400 font-mono">
+          <div className="flex items-center space-x-2">
+            <span>Shortcut: Press <kbd className="px-1 py-0.2 rounded bg-slate-800 text-gold-400">Esc</kbd> to close</span>
+          </div>
+          <span>Jafri Sacred Library • Verified Multi-Tradition Search</span>
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 // ==============================================================================
 // Search Normalization & Reference Parsing Utilities
 // Multilingual Unicode-Aware Search for 7 Religious Traditions
-// Jafri Religious Resources — Phase 6.3
+// Jafri Religious Resources — Phase 6.3.1 (Integrity & Hardening)
 // ==============================================================================
 
 import { ParsedReference } from '../types/search';
@@ -13,6 +13,7 @@ import { ParsedReference } from '../types/search';
  * - Normalizes Yaa and Alif Maqsurah (ى) to ي
  * - Normalizes Taa Marbutah (ة) to ه
  * - Strips tatweel (ـ) and Quranic verse end symbols
+ * - Preserves Arabic letters and roots
  */
 export function normalizeArabic(text: string): string {
   if (!text) return '';
@@ -22,30 +23,27 @@ export function normalizeArabic(text: string): string {
     // Remove Tatweel (kashida)
     .replace(/\u0640/g, '')
     // Normalize Alif forms
-    .replace(/[إأآء]/g, 'ا')
+    .replace(/[إأآ]/g, 'ا')
     // Normalize Yaa / Alif Maqsurah
-    .replace(/[ىي]/g, 'ي')
+    .replace(/[ى]/g, 'ي')
     // Normalize Taa Marbuta
     .replace(/ة/g, 'ه')
-    // Strip Quranic verse markers and parentheses
+    // Strip Quranic verse markers and brackets
     .replace(/[\u06DD\uFD3E\uFD3F\(\)\[\]،؛؟.\-–—]/g, ' ')
     .replace(/\s+/g, ' ')
-    .trim()
-    .toLowerCase();
+    .trim();
 }
 
 /**
  * Normalizes Devanagari script:
- * - Strips nukta (\u093C)
- * - Strips Vedic accents (\u0951, \u0952, etc.)
+ * - Strips Vedic accents (\u0951, \u0952, \u0953, \u0954)
  * - Strips danda (।) and double danda (॥)
- * - Normalizes anusvara / chandrabindu
+ * - Preserves consonants, conjuncts (virama), and matras (\p{M})
  */
 export function normalizeDevanagari(text: string): string {
   if (!text) return '';
   return text
-    .replace(/\u093C/g, '') // Nukta
-    .replace(/[\u0951\u0952\u0953\u0954]/g, '') // Vedic accents
+    .replace(/[\u0951\u0952\u0953\u0954]/g, '') // Vedic svara accents
     .replace(/[।॥|]/g, ' ') // Dandas
     .replace(/[\(\)\[\],.;:?\-–—]/g, ' ')
     .replace(/\s+/g, ' ')
@@ -55,6 +53,7 @@ export function normalizeDevanagari(text: string): string {
 /**
  * Normalizes Hebrew script:
  * - Strips Niqqud (vowels) and cantillation marks (\u0591-\u05BD, \u05BF-\u05C5, \u05C7)
+ * - Preserves Hebrew square letters (Alef through Tav)
  */
 export function normalizeHebrew(text: string): string {
   if (!text) return '';
@@ -67,12 +66,12 @@ export function normalizeHebrew(text: string): string {
 
 /**
  * Normalizes Gurmukhi script:
- * - Strips bindi (\u0A02), tippi (\u0A70), addak (\u0A71)
+ * - Strips dandas, brackets, and non-letter punctuation
+ * - Preserves consonants, vowel signs, and root letters
  */
 export function normalizeGurmukhi(text: string): string {
   if (!text) return '';
   return text
-    .replace(/[\u0A02\u0A70\u0A71]/g, '')
     .replace(/[।॥|]/g, ' ')
     .replace(/[\(\)\[\],.;:?\-–—]/g, ' ')
     .replace(/\s+/g, ' ')
@@ -81,15 +80,15 @@ export function normalizeGurmukhi(text: string): string {
 
 /**
  * Normalizes Latin-script and IAST / Pali / Romanized transliterations:
- * - Decomposes diacritics (NFD)
- * - Converts ā->a, ī->i, ū->u, ṛ->r, ṝ->r, ḷ->l, ṅ->n, ñ->n, ṭ->t, ḍ->d, ṇ->n, ś->s, ṣ->s, ḥ->h, ṃ->m, etc.
+ * - Decomposes and replaces IAST / Pali accented vowels & consonants (ā->a, ī->i, ū->u, ṛ->r, ś->s, ṣ->s, etc.)
  * - Strips punctuation, dashes, quotes
+ * - PRESERVES Unicode letters (\p{L}), marks (\p{M}), and numbers (\p{N}) across all 7 script systems!
  */
 export function normalizeLatinAndTransliteration(text: string): string {
   if (!text) return '';
   return text
     .toLowerCase()
-    // Explicit IAST mappings before generic strip
+    // Explicit IAST & Pali mappings
     .replace(/ā/g, 'a')
     .replace(/ī/g, 'i')
     .replace(/ū/g, 'u')
@@ -107,19 +106,17 @@ export function normalizeLatinAndTransliteration(text: string): string {
     .replace(/ḥ/g, 'h')
     .replace(/ṃ/g, 'm')
     .replace(/ṁ/g, 'm')
-    // Remove remaining combining diacritical marks
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    // Normalize apostrophes & quotes
+    // Normalize quotes & apostrophes
     .replace(/[''""`ʻʾʿ]/g, '')
-    // Replace non-alphanumeric with spaces (excluding numbers)
-    .replace(/[^a-z0-9\s]/g, ' ')
+    // Replace punctuation symbols with spaces, while strictly retaining \p{L} (letters), \p{M} (combining marks/matras), and \p{N} (numbers)
+    .replace(/[^\p{L}\p{M}\p{N}\s]/gu, ' ')
     .replace(/\s+/g, ' ')
     .trim();
 }
 
 /**
- * Unified search token normalizer
+ * Unified search token normalizer:
+ * Safely normalizes across all 7 world traditions without destroying non-Latin characters.
  */
 export function normalizeForSearch(text: string): string {
   if (!text) return '';
@@ -139,7 +136,7 @@ export function normalizeForSearch(text: string): string {
  * - "Bereshit 1:1", "Shemot 20:1", "Tehillim 23", "Psalm 23"
  * - "Japji Sahib", "Ang 1", "SGGS 1", "Ang 5"
  * - "Mangala Sutta", "Dhammapada 1", "Metta Sutta"
- * - "Namokar Mantra", "Tattvartha Sutra 1:1", "Bhaktamara 1"
+ * - "Namokar Mantra", "Tattvartha Sutra 1:1", "Bhaktamara"
  */
 export function parseScriptureReference(query: string): ParsedReference | null {
   if (!query || !query.trim()) return null;
@@ -157,23 +154,33 @@ export function parseScriptureReference(query: string): ParsedReference | null {
       verseNumber: 255,
       rawQuery: q,
       isExactCitation: true,
+      citationType: 'verse',
     };
   }
 
-  const quranMatch = lower.match(/(?:quran|qur'an|surah|surat)?\s*([0-9]{1,3})[:\s]([0-9]{1,3})/);
-  if (quranMatch && (lower.includes('quran') || lower.includes('surah') || q.includes(':'))) {
-    const surahNum = parseInt(quranMatch[1], 10);
-    const ayahNum = parseInt(quranMatch[2], 10);
-    if (surahNum >= 1 && surahNum <= 114 && ayahNum >= 1 && ayahNum <= 286) {
-      return {
-        religion: 'islam',
-        collectionId: 'quran',
-        bookOrSurah: surahNum,
-        chapterNumber: surahNum,
-        verseNumber: ayahNum,
-        rawQuery: q,
-        isExactCitation: true,
-      };
+  const hasQuranKeyword = lower.includes('quran') || lower.includes("qur'an") || lower.includes('surah') || lower.includes('surat');
+  const isPureNumericCitation = /^\s*([0-9]{1,3})[:\s]([0-9]{1,3})\s*$/.test(lower);
+
+  if (hasQuranKeyword || isPureNumericCitation) {
+    const quranMatch = isPureNumericCitation
+      ? lower.match(/^\s*([0-9]{1,3})[:\s]([0-9]{1,3})\s*$/)
+      : lower.match(/(?:quran|qur'an|surah|surat)\s*([0-9]{1,3})(?:[:\s]([0-9]{1,3}))?/);
+
+    if (quranMatch) {
+      const surahNum = parseInt(quranMatch[1], 10);
+      const ayahNum = quranMatch[2] ? parseInt(quranMatch[2], 10) : undefined;
+      if (surahNum >= 1 && surahNum <= 114) {
+        return {
+          religion: 'islam',
+          collectionId: 'quran',
+          bookOrSurah: surahNum,
+          chapterNumber: surahNum,
+          verseNumber: ayahNum,
+          rawQuery: q,
+          isExactCitation: true,
+          citationType: ayahNum ? 'verse' : 'chapter',
+        };
+      }
     }
   }
 
@@ -182,7 +189,7 @@ export function parseScriptureReference(query: string): ParsedReference | null {
   const gitaMatch = lower.match(/(?:bhagavad\s*gita|gita|bg)\s*(?:chapter\s*)?([0-9]{1,2})(?:[:\s]([0-9]{1,2}))?/);
   if (gitaMatch) {
     const ch = parseInt(gitaMatch[1], 10);
-    const v = gitaMatch[2] ? parseInt(gitaMatch[2], 10) : 1;
+    const v = gitaMatch[2] ? parseInt(gitaMatch[2], 10) : undefined;
     if (ch >= 1 && ch <= 18) {
       return {
         religion: 'hinduism',
@@ -192,11 +199,12 @@ export function parseScriptureReference(query: string): ParsedReference | null {
         verseNumber: v,
         rawQuery: q,
         isExactCitation: true,
+        citationType: v ? 'verse' : 'chapter',
       };
     }
   }
 
-  // 3. CHRISTIANITY: Bible Books & Verses
+  // 3. CHRISTIANITY & CROSS-TRADITION PSALMS
   // E.g. "John 3:16", "Genesis 1:1", "Psalm 23", "Matthew 5:3", "1 Corinthians 13:4"
   const bibleRegex = /(?:([1-3]\s*)?([a-zA-Z]+))\s*([0-9]{1,3})(?:[:\s]([0-9]{1,3}))?/;
   const bibleMatch = lower.match(bibleRegex);
@@ -204,7 +212,7 @@ export function parseScriptureReference(query: string): ParsedReference | null {
     const prefix = bibleMatch[1] ? bibleMatch[1].trim() + ' ' : '';
     const bookNamePart = (prefix + bibleMatch[2]).trim();
     const ch = parseInt(bibleMatch[3], 10);
-    const v = bibleMatch[4] ? parseInt(bibleMatch[4], 10) : 1;
+    const v = bibleMatch[4] ? parseInt(bibleMatch[4], 10) : undefined;
 
     // Check against canonical Bible books
     const BIBLE_BOOK_MAP: Record<string, { id: number; name: string }> = {
@@ -226,45 +234,51 @@ export function parseScriptureReference(query: string): ParsedReference | null {
 
     const bookEntry = BIBLE_BOOK_MAP[bookNamePart];
     if (bookEntry) {
+      // Special cross-tradition handling for Psalm / Psalms:
+      // Psalm queries relate to BOTH Judaism (Tehillim) and Christianity (Psalms)
+      const isPsalmQuery = bookNamePart === 'psalm' || bookNamePart === 'psalms';
       return {
-        religion: 'christianity',
-        collectionId: 'bible-kjv',
+        religion: isPsalmQuery ? undefined : 'christianity',
+        collectionId: isPsalmQuery ? 'psalms' : 'bible-kjv',
         bookOrSurah: bookEntry.id,
         chapterNumber: ch,
         verseNumber: v,
         rawQuery: q,
         isExactCitation: true,
+        citationType: v ? 'verse' : 'chapter',
       };
     }
   }
 
   // 4. JUDAISM: Tanakh / Torah / Tehillim
   // E.g. "bereshit 1:1", "shemot 20:1", "tehillim 23", "tehillim 1"
-  if (lower.includes('bereshit') || lower.includes('genesis')) {
-    const m = lower.match(/(?:bereshit|genesis)\s*([0-9]{1,3})(?:[:\s]([0-9]{1,3}))?/);
+  if (lower.includes('bereshit') || lower.includes('shemot') || lower.includes('devarim')) {
+    const m = lower.match(/(?:bereshit|shemot|devarim)\s*([0-9]{1,3})(?:[:\s]([0-9]{1,3}))?/);
     if (m) {
       return {
         religion: 'judaism',
-        collectionId: 'torah',
-        bookOrSurah: 'genesis',
+        collectionId: 'tanakh',
+        bookOrSurah: lower.includes('bereshit') ? 'genesis' : lower.includes('shemot') ? 'exodus' : 'deuteronomy',
         chapterNumber: parseInt(m[1], 10) || 1,
-        verseNumber: m[2] ? parseInt(m[2], 10) : 1,
+        verseNumber: m[2] ? parseInt(m[2], 10) : undefined,
         rawQuery: q,
         isExactCitation: true,
+        citationType: m[2] ? 'verse' : 'chapter',
       };
     }
   }
-  if (lower.includes('tehillim') || (lower.includes('psalm') && !lower.includes('bible'))) {
-    const m = lower.match(/(?:tehillim|psalm|psalms)\s*([0-9]{1,3})(?:[:\s]([0-9]{1,3}))?/);
+  if (lower.includes('tehillim')) {
+    const m = lower.match(/tehillim\s*([0-9]{1,3})(?:[:\s]([0-9]{1,3}))?/);
     if (m) {
       return {
         religion: 'judaism',
-        collectionId: 'ketuvim',
+        collectionId: 'tanakh',
         bookOrSurah: 'psalms',
         chapterNumber: parseInt(m[1], 10) || 1,
-        verseNumber: m[2] ? parseInt(m[2], 10) : 1,
+        verseNumber: m[2] ? parseInt(m[2], 10) : undefined,
         rawQuery: q,
         isExactCitation: true,
+        citationType: m[2] ? 'verse' : 'chapter',
       };
     }
   }
@@ -277,9 +291,9 @@ export function parseScriptureReference(query: string): ParsedReference | null {
       collectionId: 'sggs',
       bookOrSurah: 'Japji Sahib',
       chapterNumber: 1,
-      verseNumber: 1,
       rawQuery: q,
       isExactCitation: true,
+      citationType: 'composition',
     };
   }
   const angMatch = lower.match(/(?:ang|sggs|page)\s*([0-9]{1,4})/);
@@ -294,6 +308,7 @@ export function parseScriptureReference(query: string): ParsedReference | null {
         verseNumber: 1,
         rawQuery: q,
         isExactCitation: true,
+        citationType: 'verse',
       };
     }
   }
@@ -306,9 +321,9 @@ export function parseScriptureReference(query: string): ParsedReference | null {
       collectionId: 'khuddaka',
       bookOrSurah: 'Sutta Nipata 2.4',
       chapterNumber: 'mangala',
-      verseNumber: 1,
       rawQuery: q,
       isExactCitation: true,
+      citationType: 'composition',
     };
   }
   if (lower.includes('dhammacakka') || lower.includes('turning the wheel')) {
@@ -317,9 +332,9 @@ export function parseScriptureReference(query: string): ParsedReference | null {
       collectionId: 'samyutta',
       bookOrSurah: 'SN 56.11',
       chapterNumber: 'dhammacakka',
-      verseNumber: 1,
       rawQuery: q,
       isExactCitation: true,
+      citationType: 'composition',
     };
   }
   if (lower.includes('metta') || lower.includes('karaniya')) {
@@ -328,9 +343,9 @@ export function parseScriptureReference(query: string): ParsedReference | null {
       collectionId: 'khuddaka',
       bookOrSurah: 'Sutta Nipata 1.8',
       chapterNumber: 'metta',
-      verseNumber: 1,
       rawQuery: q,
       isExactCitation: true,
+      citationType: 'composition',
     };
   }
 
@@ -340,11 +355,11 @@ export function parseScriptureReference(query: string): ParsedReference | null {
     return {
       religion: 'jainism',
       collectionId: 'navkar',
-      bookOrSurah: 'Canonical Liturgy',
+      bookOrSurah: 'Ṇamōkāra Mahā Mantra',
       chapterNumber: 'navkar',
-      verseNumber: 1,
       rawQuery: q,
       isExactCitation: true,
+      citationType: 'composition',
     };
   }
   if (lower.includes('bhaktamara') || lower.includes('bhaktamar')) {
@@ -353,9 +368,9 @@ export function parseScriptureReference(query: string): ParsedReference | null {
       collectionId: 'bhaktamara',
       bookOrSurah: 'Bhaktamara Stotra',
       chapterNumber: 1,
-      verseNumber: 1,
       rawQuery: q,
       isExactCitation: true,
+      citationType: 'composition',
     };
   }
   if (lower.includes('tattvartha')) {
@@ -369,6 +384,7 @@ export function parseScriptureReference(query: string): ParsedReference | null {
       verseNumber: 1,
       rawQuery: q,
       isExactCitation: true,
+      citationType: 'chapter',
     };
   }
 
