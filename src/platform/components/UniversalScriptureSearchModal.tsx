@@ -655,22 +655,58 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                           </span>
                         )}
 
-                        {/* Rights & Licence Badge (Phase 6.3.3) */}
-                        {result.exactLicenceIdentifier && (
-                          <span
-                            data-testid="rights-licence-badge"
-                            className={`text-[10px] font-mono px-2 py-0.2 rounded-full border ${
-                              result.rightsStatus === 'VERIFIED'
-                                ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30'
-                                : result.rightsStatus === 'RESTRICTED'
-                                ? 'bg-amber-500/10 text-amber-300 border-amber-500/30'
-                                : 'bg-slate-700/40 text-slate-400 border-slate-700'
-                            }`}
-                            title={`Rights Status: ${result.rightsStatus || 'VERIFIED'} • Rights Holder: ${result.rightsHolderOrPublisher || 'Public Domain'}`}
-                          >
-                            {result.exactLicenceIdentifier}
-                          </span>
-                        )}
+                        {/* Rights & Licence Badge (Phase 6.3.4 Fail-Closed Gate) */}
+                        {(() => {
+                          const status = result.rightsStatus;
+                          const licence = result.exactLicenceIdentifier;
+                          const holder = result.rightsHolderOrPublisher;
+
+                          if (!status || status === 'UNKNOWN' || !licence) {
+                            return (
+                              <span
+                                data-testid="rights-licence-badge"
+                                className="text-[10px] font-mono px-2 py-0.2 rounded-full border bg-slate-800/80 text-slate-400 border-slate-700"
+                                title={`Rights Status: UNKNOWN • ${holder ? `Rights Holder: ${holder}` : 'Rights Holder: Unspecified'}`}
+                              >
+                                Rights not verified
+                              </span>
+                            );
+                          }
+
+                          if (status === 'PERMISSION_REQUIRED') {
+                            return (
+                              <span
+                                data-testid="rights-licence-badge"
+                                className="text-[10px] font-mono px-2 py-0.2 rounded-full border bg-rose-500/10 text-rose-300 border-rose-500/30"
+                                title={`Rights Status: PERMISSION_REQUIRED • ${holder ? `Rights Holder: ${holder}` : 'Rights Holder: Unspecified'} • Permission required for redistribution`}
+                              >
+                                Permission Required
+                              </span>
+                            );
+                          }
+
+                          if (status === 'RESTRICTED') {
+                            return (
+                              <span
+                                data-testid="rights-licence-badge"
+                                className="text-[10px] font-mono px-2 py-0.2 rounded-full border bg-amber-500/10 text-amber-300 border-amber-500/30"
+                                title={`Rights Status: RESTRICTED • Rights Holder: ${holder || 'Documented Terms'} • Conditional non-commercial use only`}
+                              >
+                                {licence}
+                              </span>
+                            );
+                          }
+
+                          return (
+                            <span
+                              data-testid="rights-licence-badge"
+                              className="text-[10px] font-mono px-2 py-0.2 rounded-full border bg-emerald-500/10 text-emerald-300 border-emerald-500/30"
+                              title={`Rights Status: VERIFIED • Rights Holder: ${holder || 'Verified Source'} • Exact Licence: ${licence}`}
+                            >
+                              {licence}
+                            </span>
+                          );
+                        })()}
                       </div>
 
                       {/* Match Type Badge */}
@@ -771,11 +807,36 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                                 <span className="font-semibold text-gold-400/90">
                                   {tr.translationName} ({tr.language})
                                 </span>
-                                {tr.exactLicenceIdentifier && (
-                                  <span className="text-[9px] text-emerald-400/80 bg-emerald-950/40 px-1 py-0.2 rounded border border-emerald-500/20">
-                                    {tr.exactLicenceIdentifier}
-                                  </span>
-                                )}
+                                {(() => {
+                                  const st = tr.rightsStatus;
+                                  const lic = tr.exactLicenceIdentifier;
+                                  if (!st || st === 'UNKNOWN' || !lic) {
+                                    return (
+                                      <span className="text-[9px] text-slate-400 bg-slate-800 px-1 py-0.2 rounded border border-slate-700">
+                                        Rights not verified
+                                      </span>
+                                    );
+                                  }
+                                  if (st === 'PERMISSION_REQUIRED') {
+                                    return (
+                                      <span className="text-[9px] text-rose-300 bg-rose-950/40 px-1 py-0.2 rounded border border-rose-500/30">
+                                        Permission Required
+                                      </span>
+                                    );
+                                  }
+                                  if (st === 'RESTRICTED') {
+                                    return (
+                                      <span className="text-[9px] text-amber-300 bg-amber-950/40 px-1 py-0.2 rounded border border-amber-500/30">
+                                        {lic}
+                                      </span>
+                                    );
+                                  }
+                                  return (
+                                    <span className="text-[9px] text-emerald-400/80 bg-emerald-950/40 px-1 py-0.2 rounded border border-emerald-500/20">
+                                      {lic}
+                                    </span>
+                                  );
+                                })()}
                               </div>
                               <p className="text-slate-200 font-serif leading-relaxed text-xs">{tr.text}</p>
                             </div>
@@ -794,9 +855,13 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                               • Recension: {result.canonicalRecension}
                             </span>
                           )}
-                          {result.rightsHolderOrPublisher && (
+                          {result.rightsHolderOrPublisher ? (
                             <span className="text-[10px] text-slate-500">
                               • Rights: {result.rightsHolderOrPublisher}
+                            </span>
+                          ) : (
+                            <span className="text-[10px] text-slate-500 italic">
+                              • Rights: Unspecified / Pending Verification
                             </span>
                           )}
                         </div>

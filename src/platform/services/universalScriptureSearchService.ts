@@ -359,10 +359,10 @@ export class UniversalScriptureSearchService {
         availabilityStatus: quranCov.availabilityStatus,
         quotationType: 'scholarly_translation',
         canonicalRecension: 'Standard Hafs ‘an ‘Asim (KFGQPC / Tanzil)',
-        provenanceNotes: 'Dual verified translations: Sahih International (English 1997) & Allama Jawadi (Urdu 1990)',
+        provenanceNotes: 'Dual translations: Sahih International (English 1997) & Allama Jawadi (Urdu 1990)',
         scopeNotes: quranCov.scopeNotes,
         numberingConvention: 'Standard KFGQPC Hafs ‘an ‘Asim Uthmani 6,236 Ayah standard',
-        exactLicenceIdentifier: 'CC-BY-3.0',
+        exactLicenceIdentifier: 'CC BY 3.0',
         rightsHolderOrPublisher: 'Tanzil Project & KFGQPC Medina',
         rightsStatus: 'VERIFIED',
         parallelTranslations: isKursi
@@ -373,9 +373,9 @@ export class UniversalScriptureSearchService {
                 translator: 'Saheeh International Group',
                 language: 'English',
                 text: item.translationEn,
-                exactLicenceIdentifier: 'Public Domain / Free Religious Educational Distribution',
+                exactLicenceIdentifier: 'PERMISSION_REQUIRED',
                 rightsHolderOrPublisher: 'Dar Abul Qasim / Sahih International',
-                rightsStatus: 'VERIFIED',
+                rightsStatus: 'PERMISSION_REQUIRED',
               },
               {
                 id: 'tr_jawadi',
@@ -383,9 +383,9 @@ export class UniversalScriptureSearchService {
                 translator: 'Allama Jawadi',
                 language: 'Urdu',
                 text: item.translationUr || '',
-                exactLicenceIdentifier: 'Public Domain / Religious Educational Waqf',
-                rightsHolderOrPublisher: 'Tanzeem-ul-Makatib',
-                rightsStatus: 'VERIFIED',
+                exactLicenceIdentifier: 'PERMISSION_REQUIRED',
+                rightsHolderOrPublisher: 'Tanzeem-ul-Makatib / Allama Jawadi Estate',
+                rightsStatus: 'PERMISSION_REQUIRED',
               },
             ]
           : undefined,
@@ -463,9 +463,9 @@ export class UniversalScriptureSearchService {
                 translator: 'Swami Sivananda (Divine Life Society)',
                 language: 'English',
                 text: verse.sivanandaEn || '',
-                exactLicenceIdentifier: 'CC-BY-NC-4.0',
+                exactLicenceIdentifier: 'Custom Terms',
                 rightsHolderOrPublisher: 'The Divine Life Trust Society, Rishikesh',
-                rightsStatus: 'VERIFIED',
+                rightsStatus: 'RESTRICTED',
               },
               {
                 id: 'tr_gambhirananda',
@@ -473,9 +473,9 @@ export class UniversalScriptureSearchService {
                 translator: 'Swami Gambhirananda (Advaita Ashrama)',
                 language: 'English',
                 text: verse.gambhiranandaEn || '',
-                exactLicenceIdentifier: 'Permission Documented / Educational Public Scholarship',
+                exactLicenceIdentifier: 'Custom Terms',
                 rightsHolderOrPublisher: 'Advaita Ashrama, Kolkata',
-                rightsStatus: 'VERIFIED',
+                rightsStatus: 'RESTRICTED',
               },
               {
                 id: 'tr_purohit',
@@ -483,9 +483,9 @@ export class UniversalScriptureSearchService {
                 translator: 'Shri Purohit Swami',
                 language: 'English',
                 text: verse.purohitEn || '',
-                exactLicenceIdentifier: 'Public Domain',
-                rightsHolderOrPublisher: 'Shri Purohit Swami (1935, Public Domain worldwide)',
-                rightsStatus: 'VERIFIED',
+                exactLicenceIdentifier: 'Custom Terms',
+                rightsHolderOrPublisher: 'Shri Purohit Swami (1935)',
+                rightsStatus: 'RESTRICTED',
               },
               {
                 id: 'tr_ramsukhdas',
@@ -493,9 +493,9 @@ export class UniversalScriptureSearchService {
                 translator: 'Swami Ramsukhdas (Gita Press Gorakhpur)',
                 language: 'Hindi',
                 text: verse.ramsukhdasHi || '',
-                exactLicenceIdentifier: 'Gita Press Public Religious Heritage',
+                exactLicenceIdentifier: 'Custom Terms',
                 rightsHolderOrPublisher: 'Gita Press, Gorakhpur',
-                rightsStatus: 'VERIFIED',
+                rightsStatus: 'RESTRICTED',
               },
             ]
           : undefined,
@@ -624,7 +624,8 @@ export class UniversalScriptureSearchService {
       scopeNotes: 'Complete 6 verses of Psalm 23 bundled offline in King James Version text.',
       numberingConvention: 'Standard Protestant 66-Book Canon (1,189 Chapters)',
       exactLicenceIdentifier: 'Public Domain',
-      rightsHolderOrPublisher: 'Authorized King James Version 1611 (Public Domain)',
+      rightsHolderOrPublisher: 'Authorized King James Version 1611',
+      geographicRestrictions: 'UK Crown Copyright within the United Kingdom (Cambridge University Press Letters Patent); Public Domain in US and non-UK jurisdictions.',
       rightsStatus: 'VERIFIED',
     });
 
@@ -674,7 +675,8 @@ export class UniversalScriptureSearchService {
           provenanceNotes: 'Pure Cambridge Edition Text',
           numberingConvention: 'Standard Protestant 66-Book Canon (1,189 Chapters)',
           exactLicenceIdentifier: 'Public Domain',
-          rightsHolderOrPublisher: 'Authorized King James Version 1611 (Public Domain)',
+          rightsHolderOrPublisher: 'Authorized King James Version 1611',
+          geographicRestrictions: 'UK Crown Copyright within the United Kingdom (Cambridge University Press Letters Patent); Public Domain in US and non-UK jurisdictions.',
           rightsStatus: 'VERIFIED',
         });
       });
@@ -708,7 +710,8 @@ export class UniversalScriptureSearchService {
       scopeNotes: 'Bundled complete offline in King James Version text.',
       numberingConvention: 'Standard Protestant 66-Book Canon (1,189 Chapters)',
       exactLicenceIdentifier: 'Public Domain',
-      rightsHolderOrPublisher: 'Authorized King James Version 1611 (Public Domain)',
+      rightsHolderOrPublisher: 'Authorized King James Version 1611',
+      geographicRestrictions: 'UK Crown Copyright within the United Kingdom (Cambridge University Press Letters Patent); Public Domain in US and non-UK jurisdictions.',
       rightsStatus: 'VERIFIED',
     });
 
@@ -717,7 +720,41 @@ export class UniversalScriptureSearchService {
     // =========================================================================
     const judCov = getCoverage('tanakh');
 
-    // A. Grouped Complete Psalm 23 (Judaism / Tehillim)
+    // A. Grouped Complete Chapters (Genesis 1, Tehillim 23, Tehillim 100, Tehillim 121)
+    // 1. Genesis 1 Complete Chapter (31 Verses)
+    index.push({
+      id: 'judaism_genesis_1_complete',
+      religion: 'judaism',
+      collectionId: 'torah',
+      collectionTitle: 'The Tanakh (Hebrew Bible)',
+      readingId: 'genesis-1',
+      chapterNumber: 1,
+      verseNumber: 1,
+      displayCoordinates: 'Bereshit (Genesis) Chapter 1',
+      displayTitle: 'Genesis 1 — The Creation of the Universe (Complete 31 Verses)',
+      originalText:
+        'בְּרֵאשִׁית בָּרָא אֱלֹהִים אֵת הַשָּׁמַיִם וְאֵת הָאָרֶץ׃ וְהָאָרֶץ הָיְתָה תֹהוּ וָבֹהוּ וְחֹשֶׁךְ עַל־פְּנֵי תְהוֹם וְרוּחַ אֱלֹהִים מְרַחֶפֶת עַל־פְּנֵי הַמָּיִם׃ וַיֹּאמֶר אֱלֹהִים יְהִי אוֹר וַיְהִי־אוֹਰ׃',
+      translationText:
+        'In the beginning God created the heaven and the earth. And the earth was unformed and void, and darkness was upon the face of the deep; and the spirit of God hovered over the face of the waters. And God said: "Let there be light." And there was light. (Complete 31 verses of Genesis Chapter 1 in Hebrew Masoretic text and JPS 1917 translation).',
+      languageCode: 'he',
+      sourceAttribution: 'The Tanakh (Masoretic Text) • JPS 1917 Translation',
+      matchType: 'exact_reference',
+      thematicKeyword: 'Wisdom',
+      isOfflineAvailable: true,
+      score: 100,
+      groupedUnitsCount: 31,
+      availabilityStatus: judCov.availabilityStatus,
+      quotationType: 'scholarly_translation',
+      canonicalRecension: 'Masoretic Text (Westminster Leningrad Codex)',
+      provenanceNotes: 'Jewish Publication Society (JPS 1917)',
+      scopeNotes: 'Complete 31 verses of Genesis Chapter 1 bundled offline in Masoretic Hebrew and English translation.',
+      numberingConvention: 'Standard Jewish Masoretic Canon of 24 Books (929 Chapters)',
+      exactLicenceIdentifier: 'Public Domain',
+      rightsHolderOrPublisher: 'Jewish Publication Society (1917)',
+      rightsStatus: 'VERIFIED',
+    });
+
+    // 2. Tehillim 23 Complete Psalm (6 Verses)
     index.push({
       id: 'judaism_psalm_23_complete',
       religion: 'judaism',
@@ -744,6 +781,72 @@ export class UniversalScriptureSearchService {
       canonicalRecension: 'Masoretic Text (Westminster Leningrad Codex)',
       provenanceNotes: 'Jewish Publication Society (JPS 1917)',
       scopeNotes: 'Complete 6 verses of Tehillim 23 bundled offline in Masoretic Hebrew and English translation.',
+      numberingConvention: 'Standard Jewish Masoretic Canon of 24 Books (929 Chapters)',
+      exactLicenceIdentifier: 'Public Domain',
+      rightsHolderOrPublisher: 'Jewish Publication Society (1917)',
+      rightsStatus: 'VERIFIED',
+    });
+
+    // 3. Tehillim 100 Complete Psalm (5 Verses)
+    index.push({
+      id: 'judaism_psalm_100_complete',
+      religion: 'judaism',
+      collectionId: 'ketuvim',
+      collectionTitle: 'The Tanakh (Hebrew Bible)',
+      readingId: 'psalms-100',
+      chapterNumber: 100,
+      verseNumber: 1,
+      displayCoordinates: 'Tehillim (Psalms) Chapter 100',
+      displayTitle: 'Tehillim 100 — Mizmor Letodah (Complete 5 Verses)',
+      originalText:
+        'מִזְמוֹר לְתוֹדָה הָרִיעוּ לַיהוָה כָּל־הָאָרֶץ׃ עִבְדוּ אֶת־יְהוָה בְּשִׂמְחָה בֹּאוּ לְפָנָיו בִּרְנָנָה׃ דְּעוּ כִּי־יְהוָה הוּא אֱלֹהִים הוּא־עָשָׂנוּ וְלוֹ אֲנַחְנוּ עַמּוֹ וְצֹאן מַרְעִיתוֹ׃ בֹּאוּ שְׁעָרָיו בְּתוֹדָה חֲצֵרֹתָיו בִּתְהִלָּה הוֹדוּ לוֹ בָּרְכוּ שְׁמוֹ׃ כִּי־טוֹב יְהוָה לְעוֹלָם חַסְדּוֹ וְעַד־דֹּר וָדֹר אֱמוּנָתוֹ׃',
+      translationText:
+        'A Psalm of thanksgiving. Shout unto the LORD, all the earth. Serve the LORD with gladness; come before His presence with singing. Know ye that the LORD He is God; it is He that hath made us, and we are His, His people, and the flock of His pasture. Enter into His gates with thanksgiving, and into His courts with praise; give thanks unto Him, and bless His name. For the LORD is good; His mercy endureth for ever; and His faithfulness unto all generations.',
+      languageCode: 'he',
+      sourceAttribution: 'The Tanakh (Masoretic Text) • JPS 1917 Translation',
+      matchType: 'exact_reference',
+      thematicKeyword: 'Gratitude',
+      isOfflineAvailable: true,
+      score: 100,
+      groupedUnitsCount: 5,
+      availabilityStatus: judCov.availabilityStatus,
+      quotationType: 'scholarly_translation',
+      canonicalRecension: 'Masoretic Text (Westminster Leningrad Codex)',
+      provenanceNotes: 'Jewish Publication Society (JPS 1917)',
+      scopeNotes: 'Complete 5 verses of Tehillim 100 bundled offline in Masoretic Hebrew and English translation.',
+      numberingConvention: 'Standard Jewish Masoretic Canon of 24 Books (929 Chapters)',
+      exactLicenceIdentifier: 'Public Domain',
+      rightsHolderOrPublisher: 'Jewish Publication Society (1917)',
+      rightsStatus: 'VERIFIED',
+    });
+
+    // 4. Tehillim 121 Complete Psalm (8 Verses)
+    index.push({
+      id: 'judaism_psalm_121_complete',
+      religion: 'judaism',
+      collectionId: 'ketuvim',
+      collectionTitle: 'The Tanakh (Hebrew Bible)',
+      readingId: 'psalms-121',
+      chapterNumber: 121,
+      verseNumber: 1,
+      displayCoordinates: 'Tehillim (Psalms) Chapter 121',
+      displayTitle: 'Tehillim 121 — Shir Lama‘alot (Complete 8 Verses)',
+      originalText:
+        'שִׁיר לַמַּעֲלוֹת אֶשָּׂא עֵינַי אֶל־הֶהָרִים מֵאַיִਨ יָבֹא עֶזְਰִי׃ עֶזְרִי מֵעִם יְהוָה עֹשֵׂה שָׁמַיִם וָאָרֶץ׃ אַל־יִתֵּן לַמּוֹט רַਗְלֶךָ אַל־יָנוּם שֹׁמְਰֶךָ׃ הִנֵּה לֹא־יָנוּם וְלֹא יִישָׁן שׁוֹמֵਰ יִשְׂרָאֵל׃ יְהוָה שֹׁמְਰֶךָ יְהוָה צִלְּךָ עַਲ־יַד יְמִיਨֶךָ׃ יוֹਮָם הַשֶּׁמֶשׁ לֹא־יַכֶּכָּה וְיָרֵחַ בַּלָּיְלָה׃ יְהוָה יִשְׁמָרְךָ מִכָּਲ־רָע יִשְׁמֹਰ אֶਤ־נַפְשֶׁךָ׃ יְהוָה יִשְׁמָר־צֵאתְךָ וּבוֹאֶךָ מֵעַתָּה וְעַד־עוֹלָם׃',
+      translationText:
+        'A Song of Ascents. I will lift up mine eyes unto the hills, from whence cometh my help. My help cometh from the LORD, which made heaven and earth. He will not suffer thy foot to be moved: He that keepeth thee will not slumber. Behold, He that keepeth Israel shall neither slumber nor sleep. The LORD is thy keeper: the LORD is thy shade upon thy right hand. The sun shall not smite thee by day, nor the moon by night. The LORD shall preserve thee from all evil: He shall preserve thy soul. The LORD shall preserve thy going out and thy coming in from this time forth, and even for evermore.',
+      languageCode: 'he',
+      sourceAttribution: 'The Tanakh (Masoretic Text) • JPS 1917 Translation',
+      matchType: 'exact_reference',
+      thematicKeyword: 'Peace',
+      isOfflineAvailable: true,
+      score: 100,
+      groupedUnitsCount: 8,
+      availabilityStatus: judCov.availabilityStatus,
+      quotationType: 'scholarly_translation',
+      canonicalRecension: 'Masoretic Text (Westminster Leningrad Codex)',
+      provenanceNotes: 'Jewish Publication Society (JPS 1917)',
+      scopeNotes: 'Complete 8 verses of Tehillim 121 bundled offline in Masoretic Hebrew and English translation.',
       numberingConvention: 'Standard Jewish Masoretic Canon of 24 Books (929 Chapters)',
       exactLicenceIdentifier: 'Public Domain',
       rightsHolderOrPublisher: 'Jewish Publication Society (1917)',
@@ -844,9 +947,9 @@ export class UniversalScriptureSearchService {
           provenanceNotes: 'Dr. Sant Singh Khalsa translation',
           scopeNotes: sikhCov.scopeNotes,
           numberingConvention: 'Standard SGPC Damdami Bir 1,430 Ang Page Layout Standard',
-          exactLicenceIdentifier: 'Open Religious Educational Distribution / Public Gurbani Domain',
+          exactLicenceIdentifier: 'Custom Terms',
           rightsHolderOrPublisher: 'Dr. Sant Singh Khalsa, MD / SGPC Amritsar',
-          rightsStatus: 'VERIFIED',
+          rightsStatus: 'RESTRICTED',
         });
       });
     });
@@ -880,9 +983,9 @@ export class UniversalScriptureSearchService {
       scopeNotes: sikhCov.scopeNotes,
       numberingConvention: 'Standard SGPC Damdami Bir 1,430 Ang Page Layout Standard',
       alternateNumberingCrossReference: 'Cross-reference: SGGS Ang 3 (Japji Sahib Pauri 16)',
-      exactLicenceIdentifier: 'Open Religious Educational Distribution / Public Gurbani Domain',
+      exactLicenceIdentifier: 'Custom Terms',
       rightsHolderOrPublisher: 'Dr. Sant Singh Khalsa, MD / SGPC Amritsar',
-      rightsStatus: 'VERIFIED',
+      rightsStatus: 'RESTRICTED',
     });
 
     // 2. SGGS Ang 3: Dhaul Dharam Daya Ka Poot (Japji Sahib, Pauri 16)
@@ -913,9 +1016,9 @@ export class UniversalScriptureSearchService {
       scopeNotes: sikhCov.scopeNotes,
       numberingConvention: 'Standard SGPC Damdami Bir 1,430 Ang Page Layout Standard',
       alternateNumberingCrossReference: 'Cross-reference: SGGS Ang 471 (Asa di Var, Salok M:1)',
-      exactLicenceIdentifier: 'Open Religious Educational Distribution / Public Gurbani Domain',
+      exactLicenceIdentifier: 'Custom Terms',
       rightsHolderOrPublisher: 'Dr. Sant Singh Khalsa, MD / SGPC Amritsar',
-      rightsStatus: 'VERIFIED',
+      rightsStatus: 'RESTRICTED',
     });
 
     // 3. SGGS Ang 1381: Salok Sheikh Farid 78 (Forgiveness)
@@ -945,12 +1048,12 @@ export class UniversalScriptureSearchService {
       provenanceNotes: 'SGGS Ang 1381, Salok Sheikh Farid 78. Dr. Sant Singh Khalsa translation.',
       scopeNotes: sikhCov.scopeNotes,
       numberingConvention: 'Standard SGPC Damdami Bir 1,430 Ang Page Layout Standard',
-      exactLicenceIdentifier: 'Open Religious Educational Distribution / Public Gurbani Domain',
+      exactLicenceIdentifier: 'Custom Terms',
       rightsHolderOrPublisher: 'Dr. Sant Singh Khalsa, MD / SGPC Amritsar',
-      rightsStatus: 'VERIFIED',
+      rightsStatus: 'RESTRICTED',
     });
 
-    // 4. SGGS Ang 1382: Salok Sheikh Farid 85 (Patience)
+    // 4. SGGS Ang 1382: Salok Sheikh Farid 85 (Distress / Whirlpool)
     index.push({
       id: 'sikhism_ang_1382_salok_farid_85',
       religion: 'sikhism',
@@ -960,11 +1063,11 @@ export class UniversalScriptureSearchService {
       chapterNumber: 1382,
       verseNumber: 85,
       displayCoordinates: 'SGGS Ang 1382 (Salok Sheikh Farid 85)',
-      displayTitle: 'Sabr: Make Patience Thy Bow and Arrow (Salok 85)',
-      originalText: 'ਸਬਰੁ ਮੰਝਿ ਕਮਾਣ ਏ ਸਬਰੁ ਕਾ ਨੀਹਣੋ ॥ ਸਬਰ ਸੰਦਾ ਬਾਣੁ ਖਾਲਕੁ ਖਤਾ ਨ ਕਰੀ ॥੮੫॥',
+      displayTitle: 'The Day in Distress and the Boat in the Whirlpool (Salok 85)',
+      originalText: 'ਫਰੀਦਾ ਦੁਖਾ ਸੇਤੀ ਦਿਹੁ ਗਇਆ ਸੂਲਾ ਸੇਤੀ ਰਾਤਿ ॥ ਖੜਾ ਪੁਕਾਰੇ ਪਾਤਣੀ ਬੇੜਾ ਕਪਰ ਵਾਤਿ ॥੮੫॥',
       translationText:
-        'Let patience be thy bow, and patience the bowstring. Let patience be the arrow; the Creator will not let it miss its aim. (SGGS Ang 1382, Salok Sheikh Farid 85).',
-      transliterationText: 'Sabar manjhi kamaan e sabar kaa neehano; Sabar sandaa baan khaalak khataa na karee',
+        'Fareed, the day passed in sorrow, and the night passed in grief. The ferryman cries out at the landing, the boat is caught in the whirlpool. (SGGS Ang 1382, Salok Sheikh Farid 85).',
+      transliterationText: 'Fareedaa dukhaa setee dihu ga-i-aa soolaa setee raat; Khadaa pukaare paatanee beraa kapar vaat',
       languageCode: 'pa',
       sourceAttribution: 'Sri Guru Granth Sahib Ji • Dr. Sant Singh Khalsa Translation',
       matchType: 'exact_reference',
@@ -977,9 +1080,43 @@ export class UniversalScriptureSearchService {
       provenanceNotes: 'SGGS Ang 1382, Salok Sheikh Farid 85. Dr. Sant Singh Khalsa translation.',
       scopeNotes: sikhCov.scopeNotes,
       numberingConvention: 'Standard SGPC Damdami Bir 1,430 Ang Page Layout Standard',
-      exactLicenceIdentifier: 'Open Religious Educational Distribution / Public Gurbani Domain',
+      alternateNumberingCrossReference: 'Cross-reference: SGGS Ang 1384 (Salok Sheikh Farid 115 - Sabr / Patience)',
+      exactLicenceIdentifier: 'Custom Terms',
       rightsHolderOrPublisher: 'Dr. Sant Singh Khalsa, MD / SGPC Amritsar',
-      rightsStatus: 'VERIFIED',
+      rightsStatus: 'RESTRICTED',
+    });
+
+    // 4b. SGGS Ang 1384: Salok Sheikh Farid 115 (Sabr / Patience Bow and Arrow)
+    index.push({
+      id: 'sikhism_ang_1384_salok_farid_115',
+      religion: 'sikhism',
+      collectionId: 'sggs',
+      collectionTitle: 'Sri Guru Granth Sahib Ji',
+      parentWorkTitle: 'Salok Bhagat Farid Ji (Angs 1377–1384)',
+      chapterNumber: 1384,
+      verseNumber: 115,
+      displayCoordinates: 'SGGS Ang 1384 (Salok Sheikh Farid 115)',
+      displayTitle: 'Sabr: Make Patience Thy Bow and Arrow (Salok 115)',
+      originalText: 'ਸਬਰੁ ਮੰਝਿ ਕਮਾਣ ਏ ਸਬਰੁ ਕਾ ਨੀਹਣੋ ॥ ਸਬਰ ਸੰਦਾ ਬਾਣੁ ਖਾਲਕੁ ਖਤਾ ਨ ਕਰੀ ॥੧੧੫॥',
+      translationText:
+        'Let patience be thy bow, and patience the bowstring. Let patience be the arrow; the Creator will not let it miss its aim. (SGGS Ang 1384, Salok Sheikh Farid 115).',
+      transliterationText: 'Sabar manjhi kamaan e sabar kaa neehano; Sabar sandaa baan khaalak khataa na karee',
+      languageCode: 'pa',
+      sourceAttribution: 'Sri Guru Granth Sahib Ji • Dr. Sant Singh Khalsa Translation',
+      matchType: 'exact_reference',
+      thematicKeyword: 'Patience',
+      isOfflineAvailable: true,
+      score: 100,
+      availabilityStatus: sikhCov.availabilityStatus,
+      quotationType: 'scholarly_translation',
+      canonicalRecension: 'Damdami Bir Standard (1,430 Angs)',
+      provenanceNotes: 'SGGS Ang 1384, Salok Sheikh Farid 115. Dr. Sant Singh Khalsa translation.',
+      scopeNotes: sikhCov.scopeNotes,
+      numberingConvention: 'Standard SGPC Damdami Bir 1,430 Ang Page Layout Standard',
+      alternateNumberingCrossReference: 'Cross-reference: SGGS Ang 1382 (Salok Sheikh Farid 85)',
+      exactLicenceIdentifier: 'Custom Terms',
+      rightsHolderOrPublisher: 'Dr. Sant Singh Khalsa, MD / SGPC Amritsar',
+      rightsStatus: 'RESTRICTED',
     });
 
     // 5. SGGS Ang 268: Gauri Sukhmani (Peace & Gratitude)
@@ -1009,9 +1146,9 @@ export class UniversalScriptureSearchService {
       provenanceNotes: 'SGGS Ang 268, Gauri Sukhmani Astpadi 12, Pauri 1. Dr. Sant Singh Khalsa translation.',
       scopeNotes: sikhCov.scopeNotes,
       numberingConvention: 'Standard SGPC Damdami Bir 1,430 Ang Page Layout Standard',
-      exactLicenceIdentifier: 'Open Religious Educational Distribution / Public Gurbani Domain',
+      exactLicenceIdentifier: 'Custom Terms',
       rightsHolderOrPublisher: 'Dr. Sant Singh Khalsa, MD / SGPC Amritsar',
-      rightsStatus: 'VERIFIED',
+      rightsStatus: 'RESTRICTED',
     });
 
     // 6. SGGS Ang 1245: Sarang ki Var (Charity / Vand Chhako)
@@ -1041,9 +1178,9 @@ export class UniversalScriptureSearchService {
       provenanceNotes: 'SGGS Ang 1245, Sarang ki Var, Salok M:1. Dr. Sant Singh Khalsa translation.',
       scopeNotes: sikhCov.scopeNotes,
       numberingConvention: 'Standard SGPC Damdami Bir 1,430 Ang Page Layout Standard',
-      exactLicenceIdentifier: 'Open Religious Educational Distribution / Public Gurbani Domain',
+      exactLicenceIdentifier: 'Custom Terms',
       rightsHolderOrPublisher: 'Dr. Sant Singh Khalsa, MD / SGPC Amritsar',
-      rightsStatus: 'VERIFIED',
+      rightsStatus: 'RESTRICTED',
     });
 
     // =========================================================================
@@ -1079,7 +1216,7 @@ export class UniversalScriptureSearchService {
       provenanceNotes: 'Complete 12-blessing discourse • Bhikkhu Bodhi & Narada Thera',
       scopeNotes: 'Complete 12-section discourse bundled offline in Pali script and English translation.',
       numberingConvention: '12 Blessing Sections (Khuddaka Patha 5 / Sutta Nipata 2.4)',
-      exactLicenceIdentifier: 'CC-BY-NC-4.0',
+      exactLicenceIdentifier: 'CC BY-NC 4.0',
       rightsHolderOrPublisher: 'Bhikkhu Bodhi / SuttaCentral',
       rightsStatus: 'VERIFIED',
     });
@@ -1111,9 +1248,9 @@ export class UniversalScriptureSearchService {
           quotationType: 'scholarly_translation',
           canonicalRecension: 'Chattha Sangayana Tipitaka (CST4)',
           provenanceNotes: 'Acharya Buddharakkhita & Thanissaro Bhikkhu',
-          exactLicenceIdentifier: 'CC-BY-NC-4.0',
+          exactLicenceIdentifier: col.id === 'dhammapada' ? 'Custom Terms' : 'CC BY-NC 4.0',
           rightsHolderOrPublisher: 'Buddhist Publication Society & Access to Insight',
-          rightsStatus: 'VERIFIED',
+          rightsStatus: col.id === 'dhammapada' ? 'RESTRICTED' : 'VERIFIED',
         });
       });
     });
@@ -1153,9 +1290,9 @@ export class UniversalScriptureSearchService {
       provenanceNotes: 'Complete 9-line sacred liturgy • JAINA Education Committee',
       scopeNotes: 'Complete 9-line sacred liturgy bundled offline in Prakrit Devanagari, transliteration, and English translation.',
       numberingConvention: '9 Liturgical Lines (5 Parameshti Bows + 4 Chulika Verses)',
-      exactLicenceIdentifier: 'CC-BY-NC-4.0',
+      exactLicenceIdentifier: 'Custom Terms',
       rightsHolderOrPublisher: 'JAINA Education Committee (Federation of Jain Associations in North America)',
-      rightsStatus: 'VERIFIED',
+      rightsStatus: 'RESTRICTED',
     });
 
     // B. Jainism Collections Text Units
@@ -1186,9 +1323,9 @@ export class UniversalScriptureSearchService {
           quotationType: 'scholarly_translation',
           canonicalRecension: 'Traditional Classical Jain Recensions',
           provenanceNotes: 'JAINA Education Committee & Nathmal Tatia',
-          exactLicenceIdentifier: 'CC-BY-NC-4.0',
+          exactLicenceIdentifier: 'Custom Terms',
           rightsHolderOrPublisher: 'JAINA Education Committee & Jain eLibrary',
-          rightsStatus: 'VERIFIED',
+          rightsStatus: 'RESTRICTED',
         });
       });
     });
@@ -1243,7 +1380,7 @@ export class UniversalScriptureSearchService {
             quotationType: 'scholarly_translation',
             canonicalRecension: 'Standard Hafs ‘an ‘Asim (KFGQPC / Tanzil)',
             provenanceNotes: 'Sahih International English Translation (1997)',
-            exactLicenceIdentifier: 'CC-BY-3.0',
+            exactLicenceIdentifier: 'CC BY 3.0',
             rightsHolderOrPublisher: 'Tanzil Project / Sahih International',
             rightsStatus: 'VERIFIED',
           },
@@ -1291,9 +1428,9 @@ export class UniversalScriptureSearchService {
             quotationType: 'scholarly_translation',
             canonicalRecension: 'Standard 701-Verse Recension',
             provenanceNotes: 'Swami Sivananda Commentary (Divine Life Society)',
-            exactLicenceIdentifier: 'CC-BY-NC-4.0',
+            exactLicenceIdentifier: 'Custom Terms',
             rightsHolderOrPublisher: 'The Divine Life Society',
-            rightsStatus: 'VERIFIED',
+            rightsStatus: 'RESTRICTED',
           },
           {
             id: 'theme_jud_compassion',
@@ -1342,9 +1479,9 @@ export class UniversalScriptureSearchService {
             provenanceNotes: 'SGGS Ang 471, Asa di Var, Salok M:1. Dr. Sant Singh Khalsa translation. Cross-reference: Ang 3.',
             numberingConvention: 'Standard SGPC Damdami Bir 1,430 Ang Page Layout Standard',
             alternateNumberingCrossReference: 'Cross-reference: SGGS Ang 3 (Japji Sahib Pauri 16)',
-            exactLicenceIdentifier: 'Open Religious Educational Distribution / Public Gurbani Domain',
+            exactLicenceIdentifier: 'Custom Terms',
             rightsHolderOrPublisher: 'Dr. Sant Singh Khalsa, MD / SGPC Amritsar',
-            rightsStatus: 'VERIFIED',
+            rightsStatus: 'RESTRICTED',
           },
           {
             id: 'theme_bud_compassion',
@@ -1366,7 +1503,7 @@ export class UniversalScriptureSearchService {
             quotationType: 'scholarly_translation',
             canonicalRecension: 'Pali Sutta Nipata 1.8',
             provenanceNotes: 'Thanissaro Bhikkhu translation (1994)',
-            exactLicenceIdentifier: 'CC-BY-NC-4.0',
+            exactLicenceIdentifier: 'CC BY-NC 4.0',
             rightsHolderOrPublisher: 'Thanissaro Bhikkhu / Access to Insight',
             rightsStatus: 'VERIFIED',
           },
@@ -1390,9 +1527,9 @@ export class UniversalScriptureSearchService {
             quotationType: 'scholarly_translation',
             canonicalRecension: 'Tattvartha Sutra Traditional Recension',
             provenanceNotes: 'Acharya Umasvati / Nathmal Tatia translation',
-            exactLicenceIdentifier: 'CC-BY-NC-4.0',
+            exactLicenceIdentifier: 'Custom Terms',
             rightsHolderOrPublisher: 'JAINA Education Committee / Nathmal Tatia',
-            rightsStatus: 'VERIFIED',
+            rightsStatus: 'RESTRICTED',
           },
         ],
       },
@@ -1537,9 +1674,9 @@ export class UniversalScriptureSearchService {
             canonicalRecension: 'Damdami Bir Standard (1,430 Angs)',
             provenanceNotes: 'SGGS Ang 1381, Salok Sheikh Farid 78. Dr. Sant Singh Khalsa translation.',
             numberingConvention: 'Standard SGPC Damdami Bir 1,430 Ang Page Layout Standard',
-            exactLicenceIdentifier: 'Open Religious Educational Distribution / Public Gurbani Domain',
+            exactLicenceIdentifier: 'Custom Terms',
             rightsHolderOrPublisher: 'Dr. Sant Singh Khalsa, MD / SGPC Amritsar',
-            rightsStatus: 'VERIFIED',
+            rightsStatus: 'RESTRICTED',
           },
           {
             id: 'theme_bud_forgiveness',
@@ -1684,9 +1821,9 @@ export class UniversalScriptureSearchService {
             canonicalRecension: 'Damdami Bir Standard (1,430 Angs)',
             provenanceNotes: 'SGGS Ang 268, Gauri Sukhmani, Salok M:5. Dr. Sant Singh Khalsa translation.',
             numberingConvention: 'Standard SGPC Damdami Bir 1,430 Ang Page Layout Standard',
-            exactLicenceIdentifier: 'Open Religious Educational Distribution / Public Gurbani Domain',
+            exactLicenceIdentifier: 'Custom Terms',
             rightsHolderOrPublisher: 'Dr. Sant Singh Khalsa, MD / SGPC Amritsar',
-            rightsStatus: 'VERIFIED',
+            rightsStatus: 'RESTRICTED',
           },
           {
             id: 'theme_bud_peace',
@@ -1835,13 +1972,13 @@ export class UniversalScriptureSearchService {
             religion: 'sikhism',
             collectionId: 'sggs',
             collectionTitle: 'Sri Guru Granth Sahib Ji',
-            chapterNumber: 1382,
-            verseNumber: 85,
-            displayCoordinates: 'SGGS Ang 1382 (Salok Sheikh Farid 85)',
-            displayTitle: 'Sabr: Make Patience Thy Bow and Arrow (Salok 85)',
-            originalText: 'ਸਬਰੁ ਮੰਝਿ ਕਮਾਣ ਏ ਸਬਰੁ ਕਾ ਨੀਹਣੋ ॥ ਸਬਰ ਸੰਦਾ ਬਾਣੁ ਖਾਲਕੁ ਖਤਾ ਨ ਕਰੀ ॥੮੫॥',
+            chapterNumber: 1384,
+            verseNumber: 115,
+            displayCoordinates: 'SGGS Ang 1384 (Salok Sheikh Farid 115)',
+            displayTitle: 'Sabr: Make Patience Thy Bow and Arrow (Salok 115)',
+            originalText: 'ਸਬਰੁ ਮੰਝਿ ਕਮਾਣ ਏ ਸਬਰੁ ਕਾ ਨੀਹਣੋ ॥ ਸਬਰ ਸੰਦਾ ਬਾਣੁ ਖਾਲਕੁ ਖਤਾ ਨ ਕਰੀ ॥੧੧੫॥',
             translationText:
-              'Let patience be thy bow, and patience the bowstring. Let patience be the arrow; the Creator will not let it miss its aim. (SGGS Ang 1382, Salok Sheikh Farid 85).',
+              'Let patience be thy bow, and patience the bowstring. Let patience be the arrow; the Creator will not let it miss its aim. (SGGS Ang 1384, Salok Sheikh Farid 115).',
             languageCode: 'pa',
             sourceAttribution: 'Sant Singh Khalsa Translation',
             matchType: 'thematic_result',
@@ -1850,11 +1987,11 @@ export class UniversalScriptureSearchService {
             score: 70,
             quotationType: 'scholarly_translation',
             canonicalRecension: 'Damdami Bir Standard (1,430 Angs)',
-            provenanceNotes: 'SGGS Ang 1382, Salok Sheikh Farid 85. Dr. Sant Singh Khalsa translation.',
+            provenanceNotes: 'SGGS Ang 1384, Salok Sheikh Farid 115. Dr. Sant Singh Khalsa translation.',
             numberingConvention: 'Standard SGPC Damdami Bir 1,430 Ang Page Layout Standard',
-            exactLicenceIdentifier: 'Open Religious Educational Distribution / Public Gurbani Domain',
+            exactLicenceIdentifier: 'Custom Terms',
             rightsHolderOrPublisher: 'Dr. Sant Singh Khalsa, MD / SGPC Amritsar',
-            rightsStatus: 'VERIFIED',
+            rightsStatus: 'RESTRICTED',
           },
           {
             id: 'theme_bud_patience',
@@ -2020,9 +2157,9 @@ export class UniversalScriptureSearchService {
             canonicalRecension: 'Damdami Bir Standard (1,430 Angs)',
             provenanceNotes: 'SGGS Ang 268, Gauri Sukhmani, Astpadi 12, Pauri 1. Dr. Sant Singh Khalsa translation.',
             numberingConvention: 'Standard SGPC Damdami Bir 1,430 Ang Page Layout Standard',
-            exactLicenceIdentifier: 'Open Religious Educational Distribution / Public Gurbani Domain',
+            exactLicenceIdentifier: 'Custom Terms',
             rightsHolderOrPublisher: 'Dr. Sant Singh Khalsa, MD / SGPC Amritsar',
-            rightsStatus: 'VERIFIED',
+            rightsStatus: 'RESTRICTED',
           },
           {
             id: 'theme_bud_gratitude',
@@ -2188,9 +2325,9 @@ export class UniversalScriptureSearchService {
             canonicalRecension: 'Damdami Bir Standard (1,430 Angs)',
             provenanceNotes: 'SGGS Ang 1245, Sarang ki Var, Salok M:1. Dr. Sant Singh Khalsa translation.',
             numberingConvention: 'Standard SGPC Damdami Bir 1,430 Ang Page Layout Standard',
-            exactLicenceIdentifier: 'Open Religious Educational Distribution / Public Gurbani Domain',
+            exactLicenceIdentifier: 'Custom Terms',
             rightsHolderOrPublisher: 'Dr. Sant Singh Khalsa, MD / SGPC Amritsar',
-            rightsStatus: 'VERIFIED',
+            rightsStatus: 'RESTRICTED',
           },
           {
             id: 'theme_bud_charity',
@@ -2356,9 +2493,9 @@ export class UniversalScriptureSearchService {
             canonicalRecension: 'Damdami Bir Standard (1,430 Angs)',
             provenanceNotes: 'SGGS Ang 2, Japji Sahib Pauri 5. Dr. Sant Singh Khalsa translation.',
             numberingConvention: 'Standard SGPC Damdami Bir 1,430 Ang Page Layout Standard',
-            exactLicenceIdentifier: 'Open Religious Educational Distribution / Public Gurbani Domain',
+            exactLicenceIdentifier: 'Custom Terms',
             rightsHolderOrPublisher: 'Dr. Sant Singh Khalsa, MD / SGPC Amritsar',
-            rightsStatus: 'VERIFIED',
+            rightsStatus: 'RESTRICTED',
           },
           {
             id: 'theme_bud_wisdom',

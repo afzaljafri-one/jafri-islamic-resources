@@ -4,7 +4,7 @@
 // ==============================================================================
 
 import { ReligionId } from './religion';
-import { CoverageAvailabilityStatus, RightsStatus } from './coverage';
+import { CoverageAvailabilityStatus, RightsStatus, ControlledLicenceIdentifier } from './coverage';
 
 /**
  * Four mutually exclusive search match categories defined by Phase 6.3 specification
@@ -27,7 +27,7 @@ export interface ParallelTranslationRecord {
   publicationReference?: string;
   sourceReferenceUrl?: string;
   license?: string;
-  exactLicenceIdentifier?: string;
+  exactLicenceIdentifier?: ControlledLicenceIdentifier;
   rightsHolderOrPublisher?: string;
   rightsStatus?: RightsStatus;
   verificationStatus?: 'VERIFIED' | 'PARTIAL_VERIFIED' | 'UNKNOWN';
@@ -69,12 +69,13 @@ export interface UniversalSearchResult {
   canonicalRecension?: string;
   sourceReferenceUrl?: string;
 
-  /** Phase 6.3.3: Numbering Conventions & Rights Remediation */
+  /** Phase 6.3.3 & Phase 6.3.4: Numbering Conventions & Rights Remediation */
   numberingConvention?: string;
   alternateNumberingCrossReference?: string;
-  exactLicenceIdentifier?: string;
+  exactLicenceIdentifier?: ControlledLicenceIdentifier;
   rightsHolderOrPublisher?: string;
   rightsStatus?: RightsStatus;
+  geographicRestrictions?: string;
 }
 
 /**

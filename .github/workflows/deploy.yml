@@ -48,6 +48,9 @@ jobs:
       - name: Run TypeScript Type-Check (tsc -b)
         run: npx tsc -b
 
+      - name: Run Phase 6.3.4 Data & Rights Gate Validator
+        run: node test_phase6_3_4_rights_gate.cjs
+
       - name: Compile Vite Production Bundle
         run: npx vite build
         env:

@@ -29,6 +29,22 @@ export type RightsStatus =
   | 'PERMISSION_REQUIRED'
   | 'UNKNOWN';
 
+/**
+ * Controlled formal licence classifications permitted by the Phase 6.3.4 rights gate.
+ * Descriptive phrases (e.g. 'Universal Religious Heritage', 'Public Gurbani Domain') are prohibited.
+ */
+export type ControlledLicenceIdentifier =
+  | 'CC BY 3.0'
+  | 'CC BY 4.0'
+  | 'CC BY-SA 4.0'
+  | 'CC BY-NC 4.0'
+  | 'CC0 1.0'
+  | 'Public Domain'
+  | 'Written Permission'
+  | 'Custom Terms'
+  | 'PERMISSION_REQUIRED'
+  | 'UNKNOWN';
+
 export type RemoteAvailabilityStatus =
   | 'FULL'
   | 'PARTIAL'
@@ -45,6 +61,10 @@ export type LocalCacheStatus =
  * Granular, traceable metadata for the canonical original religious source
  */
 export interface CanonicalSourceProvenance {
+  /** Exact canonical work title */
+  exactWorkTitle?: string;
+  /** Exact edition or version identification */
+  editionAndVersion?: string;
   /** Name of the canonical source institution or standard recension */
   originalSource: string;
   /** Original sacred language (e.g. Classical Arabic, Biblical Hebrew, Sanskrit, Gurmukhi, Pali, Prakrit) */
@@ -53,33 +73,47 @@ export interface CanonicalSourceProvenance {
   script: string;
   /** Precise historical or theological recension */
   recensionEdition: string;
-  /** Identifiable web or scholarly source reference URL */
+  /** Primary source URL or scholarly repository */
+  primarySourceUrl?: string;
+  /** Identifiable web or scholarly source reference URL (alias for primarySourceUrl) */
   sourceReferenceUrl?: string;
   /** Descriptive licence summary */
   license: string;
-  /** Formal, unambiguous licence identifier (e.g. 'CC-BY-3.0', 'Public Domain', 'Universal Heritage') */
-  exactLicenceIdentifier: string;
-  /** Documented rights holder, traditional custodian, or publishing institution */
+  /** Controlled formal licence classification */
+  exactLicenceIdentifier: ControlledLicenceIdentifier;
+  /** Formal copyright holder or custodial institution */
+  copyrightHolderOrPublisher?: string;
+  /** Documented rights holder, traditional custodian, or publishing institution (alias) */
   rightsHolderOrPublisher: string;
   /** Formal rights classification status */
   rightsStatus: RightsStatus;
+  /** Reference to exact licence document or written permission agreement */
+  exactLicenceOrPermissionDoc?: string;
+  /** ISO date of verification audit */
+  verificationDate?: string;
   /** Attribution requirement text */
   attributionRequirement: string;
   /** Commercial usage permission flag */
   commercialUsePermission: boolean;
-  /** Non-commercial restriction flag */
+  /** Non-commercial restriction details or flag */
+  nonCommercialRestrictions?: boolean | string;
+  /** Non-commercial restriction flag (alias) */
   nonCommercialRestriction: boolean;
-  /** Textual modification permission flag (often false for verbatim religious texts) */
+  /** Textual modification permission flag (strictly false for sacred scriptures) */
   modificationPermission: boolean;
   /** Redistribution permission flag */
   redistributionPermission: boolean;
   /** Explicit permission to bundle in client application offline storage */
   offlineBundlingPermission: boolean;
+  /** Specific territorial or jurisdictional limitations (e.g. UK Crown Copyright) */
+  geographicRestrictions?: string;
+  /** Name of reviewer, date, and verifiable documentary evidence summary */
+  rightsReviewerAndEvidence?: string;
   /** Required verbatim copyright notice */
   requiredCopyrightNotice: string;
   /** Verification audit status */
   verificationStatus: VerificationStatus;
-  /** ISO date of last scholarly verification */
+  /** ISO date of last scholarly verification (alias) */
   lastVerified: string;
 }
 
@@ -89,6 +123,10 @@ export interface CanonicalSourceProvenance {
 export interface TranslationProvenanceRecord {
   /** Identifier for translation record */
   id: string;
+  /** Exact work title of the translation */
+  exactWorkTitle?: string;
+  /** Exact edition, version, or printing */
+  editionAndVersion?: string;
   /** Name of the scholarly translator or translation committee */
   translator: string;
   /** Formal translation work title or publication edition */
@@ -97,21 +135,31 @@ export interface TranslationProvenanceRecord {
   targetLanguage: string;
   /** Year or publication reference */
   publicationReference?: string;
-  /** Identifiable scholarly or public repository URL */
+  /** Primary source URL or scholarly repository */
+  primarySourceUrl?: string;
+  /** Identifiable scholarly or public repository URL (alias) */
   sourceReferenceUrl?: string;
   /** Descriptive licence summary */
   license: string;
-  /** Formal, unambiguous licence identifier (e.g. 'Public Domain', 'CC-BY-NC-4.0', 'Permission Granted') */
-  exactLicenceIdentifier: string;
-  /** Documented rights holder, estate, or publishing house */
+  /** Controlled formal licence classification */
+  exactLicenceIdentifier: ControlledLicenceIdentifier;
+  /** Formal copyright holder or publisher */
+  copyrightHolderOrPublisher?: string;
+  /** Documented rights holder, estate, or publishing house (alias) */
   rightsHolderOrPublisher: string;
   /** Formal rights classification status */
   rightsStatus: RightsStatus;
+  /** Reference to exact licence document or written permission agreement */
+  exactLicenceOrPermissionDoc?: string;
+  /** ISO date of verification audit */
+  verificationDate?: string;
   /** Attribution requirement text */
   attributionRequirement: string;
   /** Commercial usage permission flag */
   commercialUsePermission: boolean;
-  /** Non-commercial restriction flag */
+  /** Non-commercial restriction details or flag */
+  nonCommercialRestrictions?: boolean | string;
+  /** Non-commercial restriction flag (alias) */
   nonCommercialRestriction: boolean;
   /** Textual modification permission flag */
   modificationPermission: boolean;
@@ -119,6 +167,10 @@ export interface TranslationProvenanceRecord {
   redistributionPermission: boolean;
   /** Explicit permission to bundle in client application offline storage */
   offlineBundlingPermission: boolean;
+  /** Specific territorial or jurisdictional limitations (e.g. UK Crown Copyright) */
+  geographicRestrictions?: string;
+  /** Name of reviewer, date, and verifiable documentary evidence summary */
+  rightsReviewerAndEvidence?: string;
   /** Required verbatim copyright notice */
   requiredCopyrightNotice: string;
   /** Verification audit status */
