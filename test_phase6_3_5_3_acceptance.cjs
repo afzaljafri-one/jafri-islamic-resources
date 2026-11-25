@@ -419,8 +419,18 @@ async function runAcceptanceTest() {
     { stdio: ['ignore', 'pipe', 'pipe'] }
   );
 
+  chrome.stderr.on('data', (d) => {
+    const s = d.toString();
+    if (!s.includes('DevTools listening') && !s.includes('handshake')) {
+      console.error('[chrome stderr]', s.trim());
+    }
+  });
+  chrome.stdout.on('data', (d) => {
+    console.log('[chrome stdout]', d.toString().trim());
+  });
+
   let wsEndpoint = null;
-  for (let i = 0; i < 40; i++) {
+  for (let i = 0; i < 120; i++) {
     await new Promise((r) => setTimeout(r, 250));
     try {
       const r = await fetch(`http://127.0.0.1:${chromePort}/json/version`);
@@ -433,11 +443,25 @@ async function runAcceptanceTest() {
         }
       }
     } catch (_) {}
+    if (!wsEndpoint) {
+      try {
+        const r2 = await fetch(`http://localhost:${chromePort}/json/version`);
+        if (r2.ok) {
+          const data2 = await r2.json();
+          if (data2.webSocketDebuggerUrl) {
+            wsEndpoint = data2.webSocketDebuggerUrl;
+            console.log(`Chrome remote debugging connected on localhost port ${chromePort}:`, wsEndpoint);
+            break;
+          }
+        }
+      } catch (_) {}
+    }
   }
 
   if (!wsEndpoint) {
     try { chrome.kill(); } catch (_) {}
     try { preview.kill(); } catch (_) {}
+    try { fs.rmSync(tempProfileDir, { recursive: true, force: true }); } catch (_) {}
     throw new Error('Failed to connect to Chrome CDP WebSocket');
   }
 
