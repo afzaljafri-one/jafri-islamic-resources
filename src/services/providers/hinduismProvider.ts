@@ -63,7 +63,7 @@ export const GITA_CHAPTERS: GitaChapterMeta[] = [
   { chapter_number: 18, verses_count: 78, name: 'मोक्षसंन्यासयोग', translation: 'Moksha Sanyasa Yoga', transliteration: 'Mokṣa Sannyāsa Yoga', meaningEn: 'Liberation through Total Renunciation and Complete Surrender to the Divine.' },
 ];
 
-const FOUNDATIONAL_GITA_VERSES: Record<string, GitaVerseData> = {
+export const FOUNDATIONAL_GITA_VERSES: Record<string, GitaVerseData> = {
   '1:1': {
     chapter: 1,
     verse: 1,

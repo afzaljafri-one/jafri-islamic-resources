@@ -15,6 +15,7 @@ import {
   BookOpen,
   BookMarked,
   CalendarCheck,
+  Search,
 } from 'lucide-react';
 import { ReligionId } from '../types/religion';
 import { RELIGIONS_REGISTRY, ALL_RELIGION_IDS } from '../config/religionsRegistry';
@@ -23,6 +24,7 @@ import type { ReadingPosition } from '../types/personalLibrary';
 
 interface PlatformHomepageProps {
   onSelectReligion: (religionId: ReligionId | 'sacred-audio') => void;
+  onOpenSearch?: () => void;
   onOpenSpanishPilot?: () => void;
   onOpenStudio?: () => void;
   onOpenSacredAudio?: () => void;
@@ -32,6 +34,7 @@ interface PlatformHomepageProps {
 
 export const PlatformHomepage: React.FC<PlatformHomepageProps> = ({
   onSelectReligion,
+  onOpenSearch,
   onOpenSpanishPilot,
   onOpenStudio,
   onOpenSacredAudio,
@@ -163,6 +166,26 @@ export const PlatformHomepage: React.FC<PlatformHomepageProps> = ({
         <p className="max-w-2xl mx-auto mt-3 text-xs sm:text-sm text-slate-300 leading-relaxed">
           A dedicated, free-to-use digital library honoring seven world traditions through respectful textual presentation, rigorous provenance, verified translations, and independent, uncompromised modules.
         </p>
+
+        {/* Quick Universal Scripture Search Bar (Phase 6.3) */}
+        {onOpenSearch && (
+          <div className="mt-6 max-w-xl mx-auto">
+            <button
+              id="homepage-hero-search-btn"
+              data-testid="homepage-hero-search-btn"
+              onClick={onOpenSearch}
+              className="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-navy-950/90 border border-gold-500/30 hover:border-gold-400 text-slate-400 hover:text-slate-200 shadow-lg transition group cursor-pointer text-xs sm:text-sm"
+            >
+              <div className="flex items-center space-x-2.5 overflow-hidden">
+                <Search className="w-4 h-4 text-gold-400 group-hover:scale-110 transition-transform flex-shrink-0" />
+                <span className="truncate">Search scripture across 7 traditions (e.g. John 3:16, Quran 2:255, Gita 2:47)...</span>
+              </div>
+              <kbd className="hidden sm:inline-block px-2 py-0.5 text-[10px] font-mono rounded bg-slate-800 text-slate-400 border border-slate-700 flex-shrink-0">
+                ⌘K / /
+              </kbd>
+            </button>
+          </div>
+        )}
 
         {/* Quick Highlights Grid */}
         <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto text-left">

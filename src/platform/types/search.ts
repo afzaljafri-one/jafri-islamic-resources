@@ -1,0 +1,89 @@
+// ==============================================================================
+// Universal Scripture Search Engine — Data Types & Contracts
+// Jafri Religious Resources — Phase 6.3
+// ==============================================================================
+
+import { ReligionId } from './religion';
+
+/**
+ * Four mutually exclusive search match categories defined by Phase 6.3 specification
+ */
+export type SearchMatchType =
+  | 'exact_reference' // Canonical reference match (e.g., John 3:16, Quran 2:255, Gita 2:47)
+  | 'exact_phrase'    // Exact contiguous phrase match in original text or translation
+  | 'word_match'       // Multi-word or root keyword match
+  | 'thematic_result'; // Thematic / subject discovery (e.g., Compassion, Peace, Forgiveness)
+
+/**
+ * Standard Universal Scripture Search Result Unit
+ */
+export interface UniversalSearchResult {
+  id: string; // Unique result identifier, e.g. "search_islam_quran_2_255"
+  religion: ReligionId;
+  collectionId: string;
+  collectionTitle: string;
+  readingId?: string;
+  chapterNumber?: number | string;
+  verseNumber?: number | string;
+  displayCoordinates: string; // e.g. "John 3:16", "Quran 2:255", "Bhagavad Gita 2:47", "SGGS Ang 1"
+  displayTitle: string; // e.g. "Ayat al-Kursi (The Throne Verse)", "The Shepherd Psalm"
+  originalText: string; // Authentic, untouched original script
+  translationText: string; // English / primary translation
+  secondaryTranslationText?: string; // Optional Urdu / Hindi / commentary translation
+  transliterationText?: string; // Standard phonetic transliteration where available
+  languageCode: string; // Original language ISO code ('ar', 'sa', 'he', 'pa', 'pi', 'pka', 'el')
+  sourceAttribution: string; // Source attribution & scholarly translator
+  matchType: SearchMatchType;
+  thematicKeyword?: string; // e.g. "Compassion", "Peace" when matchType === 'thematic_result'
+  matchedSnippet?: string; // Highlighted or matching excerpt
+  isOfflineAvailable: boolean; // Indicates if passage is available in bundled/cached offline storage
+  score: number; // Relevance ranking score
+}
+
+/**
+ * Scripture Reference Parser Output
+ */
+export interface ParsedReference {
+  religion?: ReligionId;
+  collectionId?: string;
+  bookOrSurah?: string | number;
+  chapterNumber?: number | string;
+  verseNumber?: number | string;
+  rawQuery: string;
+  isExactCitation: boolean;
+}
+
+/**
+ * Query Filters
+ */
+export interface SearchFilterOptions {
+  religion?: ReligionId | 'all';
+  matchType?: SearchMatchType | 'all';
+  collectionId?: string;
+  languageCode?: string;
+  offlineOnly?: boolean;
+  limit?: number;
+  offset?: number;
+}
+
+/**
+ * Search History Record
+ */
+export interface SearchHistoryItem {
+  id: string;
+  query: string;
+  timestamp: string;
+  religion?: ReligionId;
+  resultCount?: number;
+}
+
+/**
+ * Curated Thematic Subject Entry
+ */
+export interface ThematicSubjectDefinition {
+  id: string;
+  name: string; // e.g. "Compassion", "Forgiveness", "Peace"
+  description: string;
+  traditionTerms: Record<ReligionId, string>; // e.g. Islam: "Rahmah", Hinduism: "Karuna / Daya", etc.
+  passages: UniversalSearchResult[];
+}

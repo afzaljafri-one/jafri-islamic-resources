@@ -26,6 +26,7 @@ import { PlatformNavbar } from './platform/components/PlatformNavbar';
 import { PlatformHomepage } from './platform/components/PlatformHomepage';
 import { UniversalBookmarksDrawer } from './platform/components/UniversalBookmarksDrawer';
 import { MyLibraryModal, LibraryTab } from './platform/components/MyLibraryModal';
+import { UniversalScriptureSearchModal } from './platform/components/UniversalScriptureSearchModal';
 import { MultilingualQuranAudioDrawer } from './platform/components/MultilingualQuranAudioDrawer';
 import { SpanishNarrationPilotModal } from './platform/components/SpanishNarrationPilotModal';
 import { MultilingualReadingStudio } from './platform/components/MultilingualReadingStudio';
@@ -103,6 +104,9 @@ export const App: React.FC = () => {
   const [isCoverageModalOpen, setIsCoverageModalOpen] = useState(false);
   const [coverageModalReligion, setCoverageModalReligion] = useState<ReligionId>('islam');
 
+  // Universal Scripture Search State (Phase 6.3)
+  const [isUniversalSearchOpen, setIsUniversalSearchOpen] = useState(false);
+
   // My Sacred Library State (Phase 6.1)
   const [isMyLibraryOpen, setIsMyLibraryOpen] = useState(false);
   const [myLibraryInitialTab, setMyLibraryInitialTab] = useState<LibraryTab>('continue');
@@ -114,6 +118,24 @@ export const App: React.FC = () => {
       setBookmarks(platformStorageService.getBookmarks());
     });
     return () => unsub();
+  }, []);
+
+  // Global Keyboard Shortcuts (Phase 6.3: '/' or '⌘K' to search)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setIsUniversalSearchOpen((prev) => !prev);
+      } else if (
+        e.key === '/' &&
+        !['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement)?.tagName)
+      ) {
+        e.preventDefault();
+        setIsUniversalSearchOpen(true);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   const handleOpenMyLibrary = (tab: LibraryTab = 'continue', religion: ReligionId | 'all' = 'all') => {
@@ -134,6 +156,7 @@ export const App: React.FC = () => {
   ) => {
     setIsMyLibraryOpen(false);
     setIsPlatformBookmarksOpen(false);
+    setIsUniversalSearchOpen(false);
 
     // Build URL query params
     if (typeof window !== 'undefined' && window.location) {
@@ -240,6 +263,7 @@ export const App: React.FC = () => {
           <PlatformNavbar
             activeReligion="home"
             onSelectReligion={handleSelectReligion}
+            onOpenSearch={() => setIsUniversalSearchOpen(true)}
             onOpenBookmarks={handleOpenPlatformBookmarks}
             onOpenMyLibrary={handleOpenMyLibrary}
             onOpenCoverage={handleOpenCoverage}
@@ -249,6 +273,7 @@ export const App: React.FC = () => {
           />
           <PlatformHomepage
             onSelectReligion={(rel) => handleSelectReligion(rel)}
+            onOpenSearch={() => setIsUniversalSearchOpen(true)}
             onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
             onOpenStudio={() => setIsMultilingualStudioOpen(true)}
             onOpenMyLibrary={() => handleOpenMyLibrary('continue')}
@@ -266,6 +291,7 @@ export const App: React.FC = () => {
           <PlatformNavbar
             activeReligion="islam"
             onSelectReligion={handleSelectReligion}
+            onOpenSearch={() => setIsUniversalSearchOpen(true)}
             onOpenBookmarks={handleOpenPlatformBookmarks}
             onOpenMyLibrary={handleOpenMyLibrary}
             onOpenCoverage={handleOpenCoverage}
@@ -529,6 +555,7 @@ export const App: React.FC = () => {
           <PlatformNavbar
             activeReligion="hinduism"
             onSelectReligion={handleSelectReligion}
+            onOpenSearch={() => setIsUniversalSearchOpen(true)}
             onOpenBookmarks={handleOpenPlatformBookmarks}
             onOpenMyLibrary={handleOpenMyLibrary}
             onOpenCoverage={handleOpenCoverage}
@@ -548,6 +575,7 @@ export const App: React.FC = () => {
           <PlatformNavbar
             activeReligion="christianity"
             onSelectReligion={handleSelectReligion}
+            onOpenSearch={() => setIsUniversalSearchOpen(true)}
             onOpenBookmarks={handleOpenPlatformBookmarks}
             onOpenMyLibrary={handleOpenMyLibrary}
             onOpenCoverage={handleOpenCoverage}
@@ -567,6 +595,7 @@ export const App: React.FC = () => {
           <PlatformNavbar
             activeReligion="judaism"
             onSelectReligion={handleSelectReligion}
+            onOpenSearch={() => setIsUniversalSearchOpen(true)}
             onOpenBookmarks={handleOpenPlatformBookmarks}
             onOpenMyLibrary={handleOpenMyLibrary}
             onOpenCoverage={handleOpenCoverage}
@@ -586,6 +615,7 @@ export const App: React.FC = () => {
           <PlatformNavbar
             activeReligion="sikhism"
             onSelectReligion={handleSelectReligion}
+            onOpenSearch={() => setIsUniversalSearchOpen(true)}
             onOpenBookmarks={handleOpenPlatformBookmarks}
             onOpenMyLibrary={handleOpenMyLibrary}
             onOpenCoverage={handleOpenCoverage}
@@ -605,6 +635,7 @@ export const App: React.FC = () => {
           <PlatformNavbar
             activeReligion="buddhism"
             onSelectReligion={handleSelectReligion}
+            onOpenSearch={() => setIsUniversalSearchOpen(true)}
             onOpenBookmarks={handleOpenPlatformBookmarks}
             onOpenMyLibrary={handleOpenMyLibrary}
             onOpenCoverage={handleOpenCoverage}
@@ -624,6 +655,7 @@ export const App: React.FC = () => {
           <PlatformNavbar
             activeReligion="jainism"
             onSelectReligion={handleSelectReligion}
+            onOpenSearch={() => setIsUniversalSearchOpen(true)}
             onOpenBookmarks={handleOpenPlatformBookmarks}
             onOpenMyLibrary={handleOpenMyLibrary}
             onOpenCoverage={handleOpenCoverage}
@@ -643,6 +675,7 @@ export const App: React.FC = () => {
           <PlatformNavbar
             activeReligion="sacred-audio"
             onSelectReligion={handleSelectReligion}
+            onOpenSearch={() => setIsUniversalSearchOpen(true)}
             onOpenBookmarks={handleOpenPlatformBookmarks}
             onOpenMyLibrary={handleOpenMyLibrary}
             onOpenCoverage={handleOpenCoverage}
@@ -653,6 +686,15 @@ export const App: React.FC = () => {
           <SacredAudioLibraryHub onReturnToHome={() => handleSelectReligion('home')} />
         </>
       )}
+
+      {/* =========================================================================
+          UNIVERSAL MULTI-RELIGION SCRIPTURE SEARCH MODAL (Phase 6.3)
+          ========================================================================= */}
+      <UniversalScriptureSearchModal
+        isOpen={isUniversalSearchOpen}
+        onClose={() => setIsUniversalSearchOpen(false)}
+        onNavigateToReading={handleNavigateToReading}
+      />
 
       {/* =========================================================================
           MY SACRED LIBRARY MODAL (Phase 6.1)

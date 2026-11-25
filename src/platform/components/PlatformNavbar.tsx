@@ -4,13 +4,14 @@
 // ==============================================================================
 
 import React from 'react';
-import { Home, Bookmark, Globe, ChevronDown, Headphones, BookOpen, BookMarked } from 'lucide-react';
+import { Home, Bookmark, Globe, ChevronDown, Headphones, BookOpen, BookMarked, Search } from 'lucide-react';
 import { ReligionId } from '../types/religion';
 import { RELIGIONS_REGISTRY, ALL_RELIGION_IDS } from '../config/religionsRegistry';
 
 interface PlatformNavbarProps {
   activeReligion: ReligionId | 'home' | 'sacred-audio';
   onSelectReligion: (rel: ReligionId | 'home' | 'sacred-audio') => void;
+  onOpenSearch?: () => void;
   onOpenBookmarks?: () => void;
   onOpenMyLibrary?: (initialTab?: 'continue' | 'bookmarks' | 'history' | 'progress') => void;
   onOpenCoverage?: () => void;
@@ -23,6 +24,7 @@ interface PlatformNavbarProps {
 export const PlatformNavbar: React.FC<PlatformNavbarProps> = ({
   activeReligion,
   onSelectReligion,
+  onOpenSearch,
   onOpenBookmarks,
   onOpenMyLibrary,
   onOpenCoverage,
@@ -146,10 +148,28 @@ export const PlatformNavbar: React.FC<PlatformNavbarProps> = ({
             </button>
           )}
 
+          {/* Universal Scripture Search Button (Phase 6.3) */}
+          {onOpenSearch && (
+            <button
+              id="platform-nav-search-btn"
+              data-testid="platform-nav-search-btn"
+              onClick={onOpenSearch}
+              title="Search Scripture across all 7 Traditions (Press / or ⌘K)"
+              className="flex items-center space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-navy-950 border border-slate-700 hover:border-gold-500/50 text-slate-300 hover:text-gold-300 text-xs font-semibold transition cursor-pointer"
+            >
+              <Search className="w-3.5 h-3.5 text-gold-400" />
+              <span className="hidden sm:inline">Search Scripture</span>
+              <kbd className="hidden lg:inline-block px-1.5 py-0.2 text-[10px] font-mono rounded bg-slate-800 text-slate-400 border border-slate-700">
+                /
+              </kbd>
+            </button>
+          )}
+
           {/* My Library & Bookmarks Toggle (Phase 6.1) */}
           {onOpenMyLibrary ? (
             <button
               id="platform-nav-my-library-btn"
+              data-testid="platform-nav-my-library-btn"
               onClick={() => onOpenMyLibrary('continue')}
               title="My Sacred Library (Bookmarks, Reading History & Chapter Progress)"
               className="flex items-center space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-navy-950 border border-gold-500/40 hover:border-gold-400 text-gold-300 hover:text-gold-200 text-xs font-semibold transition cursor-pointer"
