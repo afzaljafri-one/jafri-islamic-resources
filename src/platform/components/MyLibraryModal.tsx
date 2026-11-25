@@ -20,12 +20,14 @@ import {
   BookMarked,
   Clock,
   Sparkles,
+  CalendarCheck,
 } from 'lucide-react';
 import { ReligionId } from '../types/religion';
 import { RELIGIONS_REGISTRY } from '../config/religionsRegistry';
 import { personalLibraryService, CANONICAL_SCOPES } from '../services/personalLibraryService';
+import { ReadingPlansView } from './ReadingPlansView';
 
-export type LibraryTab = 'continue' | 'bookmarks' | 'history' | 'progress';
+export type LibraryTab = 'continue' | 'bookmarks' | 'history' | 'progress' | 'plans';
 
 interface MyLibraryModalProps {
   isOpen: boolean;
@@ -55,6 +57,14 @@ export const MyLibraryModal: React.FC<MyLibraryModalProps> = ({
   const [selectedReligion, setSelectedReligion] = useState<ReligionId | 'all'>(initialReligion);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [bookmarkSort, setBookmarkSort] = useState<'recent' | 'scripture' | 'oldest'>('recent');
+
+  // Update active tab & religion when opened with specific initialTab
+  useEffect(() => {
+    if (isOpen) {
+      if (initialTab) setActiveTab(initialTab);
+      if (initialReligion) setSelectedReligion(initialReligion);
+    }
+  }, [isOpen, initialTab, initialReligion]);
 
   // Service state
   const [libraryState, setLibraryState] = useState(() => personalLibraryService.getState());
@@ -142,20 +152,40 @@ export const MyLibraryModal: React.FC<MyLibraryModalProps> = ({
   const handleImportJson = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    // Check if user has existing data to confirm merge
+    const hasExistingData =
+      libraryState.bookmarks.length > 0 ||
+      Object.values(libraryState.positions).some(Boolean) ||
+      Object.keys(libraryState.progress).length > 0 ||
+      libraryState.plans.length > 0;
+
+    if (hasExistingData) {
+      const proceed = window.confirm(
+        'Importing this backup will safely merge its bookmarks, reading plans and progress into your existing library without overwriting existing notes. Do you wish to proceed?'
+      );
+      if (!proceed) {
+        e.target.value = '';
+        return;
+      }
+    }
+
     const reader = new FileReader();
     reader.onload = (event) => {
       try {
         const json = JSON.parse(event.target?.result as string);
         const res = personalLibraryService.importLibrary(json);
         if (res.success) {
-          setExportNotice(`Imported ${res.count} items into your library.`);
+          const dupText = res.duplicates ? ` (${res.duplicates} duplicates merged)` : '';
+          const plansText = res.plansCount ? `, ${res.plansCount} plans` : '';
+          setExportNotice(`Imported ${res.count} bookmarks${plansText}${dupText} into your library.`);
         } else {
           setExportNotice(res.error || 'Failed to import backup file.');
         }
-        setTimeout(() => setExportNotice(null), 4000);
+        setTimeout(() => setExportNotice(null), 5000);
       } catch {
-        setExportNotice('Invalid JSON file format.');
-        setTimeout(() => setExportNotice(null), 4000);
+        setExportNotice('Invalid JSON file format. Please provide a valid Jafri Sacred Library JSON backup.');
+        setTimeout(() => setExportNotice(null), 5000);
       }
     };
     reader.readAsText(file);
@@ -315,6 +345,28 @@ export const MyLibraryModal: React.FC<MyLibraryModalProps> = ({
             >
               <CheckCircle2 className="w-3.5 h-3.5" />
               <span>Chapter Progress</span>
+            </button>
+
+            <button
+              data-testid="tab-plans"
+              onClick={() => setActiveTab('plans')}
+              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition whitespace-nowrap ${
+                activeTab === 'plans'
+                  ? 'bg-gold-500 text-navy-950 shadow-gold-sm font-bold'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+              }`}
+            >
+              <CalendarCheck className="w-3.5 h-3.5" />
+              <span>Reading Plans</span>
+              {libraryState.plans.length > 0 && (
+                <span
+                  className={`ml-1 px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
+                    activeTab === 'plans' ? 'bg-navy-950/20 text-navy-950' : 'bg-gold-500/20 text-gold-400'
+                  }`}
+                >
+                  {libraryState.plans.length}
+                </span>
+              )}
             </button>
           </div>
         </div>
@@ -840,6 +892,13 @@ export const MyLibraryModal: React.FC<MyLibraryModalProps> = ({
                 })}
               </div>
             </div>
+          )}
+
+          {/* =========================================================================
+              TAB E: READING PLANS & DAILY SCHEDULES (Phase 6.2)
+              ========================================================================= */}
+          {activeTab === 'plans' && (
+            <ReadingPlansView onNavigateToReading={onNavigateToReading} />
           )}
         </div>
 

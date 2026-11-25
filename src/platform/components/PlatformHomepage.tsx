@@ -14,6 +14,7 @@ import {
   Headphones,
   BookOpen,
   BookMarked,
+  CalendarCheck,
 } from 'lucide-react';
 import { ReligionId } from '../types/religion';
 import { RELIGIONS_REGISTRY, ALL_RELIGION_IDS } from '../config/religionsRegistry';
@@ -40,10 +41,14 @@ export const PlatformHomepage: React.FC<PlatformHomepageProps> = ({
   const [globalLastRead, setGlobalLastRead] = useState<ReadingPosition | null>(() =>
     personalLibraryService.getGlobalLastRead()
   );
+  const [todaySessions, setTodaySessions] = useState(() =>
+    personalLibraryService.getTodaySessions()
+  );
 
   useEffect(() => {
     const unsub = personalLibraryService.subscribe(() => {
       setGlobalLastRead(personalLibraryService.getGlobalLastRead());
+      setTodaySessions(personalLibraryService.getTodaySessions());
     });
     return () => unsub();
   }, []);
@@ -93,6 +98,44 @@ export const PlatformHomepage: React.FC<PlatformHomepageProps> = ({
               >
                 <BookMarked className="w-3.5 h-3.5 text-gold-400" />
                 <span className="hidden sm:inline">My Library</span>
+              </button>
+            )}
+          </div>
+        </section>
+      )}
+
+      {/* Today's Reading Plan Quick Banner (Phase 6.2) */}
+      {todaySessions.length > 0 && (
+        <section
+          id="homepage-daily-plan-banner"
+          data-testid="homepage-daily-plan-banner"
+          className="rounded-2xl bg-gradient-to-r from-navy-900 via-navy-900/95 to-navy-950 border border-gold-500/40 p-4 sm:p-5 shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+        >
+          <div className="flex items-start sm:items-center space-x-3.5">
+            <div className="w-10 h-10 rounded-xl bg-gold-500/20 border border-gold-500/40 flex items-center justify-center text-gold-400 flex-shrink-0 shadow-gold-sm">
+              <CalendarCheck className="w-5 h-5 text-gold-400" />
+            </div>
+            <div>
+              <div className="flex items-center space-x-2">
+                <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-gold-500/20 text-gold-300">
+                  Daily Plan
+                </span>
+                <span className="text-xs text-slate-400">Scheduled for today</span>
+              </div>
+              <h3 className="font-serif text-sm sm:text-base font-bold text-slate-100 mt-0.5">
+                {todaySessions.filter((s) => s.status === 'completed').length} of {todaySessions.length} reading tasks completed today
+              </h3>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-2 flex-shrink-0">
+            {onOpenMyLibrary && (
+              <button
+                onClick={() => (onOpenMyLibrary as any)('plans')}
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-gold-500 to-gold-400 text-navy-950 font-bold text-xs shadow-gold-sm hover:brightness-110 transition flex items-center space-x-1.5 cursor-pointer"
+              >
+                <CalendarCheck className="w-3.5 h-3.5" />
+                <span>Open Daily Routine</span>
               </button>
             )}
           </div>

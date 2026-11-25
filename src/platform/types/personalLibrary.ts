@@ -127,6 +127,8 @@ export interface ReadingProgressRecord {
 
 /**
  * Export / Backup Schema for Personal Library Data
+ * Version 1: Bookmarks, Positions, History, Progress
+ * Version 2: Added Reading Plans & Scheduled Sessions (Phase 6.2)
  */
 export interface PersonalLibraryExport {
   schemaVersion: number;
@@ -136,6 +138,85 @@ export interface PersonalLibraryExport {
   readingPositions: Record<ReligionId, ReadingPosition | null>;
   readingHistory: ReadingHistoryEntry[];
   readingProgress: Record<string, ReadingProgressRecord>;
+  readingPlans?: ReadingPlan[];
+  readingSessions?: ReadingPlanSession[];
+}
+
+/**
+ * Individual Planned Reading Unit within a Plan
+ */
+export interface ReadingPlanItem {
+  id: string;
+  religion: ReligionId;
+  scriptureId: string;
+  collectionId: string;
+  readingId: string;
+  chapterNumber?: number | string;
+  verseNumber?: number | string;
+  displayTitle: string;
+  displayLocation: string;
+  estimatedMinutes?: number;
+}
+
+/**
+ * Reading Plan Definition
+ */
+export interface ReadingPlan {
+  id: string;
+  name: string;
+  description?: string;
+  religions: ReligionId[];
+  planType: 'single-religion' | 'multi-religion' | 'custom';
+  targetType: 'chapter' | 'passage' | 'time';
+  dailyTarget: number;
+  targetUnit: 'chapters' | 'passages' | 'minutes';
+  items: ReadingPlanItem[];
+  startDate: string; // YYYY-MM-DD
+  endDate?: string; // YYYY-MM-DD (optional)
+  selectedWeekdays: number[]; // 0 = Sun, 1 = Mon, ..., 6 = Sat
+  preferredTime: string; // HH:MM
+  timeZone: string;
+  reminderEnabled: boolean;
+  reminderTime?: string; // HH:MM
+  status: 'active' | 'paused' | 'completed';
+  createdAt: string;
+  updatedAt: string;
+  currentIndex: number;
+}
+
+/**
+ * Scheduled Reading Session (Daily Instance)
+ */
+export interface ReadingPlanSession {
+  id: string;
+  planId: string;
+  planName: string;
+  date: string; // YYYY-MM-DD
+  item: ReadingPlanItem;
+  status: 'scheduled' | 'completed' | 'skipped' | 'postponed';
+  scheduledWeekday: number;
+  completedAt?: string;
+  postponedToDate?: string;
+  notes?: string;
+}
+
+/**
+ * Aggregated Plan Progress Metrics
+ */
+export interface ReadingPlanProgress {
+  planId: string;
+  totalItems: number;
+  completedSessions: number;
+  skippedSessions: number;
+  postponedSessions: number;
+  scheduledSessionsToDate: number;
+  weeklyCompleted: number;
+  weeklyScheduled: number;
+  monthlyCompleted: number;
+  monthlyScheduled: number;
+  lastCompletedDate?: string;
+  lastCompletedTitle?: string;
+  progressPercentage: number | null;
 }
 
 /**
@@ -147,5 +228,7 @@ export interface PersonalLibraryState {
   globalLastRead: ReadingPosition | null;
   history: ReadingHistoryEntry[];
   progress: Record<string, ReadingProgressRecord>;
+  plans: ReadingPlan[];
+  sessions: ReadingPlanSession[];
   isLoading: boolean;
 }
