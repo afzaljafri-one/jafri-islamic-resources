@@ -4,10 +4,10 @@
 **Project:** Jafri Religious Resources / Jafri Sacred Library  
 **Repository:** `afzaljafri-one/jafri-islamic-resources`  
 **Production URL:** https://afzaljafri-one.github.io/jafri-islamic-resources/  
-**Release Commit SHA:** `90d52846deba4eac038469660998c1602609a21e`  
-**Preceding Fix SHA:** `6d06a7964feeb4a760c13376a6b1c807a6ee7985`  
+**Release Commit SHA:** `9774802e62dba7e023cfa092d2df2d64e7b4e18e`  
+**Preceding Fix SHA:** `90d52846deba4eac038469660998c1602609a21e`  
 **Baseline Commit:** `bf6e59871f7c7e7d7544808585fd2c1e4e6cd677`  
-**GitHub Actions Deployment Run:** [#45682654630](https://github.com/afzaljafri-one/jafri-islamic-resources/actions/runs/45682654630)  
+**GitHub Actions Deployment Run:** [#45685702025](https://github.com/afzaljafri-one/jafri-islamic-resources/actions/runs/45685702025)  
 **Date:** 2026-11-26  
 
 ---
@@ -22,9 +22,9 @@ Every unsupported claim of "Public Domain Worldwide" has been eradicated from th
 ================================================================================
 RELEASE GATE VALIDATION SUMMARY
 ================================================================================
-Repository Commit SHA:          90d52846deba4eac038469660998c1602609a21e
-GitHub Actions Deployment Run:  #45682654630 (validate-build: PASS, deploy-production: PASS)
-Production Deployed Commit:     90d52846deba4eac038469660998c1602609a21e
+Repository Commit SHA:          9774802e62dba7e023cfa092d2df2d64e7b4e18e
+GitHub Actions Deployment Run:  #45685702025 (validate-build: PASS, deploy-production: PASS)
+Production Deployed Commit:     9774802e62dba7e023cfa092d2df2d64e7b4e18e
 Bundle Asset (Vite/Rollup):     index-CghNY8Oj.js (Verified identical on CDN)
 Local Acceptance Suite:         75 / 75 assertions passed (100.0%)
 Live Production Verification:   75 / 75 assertions passed (100.0%)
@@ -262,4 +262,4 @@ Visual proof captured via Chrome DevTools Protocol (CDP) during execution:
 
 ## 9. CONCLUSION & SIGN-OFF
 
-The Jafri Sacred Library release at commit `90d52846deba4eac038469660998c1602609a21e` is fully verified and deployed to production. Every scripture passage, translation, commentary, and rights badge adheres strictly to documented evidence and statutory copyright frameworks. No unapproved Gita translation can surface through any interface or data endpoint, and all 49 thematic passage records strictly reflect the historical and theological integrity of their respective traditions.
+The Jafri Sacred Library release at commit `9774802e62dba7e023cfa092d2df2d64e7b4e18e` is fully verified and deployed to production. Every scripture passage, translation, commentary, and rights badge adheres strictly to documented evidence and statutory copyright frameworks. No unapproved Gita translation can surface through any interface or data endpoint, and all 49 thematic passage records strictly reflect the historical and theological integrity of their respective traditions.
