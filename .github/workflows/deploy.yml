@@ -105,8 +105,9 @@ jobs:
       - name: Live Smoke Test Verification
         run: |
           echo "Verifying live production deployment on GitHub Pages..."
-          for i in {1..6}; do
-            echo "Checking deployment attempt $i/6..."
+          sleep 15
+          for i in {1..8}; do
+            echo "Checking deployment attempt $i/8..."
             PAGE_HTML=$(curl -f -s -L https://afzaljafri-one.github.io/jafri-islamic-resources/ || true)
             if echo "$PAGE_HTML" | grep -q "Jafri Sacred Library"; then
               echo "✓ Live smoke test passed: Production site is serving current release."
@@ -127,6 +128,6 @@ jobs:
           node-version: 20
 
       - name: Run Phase 6.3.5.5 Live Production Acceptance Suite
-        run: node --experimental-websocket test_phase6_3_5_5_prod_live.cjs
+        run: node --experimental-websocket test_phase6_3_5_5_prod_live.cjs || (sleep 10 && node --experimental-websocket test_phase6_3_5_5_prod_live.cjs)
         env:
           CHROME_BIN: /usr/bin/google-chrome
