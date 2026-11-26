@@ -34,7 +34,6 @@ import { AudioNoticeModal } from '../../platform/components/AudioNoticeModal';
 import { ScriptureCoverageModal } from '../../platform/components/ScriptureCoverageModal';
 import { YouTubeEmbedModal } from '../../platform/components/audio/YouTubeEmbedModal';
 import { SACRED_AUDIO_MASTER_CATALOGUE } from '../../platform/data/sacredAudioMasterCatalogue';
-import { MultilingualAudioPlayerBar } from '../../platform/components/MultilingualAudioPlayerBar';
 import { TypographyControls } from '../../platform/components/TypographyControls';
 import { AttributionFooter } from '../../platform/components/AttributionFooter';
 import { platformStorageService } from '../../platform/services/storageService';
@@ -116,6 +115,13 @@ export const JainismModule: React.FC<JainismModuleProps> = ({
   const [isYouTubeModalOpen, setIsYouTubeModalOpen] = useState<boolean>(false);
   const navkarReq = SACRED_AUDIO_MASTER_CATALOGUE.find((r) => r.id === 'REQ-JAI-007') || null;
   const [isAudioPlayerVisible, setIsAudioPlayerVisible] = useState<boolean>(false);
+
+  // Stop multilingual audio when leaving Jainism reading context (unmount only)
+  useEffect(() => {
+    return () => {
+      multilingualAudioEngine.stop();
+    };
+  }, []);
   const [activeAudioUnitId, setActiveAudioUnitId] = useState<string | null>(null);
   const [isAudioPlaying, setIsAudioPlaying] = useState<boolean>(false);
   const [showTypography, setShowTypography] = useState<boolean>(false);
@@ -216,7 +222,7 @@ export const JainismModule: React.FC<JainismModuleProps> = ({
     });
 
     multilingualAudioEngine.loadUnits('jainism', scriptureUnits);
-  }, [units, selectedText]);
+  }, [selectedText]);
 
   const handlePlayUnit = (unitId: string) => {
     const uId = `jain_${selectedText.id}_${unitId}`;
@@ -296,9 +302,9 @@ export const JainismModule: React.FC<JainismModuleProps> = ({
   return (
     <div className="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-6 space-y-6 animate-in fade-in-50 duration-200">
       {/* Top Breadcrumb & Controls Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 py-3 rounded-2xl bg-gradient-to-r from-navy-900 via-navy-900/90 to-navy-950 border border-slate-800 shadow-lg">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 px-4 py-3 rounded-2xl bg-gradient-to-r from-navy-900 via-navy-900/90 to-navy-950 border border-slate-800 shadow-lg">
         {/* Navigation & Text Indicator */}
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center flex-wrap gap-2 min-w-0">
           <button
             onClick={onReturnToHome}
             className="flex items-center space-x-1 px-2.5 py-1.5 rounded-xl bg-navy-950/80 border border-slate-700/80 hover:border-gold-500/50 text-slate-300 hover:text-gold-300 text-xs font-medium transition"
@@ -330,7 +336,7 @@ export const JainismModule: React.FC<JainismModuleProps> = ({
         </div>
 
         {/* Action Controls: Text Switcher, Search, Bookmarks, Typography */}
-        <div className="flex items-center space-x-2 self-end sm:self-auto">
+        <div className="flex items-center flex-wrap gap-2 self-end lg:self-auto">
           {/* Quick Scripture Switcher */}
           <select
             value={selectedText.id}
@@ -553,7 +559,20 @@ export const JainismModule: React.FC<JainismModuleProps> = ({
         };
 
         return (
-          <TwoColumnReadingLayout context={readingContext}>
+          <TwoColumnReadingLayout
+            context={readingContext}
+            multilingualControls={{
+              isVisible: isAudioPlayerVisible,
+              title: `${selectedText.titleEn}`,
+              subtitle: `${selectedText.titlePrakrit} (Prakrit & English)`,
+              availableEditions: JAINISM_AUDIO_EDITIONS,
+              onOpenProvenanceModal: () => setIsAudioNoticeOpen(true),
+              onClose: () => {
+                multilingualAudioEngine.stop();
+                setIsAudioPlayerVisible(false);
+              },
+            }}
+          >
             <main className="space-y-4 min-h-[450px]">
         {units.length === 0 ? (
           <div className="py-24 text-center text-slate-500 text-xs space-y-2">
@@ -756,20 +775,6 @@ export const JainismModule: React.FC<JainismModuleProps> = ({
         onClose={() => setIsCoverageOpen(false)}
         initialReligionId="jainism"
       />
-
-      {/* Multilingual Audio Player Bar */}
-      {isAudioPlayerVisible && (
-        <MultilingualAudioPlayerBar
-          title={`${selectedText.titleEn}`}
-          subtitle={`${selectedText.titlePrakrit} (Prakrit & English)`}
-          availableEditions={JAINISM_AUDIO_EDITIONS}
-          onOpenProvenanceModal={() => setIsAudioNoticeOpen(true)}
-          onClose={() => {
-            multilingualAudioEngine.stop();
-            setIsAudioPlayerVisible(false);
-          }}
-        />
-      )}
 
       {/* Approved YouTube Embed Modal for Navkar Mantra */}
       {navkarReq && (

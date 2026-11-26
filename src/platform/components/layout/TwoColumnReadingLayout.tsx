@@ -9,6 +9,8 @@
 import React from 'react';
 import {
   SacredAudioReadingPanel,
+  QuranAudioControlsProps,
+  MultilingualAudioControlsProps,
 } from '../audio/SacredAudioReadingPanel';
 import type { ReadingContext } from '../../services/contextualAudioMatcher';
 
@@ -16,6 +18,8 @@ export interface TwoColumnReadingLayoutProps {
   context: ReadingContext;
   children: React.ReactNode;
   topBanner?: React.ReactNode;
+  quranControls?: QuranAudioControlsProps;
+  multilingualControls?: MultilingualAudioControlsProps;
   className?: string;
 }
 
@@ -23,6 +27,8 @@ export const TwoColumnReadingLayout: React.FC<TwoColumnReadingLayoutProps> = ({
   context,
   children,
   topBanner,
+  quranControls,
+  multilingualControls,
   className = '',
 }) => {
   return (
@@ -43,12 +49,16 @@ export const TwoColumnReadingLayout: React.FC<TwoColumnReadingLayoutProps> = ({
           {children}
         </div>
 
-        {/* Right Column (approx 35%): Persistent Sacred Audio Library Panel */}
+        {/* Right Column (approx 35%): Unified Sacred Audio Library Panel (moves together with document scrolling) */}
         <div
-          className="lg:col-span-4 w-full sticky top-20 z-10 space-y-6"
+          className="lg:col-span-4 w-full min-w-0 space-y-6"
           data-testid="sacred-audio-column"
         >
-          <SacredAudioReadingPanel context={context} />
+          <SacredAudioReadingPanel
+            context={context}
+            quranControls={quranControls}
+            multilingualControls={multilingualControls}
+          />
         </div>
       </div>
     </div>

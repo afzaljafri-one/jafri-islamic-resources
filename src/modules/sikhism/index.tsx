@@ -34,7 +34,6 @@ import { UniversalSearchModal } from '../../platform/components/UniversalSearchM
 import { UniversalBookmarksDrawer } from '../../platform/components/UniversalBookmarksDrawer';
 import { AudioNoticeModal } from '../../platform/components/AudioNoticeModal';
 import { ScriptureCoverageModal } from '../../platform/components/ScriptureCoverageModal';
-import { MultilingualAudioPlayerBar } from '../../platform/components/MultilingualAudioPlayerBar';
 import { TypographyControls } from '../../platform/components/TypographyControls';
 import { AttributionFooter } from '../../platform/components/AttributionFooter';
 import { platformStorageService } from '../../platform/services/storageService';
@@ -117,6 +116,13 @@ export const SikhismModule: React.FC<SikhismModuleProps> = ({
   const [isCoverageOpen, setIsCoverageOpen] = useState<boolean>(false);
   const [retryTrigger, setRetryTrigger] = useState<number>(0);
   const [isAudioPlayerVisible, setIsAudioPlayerVisible] = useState<boolean>(false);
+
+  // Stop multilingual audio when leaving Sikhism reading context (unmount only)
+  useEffect(() => {
+    return () => {
+      multilingualAudioEngine.stop();
+    };
+  }, []);
   const [activeAudioUnitId, setActiveAudioUnitId] = useState<string | null>(null);
   const [isAudioPlaying, setIsAudioPlaying] = useState<boolean>(false);
   const [showTypography, setShowTypography] = useState<boolean>(false);
@@ -572,7 +578,20 @@ export const SikhismModule: React.FC<SikhismModuleProps> = ({
         };
 
         return (
-          <TwoColumnReadingLayout context={readingContext}>
+          <TwoColumnReadingLayout
+            context={readingContext}
+            multilingualControls={{
+              isVisible: isAudioPlayerVisible,
+              title: `Sri Guru Granth Sahib Ji — Ang ${currentAng}`,
+              subtitle: angData?.raag ? `Raag ${angData.raag}` : 'BaniDB Integration',
+              availableEditions: SIKHISM_AUDIO_EDITIONS,
+              onOpenProvenanceModal: () => setIsAudioNoticeOpen(true),
+              onClose: () => {
+                multilingualAudioEngine.stop();
+                setIsAudioPlayerVisible(false);
+              },
+            }}
+          >
             <main className="space-y-4 min-h-[450px]">
         {loading ? (
           <div className="py-24 text-center text-slate-400 text-xs space-y-2">
@@ -854,19 +873,6 @@ export const SikhismModule: React.FC<SikhismModuleProps> = ({
         initialReligionId="sikhism"
       />
 
-      {/* Multilingual Audio Player Bar */}
-      {isAudioPlayerVisible && (
-        <MultilingualAudioPlayerBar
-          title={`Sri Guru Granth Sahib Ji — Ang ${currentAng}`}
-          subtitle={angData?.raag ? `Raag ${angData.raag}` : 'BaniDB Integration'}
-          availableEditions={SIKHISM_AUDIO_EDITIONS}
-          onOpenProvenanceModal={() => setIsAudioNoticeOpen(true)}
-          onClose={() => {
-            multilingualAudioEngine.stop();
-            setIsAudioPlayerVisible(false);
-          }}
-        />
-      )}
     </div>
   );
 };

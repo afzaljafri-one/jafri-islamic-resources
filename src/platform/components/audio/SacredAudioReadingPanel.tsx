@@ -10,8 +10,11 @@ import React, { useEffect, useState, useMemo, useRef } from 'react';
 import {
   Play,
   Pause,
+  Square,
   SkipBack,
   SkipForward,
+  ChevronsLeft,
+  ChevronsRight,
   Volume2,
   VolumeX,
   ExternalLink,
@@ -19,12 +22,29 @@ import {
   CheckCircle2,
   Info,
   Radio,
+  AlertCircle,
+  RefreshCw,
+  ChevronDown,
+  ChevronUp,
+  X,
 } from 'lucide-react';
+import { SUPPORTED_RECITERS } from '../../../types/quran';
+import type { PlaybackScope, PageAyahBoundary } from '../../../services/audio/types';
 import type { SacredAudioRequirement } from '../../types/sacredAudio';
 import {
   unifiedSacredAudioService,
   SacredAudioPlaybackState,
 } from '../../services/unifiedSacredAudioService';
+import {
+  audioCoordinator,
+  AudioEngineSourceId,
+} from '../../services/audioCoordinator';
+import {
+  multilingualAudioEngine,
+  AudioEngineState,
+  ScriptureAudioEditionOption,
+} from '../../services/multilingualAudioEngine';
+import { MultilingualAudioPlayerBar } from '../MultilingualAudioPlayerBar';
 import {
   matchContextualAudio,
   ContextualAudioResult,
@@ -38,29 +58,97 @@ function formatTime(seconds: number): string {
   return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 }
 
+export interface QuranAudioControlsProps {
+  isPlaying: boolean;
+  isLoading: boolean;
+  currentSurahNumber: number;
+  currentSurahName: string;
+  currentAyahNumber: number;
+  totalAyahs: number;
+  reciterId: string;
+  currentTime: number;
+  duration: number;
+  playbackScope: PlaybackScope;
+  onTogglePlaybackScope: () => void;
+  pageBoundary: PageAyahBoundary | null;
+  pageRecitationCompleted: boolean;
+  completionMessage: string | null;
+  onSelectReciter: (id: string) => void;
+  onTogglePlay: () => void;
+  onStop: () => void;
+  onSeek: (seconds: number) => void;
+  onNextAyah: () => void;
+  onPrevAyah: () => void;
+  onNextSurah: () => void;
+  onPrevSurah: () => void;
+  autoAdvance: boolean;
+  onToggleAutoAdvance: () => void;
+  playbackSpeed: number;
+  onChangePlaybackSpeed: (speed: number) => void;
+  errorMessage: string | null;
+}
+
+export interface MultilingualAudioControlsProps {
+  isVisible: boolean;
+  title: string;
+  subtitle?: string;
+  availableEditions: ScriptureAudioEditionOption[];
+  onOpenProvenanceModal?: () => void;
+  onClose?: () => void;
+}
+
 export interface SacredAudioReadingPanelProps {
   context: CanonicalReadingContext;
+  quranControls?: QuranAudioControlsProps;
+  multilingualControls?: MultilingualAudioControlsProps;
   className?: string;
 }
 
 export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = ({
   context,
+  quranControls,
+  multilingualControls,
   className = '',
 }) => {
+  const [isViewAllOpen, setIsViewAllOpen] = useState(false);
+  const [showTextInfo, setShowTextInfo] = useState(false);
+  const [activeCoordinatorSource, setActiveCoordinatorSource] = useState<AudioEngineSourceId | null>(() =>
+    audioCoordinator.getActiveSource()
+  );
   // Global playback state from UnifiedSacredAudioService
   const [playbackState, setPlaybackState] = useState<SacredAudioPlaybackState>(() =>
     unifiedSacredAudioService.getState()
+  );
+  const [multilingualState, setMultilingualState] = useState<AudioEngineState>(() =>
+    multilingualAudioEngine.getState()
   );
 
   // Monotonically increasing request counter to prevent asynchronous race conditions
   const syncRequestIdRef = useRef<number>(0);
 
-  // Subscribe to playback changes
+  // Subscribe to playback changes and global audio coordinator active source
   useEffect(() => {
-    const unsubscribe = unifiedSacredAudioService.subscribe((state) => {
+    const unsubSacred = unifiedSacredAudioService.subscribe((state) => {
       setPlaybackState(state);
     });
-    return unsubscribe;
+    const unsubCoordinator = audioCoordinator.subscribe((source) => {
+      setActiveCoordinatorSource(source);
+    });
+    const unsubMulti = multilingualAudioEngine.subscribe((state) => {
+      setMultilingualState(state);
+    });
+    return () => {
+      unsubSacred();
+      unsubCoordinator();
+      unsubMulti();
+    };
+  }, []);
+
+  // Stop Sacred Audio when leaving reading context (component unmount only)
+  useEffect(() => {
+    return () => {
+      unifiedSacredAudioService.stop();
+    };
   }, []);
 
   // Compute canonical contextual audio match result using the Universal Synchronization Engine
@@ -256,6 +344,24 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
     return 'Authentic Sacred Chanting';
   };
 
+  // Determine active player mode: follows active audio source, falls back to reading context
+  const isSacredSourceActive =
+    activeCoordinatorSource === 'sacred' ||
+    (playbackState.currentRequirement !== null &&
+      (playbackState.status === 'PLAYING' ||
+        playbackState.status === 'LOADING' ||
+        playbackState.status === 'PAUSED'));
+  const isMultilingualSourceActive =
+    activeCoordinatorSource === 'multilingual' ||
+    multilingualState.playbackState === 'playing' ||
+    multilingualState.playbackState === 'buffering' ||
+    multilingualState.playbackState === 'paused' ||
+    Boolean(multilingualControls?.isVisible && !isSacredSourceActive);
+  const showQuranPlayer = Boolean(quranControls) && !isSacredSourceActive && !isMultilingualSourceActive;
+  const showMultilingualPlayer =
+    !showQuranPlayer && !isSacredSourceActive && Boolean(multilingualControls) && isMultilingualSourceActive;
+  const showSacredPlayer = !showQuranPlayer && !showMultilingualPlayer && Boolean(activeReq);
+
   return (
     <aside
       className={`flex flex-col bg-navy-950/95 border border-gold-500/30 rounded-3xl p-4 sm:p-5 shadow-2xl space-y-4 ${className}`}
@@ -348,10 +454,330 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
       )}
 
       {/* -----------------------------------------------------------------------
-          MAIN PLAYER CARD: Current Track Controls & Visualizer
+          QURAN AYAH-BY-AYAH RECITATION CONTROLS (Unified into Sacred Audio Panel)
+          Preserves reciter selection, Ayah/Surah nav, Page/Surah scope, seek,
+          speed, auto-advance, and page-boundary notices without a fixed dock.
           ----------------------------------------------------------------------- */}
-      {activeReq ? (
-        <div className="p-4 rounded-2xl bg-gradient-to-b from-navy-900 to-navy-950 border border-gold-500/25 space-y-3.5 shadow-lg">
+      {showQuranPlayer && quranControls && (() => {
+        const currentReciter =
+          SUPPORTED_RECITERS.find((r) => r.id === quranControls.reciterId) || SUPPORTED_RECITERS[0];
+        const progressPercent =
+          quranControls.duration > 0
+            ? Math.min(100, (quranControls.currentTime / quranControls.duration) * 100)
+            : 0;
+        const isPageMode = quranControls.playbackScope === 'page';
+        const pageBoundary = quranControls.pageBoundary;
+        const hasPageBoundary = isPageMode && pageBoundary !== null;
+        const isDuaKhatm = pageBoundary?.isDuaKhatmOnly ?? false;
+        const isUnverified = hasPageBoundary && !pageBoundary.isVerified;
+        const isPrevAyahDisabled =
+          isUnverified ||
+          (hasPageBoundary && pageBoundary.startAyah > 0
+            ? quranControls.currentAyahNumber <= pageBoundary.startAyah
+            : quranControls.currentAyahNumber <= 1);
+        const isNextAyahDisabled =
+          isUnverified ||
+          (hasPageBoundary && pageBoundary.endAyah > 0
+            ? quranControls.currentAyahNumber >= pageBoundary.endAyah
+            : quranControls.currentAyahNumber >= quranControls.totalAyahs);
+        const isPrevSurahDisabled = isPageMode || quranControls.currentSurahNumber <= 1;
+        const isNextSurahDisabled = isPageMode || quranControls.currentSurahNumber >= 114;
+        const isPlayDisabled = isDuaKhatm || isUnverified;
+
+        return (
+          <div
+            data-testid="quran-unified-player-section"
+            className="p-4 rounded-2xl bg-gradient-to-b from-navy-900 to-navy-950 border border-gold-500/30 space-y-3 shadow-lg"
+          >
+            {/* Track & Ayah Info */}
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0 flex-1">
+                <div className="text-xs font-serif font-bold text-slate-100 flex items-center gap-1.5 flex-wrap">
+                  <span className="truncate" data-testid="audio-surah-info">
+                    Surah {quranControls.currentSurahNumber}: {quranControls.currentSurahName}
+                  </span>
+                  <span
+                    data-testid="audio-ayah-badge"
+                    className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-gold-500/20 text-gold-300 border border-gold-500/30 whitespace-nowrap"
+                  >
+                    Ayah {quranControls.currentAyahNumber} / {quranControls.totalAyahs}
+                  </span>
+                </div>
+                <div className="text-[11px] text-slate-400 mt-1 flex items-center gap-1.5 flex-wrap">
+                  <span className="text-slate-500">Reciter:</span>
+                  <span className="text-gold-400 font-medium truncate" data-testid="audio-reciter-name">
+                    {currentReciter.name}
+                  </span>
+                  {isPageMode && pageBoundary && !isDuaKhatm && (
+                    <span
+                      data-testid="audio-page-boundary-badge"
+                      className={`text-[10px] font-mono px-1.5 py-0.5 rounded border whitespace-nowrap ${
+                        pageBoundary.isVerified
+                          ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                          : 'bg-rose-500/20 text-rose-300 border-rose-500/40'
+                      }`}
+                    >
+                      Page {pageBoundary.pageNumber}:{' '}
+                      {pageBoundary.isVerified ? `v.${pageBoundary.startAyah}–${pageBoundary.endAyah}` : 'Unverified'}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Scrubber Slider */}
+            <div className="w-full flex items-center space-x-2 text-[10px] font-mono text-slate-400">
+              <span className="w-9 text-right text-gold-300 font-semibold" data-testid="audio-current-time">
+                {formatTime(quranControls.currentTime)}
+              </span>
+              <input
+                type="range"
+                min={0}
+                max={quranControls.duration > 0 ? quranControls.duration : 100}
+                step={0.1}
+                value={quranControls.currentTime}
+                onInput={(e) => quranControls.onSeek(parseFloat((e.target as HTMLInputElement).value))}
+                onChange={(e) => quranControls.onSeek(parseFloat(e.target.value))}
+                aria-label="Audio scrubber"
+                data-testid="audio-progress-bar"
+                className="flex-1 h-1.5 bg-navy-800 rounded-lg appearance-none cursor-pointer accent-gold-400"
+                style={{
+                  background: `linear-gradient(to right, #d97706 ${progressPercent}%, #1e293b ${progressPercent}%)`,
+                }}
+              />
+              <span className="w-9 text-left text-slate-400" data-testid="audio-duration">
+                {formatTime(quranControls.duration)}
+              </span>
+            </div>
+
+            {/* Transport Controls */}
+            <div className="flex items-center justify-center space-x-1.5">
+              <button
+                onClick={quranControls.onPrevSurah}
+                disabled={isPrevSurahDisabled}
+                data-testid="audio-prev-surah-btn"
+                title={isPageMode ? 'Surah navigation disabled in Page Mode' : 'Previous Surah'}
+                className="p-1.5 rounded-full text-slate-400 hover:text-gold-400 hover:bg-navy-800 disabled:opacity-30 transition-colors"
+              >
+                <ChevronsLeft className="w-4 h-4" />
+              </button>
+              <button
+                onClick={quranControls.onPrevAyah}
+                disabled={isPrevAyahDisabled}
+                data-testid="audio-prev-ayah-btn"
+                title="Previous Ayah"
+                className="p-1.5 rounded-full text-slate-300 hover:text-gold-400 hover:bg-navy-800 disabled:opacity-30 transition-colors"
+              >
+                <SkipBack className="w-4 h-4" />
+              </button>
+              <button
+                onClick={quranControls.onTogglePlay}
+                data-testid="audio-play-pause-btn"
+                title={
+                  isDuaKhatm
+                    ? 'Dua Khatm (Audio Unavailable)'
+                    : isUnverified
+                    ? 'Page boundaries not yet verified (Audio Disabled)'
+                    : quranControls.isPlaying
+                    ? 'Pause'
+                    : 'Play'
+                }
+                disabled={isPlayDisabled}
+                className="w-10 h-10 rounded-full bg-gold-500 hover:bg-gold-400 disabled:opacity-30 text-navy-950 font-bold flex items-center justify-center shadow-gold-sm transition-transform active:scale-95 flex-shrink-0"
+              >
+                {quranControls.isLoading && quranControls.isPlaying ? (
+                  <RefreshCw className="w-4 h-4 animate-spin" />
+                ) : quranControls.isPlaying ? (
+                  <Pause className="w-4 h-4" />
+                ) : (
+                  <Play className="w-4 h-4 ml-0.5" />
+                )}
+              </button>
+              <button
+                onClick={quranControls.onStop}
+                data-testid="audio-stop-btn"
+                title="Stop Playback"
+                className="p-1.5 rounded-full text-slate-400 hover:text-rose-400 hover:bg-navy-800 transition-colors"
+              >
+                <Square className="w-3.5 h-3.5 fill-current" />
+              </button>
+              <button
+                onClick={quranControls.onNextAyah}
+                disabled={isNextAyahDisabled}
+                data-testid="audio-next-ayah-btn"
+                title="Next Ayah"
+                className="p-1.5 rounded-full text-slate-300 hover:text-gold-400 hover:bg-navy-800 disabled:opacity-30 transition-colors"
+              >
+                <SkipForward className="w-4 h-4" />
+              </button>
+              <button
+                onClick={quranControls.onNextSurah}
+                disabled={isNextSurahDisabled}
+                data-testid="audio-next-surah-btn"
+                title={isPageMode ? 'Surah navigation disabled in Page Mode' : 'Next Surah'}
+                className="p-1.5 rounded-full text-slate-400 hover:text-gold-400 hover:bg-navy-800 disabled:opacity-30 transition-colors"
+              >
+                <ChevronsRight className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Scope, Reciter, Auto-Advance & Speed */}
+            <div className="flex flex-wrap items-center justify-between gap-1.5 pt-2 border-t border-navy-800/80 text-xs">
+              <button
+                onClick={quranControls.onTogglePlaybackScope}
+                data-testid="audio-scope-toggle"
+                className={`px-2 py-1 rounded-lg border text-[11px] font-medium transition-colors whitespace-nowrap ${
+                  isPageMode
+                    ? 'bg-amber-500/20 text-amber-300 border-amber-500/50'
+                    : 'bg-navy-900 text-slate-400 border-navy-800 hover:text-slate-200'
+                }`}
+              >
+                {isPageMode ? '📄 Page' : '📖 Surah'}
+              </button>
+
+              <select
+                value={quranControls.reciterId}
+                onChange={(e) => quranControls.onSelectReciter(e.target.value)}
+                data-testid="audio-reciter-select"
+                aria-label="Select Reciter"
+                className="bg-navy-900 border border-gold-500/30 rounded-lg px-2 py-1 text-[11px] text-slate-200 focus:outline-none focus:border-gold-400 max-w-[140px] truncate"
+              >
+                {SUPPORTED_RECITERS.map((r) => (
+                  <option key={r.id} value={r.id}>
+                    {r.name}
+                  </option>
+                ))}
+              </select>
+
+              <button
+                onClick={quranControls.onToggleAutoAdvance}
+                data-testid="audio-autoadvance-toggle"
+                className={`px-2 py-1 rounded-lg border text-[11px] font-medium transition-colors whitespace-nowrap ${
+                  quranControls.autoAdvance
+                    ? 'bg-gold-500/20 text-gold-300 border-gold-500/50'
+                    : 'bg-navy-900 text-slate-400 border-navy-800 hover:text-slate-200'
+                }`}
+              >
+                Auto: {quranControls.autoAdvance ? 'ON' : 'OFF'}
+              </button>
+
+              <select
+                value={quranControls.playbackSpeed}
+                onChange={(e) => quranControls.onChangePlaybackSpeed(Number(e.target.value))}
+                data-testid="audio-speed-select"
+                aria-label="Playback Speed"
+                className="bg-navy-900 border border-gold-500/30 rounded-lg px-1.5 py-1 text-[11px] text-slate-200 focus:outline-none"
+              >
+                <option value="0.75">0.75x</option>
+                <option value="1">1.0x</option>
+                <option value="1.25">1.25x</option>
+                <option value="1.5">1.5x</option>
+              </select>
+            </div>
+
+            {/* Quran Boundary / Status Banners */}
+            {quranControls.pageRecitationCompleted && (
+              <div
+                data-testid="audio-page-completed-banner"
+                className="text-xs text-emerald-300 bg-emerald-950/80 border border-emerald-500/40 rounded-lg px-3 py-1.5 flex items-center justify-between"
+              >
+                <div className="flex items-center space-x-1.5 min-w-0">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
+                  <span className="truncate font-medium" data-testid="audio-completion-message">
+                    {quranControls.completionMessage || 'Page recitation completed.'}
+                  </span>
+                </div>
+                <button
+                  onClick={quranControls.onTogglePlay}
+                  data-testid="audio-replay-page-btn"
+                  className="underline hover:text-emerald-100 ml-2 font-medium flex-shrink-0 text-xs"
+                >
+                  Replay
+                </button>
+              </div>
+            )}
+
+            {isDuaKhatm && (
+              <div
+                data-testid="audio-dua-khatm-banner"
+                className="text-xs text-gold-300 bg-gold-950/80 border border-gold-500/40 rounded-lg px-3 py-1.5 flex items-center space-x-1.5"
+              >
+                <Info className="w-3.5 h-3.5 text-gold-400 flex-shrink-0" />
+                <span data-testid="audio-dua-khatm-text">
+                  {quranControls.completionMessage || 'Dua Khatm al-Quran epilogue plate (Recitation audio unavailable).'}
+                </span>
+              </div>
+            )}
+
+            {isUnverified && !isDuaKhatm && (
+              <div
+                data-testid="audio-unverified-page-banner"
+                className="text-xs text-amber-300 bg-amber-950/80 border border-amber-500/40 rounded-lg px-3 py-1.5 flex items-center space-x-1.5"
+              >
+                <AlertCircle className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />
+                <span data-testid="audio-unverified-page-text">
+                  {quranControls.completionMessage || 'Page boundaries not yet verified. Audio disabled for this page.'}
+                </span>
+              </div>
+            )}
+
+            {quranControls.errorMessage && (
+              <div
+                data-testid="audio-error-banner"
+                className="text-xs text-amber-300 bg-amber-950/70 border border-amber-500/30 rounded-lg px-3 py-1.5 flex items-center justify-between"
+              >
+                <div className="flex items-center space-x-1.5 min-w-0">
+                  <AlertCircle className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />
+                  <span className="truncate">{quranControls.errorMessage}</span>
+                </div>
+                <button
+                  onClick={quranControls.onTogglePlay}
+                  className="underline hover:text-amber-100 ml-2 font-medium flex-shrink-0 text-xs"
+                >
+                  Retry
+                </button>
+              </div>
+            )}
+          </div>
+        );
+      })()}
+
+      {/* -----------------------------------------------------------------------
+          MULTILINGUAL SCRIPTURE NARRATION CONTROLS (Inline inside Unified Panel)
+          ----------------------------------------------------------------------- */}
+      {showMultilingualPlayer && multilingualControls && (
+        <MultilingualAudioPlayerBar
+          title={multilingualControls.title}
+          subtitle={multilingualControls.subtitle}
+          availableEditions={multilingualControls.availableEditions}
+          onOpenProvenanceModal={multilingualControls.onOpenProvenanceModal}
+          onClose={multilingualControls.onClose}
+        />
+      )}
+
+      {/* -----------------------------------------------------------------------
+          MAIN PLAYER CARD: Current Track Controls & Visualizer (Sacred Audio)
+          ----------------------------------------------------------------------- */}
+      {showSacredPlayer && activeReq ? (
+        <div
+          data-testid="sacred-audio-active-player"
+          className="p-4 rounded-2xl bg-gradient-to-b from-navy-900 to-navy-950 border border-gold-500/25 space-y-3.5 shadow-lg"
+        >
+          {quranControls && (
+            <div className="flex items-center justify-between pb-2 border-b border-navy-800/80">
+              <span className="text-[11px] font-medium text-emerald-400">
+                Sacred Audio Active
+              </span>
+              <button
+                type="button"
+                onClick={quranControls.onTogglePlay}
+                data-testid="switch-to-quran-btn"
+                className="text-[11px] font-semibold text-gold-400 hover:text-gold-300 underline"
+              >
+                Switch to Quran Recitation
+              </button>
+            </div>
+          )}
           {/* Header row: ID & Type Badge */}
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
@@ -536,33 +962,67 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
             </button>
           </div>
         </div>
-      ) : (
+      ) : !showQuranPlayer && !showMultilingualPlayer ? (
         /* ---------------------------------------------------------------------
            LEVEL 5: NO APPROVED MATCH (Strict Graceful Empty State)
            --------------------------------------------------------------------- */
         <div
           data-testid="no-audio-card"
-          className="p-6 text-center bg-navy-900/60 border border-amber-500/30 rounded-2xl space-y-3 shadow-lg"
+          className="p-5 text-center bg-navy-900/60 border border-amber-500/30 rounded-2xl space-y-2.5 shadow-lg"
         >
-          <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center mx-auto">
-            <VolumeX className="w-6 h-6" />
+          <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center mx-auto">
+            <VolumeX className="w-5 h-5" />
           </div>
           <div className="space-y-1">
             <h3 className="font-serif text-sm font-bold text-slate-100">
               No approved recording currently available for this reading.
             </h3>
-            <p className="text-xs text-gold-400 font-medium">
+            <p className="text-xs text-gold-400 font-medium truncate">
               Reading: {activeReadingTitle}
-            </p>
-            <p className="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed pt-1">
-              This scripture text is available for authentic study. You may browse and listen to other approved liturgical recordings from the {context.religionId} tradition below.
             </p>
           </div>
         </div>
-      )}
+      ) : null}
+
+      {/* Expandable Text & Audio Information (Clutter Simplification) */}
+      <div className="border-t border-navy-800/80 pt-2">
+        <button
+          type="button"
+          onClick={() => setShowTextInfo((prev) => !prev)}
+          data-testid="text-info-toggle"
+          className="w-full flex items-center justify-between text-xs text-slate-400 hover:text-gold-300 py-1 transition"
+        >
+          <span className="flex items-center space-x-1.5 font-medium">
+            <Info className="w-3.5 h-3.5 text-gold-400" />
+            <span>Text information</span>
+          </span>
+          {showTextInfo ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+        </button>
+        {showTextInfo && (
+          <div
+            data-testid="text-info-details"
+            className="mt-2 p-3 rounded-xl bg-navy-900/70 border border-slate-800 text-[11px] text-slate-300 space-y-1.5 leading-relaxed"
+          >
+            <p>
+              <strong className="text-slate-100">Reading:</strong> {activeReadingTitle}
+            </p>
+            <p>
+              <strong className="text-slate-100">Tradition:</strong> {context.religionId} ({totalAvailableForTradition} approved recordings in library)
+            </p>
+            {activeReq?.rightsEvidence?.exactLicense && (
+              <p>
+                <strong className="text-slate-100">Audio Rights:</strong> {activeReq.rightsEvidence.exactLicense}
+              </p>
+            )}
+            <p className="text-slate-400">
+              Only verified open-licensed or explicitly authorized recordings are enabled. Blocked or pending-permission audio remains disabled.
+            </p>
+          </div>
+        )}
+      </div>
 
       {/* -----------------------------------------------------------------------
-          PRIMARY MATCHES LIST (When multiple exact/chapter matches exist)
+          PRIMARY MATCHES LIST (Natural document flow, max 3 items + View all)
           ----------------------------------------------------------------------- */}
       {primaryMatches.length > 1 && (
         <div className="space-y-2 pt-1">
@@ -570,11 +1030,20 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
             <span className="font-semibold text-slate-300">
               Matching Recordings ({primaryMatches.length})
             </span>
-            <span className="text-[10px] text-emerald-400 font-mono">Verified Match</span>
+            {primaryMatches.length > 3 && (
+              <button
+                type="button"
+                onClick={() => setIsViewAllOpen(true)}
+                data-testid="view-all-recordings-btn"
+                className="text-[11px] font-semibold text-gold-400 hover:text-gold-300 underline"
+              >
+                View all ({primaryMatches.length})
+              </button>
+            )}
           </div>
 
-          <div className="max-h-48 overflow-y-auto space-y-1.5 pr-1 custom-scrollbar">
-            {primaryMatches.map((req) => {
+          <div className="space-y-1.5">
+            {primaryMatches.slice(0, 3).map((req) => {
               const isSelected = activeReq?.id === req.id;
               const isPlayingThis =
                 playbackState.currentRequirement?.id === req.id &&
@@ -617,10 +1086,6 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
                       </div>
                     </div>
                   </div>
-
-                  <span className="text-[9px] font-mono text-gold-400/80 flex-shrink-0">
-                    {req.id}
-                  </span>
                 </div>
               );
             })}
@@ -629,81 +1094,155 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
       )}
 
       {/* -----------------------------------------------------------------------
-          LEVEL 4: SEPARATE TRADITION CATALOGUE
-          "Other Available Recordings from This Tradition"
-          Explicitly isolated from the active reading match
+          LEVEL 4: RECOMMENDED TRADITION RECORDINGS (Natural document flow, max 3 + View all)
           ----------------------------------------------------------------------- */}
-      <div className="space-y-2 pt-2 border-t border-navy-800/80">
-        <div className="flex items-center justify-between text-xs text-slate-400 px-1">
-          <span className="font-semibold text-slate-300">
-            Other Available Recordings from This Tradition ({additionalRecordings.length})
-          </span>
-          <span className="text-[10px] text-gold-400/80 font-mono">
-            {totalAvailableForTradition} Total
-          </span>
-        </div>
-
-        <div className="max-h-56 sm:max-h-64 overflow-y-auto space-y-1.5 pr-1 custom-scrollbar">
-          {additionalRecordings.map((req) => {
-            const isSelected = activeReq?.id === req.id;
-            const isPlayingThis =
-              playbackState.currentRequirement?.id === req.id &&
-              playbackState.status === 'PLAYING';
-
-            return (
-              <div
-                key={req.id}
-                data-testid={`playlist-item-${req.id}`}
-                onClick={() => handleTogglePlay(req)}
-                className={`p-2.5 rounded-xl border text-left cursor-pointer transition flex items-center justify-between group ${
-                  isSelected
-                    ? 'bg-gold-500/10 border-gold-500/50 shadow-gold-sm'
-                    : 'bg-navy-900/70 border-slate-800/80 hover:bg-navy-900 hover:border-slate-700'
-                }`}
+      {additionalRecordings.length > 0 && (
+        <div className="space-y-2 pt-2 border-t border-navy-800/80">
+          <div className="flex items-center justify-between text-xs text-slate-400 px-1">
+            <span className="font-semibold text-slate-300">
+              Recommended Recordings ({additionalRecordings.length})
+            </span>
+            {additionalRecordings.length > 3 && (
+              <button
+                type="button"
+                onClick={() => setIsViewAllOpen(true)}
+                data-testid="view-all-recordings-btn"
+                className="text-[11px] font-semibold text-gold-400 hover:text-gold-300 underline"
               >
-                <div className="flex items-center space-x-2.5 min-w-0 pr-2">
+                View all ({additionalRecordings.length})
+              </button>
+            )}
+          </div>
+
+          <div className="space-y-1.5">
+            {additionalRecordings.slice(0, 3).map((req) => {
+              const isSelected = activeReq?.id === req.id;
+              const isPlayingThis =
+                playbackState.currentRequirement?.id === req.id &&
+                playbackState.status === 'PLAYING';
+
+              return (
+                <div
+                  key={req.id}
+                  data-testid={`playlist-item-${req.id}`}
+                  onClick={() => handleTogglePlay(req)}
+                  className={`p-2.5 rounded-xl border text-left cursor-pointer transition flex items-center justify-between group ${
+                    isSelected
+                      ? 'bg-gold-500/10 border-gold-500/50 shadow-gold-sm'
+                      : 'bg-navy-900/70 border-slate-800/80 hover:bg-navy-900 hover:border-slate-700'
+                  }`}
+                >
+                  <div className="flex items-center space-x-2.5 min-w-0 pr-2">
+                    <div
+                      className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 text-xs font-mono ${
+                        isPlayingThis
+                          ? 'bg-gold-500 text-navy-950 font-bold'
+                          : isSelected
+                          ? 'bg-gold-500/20 text-gold-400'
+                          : 'bg-navy-950 text-slate-400 group-hover:text-gold-400'
+                      }`}
+                    >
+                      {isPlayingThis ? (
+                        <Pause className="w-3.5 h-3.5 fill-current" />
+                      ) : (
+                        <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
+                      )}
+                    </div>
+
+                    <div className="min-w-0">
+                      <div className="text-xs font-semibold text-slate-200 truncate group-hover:text-gold-300">
+                        {req.requirementTitle}
+                      </div>
+                      <div className="text-[10px] text-slate-400 truncate">
+                        {getReciterAttribution(req)}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-1.5 flex-shrink-0">
+                    <span
+                      className={`px-1.5 py-0.5 rounded text-[9px] font-bold border ${
+                        req.playbackProvider === 'LOCAL_HTML5'
+                          ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
+                          : 'bg-purple-500/15 text-purple-300 border-purple-500/30'
+                      }`}
+                    >
+                      {req.playbackProvider === 'LOCAL_HTML5' ? 'Audio' : 'Video'}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Explicit View All Recordings Modal */}
+      {isViewAllOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+          data-testid="all-recordings-modal"
+        >
+          <div className="relative w-full max-w-2xl max-h-[85vh] bg-navy-950 border border-gold-500/30 rounded-3xl shadow-2xl flex flex-col overflow-hidden">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-navy-800">
+              <div>
+                <h3 className="font-serif text-base font-bold text-slate-100">
+                  All Available Recordings — {context.religionId}
+                </h3>
+                <p className="text-xs text-slate-400">
+                  {primaryMatches.length + additionalRecordings.length} verified recordings
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsViewAllOpen(false)}
+                data-testid="close-all-recordings-modal"
+                className="p-2 rounded-xl text-slate-400 hover:text-slate-100 hover:bg-navy-900 transition"
+                aria-label="Close recordings modal"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-4 space-y-2">
+              {[...primaryMatches, ...additionalRecordings].map((req) => {
+                const isSelected = activeReq?.id === req.id;
+                const isPlayingThis =
+                  playbackState.currentRequirement?.id === req.id &&
+                  playbackState.status === 'PLAYING';
+                return (
                   <div
-                    className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 text-xs font-mono ${
-                      isPlayingThis
-                        ? 'bg-gold-500 text-navy-950 font-bold'
-                        : isSelected
-                        ? 'bg-gold-500/20 text-gold-400'
-                        : 'bg-navy-950 text-slate-400 group-hover:text-gold-400'
+                    key={req.id}
+                    onClick={() => {
+                      handleTogglePlay(req);
+                      setIsViewAllOpen(false);
+                    }}
+                    className={`p-3 rounded-xl border cursor-pointer transition flex items-center justify-between ${
+                      isSelected
+                        ? 'bg-gold-500/10 border-gold-500/50'
+                        : 'bg-navy-900/70 border-slate-800 hover:border-slate-700'
                     }`}
                   >
-                    {isPlayingThis ? (
-                      <Pause className="w-3.5 h-3.5 fill-current" />
-                    ) : (
-                      <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
-                    )}
-                  </div>
-
-                  <div className="min-w-0">
-                    <div className="text-xs font-semibold text-slate-200 truncate group-hover:text-gold-300">
-                      {req.requirementTitle}
+                    <div className="flex items-center space-x-3 min-w-0 pr-2">
+                      <div className="w-8 h-8 rounded-lg bg-navy-950 flex items-center justify-center text-gold-400 flex-shrink-0">
+                        {isPlayingThis ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-xs font-semibold text-slate-100 truncate">
+                          {req.requirementTitle}
+                        </div>
+                        <div className="text-[11px] text-slate-400 truncate">
+                          {getReciterAttribution(req)}
+                        </div>
+                      </div>
                     </div>
-                    <div className="text-[10px] text-slate-400 truncate">
-                      {getReciterAttribution(req)}
-                    </div>
+                    <span className="text-[10px] font-mono text-gold-400/80 flex-shrink-0">{req.id}</span>
                   </div>
-                </div>
-
-                <div className="flex items-center space-x-1.5 flex-shrink-0">
-                  {req.playbackProvider === 'LOCAL_HTML5' ? (
-                    <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                      Audio
-                    </span>
-                  ) : (
-                    <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-purple-500/15 text-purple-300 border border-purple-500/30">
-                      Video
-                    </span>
-                  )}
-                </div>
-              </div>
-            );
-          })}
+                );
+              })}
+            </div>
+          </div>
         </div>
-      </div>
+      )}
     </aside>
   );
 };

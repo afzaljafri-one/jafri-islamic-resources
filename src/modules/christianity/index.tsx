@@ -40,7 +40,6 @@ import { AudioNoticeModal } from '../../platform/components/AudioNoticeModal';
 import { ScriptureCoverageModal } from '../../platform/components/ScriptureCoverageModal';
 import { TwoColumnReadingLayout } from '../../platform/components/layout/TwoColumnReadingLayout';
 import type { ReadingContext } from '../../platform/services/contextualAudioMatcher';
-import { MultilingualAudioPlayerBar } from '../../platform/components/MultilingualAudioPlayerBar';
 import { TypographyControls } from '../../platform/components/TypographyControls';
 import { AttributionFooter } from '../../platform/components/AttributionFooter';
 import { platformStorageService } from '../../platform/services/storageService';
@@ -465,7 +464,7 @@ export const ChristianityModule: React.FC<ChristianityModuleProps> = ({
       {/* Top Breadcrumb & Controls Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 py-3 rounded-2xl bg-gradient-to-r from-navy-900 via-navy-900/90 to-navy-950 border border-slate-800 shadow-lg">
         {/* Navigation & Book Selector */}
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center flex-wrap gap-2 min-w-0">
           <button
             onClick={() => {
               multilingualAudioEngine.stop();
@@ -503,12 +502,12 @@ export const ChristianityModule: React.FC<ChristianityModuleProps> = ({
         </div>
 
         {/* Action Buttons: Translation, Search, Bookmarks, Typography */}
-        <div className="flex items-center space-x-2 self-end sm:self-auto">
+        <div className="flex items-center flex-wrap gap-2 self-end sm:self-auto w-full sm:w-auto justify-end min-w-0">
           {/* Translation Dropdown */}
           <select
             value={selectedTranslation}
             onChange={(e) => setSelectedTranslation(e.target.value)}
-            className="bg-navy-950 border border-slate-700 text-slate-200 text-xs rounded-xl px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-gold-500 font-semibold cursor-pointer"
+            className="bg-navy-950 border border-slate-700 text-slate-200 text-xs rounded-xl px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-gold-500 font-semibold cursor-pointer max-w-full"
           >
             {BIBLE_TRANSLATIONS.map((t) => (
               <option key={t.id} value={t.id}>
@@ -612,10 +611,10 @@ export const ChristianityModule: React.FC<ChristianityModuleProps> = ({
       )}
 
       {/* Chapter Selection Bar */}
-      <div className="flex items-center justify-between p-3 rounded-2xl bg-navy-950/60 border border-slate-800 text-xs">
-        <div className="flex items-center space-x-2">
-          <span className="text-slate-400 font-semibold">Jump to Chapter:</span>
-          <div className="flex items-center space-x-1 max-w-[280px] sm:max-w-md overflow-x-auto py-1">
+      <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-2xl bg-navy-950/60 border border-slate-800 text-xs">
+        <div className="flex items-center space-x-2 min-w-0 w-full sm:w-auto">
+          <span className="text-slate-400 font-semibold shrink-0">Jump to Chapter:</span>
+          <div className="flex items-center space-x-1 flex-1 min-w-0 sm:max-w-md overflow-x-auto py-1">
             {Array.from({ length: currentBook.chapters }, (_, i) => i + 1).map((ch) => (
               <button
                 key={ch}
@@ -675,7 +674,20 @@ export const ChristianityModule: React.FC<ChristianityModuleProps> = ({
       </div>
 
       {/* Main Scripture Reading Cards Area — Two-Column Reading & Sacred Audio Experience */}
-      <TwoColumnReadingLayout context={readingContext}>
+      <TwoColumnReadingLayout
+        context={readingContext}
+        multilingualControls={{
+          isVisible: isAudioPlayerVisible,
+          title: `${currentBook.name} ${currentChapter}`,
+          subtitle: selectedTranslation,
+          availableEditions: CHRISTIANITY_AUDIO_EDITIONS,
+          onOpenProvenanceModal: () => setIsAudioNoticeOpen(true),
+          onClose: () => {
+            multilingualAudioEngine.stop();
+            setIsAudioPlayerVisible(false);
+          },
+        }}
+      >
         <main className="space-y-3 min-h-[400px]">
         {loading ? (
           <div className="py-20 text-center text-slate-400 text-xs space-y-2">
@@ -946,19 +958,6 @@ export const ChristianityModule: React.FC<ChristianityModuleProps> = ({
         initialReligionId="christianity"
       />
 
-      {/* Multilingual Audio Player Bar */}
-      {isAudioPlayerVisible && (
-        <MultilingualAudioPlayerBar
-          title={`${currentBook.name} ${currentChapter}`}
-          subtitle={selectedTranslation}
-          availableEditions={CHRISTIANITY_AUDIO_EDITIONS}
-          onOpenProvenanceModal={() => setIsAudioNoticeOpen(true)}
-          onClose={() => {
-            multilingualAudioEngine.stop();
-            setIsAudioPlayerVisible(false);
-          }}
-        />
-      )}
     </div>
   );
 };

@@ -35,8 +35,6 @@ import { ScriptureNavigationDrawer } from '../../platform/components/ScriptureNa
 import { UniversalSearchModal } from '../../platform/components/UniversalSearchModal';
 import { UniversalBookmarksDrawer } from '../../platform/components/UniversalBookmarksDrawer';
 import { TypographyControls } from '../../platform/components/TypographyControls';
-import { GenericAudioPlayerBar } from '../../platform/components/GenericAudioPlayerBar';
-import { MultilingualAudioPlayerBar } from '../../platform/components/MultilingualAudioPlayerBar';
 import { AudioNoticeModal } from '../../platform/components/AudioNoticeModal';
 import { ScriptureCoverageModal } from '../../platform/components/ScriptureCoverageModal';
 import { YouTubeEmbedModal } from '../../platform/components/audio/YouTubeEmbedModal';
@@ -125,6 +123,13 @@ export const JudaismModule: React.FC<JudaismModuleProps> = ({
   const [showEnglish, setShowEnglish] = useState<boolean>(true);
   const [isPlayingAudio, setIsPlayingAudio] = useState<boolean>(false);
   const [isMultilingualPlayerVisible, setIsMultilingualPlayerVisible] = useState<boolean>(false);
+
+  // Stop multilingual audio when leaving Judaism reading context (unmount only)
+  useEffect(() => {
+    return () => {
+      multilingualAudioEngine.stop();
+    };
+  }, []);
   const [activeAudioUnitId, setActiveAudioUnitId] = useState<string | null>(null);
   const [isMultilingualPlaying, setIsMultilingualPlaying] = useState<boolean>(false);
   const [isAudioNoticeOpen, setIsAudioNoticeOpen] = useState<boolean>(false);
@@ -381,7 +386,7 @@ export const JudaismModule: React.FC<JudaismModuleProps> = ({
       {/* Top Breadcrumb & Controls Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 py-3 rounded-2xl bg-gradient-to-r from-navy-900 via-navy-900/90 to-navy-950 border border-slate-800 shadow-lg">
         {/* Navigation & Book Indicator */}
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center flex-wrap gap-2 min-w-0">
           <button
             onClick={onReturnToHome}
             className="flex items-center space-x-1 px-2.5 py-1.5 rounded-xl bg-navy-950/80 border border-slate-700/80 hover:border-gold-500/50 text-slate-300 hover:text-gold-300 text-xs font-medium transition"
@@ -452,7 +457,7 @@ export const JudaismModule: React.FC<JudaismModuleProps> = ({
         </div>
 
         {/* Action Controls: Audio Play Button, Translation Toggle, Search, Bookmarks, Typography */}
-        <div className="flex items-center space-x-2 self-end sm:self-auto flex-wrap">
+        <div className="flex items-center flex-wrap gap-2 self-end sm:self-auto w-full sm:w-auto justify-end min-w-0">
           {/* Shema Yisrael Approved YouTube Chanting (REQ-JUD-020) */}
           {currentBook.id === 'Deuteronomy' && currentChapter === 6 && shemaReq && (
             <button
@@ -575,10 +580,10 @@ export const JudaismModule: React.FC<JudaismModuleProps> = ({
       )}
 
       {/* Chapter Selection Pill Bar */}
-      <div className="flex items-center justify-between p-3 rounded-2xl bg-navy-950/60 border border-slate-800 text-xs">
-        <div className="flex items-center space-x-2">
-          <span className="text-slate-400 font-semibold">Chapter:</span>
-          <div className="flex items-center space-x-1 max-w-[280px] sm:max-w-md overflow-x-auto py-1">
+      <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-2xl bg-navy-950/60 border border-slate-800 text-xs">
+        <div className="flex items-center space-x-2 min-w-0 w-full sm:w-auto">
+          <span className="text-slate-400 font-semibold shrink-0">Chapter:</span>
+          <div className="flex items-center space-x-1 flex-1 min-w-0 sm:max-w-md overflow-x-auto py-1">
             {Array.from({ length: currentBook.chapters }, (_, i) => i + 1).map((ch) => (
               <button
                 key={ch}
@@ -647,7 +652,20 @@ export const JudaismModule: React.FC<JudaismModuleProps> = ({
         };
 
         return (
-          <TwoColumnReadingLayout context={readingContext}>
+          <TwoColumnReadingLayout
+            context={readingContext}
+            multilingualControls={{
+              isVisible: isMultilingualPlayerVisible,
+              title: `${currentBook.enTitle} ${currentChapter}`,
+              subtitle: `${currentBook.heTitle} (Hebrew & English)`,
+              availableEditions: JUDAISM_AUDIO_EDITIONS,
+              onOpenProvenanceModal: () => setIsAudioNoticeOpen(true),
+              onClose: () => {
+                multilingualAudioEngine.stop();
+                setIsMultilingualPlayerVisible(false);
+              },
+            }}
+          >
             <main className="space-y-4 min-h-[450px]">
         {/* Offline Fallback Warning for Genesis 1 */}
         {currentBook.id === 'Genesis' && currentChapter === 1 && verses.length === 2 && (
@@ -838,9 +856,6 @@ export const JudaismModule: React.FC<JudaismModuleProps> = ({
         </button>
       </div>
 
-      {/* Generic Audio Player Dock for Mechon Mamre */}
-      <GenericAudioPlayerBar accentColorClass="text-sky-400" />
-
       {/* Standardized Provenance & Attribution Footer */}
       <AttributionFooter
         provenance={{
@@ -924,19 +939,6 @@ export const JudaismModule: React.FC<JudaismModuleProps> = ({
           setBookmarks(platformStorageService.getBookmarks('judaism'));
         }}
       />
-
-      {/* Multilingual Audio Player Bar */}
-      {isMultilingualPlayerVisible && (
-        <MultilingualAudioPlayerBar
-          title={`${currentBook.enTitle} ${currentChapter}`}
-          subtitle={`${currentBook.heTitle} (Hebrew & English)`}
-          availableEditions={JUDAISM_AUDIO_EDITIONS}
-          onClose={() => {
-            multilingualAudioEngine.stop();
-            setIsMultilingualPlayerVisible(false);
-          }}
-        />
-      )}
 
       {/* Audio Status Notice Modal */}
       <AudioNoticeModal

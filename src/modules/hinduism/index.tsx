@@ -51,7 +51,6 @@ import { TwoColumnReadingLayout } from '../../platform/components/layout/TwoColu
 import type { ReadingContext } from '../../platform/services/contextualAudioMatcher';
 import { unifiedSacredAudioService } from '../../platform/services/unifiedSacredAudioService';
 import { SACRED_AUDIO_MASTER_CATALOGUE } from '../../platform/data/sacredAudioMasterCatalogue';
-import { MultilingualAudioPlayerBar } from '../../platform/components/MultilingualAudioPlayerBar';
 import { TypographyControls } from '../../platform/components/TypographyControls';
 import { AttributionFooter } from '../../platform/components/AttributionFooter';
 import { platformStorageService } from '../../platform/services/storageService';
@@ -683,9 +682,9 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
   };
 
   return (
-    <div className="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-6 space-y-6 animate-in fade-in-50 duration-200">
+    <div className="flex-1 max-w-7xl w-full min-w-0 mx-auto px-4 lg:px-8 py-6 space-y-6 overflow-x-hidden animate-in fade-in-50 duration-200">
       {/* Top Breadcrumb & Controls Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 py-3 rounded-2xl bg-gradient-to-r from-navy-900 via-navy-900/90 to-navy-950 border border-slate-800 shadow-lg">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 py-3 rounded-2xl bg-gradient-to-r from-navy-900 via-navy-900/90 to-navy-950 border border-slate-800 shadow-lg max-w-full overflow-hidden">
         {/* Navigation & Chapter/Collection Indicator */}
         <div className="flex items-center space-x-3 flex-wrap gap-y-2">
           <button
@@ -725,13 +724,13 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
         </div>
 
         {/* Action Controls: Commentary Switcher, Audio, Search, Bookmarks, Typography */}
-        <div className="flex items-center space-x-2 self-end sm:self-auto flex-wrap gap-y-1">
+        <div className="flex items-center flex-wrap gap-2 self-end sm:self-auto w-full sm:w-auto justify-end min-w-0">
           {/* Commentary Switcher (Active on Gita) */}
           {selectedCollectionId === 'gita' && (
             <select
               value={selectedCommentary}
               onChange={(e) => setSelectedCommentary(e.target.value as any)}
-              className="bg-navy-950 border border-slate-700 text-slate-200 text-xs rounded-xl px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-gold-500 font-medium cursor-pointer"
+              className="bg-navy-950 border border-slate-700 text-slate-200 text-xs rounded-xl px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-gold-500 font-medium cursor-pointer max-w-full w-full sm:w-auto truncate"
             >
               <option value="arnold">Sir Edwin Arnold (1885 • Public Domain)</option>
               <option value="siva">Swami Sivananda (Permission Required • Withheld)</option>
@@ -861,9 +860,9 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
       )}
 
       {/* Collections Catalogue Browser Bar */}
-      <div className="p-4 rounded-2xl bg-navy-950/70 border border-slate-800 space-y-3">
+      <div className="p-4 rounded-2xl bg-navy-950/70 border border-slate-800 space-y-3 max-w-full overflow-hidden">
         {/* Category Filter Pills */}
-        <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 text-xs">
+        <div className="flex items-center flex-wrap gap-1.5 w-full max-w-full pb-1 text-xs">
           <span className="text-slate-500 text-[11px] font-semibold uppercase tracking-wider mr-1">
             Category:
           </span>
@@ -964,10 +963,10 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
 
       {/* CHAPTER SELECTION BAR (When in Gita Mode) */}
       {selectedCollectionId === 'gita' && (
-        <div className="flex items-center justify-between p-3 rounded-2xl bg-navy-950/60 border border-slate-800 text-xs">
-          <div className="flex items-center space-x-2">
-            <span className="text-slate-400 font-semibold">Adhyaya:</span>
-            <div className="flex items-center space-x-1 max-w-[280px] sm:max-w-md overflow-x-auto py-1">
+        <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-2xl bg-navy-950/60 border border-slate-800 text-xs max-w-full overflow-hidden">
+          <div className="flex items-center space-x-2 min-w-0 w-full sm:w-auto">
+            <span className="text-slate-400 font-semibold shrink-0">Adhyaya:</span>
+            <div className="flex items-center space-x-1 flex-1 min-w-0 sm:max-w-md overflow-x-auto py-1">
               {GITA_CHAPTERS.map((ch) => (
                 <button
                   key={ch.chapter_number}
@@ -1022,7 +1021,26 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
       )}
 
       {/* MAIN READING AREA — Two-Column Scripture & Sacred Audio Experience */}
-      <TwoColumnReadingLayout context={readingContext}>
+      <TwoColumnReadingLayout
+        context={readingContext}
+        multilingualControls={{
+          isVisible: isAudioPlayerVisible,
+          title:
+            selectedCollectionId === 'gita'
+              ? `Bhagavad Gita — Chapter ${currentChapter.chapter_number}`
+              : selectedCollection.title,
+          subtitle:
+            selectedCollectionId === 'gita'
+              ? `${currentChapter.transliteration} (${currentChapter.name})`
+              : selectedCollection.category,
+          availableEditions: getHinduismAudioEditions(selectedCollectionId),
+          onOpenProvenanceModal: () => setIsAudioNoticeOpen(true),
+          onClose: () => {
+            multilingualAudioEngine.stop();
+            setIsAudioPlayerVisible(false);
+          },
+        }}
+      >
         <main className="space-y-4 min-h-[450px]">
         {selectedCollectionId === 'gita' ? (
           /* =========================================================================
@@ -1502,27 +1520,6 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
         initialReligionId="hinduism"
       />
 
-      {/* Multilingual Audio Player Bar */}
-      {isAudioPlayerVisible && (
-        <MultilingualAudioPlayerBar
-          title={
-            selectedCollectionId === 'gita'
-              ? `Bhagavad Gita — Chapter ${currentChapter.chapter_number}`
-              : selectedCollection.title
-          }
-          subtitle={
-            selectedCollectionId === 'gita'
-              ? `${currentChapter.transliteration} (${currentChapter.name})`
-              : selectedCollection.category
-          }
-          availableEditions={getHinduismAudioEditions(selectedCollectionId)}
-          onOpenProvenanceModal={() => setIsAudioNoticeOpen(true)}
-          onClose={() => {
-            multilingualAudioEngine.stop();
-            setIsAudioPlayerVisible(false);
-          }}
-        />
-      )}
 
       {/* Attribution Footer */}
       <AttributionFooter

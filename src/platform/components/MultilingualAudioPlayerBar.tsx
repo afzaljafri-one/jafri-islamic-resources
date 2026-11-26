@@ -120,9 +120,9 @@ export const MultilingualAudioPlayerBar: React.FC<MultilingualAudioPlayerBarProp
   return (
     <div
       data-testid="multilingual-audio-player-bar"
-      className="fixed bottom-0 left-0 right-0 z-40 bg-navy-950/95 backdrop-blur-md border-t border-gold-500/30 px-3 sm:px-6 py-2.5 sm:py-3 shadow-2xl text-slate-100"
+      className="p-4 rounded-2xl bg-gradient-to-b from-navy-900 to-navy-950 border border-gold-500/25 shadow-lg text-slate-100 space-y-3"
     >
-      <div className="max-w-7xl mx-auto flex flex-col gap-2">
+      <div className="flex flex-col gap-2.5">
         {/* Top Controls Row: Mode Selector & Passage Header & Edition Picker */}
         <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
           {/* Active Unit / Title & Dual Phase Indicator */}
@@ -218,7 +218,7 @@ export const MultilingualAudioPlayerBar: React.FC<MultilingualAudioPlayerBarProp
                 }
                 onChange={handleEditionChange}
                 data-testid="audio-edition-select"
-                className="bg-navy-900 border border-gold-500/30 rounded-lg px-2 py-1 text-slate-200 text-[11px] focus:outline-none focus:border-gold-400"
+                className="bg-navy-900 border border-gold-500/30 rounded-lg px-2 py-1 text-slate-200 text-[11px] focus:outline-none focus:border-gold-400 max-w-full truncate"
               >
                 {availableEditions.map((ed) => (
                   <option key={ed.id} value={ed.id}>
@@ -311,7 +311,7 @@ export const MultilingualAudioPlayerBar: React.FC<MultilingualAudioPlayerBarProp
           </div>
 
           {/* Speed Selector */}
-          <div className="hidden sm:flex items-center space-x-1 text-xs">
+          <div className="flex items-center space-x-1 text-xs">
             <select
               value={state.playbackSpeed}
               onChange={handleSpeed}

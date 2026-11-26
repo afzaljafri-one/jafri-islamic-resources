@@ -8,6 +8,7 @@
 import { ReligionId } from '../types';
 import { audioProvenanceRegistry } from './audioProvenanceRegistry';
 import { resolveAudioUrl } from '../utils/audioUrlResolver';
+import { audioCoordinator } from './audioCoordinator';
 
 export type ScriptureAudioMode = 'original_only' | 'translation_only' | 'dual_interleaved';
 export type AudioPlaybackState = 'idle' | 'playing' | 'paused' | 'buffering' | 'ended' | 'error';
@@ -116,6 +117,7 @@ export class MultilingualScriptureAudioEngine {
       window.addEventListener('DOMContentLoaded', () => this.ensureAudioAttached());
     }
     this.setupAudioListeners();
+    audioCoordinator.register('multilingual', () => this.stop());
   }
 
   private setupAudioListeners(): void {
@@ -321,6 +323,7 @@ export class MultilingualScriptureAudioEngine {
   }
 
   public play(unitId?: string): void {
+    audioCoordinator.activate('multilingual');
     if (unitId) {
       this.activeUnitId = unitId;
     }
@@ -410,6 +413,7 @@ export class MultilingualScriptureAudioEngine {
     this.currentTime = 0;
     this.duration = 0;
     this.notifySubscribers();
+    audioCoordinator.deactivate('multilingual');
   }
 
   public nextUnit(): void {
@@ -712,6 +716,9 @@ export class MultilingualScriptureAudioEngine {
       if (this.speechTimer) {
         clearInterval(this.speechTimer);
         this.speechTimer = null;
+      }
+      if (e?.error === 'canceled' || e?.error === 'interrupted' || this.playbackState === 'idle') {
+        return;
       }
       console.warn('Speech synthesis event notice:', e);
       this.handleAudioPhaseEnded();

@@ -15,8 +15,6 @@ interface PlatformNavbarProps {
   onOpenBookmarks?: () => void;
   onOpenMyLibrary?: (initialTab?: 'continue' | 'bookmarks' | 'history' | 'progress') => void;
   onOpenCoverage?: () => void;
-  onOpenSpanishPilot?: () => void;
-  onOpenStudio?: () => void;
   onOpenSacredAudio?: () => void;
   bookmarksCount?: number;
 }
@@ -28,13 +26,11 @@ export const PlatformNavbar: React.FC<PlatformNavbarProps> = ({
   onOpenBookmarks,
   onOpenMyLibrary,
   onOpenCoverage,
-  onOpenSpanishPilot,
-  onOpenStudio,
   bookmarksCount = 0,
 }) => {
   return (
-    <header className="sticky top-0 z-50 bg-navy-900/95 backdrop-blur-md border-b border-gold-500/20 px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3 shadow-lg max-w-full overflow-hidden">
-      <div className="max-w-7xl mx-auto flex items-center justify-between gap-2.5 sm:gap-4">
+    <header className="sticky top-0 z-50 bg-navy-900/95 backdrop-blur-md border-b border-gold-500/20 px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3 shadow-lg w-full max-w-full overflow-hidden">
+      <div className="max-w-7xl mx-auto flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 sm:gap-4">
         {/* Brand Logo & Title */}
         <button
           onClick={() => onSelectReligion('home')}
@@ -59,7 +55,7 @@ export const PlatformNavbar: React.FC<PlatformNavbarProps> = ({
         </button>
 
         {/* Religion Switcher / Dropdown for Header */}
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center flex-wrap gap-1.5 sm:gap-2 min-w-0">
           {/* Quick Home Pill */}
           <button
             onClick={() => onSelectReligion('home')}
@@ -79,7 +75,7 @@ export const PlatformNavbar: React.FC<PlatformNavbarProps> = ({
               id="platform-religion-selector"
               value={activeReligion}
               onChange={(e) => onSelectReligion(e.target.value as ReligionId | 'home')}
-              className="bg-navy-950 border border-gold-500/30 text-slate-100 rounded-xl px-2.5 sm:px-3 py-1.5 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-gold-500 cursor-pointer appearance-none pr-7 sm:pr-8"
+              className="bg-navy-950 border border-gold-500/30 text-slate-100 rounded-xl px-2.5 sm:px-3 py-1.5 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-gold-500 cursor-pointer appearance-none pr-7 sm:pr-8 max-w-[140px] sm:max-w-none truncate"
             >
               <option value="home">All 7 Religions...</option>
               {ALL_RELIGION_IDS.map((id) => {
@@ -108,32 +104,6 @@ export const PlatformNavbar: React.FC<PlatformNavbarProps> = ({
             <Headphones className="w-3.5 h-3.5 text-gold-400" />
             <span className="hidden sm:inline">Sacred Audio</span>
           </button>
-
-          {/* 30 Languages Global Studio Button (Command 20) */}
-          {onOpenStudio && (
-            <button
-              id="platform-nav-studio-btn"
-              onClick={onOpenStudio}
-              title="Estudio Multilingüe de Lectura y Audio (30 Lenguas)"
-              className="flex items-center space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-navy-950 border border-gold-500/40 hover:border-gold-400 text-gold-300 hover:text-gold-200 text-xs font-semibold transition cursor-pointer"
-            >
-              <Globe className="w-3.5 h-3.5 text-gold-400" />
-              <span className="hidden sm:inline">30 Lenguas</span>
-            </button>
-          )}
-
-          {/* Spanish Pilot Button (Command 19) */}
-          {onOpenSpanishPilot && (
-            <button
-              id="platform-nav-spanish-pilot-btn"
-              onClick={onOpenSpanishPilot}
-              title="Piloto de Narración en Español (ef_dora)"
-              className="flex items-center space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-navy-950 border border-emerald-500/40 hover:border-emerald-400 text-emerald-300 hover:text-emerald-200 text-xs font-semibold transition"
-            >
-              <span className="text-xs">🇪🇸</span>
-              <span className="hidden md:inline">Piloto Español (ef_dora)</span>
-            </button>
-          )}
 
           {/* Scripture Coverage Disclosure Button */}
           {onOpenCoverage && (
