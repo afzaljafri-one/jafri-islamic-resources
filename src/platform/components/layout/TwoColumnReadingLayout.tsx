@@ -43,9 +43,9 @@ export const TwoColumnReadingLayout: React.FC<TwoColumnReadingLayoutProps> = ({
           {children}
         </div>
 
-        {/* Right Column (approx 35%): Persistent Sacred Audio Library Panel */}
+        {/* Right Column (approx 35%): Unified Sacred Audio Library Panel (moves together with document scrolling) */}
         <div
-          className="lg:col-span-4 w-full sticky top-20 z-10 space-y-6"
+          className="lg:col-span-4 w-full min-w-0 space-y-6"
           data-testid="sacred-audio-column"
         >
           <SacredAudioReadingPanel context={context} />

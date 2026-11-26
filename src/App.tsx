@@ -308,8 +308,6 @@ export const App: React.FC = () => {
             onOpenBookmarks={handleOpenPlatformBookmarks}
             onOpenMyLibrary={handleOpenMyLibrary}
             onOpenCoverage={handleOpenCoverage}
-            onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
-            onOpenStudio={() => setIsMultilingualStudioOpen(true)}
             bookmarksCount={bookmarks.length}
           />
           <PlatformHomepage
@@ -336,8 +334,6 @@ export const App: React.FC = () => {
             onOpenBookmarks={handleOpenPlatformBookmarks}
             onOpenMyLibrary={handleOpenMyLibrary}
             onOpenCoverage={handleOpenCoverage}
-            onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
-            onOpenStudio={() => setIsMultilingualStudioOpen(true)}
             bookmarksCount={bookmarks.length}
           />
 
@@ -600,8 +596,6 @@ export const App: React.FC = () => {
             onOpenBookmarks={handleOpenPlatformBookmarks}
             onOpenMyLibrary={handleOpenMyLibrary}
             onOpenCoverage={handleOpenCoverage}
-            onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
-            onOpenStudio={() => setIsMultilingualStudioOpen(true)}
             bookmarksCount={bookmarks.length}
           />
           <HinduismModule onReturnToHome={() => handleSelectReligion('home')} />
@@ -620,8 +614,6 @@ export const App: React.FC = () => {
             onOpenBookmarks={handleOpenPlatformBookmarks}
             onOpenMyLibrary={handleOpenMyLibrary}
             onOpenCoverage={handleOpenCoverage}
-            onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
-            onOpenStudio={() => setIsMultilingualStudioOpen(true)}
             bookmarksCount={bookmarks.length}
           />
           <ChristianityModule onReturnToHome={() => handleSelectReligion('home')} />
@@ -640,8 +632,6 @@ export const App: React.FC = () => {
             onOpenBookmarks={handleOpenPlatformBookmarks}
             onOpenMyLibrary={handleOpenMyLibrary}
             onOpenCoverage={handleOpenCoverage}
-            onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
-            onOpenStudio={() => setIsMultilingualStudioOpen(true)}
             bookmarksCount={bookmarks.length}
           />
           <JudaismModule onReturnToHome={() => handleSelectReligion('home')} />
@@ -660,8 +650,6 @@ export const App: React.FC = () => {
             onOpenBookmarks={handleOpenPlatformBookmarks}
             onOpenMyLibrary={handleOpenMyLibrary}
             onOpenCoverage={handleOpenCoverage}
-            onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
-            onOpenStudio={() => setIsMultilingualStudioOpen(true)}
             bookmarksCount={bookmarks.length}
           />
           <SikhismModule onReturnToHome={() => handleSelectReligion('home')} />
@@ -680,8 +668,6 @@ export const App: React.FC = () => {
             onOpenBookmarks={handleOpenPlatformBookmarks}
             onOpenMyLibrary={handleOpenMyLibrary}
             onOpenCoverage={handleOpenCoverage}
-            onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
-            onOpenStudio={() => setIsMultilingualStudioOpen(true)}
             bookmarksCount={bookmarks.length}
           />
           <BuddhismModule onReturnToHome={() => handleSelectReligion('home')} />
@@ -700,8 +686,6 @@ export const App: React.FC = () => {
             onOpenBookmarks={handleOpenPlatformBookmarks}
             onOpenMyLibrary={handleOpenMyLibrary}
             onOpenCoverage={handleOpenCoverage}
-            onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
-            onOpenStudio={() => setIsMultilingualStudioOpen(true)}
             bookmarksCount={bookmarks.length}
           />
           <JainismModule onReturnToHome={() => handleSelectReligion('home')} />
@@ -720,8 +704,6 @@ export const App: React.FC = () => {
             onOpenBookmarks={handleOpenPlatformBookmarks}
             onOpenMyLibrary={handleOpenMyLibrary}
             onOpenCoverage={handleOpenCoverage}
-            onOpenSpanishPilot={() => setIsSpanishPilotOpen(true)}
-            onOpenStudio={() => setIsMultilingualStudioOpen(true)}
             bookmarksCount={bookmarks.length}
           />
           <SacredAudioLibraryHub onReturnToHome={() => handleSelectReligion('home')} />
