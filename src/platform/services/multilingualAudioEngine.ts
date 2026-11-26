@@ -717,6 +717,9 @@ export class MultilingualScriptureAudioEngine {
         clearInterval(this.speechTimer);
         this.speechTimer = null;
       }
+      if (e?.error === 'canceled' || e?.error === 'interrupted' || this.playbackState === 'idle') {
+        return;
+      }
       console.warn('Speech synthesis event notice:', e);
       this.handleAudioPhaseEnded();
     };

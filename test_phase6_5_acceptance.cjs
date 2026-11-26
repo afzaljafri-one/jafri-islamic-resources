@@ -178,6 +178,7 @@ async function run() {
           audioPlayCalls: [],
           audioPlayEvents: [],
           speechCalls: [],
+          speechCancelCalls: [],
         };
         const OrigAudio = window.Audio;
         window.Audio = function(...args) {
@@ -193,12 +194,30 @@ async function run() {
           window.__AUTOPLAY_AUDIT__.audioPlayCalls.push(this.src || this.tagName);
           return origMediaPlay.apply(this, args);
         };
-        if (window.speechSynthesis && typeof window.speechSynthesis.speak === 'function') {
-          const origSpeak = window.speechSynthesis.speak.bind(window.speechSynthesis);
-          window.speechSynthesis.speak = function(utterance) {
-            window.__AUTOPLAY_AUDIT__.speechCalls.push(utterance?.text?.slice(0, 40) || 'speech');
-            return origSpeak(utterance);
-          };
+        if (window.speechSynthesis) {
+          const proto = Object.getPrototypeOf(window.speechSynthesis);
+          const origSpeak = (proto && typeof proto.speak === 'function')
+            ? proto.speak
+            : window.speechSynthesis.speak;
+          const origCancel = (proto && typeof proto.cancel === 'function')
+            ? proto.cancel
+            : window.speechSynthesis.cancel;
+          if (typeof origSpeak === 'function') {
+            const wrappedSpeak = function(utterance) {
+              window.__AUTOPLAY_AUDIT__.speechCalls.push(utterance?.text?.slice(0, 40) || 'speech');
+              return origSpeak.call(window.speechSynthesis, utterance);
+            };
+            try { if (proto) proto.speak = wrappedSpeak; } catch {}
+            try { Object.defineProperty(window.speechSynthesis, 'speak', { value: wrappedSpeak, configurable: true, writable: true }); } catch {}
+          }
+          if (typeof origCancel === 'function') {
+            const wrappedCancel = function() {
+              window.__AUTOPLAY_AUDIT__.speechCancelCalls.push(Date.now());
+              return origCancel.call(window.speechSynthesis);
+            };
+            try { if (proto) proto.cancel = wrappedCancel; } catch {}
+            try { Object.defineProperty(window.speechSynthesis, 'cancel', { value: wrappedCancel, configurable: true, writable: true }); } catch {}
+          }
         }
       })();
     `,
@@ -372,6 +391,114 @@ async function run() {
 
       assert(mobileCheck?.scriptureBeforeAudio, `${rel}: Mobile single-column places scripture first, audio player below`);
       assert(!mobileCheck?.mobileOverflow, `${rel}: Zero horizontal overflow at mobile 390px (${mobileCheck?.sw})`);
+
+      // 3A. Multilingual inline player integration check on all 6 non-Islamic traditions
+      if (rel !== 'islam') {
+        await send('Emulation.setDeviceMetricsOverride', {
+          width: 1280,
+          height: 900,
+          deviceScaleFactor: 1,
+          mobile: false,
+        }, sessionId);
+        await new Promise((r) => setTimeout(r, 200));
+
+        const multiCheck = await evalCode(`
+          (async () => {
+            if ('${rel}' === 'hinduism') {
+              const rigBtn = Array.from(document.querySelectorAll('button')).find(b => /Rigveda/i.test(b.textContent || ''));
+              if (rigBtn) {
+                rigBtn.click();
+                await new Promise(r => setTimeout(r, 350));
+              }
+            }
+            const btn = document.querySelector('[data-testid="multilingual-audio-btn"]');
+            if (btn && !btn.disabled) {
+              btn.click();
+            } else if (window.__multilingualAudioEngine) {
+              window.__multilingualAudioEngine.loadUnits('${rel}', [{
+                id: 'test-inline-${rel}',
+                religion: '${rel}',
+                title: 'Inline Player Verification',
+                originalText: 'Sacred passage',
+                translationText: 'Approved English translation.',
+                translations: { en: 'Approved English translation.' },
+                originalAudioUrl: '/audio/hinduism/hinduism_vedas_purusha_suktam_vedadhayana_gosthi.ogg',
+              }]);
+              window.__multilingualAudioEngine.setMode('original_only');
+              window.__multilingualAudioEngine.play('test-inline-${rel}');
+            } else {
+              return { foundBtn: false };
+            }
+            await new Promise(r => setTimeout(r, 450));
+
+            const panel = document.querySelector('[data-testid="sacred-audio-reading-panel"]');
+            const bar = panel?.querySelector('[data-testid="multilingual-audio-player-bar"]');
+            const barRect = bar?.getBoundingClientRect();
+            const barPos = bar ? getComputedStyle(bar).position : null;
+
+            const fixedBottomPlayers = Array.from(document.querySelectorAll('div, aside, footer')).filter(el => {
+              const st = getComputedStyle(el);
+              const r = el.getBoundingClientRect();
+              return st.position === 'fixed' && Math.abs(window.innerHeight - r.bottom) < 10 && r.height > 30 && (el.innerText.includes('Play') || el.querySelector('[data-testid*="audio"]'));
+            });
+
+            const requiredTestIds = [
+              'audio-mode-original',
+              'audio-mode-translation',
+              'audio-mode-dual',
+              'audio-edition-select',
+              'audio-seek-slider',
+              'audio-volume-slider',
+              'audio-speed-select',
+              'audio-prev-btn',
+              'audio-play-pause-btn',
+              'audio-next-btn',
+              'audio-mute-toggle-btn',
+              'audio-provenance-btn',
+              'audio-close-btn',
+            ];
+            const missingControls = requiredTestIds.filter(id => !panel?.querySelector('[data-testid="' + id + '"]'));
+
+            let modesOk = false;
+            let modeDebug = null;
+            const mTrans = panel?.querySelector('[data-testid="audio-mode-translation"]');
+            const mDual = panel?.querySelector('[data-testid="audio-mode-dual"]');
+            const mOrig = panel?.querySelector('[data-testid="audio-mode-original"]');
+            if (mTrans && mDual && mOrig && window.__multilingualAudioEngine) {
+              mTrans.click();
+              await new Promise(r => setTimeout(r, 150));
+              const mode1 = window.__multilingualAudioEngine.getState().mode;
+              mDual.click();
+              await new Promise(r => setTimeout(r, 150));
+              const mode2 = window.__multilingualAudioEngine.getState().mode;
+              mOrig.click();
+              await new Promise(r => setTimeout(r, 150));
+              const mode3 = window.__multilingualAudioEngine.getState().mode;
+              modesOk = mode1 === 'translation_only' && mode2 === 'dual_interleaved' && mode3 === 'original_only';
+              modeDebug = [mode1, mode2, mode3];
+            }
+
+            const closeBtn = panel?.querySelector('[data-testid="audio-close-btn"]');
+            if (closeBtn) closeBtn.click();
+            if (window.__multilingualAudioEngine) window.__multilingualAudioEngine.stop();
+            await new Promise(r => setTimeout(r, 150));
+
+            return {
+              foundBtn: !!btn || Boolean(window.__multilingualAudioEngine),
+              inlineVisible: !!bar && barRect && barRect.height > 0 && barRect.width > 0 && barPos !== 'fixed',
+              fixedBottomCount: fixedBottomPlayers.length,
+              missingControls,
+              modesOk,
+              modeDebug,
+            };
+          })()
+        `);
+
+        assert(multiCheck?.foundBtn && multiCheck?.inlineVisible, `${rel}: Multilingual player renders inline inside SacredAudioReadingPanel`);
+        assert(multiCheck?.fixedBottomCount === 0, `${rel}: Zero fixed-bottom player when Multilingual Audio is active`);
+        assert(multiCheck?.missingControls?.length === 0, `${rel}: Inline Multilingual player exposes all required controls (missing: ${JSON.stringify(multiCheck?.missingControls)})`);
+        assert(multiCheck?.modesOk, `${rel}: Multilingual Original / Translation / Dual Interleaved modes switch cleanly (modes=${JSON.stringify(multiCheck?.modeDebug)})`);
+      }
     }
 
     // =========================================================================
@@ -505,18 +632,22 @@ async function run() {
         const quranPlayerVisibleB = !!panel.querySelector('[data-testid="quran-unified-player-section"]');
         const sacredPlayerHiddenB = !panel.querySelector('[data-testid="sacred-audio-active-player"]');
 
-        // C. Multilingual Audio -> Quran and Sacred Audio
+        // C. Multilingual Audio -> Quran and Sacred Audio + genuine Speech Synthesis cancel check
         const mEngine = window.__multilingualAudioEngine;
         let multiToQuranOk = false;
         let multiToSacredOk = false;
+        let speechToQuranOk = false;
+        let speechToSacredOk = false;
+        let c3aDebug = null;
+        let c3bDebug = null;
         if (mEngine && typeof mEngine.loadUnits === 'function') {
           mEngine.loadUnits('hinduism', [{
             id: 'test-multi-1',
             religion: 'hinduism',
             title: 'Rigveda 10.90 — Purusha Suktam',
             originalText: 'Om sahasra shirsha purushah',
-            translationText: 'Thousand-headed is the Supreme Being.',
-            translations: { en: 'Thousand-headed is the Supreme Being.' },
+            translationText: 'Thousand-headed is the Supreme Being, thousand-eyed and thousand-footed.',
+            translations: { en: 'Thousand-headed is the Supreme Being, thousand-eyed and thousand-footed.' },
             originalAudioUrl: '/audio/hinduism/hinduism_vedas_purusha_suktam_vedadhayana_gosthi.ogg',
           }]);
           mEngine.setMode('original_only');
@@ -548,6 +679,45 @@ async function run() {
             mStateAfterSacred === 'idle' &&
             !window.speechSynthesis?.speaking &&
             (sStateAfterMulti === 'PLAYING' || sStateAfterMulti === 'LOADING');
+
+          // C3. Speech synthesis (translation_only) -> Quran & Sacred Audio must invoke speechSynthesis.cancel()
+          const speakBefore1 = window.__AUTOPLAY_AUDIT__.speechCalls.length;
+          mEngine.setMode('translation_only');
+          mEngine.play('test-multi-1');
+          await new Promise(r => setTimeout(r, 450));
+          const speakAfter1 = window.__AUTOPLAY_AUDIT__.speechCalls.length;
+          const speechStarted1 = speakAfter1 > speakBefore1;
+          const cancelBefore1 = window.__AUTOPLAY_AUDIT__.speechCancelCalls.length;
+          window.__SERVICES__.quranAudioService.play();
+          await new Promise(r => setTimeout(r, 350));
+          const cancelAfter1 = window.__AUTOPLAY_AUDIT__.speechCancelCalls.length;
+          const mStateAfterC3a = mEngine.getState().playbackState;
+          const speakingAfterC3a = Boolean(window.speechSynthesis?.speaking);
+          speechToQuranOk =
+            speechStarted1 &&
+            cancelAfter1 > cancelBefore1 &&
+            mStateAfterC3a === 'idle' &&
+            !speakingAfterC3a;
+          c3aDebug = { speakBefore1, speakAfter1, speechStarted1, cancelBefore1, cancelAfter1, mStateAfterC3a, speakingAfterC3a, errorMsg: mEngine.getState().errorMessage };
+
+          const speakBefore2 = window.__AUTOPLAY_AUDIT__.speechCalls.length;
+          mEngine.setMode('translation_only');
+          mEngine.play('test-multi-1');
+          await new Promise(r => setTimeout(r, 450));
+          const speakAfter2 = window.__AUTOPLAY_AUDIT__.speechCalls.length;
+          const speechStarted2 = speakAfter2 > speakBefore2;
+          const cancelBefore2 = window.__AUTOPLAY_AUDIT__.speechCancelCalls.length;
+          if (sacredItem) sacredItem.click();
+          await new Promise(r => setTimeout(r, 500));
+          const cancelAfter2 = window.__AUTOPLAY_AUDIT__.speechCancelCalls.length;
+          const mStateAfterC3b = mEngine.getState().playbackState;
+          const speakingAfterC3b = Boolean(window.speechSynthesis?.speaking);
+          speechToSacredOk =
+            speechStarted2 &&
+            cancelAfter2 > cancelBefore2 &&
+            mStateAfterC3b === 'idle' &&
+            !speakingAfterC3b;
+          c3bDebug = { speakBefore2, speakAfter2, speechStarted2, cancelBefore2, cancelAfter2, mStateAfterC3b, speakingAfterC3b, errorMsg: mEngine.getState().errorMessage };
         }
 
         // Test View All recordings modal
@@ -579,6 +749,10 @@ async function run() {
           b_uiSwitchedToQuran: quranPlayerVisibleB && sacredPlayerHiddenB,
           c_multiToQuranOk: multiToQuranOk,
           c_multiToSacredOk: multiToSacredOk,
+          c_speechToQuranOk: speechToQuranOk,
+          c_speechToSacredOk: speechToSacredOk,
+          c3aDebug: typeof c3aDebug !== 'undefined' ? c3aDebug : null,
+          c3bDebug: typeof c3bDebug !== 'undefined' ? c3bDebug : null,
           hasViewAllBtn: !!viewAllBtn,
           modalOpened,
           modalClosed,
@@ -594,6 +768,8 @@ async function run() {
     assert(mutualExclusionResult?.b_uiSwitchedToQuran, 'B2. Visible player switches immediately back to Quran controls');
     assert(mutualExclusionResult?.c_multiToQuranOk, 'C1. Multilingual Audio -> Quran stops Multilingual Audio & speechSynthesis; only Quran active');
     assert(mutualExclusionResult?.c_multiToSacredOk, 'C2. Multilingual Audio -> Sacred Audio stops Multilingual Audio & speechSynthesis; only Sacred Audio active');
+    assert(mutualExclusionResult?.c_speechToQuranOk, `C3a. Speech synthesis (translation_only) started and speechSynthesis.cancel() invoked on Quran switch (${JSON.stringify(mutualExclusionResult?.c3aDebug)})`);
+    assert(mutualExclusionResult?.c_speechToSacredOk, `C3b. Speech synthesis (translation_only) started and speechSynthesis.cancel() invoked on Sacred Audio switch (${JSON.stringify(mutualExclusionResult?.c3bDebug)})`);
     assert(mutualExclusionResult?.hasViewAllBtn && mutualExclusionResult?.modalOpened && mutualExclusionResult?.modalClosed, 'View all recordings modal opens and closes cleanly');
 
     // D. Reader navigation / Route exit stops Quran playback and exposes new contextual player
@@ -613,6 +789,89 @@ async function run() {
     `);
     assert(routeExitCheck?.qStatusAfterExit === 'idle' && routeExitCheck?.coordSource !== 'quran', 'D2. Leaving Quran reading context stops Quran audio cleanly (not playing invisibly)');
     assert(routeExitCheck?.hasHinduAudioControls && routeExitCheck?.noQuranControls, 'D3. New tradition contextual player is immediately visible and usable');
+
+    // E. Route-exit cleanup for Sacred Audio & Multilingual Audio (Judaism, Sikhism, Jainism -> home & tradition)
+    const verifyAllEnginesIdle = async () => evalCode(`
+      (() => ({
+        quran: window.__SERVICES__.quranAudioService.getState().status,
+        sacred: window.__SERVICES__.unifiedSacredAudioService.getState().status,
+        multilingual: window.__multilingualAudioEngine.getState().playbackState,
+        coordSource: window.__SERVICES__.audioCoordinator.getActiveSource(),
+        speaking: Boolean(window.speechSynthesis?.speaking),
+      }))()
+    `);
+
+    // E1. Sacred Audio playing on Hinduism -> navigate to home
+    const sacredStartedHindu = await evalCode(`
+      (async () => {
+        const item = document.querySelector('[data-testid="sacred-audio-reading-panel"] [data-testid^="playlist-item-"]');
+        if (!item) return false;
+        item.click();
+        await new Promise(r => setTimeout(r, 500));
+        const st = window.__SERVICES__.unifiedSacredAudioService.getState().status;
+        return st === 'PLAYING' || st === 'LOADING';
+      })()
+    `);
+    assert(sacredStartedHindu, 'E1a. Sacred Audio started on Hinduism prior to home route exit');
+    await evalCode(`window.__platformNavigate('home')`);
+    await new Promise((r) => setTimeout(r, 900));
+    const afterHinduHome = await verifyAllEnginesIdle();
+    assert(
+      afterHinduHome?.quran === 'idle' &&
+      afterHinduHome?.sacred === 'IDLE' &&
+      afterHinduHome?.multilingual === 'idle' &&
+      afterHinduHome?.coordSource === null &&
+      !afterHinduHome?.speaking,
+      `E1b. Leaving Hinduism while Sacred Audio playing to home stops all engines cleanly (${JSON.stringify(afterHinduHome)})`
+    );
+
+    // E2. Multilingual Audio route-exit across Judaism -> Sikhism -> Jainism -> home
+    const multiRouteTransitions = [
+      { from: 'judaism', to: 'sikhism', label: 'Judaism -> Sikhism' },
+      { from: 'sikhism', to: 'jainism', label: 'Sikhism -> Jainism' },
+      { from: 'jainism', to: 'home', label: 'Jainism -> Home' },
+    ];
+    for (const tr of multiRouteTransitions) {
+      await evalCode(`window.__platformNavigate('${tr.from}')`);
+      await new Promise((r) => setTimeout(r, 1200));
+      const startedMulti = await evalCode(`
+        (async () => {
+          const btn = document.querySelector('[data-testid="multilingual-audio-btn"]');
+          if (btn && !btn.disabled) {
+            btn.click();
+          } else if (window.__multilingualAudioEngine) {
+            window.__multilingualAudioEngine.loadUnits('${tr.from}', [{
+              id: 'test-route-${tr.from}',
+              religion: '${tr.from}',
+              title: 'Route Exit Verification',
+              originalText: 'Sacred passage',
+              translationText: 'Approved English translation.',
+              translations: { en: 'Approved English translation.' },
+              originalAudioUrl: '/audio/hinduism/hinduism_vedas_purusha_suktam_vedadhayana_gosthi.ogg',
+            }]);
+            window.__multilingualAudioEngine.setMode('original_only');
+            window.__multilingualAudioEngine.play('test-route-${tr.from}');
+          } else {
+            return false;
+          }
+          await new Promise(r => setTimeout(r, 450));
+          const st = window.__multilingualAudioEngine.getState().playbackState;
+          return (st === 'playing' || st === 'buffering') && window.__SERVICES__.audioCoordinator.getActiveSource() === 'multilingual';
+        })()
+      `);
+      assert(startedMulti, `E2a. Multilingual Audio started on ${tr.from} before navigating to ${tr.to}`);
+      await evalCode(`window.__platformNavigate('${tr.to}')`);
+      await new Promise((r) => setTimeout(r, 900));
+      const afterExit = await verifyAllEnginesIdle();
+      assert(
+        afterExit?.quran === 'idle' &&
+        afterExit?.sacred === 'IDLE' &&
+        afterExit?.multilingual === 'idle' &&
+        afterExit?.coordSource === null &&
+        !afterExit?.speaking,
+        `E2b. Route exit (${tr.label}) leaves all engines idle, speech cancelled, and coordinator clear (${JSON.stringify(afterExit)})`
+      );
+    }
   } finally {
     try {
       chrome.kill();

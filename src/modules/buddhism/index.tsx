@@ -32,7 +32,6 @@ import { UniversalSearchModal } from '../../platform/components/UniversalSearchM
 import { UniversalBookmarksDrawer } from '../../platform/components/UniversalBookmarksDrawer';
 import { AudioNoticeModal } from '../../platform/components/AudioNoticeModal';
 import { ScriptureCoverageModal } from '../../platform/components/ScriptureCoverageModal';
-import { MultilingualAudioPlayerBar } from '../../platform/components/MultilingualAudioPlayerBar';
 import { TypographyControls } from '../../platform/components/TypographyControls';
 import { AttributionFooter } from '../../platform/components/AttributionFooter';
 import { platformStorageService } from '../../platform/services/storageService';
@@ -590,7 +589,20 @@ export const BuddhismModule: React.FC<BuddhismModuleProps> = ({
         };
 
         return (
-          <TwoColumnReadingLayout context={readingContext}>
+          <TwoColumnReadingLayout
+            context={readingContext}
+            multilingualControls={{
+              isVisible: isAudioPlayerVisible,
+              title: `${selectedSutta.titlePali}`,
+              subtitle: `${selectedSutta.titleEn} (Bhikkhu Sujato)`,
+              availableEditions: BUDDHISM_AUDIO_EDITIONS,
+              onOpenProvenanceModal: () => setIsAudioNoticeOpen(true),
+              onClose: () => {
+                multilingualAudioEngine.stop();
+                setIsAudioPlayerVisible(false);
+              },
+            }}
+          >
             <main className="space-y-4 min-h-[450px]">
         {loading ? (
           <div className="py-24 text-center text-slate-400 text-xs space-y-2">
@@ -834,20 +846,6 @@ export const BuddhismModule: React.FC<BuddhismModuleProps> = ({
         onClose={() => setIsCoverageOpen(false)}
         initialReligionId="buddhism"
       />
-
-      {/* Multilingual Audio Player Bar */}
-      {isAudioPlayerVisible && (
-        <MultilingualAudioPlayerBar
-          title={`${selectedSutta.titlePali}`}
-          subtitle={`${selectedSutta.titleEn} (Bhikkhu Sujato)`}
-          availableEditions={BUDDHISM_AUDIO_EDITIONS}
-          onOpenProvenanceModal={() => setIsAudioNoticeOpen(true)}
-          onClose={() => {
-            multilingualAudioEngine.stop();
-            setIsAudioPlayerVisible(false);
-          }}
-        />
-      )}
     </div>
   );
 };

@@ -51,7 +51,6 @@ import { TwoColumnReadingLayout } from '../../platform/components/layout/TwoColu
 import type { ReadingContext } from '../../platform/services/contextualAudioMatcher';
 import { unifiedSacredAudioService } from '../../platform/services/unifiedSacredAudioService';
 import { SACRED_AUDIO_MASTER_CATALOGUE } from '../../platform/data/sacredAudioMasterCatalogue';
-import { MultilingualAudioPlayerBar } from '../../platform/components/MultilingualAudioPlayerBar';
 import { TypographyControls } from '../../platform/components/TypographyControls';
 import { AttributionFooter } from '../../platform/components/AttributionFooter';
 import { platformStorageService } from '../../platform/services/storageService';
@@ -1022,7 +1021,26 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
       )}
 
       {/* MAIN READING AREA — Two-Column Scripture & Sacred Audio Experience */}
-      <TwoColumnReadingLayout context={readingContext}>
+      <TwoColumnReadingLayout
+        context={readingContext}
+        multilingualControls={{
+          isVisible: isAudioPlayerVisible,
+          title:
+            selectedCollectionId === 'gita'
+              ? `Bhagavad Gita — Chapter ${currentChapter.chapter_number}`
+              : selectedCollection.title,
+          subtitle:
+            selectedCollectionId === 'gita'
+              ? `${currentChapter.transliteration} (${currentChapter.name})`
+              : selectedCollection.category,
+          availableEditions: getHinduismAudioEditions(selectedCollectionId),
+          onOpenProvenanceModal: () => setIsAudioNoticeOpen(true),
+          onClose: () => {
+            multilingualAudioEngine.stop();
+            setIsAudioPlayerVisible(false);
+          },
+        }}
+      >
         <main className="space-y-4 min-h-[450px]">
         {selectedCollectionId === 'gita' ? (
           /* =========================================================================
@@ -1502,27 +1520,6 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
         initialReligionId="hinduism"
       />
 
-      {/* Multilingual Audio Player Bar */}
-      {isAudioPlayerVisible && (
-        <MultilingualAudioPlayerBar
-          title={
-            selectedCollectionId === 'gita'
-              ? `Bhagavad Gita — Chapter ${currentChapter.chapter_number}`
-              : selectedCollection.title
-          }
-          subtitle={
-            selectedCollectionId === 'gita'
-              ? `${currentChapter.transliteration} (${currentChapter.name})`
-              : selectedCollection.category
-          }
-          availableEditions={getHinduismAudioEditions(selectedCollectionId)}
-          onOpenProvenanceModal={() => setIsAudioNoticeOpen(true)}
-          onClose={() => {
-            multilingualAudioEngine.stop();
-            setIsAudioPlayerVisible(false);
-          }}
-        />
-      )}
 
       {/* Attribution Footer */}
       <AttributionFooter

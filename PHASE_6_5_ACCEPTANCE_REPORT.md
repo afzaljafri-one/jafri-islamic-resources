@@ -6,7 +6,7 @@
 - **Mandatory Baseline (`origin/main`):** `0227a704055344003cf8fff82c109a6081bbda81`
 - **Preserved UI Consistency Commit:** `75796cf0d6b7ff2e687571a3f80afe2889dd5ed2` (ported as `cd900de`)
 - **Working Feature Branch:** `phase-6-5-unified-reader-player`
-- **Status:** **COMPLETE & VERIFIED (90/90 Phase 6.5 Assertions Passed, 74/74 PWA Passed, 94/94 Phase 6.3.5.5 Regressions Passed)**
+- **Status:** **COMPLETE & VERIFIED (124/124 Phase 6.5 Assertions Passed, 74/74 PWA Passed, 94/94 Phase 6.3.5.5 Regressions Passed)**
 
 ---
 
@@ -32,8 +32,8 @@ Suite: `test_phase6_5_acceptance.cjs` (executed against clean production `dist/`
 | **1** | Exactly one visible player interface per reading page (all 7 traditions) | **PASSED** (7/7) |
 | **2** | Quran playback through the unified player | **PASSED** |
 | **3** | Full Quran playback controls retained (reciter, Ayah nav, Page/Surah scope, seek, speed, auto-advance) | **PASSED** (7/7) |
-| **4** | Other six traditions retain contextual audio functionality | **PASSED** (6/6) |
-| **5** | Switching sources cannot produce simultaneous playback (A: Quran→Sacred, B: Sacred→Quran, C: Multilingual→Quran/Sacred, D: Route Exit) | **PASSED** (10/10) |
+| **4** | Other six traditions retain contextual & inline multilingual audio functionality (zero fixed-bottom bar, all 13 controls, Original/Translation/Dual modes) | **PASSED** (24/24) |
+| **5** | Switching sources cannot produce simultaneous playback (A: Quran→Sacred, B: Sacred→Quran, C: Multilingual→Quran/Sacred + `speechSynthesis.cancel()`, D/E: Route Exit across Quran, Sacred Audio & Multilingual in Judaism/Sikhism/Jainism) | **PASSED** (18/18) |
 | **6** | Zero autoplay (DOM + detached `new Audio()` + `speechSynthesis` + YouTube `autoplay=1` + service states) | **PASSED** (7/7) |
 | **7** | Zero fixed-bottom audio players across all 7 traditions | **PASSED** (7/7) |
 | **8** | Zero nested vertical scrolling in normal reading page (+ View all modal) | **PASSED** (8/8) |
@@ -43,7 +43,7 @@ Suite: `test_phase6_5_acceptance.cjs` (executed against clean production `dist/`
 | **12** | Experimental nav buttons (`30 Lenguas`, `Piloto Español (ef_dora)`) remain absent | **PASSED** (7/7) |
 | **13** | Existing Phase 6.4 PWA acceptance suite (`test_phase6_4_pwa_acceptance.cjs`) | **PASSED** (74/74) |
 | **14** | Existing Phase 6.3.5.5 rights/content regression suite (`test_phase6_3_5_5_acceptance.cjs`) | **PASSED** (94/94) |
-| **Total** | **Phase 6.5 Acceptance Suite** | **90 / 90 (100.0%)** |
+| **Total** | **Phase 6.5 Acceptance Suite** | **124 / 124 (100.0%)** |
 
 ---
 
@@ -60,16 +60,18 @@ Captured at desktop (`1280×900`) and mobile (`390×844`) widths for Quran (Isla
 
 ### Created:
 - `src/platform/services/audioCoordinator.ts` — Mutual-exclusion coordinator enforcing one active audio source.
-- `test_phase6_5_acceptance.cjs` — 82-assertion automated acceptance suite across all 7 traditions.
+- `test_phase6_5_acceptance.cjs` — 124-assertion automated acceptance suite across all 7 traditions.
 - `PHASE_6_5_ACCEPTANCE_REPORT.md` — This acceptance report.
 
 ### Modified:
-- `src/platform/components/audio/SacredAudioReadingPanel.tsx` — Integrated full Quran controls, removed nested vertical scrollbars, added 3-item natural flow + `View all` modal + expandable `Text information`.
-- `src/platform/components/layout/TwoColumnReadingLayout.tsx` — Passed `quranControls` prop to `SacredAudioReadingPanel`.
+- `src/platform/components/MultilingualAudioPlayerBar.tsx` — Converted from `fixed bottom-0` dock into an inline card embedded inside `SacredAudioReadingPanel`.
+- `src/platform/components/audio/SacredAudioReadingPanel.tsx` — Integrated full Quran controls and inline `MultilingualAudioPlayerBar`, added unmount cleanup for `unifiedSacredAudioService`, removed nested vertical scrollbars, added 3-item natural flow + `View all` modal + expandable `Text information`.
+- `src/platform/components/layout/TwoColumnReadingLayout.tsx` — Passed `quranControls` and `multilingualControls` props to `SacredAudioReadingPanel`.
+- `src/modules/hinduism/index.tsx`, `src/modules/christianity/index.tsx`, `src/modules/judaism/index.tsx`, `src/modules/sikhism/index.tsx`, `src/modules/buddhism/index.tsx`, `src/modules/jainism/index.tsx` — Removed fixed-bottom `MultilingualAudioPlayerBar`, wired `multilingualControls` into `TwoColumnReadingLayout`, and ensured `multilingualAudioEngine.stop()` unmount cleanup in all 6 non-Islamic traditions.
 - `src/components/QuranReader/QuranReader.tsx` — Wired `quranControls` into `TwoColumnReadingLayout` and removed fixed-bottom `AudioPlayerBar`.
 - `src/services/audio/quranAudioService.ts` — Registered with `audioCoordinator`.
 - `src/platform/services/unifiedSacredAudioService.ts` — Registered with `audioCoordinator`.
-- `src/platform/services/multilingualAudioEngine.ts` — Registered with `audioCoordinator`.
+- `src/platform/services/multilingualAudioEngine.ts` — Registered with `audioCoordinator` and guarded `utterance.onerror` against `canceled`/`interrupted` races on `stop()`.
 - `.github/workflows/deploy.yml` — Added `Run Phase 6.5 Unified Reader & Player Suite` to `validate-build`.
 
 ---

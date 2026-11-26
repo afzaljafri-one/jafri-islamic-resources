@@ -35,7 +35,6 @@ import { ScriptureNavigationDrawer } from '../../platform/components/ScriptureNa
 import { UniversalSearchModal } from '../../platform/components/UniversalSearchModal';
 import { UniversalBookmarksDrawer } from '../../platform/components/UniversalBookmarksDrawer';
 import { TypographyControls } from '../../platform/components/TypographyControls';
-import { MultilingualAudioPlayerBar } from '../../platform/components/MultilingualAudioPlayerBar';
 import { AudioNoticeModal } from '../../platform/components/AudioNoticeModal';
 import { ScriptureCoverageModal } from '../../platform/components/ScriptureCoverageModal';
 import { YouTubeEmbedModal } from '../../platform/components/audio/YouTubeEmbedModal';
@@ -124,6 +123,13 @@ export const JudaismModule: React.FC<JudaismModuleProps> = ({
   const [showEnglish, setShowEnglish] = useState<boolean>(true);
   const [isPlayingAudio, setIsPlayingAudio] = useState<boolean>(false);
   const [isMultilingualPlayerVisible, setIsMultilingualPlayerVisible] = useState<boolean>(false);
+
+  // Stop multilingual audio when leaving Judaism reading context (unmount only)
+  useEffect(() => {
+    return () => {
+      multilingualAudioEngine.stop();
+    };
+  }, []);
   const [activeAudioUnitId, setActiveAudioUnitId] = useState<string | null>(null);
   const [isMultilingualPlaying, setIsMultilingualPlaying] = useState<boolean>(false);
   const [isAudioNoticeOpen, setIsAudioNoticeOpen] = useState<boolean>(false);
@@ -646,7 +652,20 @@ export const JudaismModule: React.FC<JudaismModuleProps> = ({
         };
 
         return (
-          <TwoColumnReadingLayout context={readingContext}>
+          <TwoColumnReadingLayout
+            context={readingContext}
+            multilingualControls={{
+              isVisible: isMultilingualPlayerVisible,
+              title: `${currentBook.enTitle} ${currentChapter}`,
+              subtitle: `${currentBook.heTitle} (Hebrew & English)`,
+              availableEditions: JUDAISM_AUDIO_EDITIONS,
+              onOpenProvenanceModal: () => setIsAudioNoticeOpen(true),
+              onClose: () => {
+                multilingualAudioEngine.stop();
+                setIsMultilingualPlayerVisible(false);
+              },
+            }}
+          >
             <main className="space-y-4 min-h-[450px]">
         {/* Offline Fallback Warning for Genesis 1 */}
         {currentBook.id === 'Genesis' && currentChapter === 1 && verses.length === 2 && (
@@ -920,19 +939,6 @@ export const JudaismModule: React.FC<JudaismModuleProps> = ({
           setBookmarks(platformStorageService.getBookmarks('judaism'));
         }}
       />
-
-      {/* Multilingual Audio Player Bar */}
-      {isMultilingualPlayerVisible && (
-        <MultilingualAudioPlayerBar
-          title={`${currentBook.enTitle} ${currentChapter}`}
-          subtitle={`${currentBook.heTitle} (Hebrew & English)`}
-          availableEditions={JUDAISM_AUDIO_EDITIONS}
-          onClose={() => {
-            multilingualAudioEngine.stop();
-            setIsMultilingualPlayerVisible(false);
-          }}
-        />
-      )}
 
       {/* Audio Status Notice Modal */}
       <AudioNoticeModal

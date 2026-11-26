@@ -40,6 +40,12 @@ import {
   AudioEngineSourceId,
 } from '../../services/audioCoordinator';
 import {
+  multilingualAudioEngine,
+  AudioEngineState,
+  ScriptureAudioEditionOption,
+} from '../../services/multilingualAudioEngine';
+import { MultilingualAudioPlayerBar } from '../MultilingualAudioPlayerBar';
+import {
   matchContextualAudio,
   ContextualAudioResult,
   CanonicalReadingContext,
@@ -82,15 +88,26 @@ export interface QuranAudioControlsProps {
   errorMessage: string | null;
 }
 
+export interface MultilingualAudioControlsProps {
+  isVisible: boolean;
+  title: string;
+  subtitle?: string;
+  availableEditions: ScriptureAudioEditionOption[];
+  onOpenProvenanceModal?: () => void;
+  onClose?: () => void;
+}
+
 export interface SacredAudioReadingPanelProps {
   context: CanonicalReadingContext;
   quranControls?: QuranAudioControlsProps;
+  multilingualControls?: MultilingualAudioControlsProps;
   className?: string;
 }
 
 export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = ({
   context,
   quranControls,
+  multilingualControls,
   className = '',
 }) => {
   const [isViewAllOpen, setIsViewAllOpen] = useState(false);
@@ -101,6 +118,9 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
   // Global playback state from UnifiedSacredAudioService
   const [playbackState, setPlaybackState] = useState<SacredAudioPlaybackState>(() =>
     unifiedSacredAudioService.getState()
+  );
+  const [multilingualState, setMultilingualState] = useState<AudioEngineState>(() =>
+    multilingualAudioEngine.getState()
   );
 
   // Monotonically increasing request counter to prevent asynchronous race conditions
@@ -114,9 +134,20 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
     const unsubCoordinator = audioCoordinator.subscribe((source) => {
       setActiveCoordinatorSource(source);
     });
+    const unsubMulti = multilingualAudioEngine.subscribe((state) => {
+      setMultilingualState(state);
+    });
     return () => {
       unsubSacred();
       unsubCoordinator();
+      unsubMulti();
+    };
+  }, []);
+
+  // Stop Sacred Audio when leaving reading context (component unmount only)
+  useEffect(() => {
+    return () => {
+      unifiedSacredAudioService.stop();
     };
   }, []);
 
@@ -320,8 +351,16 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
       (playbackState.status === 'PLAYING' ||
         playbackState.status === 'LOADING' ||
         playbackState.status === 'PAUSED'));
-  const showQuranPlayer = Boolean(quranControls) && !isSacredSourceActive;
-  const showSacredPlayer = !showQuranPlayer && Boolean(activeReq);
+  const isMultilingualSourceActive =
+    activeCoordinatorSource === 'multilingual' ||
+    multilingualState.playbackState === 'playing' ||
+    multilingualState.playbackState === 'buffering' ||
+    multilingualState.playbackState === 'paused' ||
+    Boolean(multilingualControls?.isVisible && !isSacredSourceActive);
+  const showQuranPlayer = Boolean(quranControls) && !isSacredSourceActive && !isMultilingualSourceActive;
+  const showMultilingualPlayer =
+    !showQuranPlayer && !isSacredSourceActive && Boolean(multilingualControls) && isMultilingualSourceActive;
+  const showSacredPlayer = !showQuranPlayer && !showMultilingualPlayer && Boolean(activeReq);
 
   return (
     <aside
@@ -704,6 +743,19 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
       })()}
 
       {/* -----------------------------------------------------------------------
+          MULTILINGUAL SCRIPTURE NARRATION CONTROLS (Inline inside Unified Panel)
+          ----------------------------------------------------------------------- */}
+      {showMultilingualPlayer && multilingualControls && (
+        <MultilingualAudioPlayerBar
+          title={multilingualControls.title}
+          subtitle={multilingualControls.subtitle}
+          availableEditions={multilingualControls.availableEditions}
+          onOpenProvenanceModal={multilingualControls.onOpenProvenanceModal}
+          onClose={multilingualControls.onClose}
+        />
+      )}
+
+      {/* -----------------------------------------------------------------------
           MAIN PLAYER CARD: Current Track Controls & Visualizer (Sacred Audio)
           ----------------------------------------------------------------------- */}
       {showSacredPlayer && activeReq ? (
@@ -910,7 +962,7 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
             </button>
           </div>
         </div>
-      ) : !showQuranPlayer ? (
+      ) : !showQuranPlayer && !showMultilingualPlayer ? (
         /* ---------------------------------------------------------------------
            LEVEL 5: NO APPROVED MATCH (Strict Graceful Empty State)
            --------------------------------------------------------------------- */

@@ -40,7 +40,6 @@ import { AudioNoticeModal } from '../../platform/components/AudioNoticeModal';
 import { ScriptureCoverageModal } from '../../platform/components/ScriptureCoverageModal';
 import { TwoColumnReadingLayout } from '../../platform/components/layout/TwoColumnReadingLayout';
 import type { ReadingContext } from '../../platform/services/contextualAudioMatcher';
-import { MultilingualAudioPlayerBar } from '../../platform/components/MultilingualAudioPlayerBar';
 import { TypographyControls } from '../../platform/components/TypographyControls';
 import { AttributionFooter } from '../../platform/components/AttributionFooter';
 import { platformStorageService } from '../../platform/services/storageService';
@@ -675,7 +674,20 @@ export const ChristianityModule: React.FC<ChristianityModuleProps> = ({
       </div>
 
       {/* Main Scripture Reading Cards Area — Two-Column Reading & Sacred Audio Experience */}
-      <TwoColumnReadingLayout context={readingContext}>
+      <TwoColumnReadingLayout
+        context={readingContext}
+        multilingualControls={{
+          isVisible: isAudioPlayerVisible,
+          title: `${currentBook.name} ${currentChapter}`,
+          subtitle: selectedTranslation,
+          availableEditions: CHRISTIANITY_AUDIO_EDITIONS,
+          onOpenProvenanceModal: () => setIsAudioNoticeOpen(true),
+          onClose: () => {
+            multilingualAudioEngine.stop();
+            setIsAudioPlayerVisible(false);
+          },
+        }}
+      >
         <main className="space-y-3 min-h-[400px]">
         {loading ? (
           <div className="py-20 text-center text-slate-400 text-xs space-y-2">
@@ -946,19 +958,6 @@ export const ChristianityModule: React.FC<ChristianityModuleProps> = ({
         initialReligionId="christianity"
       />
 
-      {/* Multilingual Audio Player Bar */}
-      {isAudioPlayerVisible && (
-        <MultilingualAudioPlayerBar
-          title={`${currentBook.name} ${currentChapter}`}
-          subtitle={selectedTranslation}
-          availableEditions={CHRISTIANITY_AUDIO_EDITIONS}
-          onOpenProvenanceModal={() => setIsAudioNoticeOpen(true)}
-          onClose={() => {
-            multilingualAudioEngine.stop();
-            setIsAudioPlayerVisible(false);
-          }}
-        />
-      )}
     </div>
   );
 };

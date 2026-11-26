@@ -34,7 +34,6 @@ import { AudioNoticeModal } from '../../platform/components/AudioNoticeModal';
 import { ScriptureCoverageModal } from '../../platform/components/ScriptureCoverageModal';
 import { YouTubeEmbedModal } from '../../platform/components/audio/YouTubeEmbedModal';
 import { SACRED_AUDIO_MASTER_CATALOGUE } from '../../platform/data/sacredAudioMasterCatalogue';
-import { MultilingualAudioPlayerBar } from '../../platform/components/MultilingualAudioPlayerBar';
 import { TypographyControls } from '../../platform/components/TypographyControls';
 import { AttributionFooter } from '../../platform/components/AttributionFooter';
 import { platformStorageService } from '../../platform/services/storageService';
@@ -116,6 +115,13 @@ export const JainismModule: React.FC<JainismModuleProps> = ({
   const [isYouTubeModalOpen, setIsYouTubeModalOpen] = useState<boolean>(false);
   const navkarReq = SACRED_AUDIO_MASTER_CATALOGUE.find((r) => r.id === 'REQ-JAI-007') || null;
   const [isAudioPlayerVisible, setIsAudioPlayerVisible] = useState<boolean>(false);
+
+  // Stop multilingual audio when leaving Jainism reading context (unmount only)
+  useEffect(() => {
+    return () => {
+      multilingualAudioEngine.stop();
+    };
+  }, []);
   const [activeAudioUnitId, setActiveAudioUnitId] = useState<string | null>(null);
   const [isAudioPlaying, setIsAudioPlaying] = useState<boolean>(false);
   const [showTypography, setShowTypography] = useState<boolean>(false);
@@ -216,7 +222,7 @@ export const JainismModule: React.FC<JainismModuleProps> = ({
     });
 
     multilingualAudioEngine.loadUnits('jainism', scriptureUnits);
-  }, [units, selectedText]);
+  }, [selectedText]);
 
   const handlePlayUnit = (unitId: string) => {
     const uId = `jain_${selectedText.id}_${unitId}`;
@@ -553,7 +559,20 @@ export const JainismModule: React.FC<JainismModuleProps> = ({
         };
 
         return (
-          <TwoColumnReadingLayout context={readingContext}>
+          <TwoColumnReadingLayout
+            context={readingContext}
+            multilingualControls={{
+              isVisible: isAudioPlayerVisible,
+              title: `${selectedText.titleEn}`,
+              subtitle: `${selectedText.titlePrakrit} (Prakrit & English)`,
+              availableEditions: JAINISM_AUDIO_EDITIONS,
+              onOpenProvenanceModal: () => setIsAudioNoticeOpen(true),
+              onClose: () => {
+                multilingualAudioEngine.stop();
+                setIsAudioPlayerVisible(false);
+              },
+            }}
+          >
             <main className="space-y-4 min-h-[450px]">
         {units.length === 0 ? (
           <div className="py-24 text-center text-slate-500 text-xs space-y-2">
@@ -756,20 +775,6 @@ export const JainismModule: React.FC<JainismModuleProps> = ({
         onClose={() => setIsCoverageOpen(false)}
         initialReligionId="jainism"
       />
-
-      {/* Multilingual Audio Player Bar */}
-      {isAudioPlayerVisible && (
-        <MultilingualAudioPlayerBar
-          title={`${selectedText.titleEn}`}
-          subtitle={`${selectedText.titlePrakrit} (Prakrit & English)`}
-          availableEditions={JAINISM_AUDIO_EDITIONS}
-          onOpenProvenanceModal={() => setIsAudioNoticeOpen(true)}
-          onClose={() => {
-            multilingualAudioEngine.stop();
-            setIsAudioPlayerVisible(false);
-          }}
-        />
-      )}
 
       {/* Approved YouTube Embed Modal for Navkar Mantra */}
       {navkarReq && (
