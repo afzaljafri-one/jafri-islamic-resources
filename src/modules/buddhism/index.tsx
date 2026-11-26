@@ -331,9 +331,9 @@ export const BuddhismModule: React.FC<BuddhismModuleProps> = ({
   return (
     <div className="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-6 space-y-6 animate-in fade-in-50 duration-200">
       {/* Top Breadcrumb & Controls Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 py-3 rounded-2xl bg-gradient-to-r from-navy-900 via-navy-900/90 to-navy-950 border border-slate-800 shadow-lg">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 px-4 py-3 rounded-2xl bg-gradient-to-r from-navy-900 via-navy-900/90 to-navy-950 border border-slate-800 shadow-lg">
         {/* Navigation & Sutta Title */}
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center flex-wrap gap-2 min-w-0">
           <button
             onClick={onReturnToHome}
             className="flex items-center space-x-1 px-2.5 py-1.5 rounded-xl bg-navy-950/80 border border-slate-700/80 hover:border-gold-500/50 text-slate-300 hover:text-gold-300 text-xs font-medium transition"
@@ -366,7 +366,7 @@ export const BuddhismModule: React.FC<BuddhismModuleProps> = ({
         </div>
 
         {/* Action Controls: Search, Bookmarks, Typography */}
-        <div className="flex items-center space-x-2 self-end sm:self-auto">
+        <div className="flex items-center flex-wrap gap-2 self-end lg:self-auto">
           {/* Quick Sutta Switcher */}
           <select
             value={selectedSutta.uid}
