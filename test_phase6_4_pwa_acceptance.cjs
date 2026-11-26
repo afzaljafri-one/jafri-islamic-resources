@@ -186,12 +186,27 @@ async function runPwaAcceptanceSuite() {
   // ===========================================================================
   tracker.startCriterion(11, 'Rights restrictions & audio quarantine rules remain enforced');
   const swRaw = fs.readFileSync(distSw, 'utf-8');
-  tracker.assert(swRaw.includes("url.pathname.includes('/audio/')"), 'Service worker excludes audio media in fetch interceptor', 11);
+  const excludesAllAudioExt =
+    swRaw.includes("url.pathname.includes('/audio/')") &&
+    swRaw.includes(".mp3") &&
+    swRaw.includes(".m4a") &&
+    swRaw.includes(".ogg") &&
+    swRaw.includes(".oga") &&
+    swRaw.includes(".wav");
+  tracker.assert(excludesAllAudioExt, 'Service worker excludes /audio/, .mp3, .m4a, .ogg, .oga, and .wav in fetch interceptor', 11);
 
   const precacheMatch = swRaw.match(/const PRECACHE_URLS = (\[[\s\S]*?\]);/);
   const precacheList = precacheMatch ? JSON.parse(precacheMatch[1]) : [];
-  const hasAudioInPrecache = precacheList.some((u) => u.includes('/audio/') || u.endsWith('.mp3') || u.endsWith('.m4a'));
-  tracker.assert(!hasAudioInPrecache, `Service worker PRECACHE_URLS contains zero audio files (checked ${precacheList.length} precached URLs)`, 11);
+  const hasAudioInPrecache = precacheList.some((u) =>
+    /(\/audio\/|\.(mp3|m4a|ogg|oga|wav)(\?|$))/i.test(u)
+  );
+  tracker.assert(!hasAudioInPrecache, `Service worker PRECACHE_URLS contains zero audio files including OGG/OGA/WAV/MP3/M4A (checked ${precacheList.length} precached URLs)`, 11);
+
+  // Verify Service Worker installation reliability (mandatory vs optional + content hash)
+  const hasMandatorySplit = swRaw.includes('const MANDATORY_PRECACHE_URLS =') && swRaw.includes('const OPTIONAL_PRECACHE_URLS =');
+  const abortsOnMandatoryFail = swRaw.includes('await caches.delete(CACHE_NAME);') && swRaw.includes('throw err;');
+  tracker.assert(hasMandatorySplit, 'Service worker separates MANDATORY_PRECACHE_URLS from OPTIONAL_PRECACHE_URLS', 11);
+  tracker.assert(abortsOnMandatoryFail, 'Service worker aborts installation and deletes partial cache if mandatory asset fails', 11);
 
   // Check Master catalogue count
   const esbuild = require('esbuild');
@@ -277,6 +292,8 @@ async function runPwaAcceptanceSuite() {
 
   let msgId = 1;
   const pendingRequests = new Map();
+  const observedNetworkRequests = [];
+  const unhandledExceptions = [];
 
   ws.onmessage = (event) => {
     try {
@@ -286,6 +303,14 @@ async function runPwaAcceptanceSuite() {
         pendingRequests.delete(msg.id);
         if (msg.error) reject(new Error(msg.error.message || JSON.stringify(msg.error)));
         else resolve(msg.result);
+      } else if (msg.method === 'Network.requestWillBeSent' && msg.params?.request?.url) {
+        observedNetworkRequests.push({
+          url: msg.params.request.url,
+          type: msg.params.type || 'Other',
+          initiatorUrl: msg.params.initiator?.url || '',
+        });
+      } else if (msg.method === 'Runtime.exceptionThrown' && msg.params?.exceptionDetails) {
+        unhandledExceptions.push(msg.params.exceptionDetails.text || 'Unhandled exception');
       }
     } catch (_) {}
   };
@@ -306,10 +331,6 @@ async function runPwaAcceptanceSuite() {
   await send('DOM.enable', {}, sessionId);
   await send('Runtime.enable', {}, sessionId);
   await send('Network.enable', {}, sessionId);
-
-  const requestedUrls = [];
-  // Record all network requests to verify path isolation
-  await send('Network.setRequestInterception', { patterns: [] }, sessionId).catch(() => {});
 
   const evalCode = async (expression) => {
     const res = await send('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true }, sessionId);
@@ -352,6 +373,86 @@ async function runPwaAcceptanceSuite() {
     tracker.assert(swRegInfo?.supported === true, 'Browser environment supports ServiceWorker', 3);
     tracker.assert(swRegInfo?.registered === true, 'Service worker is registered for base path', 3);
     tracker.assert(swRegInfo?.scope?.endsWith(BASE_PATH), `Service worker scope strictly ends with "${BASE_PATH}" (got: ${swRegInfo?.scope})`, 3);
+    tracker.assert(swRegInfo?.active === true, 'Service worker is active under the intended scope', 3);
+
+    // Browser-level Manifest & Installability Readiness Verification (distinct from device installation)
+    const cdpManifest = await send('Page.getAppManifest', {}, sessionId);
+    const manifestErrors = cdpManifest?.errors || [];
+    const criticalManifestErrors = manifestErrors.filter((e) => e.critical);
+    let parsedBrowserManifest = null;
+    try {
+      parsedBrowserManifest = cdpManifest?.data ? JSON.parse(cdpManifest.data) : null;
+    } catch (_) {}
+
+    tracker.assert(
+      cdpManifest?.url?.endsWith('/jafri-islamic-resources/manifest.webmanifest'),
+      `Browser resolved linked manifest from HTML (${cdpManifest?.url})`,
+      2
+    );
+    tracker.assert(
+      parsedBrowserManifest !== null && criticalManifestErrors.length === 0,
+      `Browser parsed manifest with zero critical errors (errors: ${criticalManifestErrors.length})`,
+      2
+    );
+    tracker.assert(
+      parsedBrowserManifest?.start_url === '/jafri-islamic-resources/' && parsedBrowserManifest?.scope === '/jafri-islamic-resources/',
+      'Browser-parsed manifest scope and start_url match /jafri-islamic-resources/',
+      2
+    );
+
+    const iconDimensionChecks = await evalCode(`
+      Promise.all([
+        { src: '/jafri-islamic-resources/icons/icon-192x192.png', w: 192, h: 192 },
+        { src: '/jafri-islamic-resources/icons/icon-512x512.png', w: 512, h: 512 },
+        { src: '/jafri-islamic-resources/icons/icon-maskable-512x512.png', w: 512, h: 512 }
+      ].map(item => new Promise(async (resolve) => {
+        try {
+          const resp = await fetch(item.src);
+          if (resp.status !== 200) return resolve({ src: item.src, ok: false, status: resp.status });
+          const img = new Image();
+          img.onload = () => resolve({
+            src: item.src,
+            ok: img.naturalWidth === item.w && img.naturalHeight === item.h,
+            status: resp.status,
+            actualW: img.naturalWidth,
+            actualH: img.naturalHeight
+          });
+          img.onerror = () => resolve({ src: item.src, ok: false, status: resp.status });
+          img.src = item.src;
+        } catch (err) {
+          resolve({ src: item.src, ok: false, error: String(err) });
+        }
+      })))
+    `);
+
+    const allIconsValid = Array.isArray(iconDimensionChecks) && iconDimensionChecks.length === 3 && iconDimensionChecks.every((c) => c.ok);
+    tracker.assert(allIconsValid, 'All required manifest icons return HTTP 200 and decode to exact declared dimensions (192x192, 512x512)', 2);
+
+    // Seed a saved library bookmark while online to verify offline reload persistence (Criterion 7)
+    await evalCode(`
+      (() => {
+        const key = 'jafri_lib_bookmarks_v1';
+        const existing = JSON.parse(localStorage.getItem(key) || '[]');
+        const testBm = {
+          id: 'pwa_offline_test_bm_gita_1_1',
+          religion: 'hinduism',
+          scriptureId: 'bhagavad-gita',
+          collectionId: 'bhagavad-gita',
+          readingId: 'chapter-1',
+          chapterNumber: '1',
+          verseNumber: '1',
+          originalTextReference: 'धृतराष्ट्र उवाच',
+          translationText: 'Ranged thus for battle on the sacred plain',
+          displayTitle: 'Bhagavad Gita 1:1 (Offline Test Bookmark)',
+          displaySubtitle: 'Kurukshetra',
+          createdAt: new Date().toISOString(),
+          timestamp: Date.now()
+        };
+        const updated = [testBm, ...existing.filter(b => b.id !== testBm.id)];
+        localStorage.setItem(key, JSON.stringify(updated));
+        localStorage.setItem('jafri_lib_migrated_v1', '1');
+      })()
+    `);
 
     // =========================================================================
     // CRITERION 4: Initial online visit installs expected application shell cache
@@ -453,10 +554,10 @@ async function runPwaAcceptanceSuite() {
     await captureScreenshot('01_pwa_offline_shell_rendered.png');
 
     // =========================================================================
-    // CRITERION 7: Existing supported offline reading datasets remain accessible
+    // CRITERION 7: Existing supported offline reading datasets & bookmarks remain accessible
     // =========================================================================
-    tracker.startCriterion(7, 'Existing supported offline reading datasets remain accessible');
-    // While still offline, request Gita Chapter 1 dataset
+    tracker.startCriterion(7, 'Existing supported offline reading datasets & bookmarks remain accessible');
+    // 7A. Gita Chapter 1 dataset served from SW cache while offline
     const offlineDatasetResult = await evalCode(`
       (async () => {
         try {
@@ -479,6 +580,65 @@ async function runPwaAcceptanceSuite() {
     tracker.assert(offlineDatasetResult?.ok === true, 'Gita Chapter 1 dataset served successfully from SW cache while offline', 7);
     tracker.assert(offlineDatasetResult?.totalVerses === 47, `Gita Chapter 1 contains all 47 verses offline (got: ${offlineDatasetResult?.totalVerses})`, 7);
     tracker.assert(offlineDatasetResult?.v1ArnoldText?.includes('Ranged thus for battle'), 'Authentic Edwin Arnold translation accessible offline for Chapter 1 Verse 1', 7);
+
+    // 7B. Existing offline-supported Quran content (Mushaf surah-index.json + bundled foundational/thematic Quran passages)
+    const offlineQuranSupport = await evalCode(`
+      (async () => {
+        const idxResp = await fetch('${BASE_PATH}data/13-line/surah-index.json');
+        const idxOk = idxResp.ok;
+        const idxData = idxOk ? await idxResp.json() : null;
+        const surahCount = Array.isArray(idxData?.surahs) ? idxData.surahs.length : (Array.isArray(idxData) ? idxData.length : Object.keys(idxData || {}).length);
+
+        // Check bundled Quran thematic search via UI search modal
+        const searchBtn = document.querySelector("[data-testid='platform-nav-search-btn']") ||
+          Array.from(document.querySelectorAll('button')).find(b => b.textContent?.includes('Search'));
+        if (searchBtn) searchBtn.click();
+        await new Promise(r => setTimeout(r, 600));
+        const input = document.querySelector("[data-testid='universal-search-input']");
+        if (input) {
+          const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+          nativeSetter.call(input, 'Quran 25:63');
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+        await new Promise(r => setTimeout(r, 1000));
+        const modalText = document.body.innerText || '';
+        const hasOfflineQuranPassage = modalText.includes('25:63') || modalText.includes('Al-Furqan');
+        const closeSearchBtn = document.querySelector('[data-testid="close-search-modal-btn"]');
+        if (closeSearchBtn) closeSearchBtn.click();
+        return { idxOk, surahCount, hasOfflineQuranPassage };
+      })()
+    `);
+
+    tracker.assert(offlineQuranSupport?.idxOk === true && offlineQuranSupport?.surahCount >= 114, `Offline Quran Mushaf 114-surah index accessible from SW cache (count: ${offlineQuranSupport?.surahCount})`, 7);
+    tracker.assert(offlineQuranSupport?.hasOfflineQuranPassage === true, 'Bundled offline Quran thematic passage (Surah 25:63) renders in Search while offline', 7);
+
+    // 7C. Saved library bookmark persistence across offline reload
+    await send('Page.reload', {}, sessionId);
+    await new Promise((r) => setTimeout(r, 2500));
+    const bookmarkPersistence = await evalCode(`
+      (async () => {
+        const raw = localStorage.getItem('jafri_lib_bookmarks_v1');
+        const parsed = raw ? JSON.parse(raw) : [];
+        const hasTestBm = parsed.some(b => b.id === 'pwa_offline_test_bm_gita_1_1');
+
+        const libBtn = document.querySelector('button[title*="My Sacred Library"]') ||
+          Array.from(document.querySelectorAll('button')).find(b => b.textContent?.includes('My Library'));
+        if (libBtn) libBtn.click();
+        await new Promise(r => setTimeout(r, 500));
+
+        const bmTabBtn = Array.from(document.querySelectorAll('button')).find(b => b.textContent?.includes('Bookmarks'));
+        if (bmTabBtn) bmTabBtn.click();
+        await new Promise(r => setTimeout(r, 500));
+
+        const bodyText = document.body.innerText || '';
+        const renderedInUi = bodyText.includes('Bhagavad Gita 1:1 (Offline Test Bookmark)');
+        const closeBtn = Array.from(document.querySelectorAll('button')).find(b => b.getAttribute('aria-label')?.includes('Close') || b.textContent?.trim() === '×');
+        if (closeBtn) closeBtn.click();
+        return { hasTestBm, renderedInUi };
+      })()
+    `);
+    tracker.assert(bookmarkPersistence?.hasTestBm === true && bookmarkPersistence?.renderedInUi === true, 'Saved library bookmark persists in storage and renders in Bookmarks UI after offline reload', 7);
     await captureScreenshot('02_pwa_offline_gita_dataset.png');
 
     // =========================================================================
@@ -512,38 +672,54 @@ async function runPwaAcceptanceSuite() {
       ({
         url: window.location.href,
         bodyText: document.getElementById('root')?.innerText || '',
-        hasGitaTitle: document.body.innerText.includes('Bhagavad') || document.body.innerText.includes('Gita')
+        hasGitaTitle: document.body.innerText.includes('Bhagavad') || document.body.innerText.includes('Gita'),
+        hasVerse1Text: document.body.innerText.includes('Ranged thus for battle')
       })
     `);
 
-    tracker.assert(hinduismState?.hasGitaTitle === true, 'Hinduism / Bhagavad Gita view renders via query parameter while offline', 8);
+    tracker.assert(hinduismState?.hasGitaTitle === true && hinduismState?.hasVerse1Text === true, 'Hinduism / Bhagavad Gita Chapter 1 renders via query parameter while offline', 8);
     await captureScreenshot('03_pwa_offline_query_navigation.png');
 
     // =========================================================================
     // CRITERION 9: Network failures for uncached external content handled gracefully
     // =========================================================================
     tracker.startCriterion(9, 'Network failures for uncached external content handled gracefully');
-    const externalFetchHandled = await evalCode(`
+    const exceptionsBeforeC9 = unhandledExceptions.length;
+    // Clear any cached Quran Surah so QuranReader genuinely attempts an uncached external API fetch while offline
+    await evalCode(`
       (async () => {
-        try {
-          const resp = await fetch('https://api.alquran.cloud/v1/surah/1', { cache: 'no-store' });
-          return { caught: false, status: resp.status };
-        } catch (err) {
-          // Expected: Network error is caught gracefully
-          return { caught: true, error: err.message };
-        }
+        try { localStorage.removeItem('jafri_quran_cache'); } catch (_) {}
       })()
     `);
 
-    tracker.assert(externalFetchHandled?.caught === true, 'External API failure rejected cleanly without crashing runtime', 9);
+    // Navigate to Islam reader (?religion=islam&surah=2) requiring uncached external Quran API while offline
+    await send('Page.navigate', { url: `${BASE_URL}?religion=islam&surah=2` }, sessionId);
+    await new Promise((r) => setTimeout(r, 3500));
 
-    const appAliveCheck = await evalCode(`
-      ({
-        rootAlive: !!document.getElementById('root'),
-        windowAlive: typeof window !== 'undefined'
-      })
+    const quranOfflineErrorState = await evalCode(`
+      (() => {
+        const bodyText = document.body.innerText || '';
+        const hasRetryBtn = Array.from(document.querySelectorAll('button')).some(b => b.textContent?.trim() === 'Retry');
+        const hasUserFacingError = hasRetryBtn || bodyText.includes('Failed') || bodyText.includes('Error loading') || bodyText.includes('unavailable');
+        const navStillPresent = !!document.querySelector('header');
+        return {
+          hasRetryBtn,
+          hasUserFacingError,
+          navStillPresent,
+          rootAlive: !!document.getElementById('root'),
+        };
+      })()
     `);
-    tracker.assert(appAliveCheck?.rootAlive === true, 'Application UI remains responsive after external network failure', 9);
+
+    tracker.assert(quranOfflineErrorState?.hasUserFacingError === true && quranOfflineErrorState?.hasRetryBtn === true, 'QuranReader handles uncached external API failure offline and displays user-facing Retry error fallback', 9);
+    tracker.assert(quranOfflineErrorState?.navStillPresent === true && quranOfflineErrorState?.rootAlive === true, 'Rest of application (navigation and root UI) remains responsive during external API failure', 9);
+    tracker.assert(unhandledExceptions.length === exceptionsBeforeC9, `Zero unhandled application exceptions thrown during offline external failure (new exceptions: ${unhandledExceptions.length - exceptionsBeforeC9})`, 9);
+
+    // Verify user can still navigate away to Hinduism offline from the error state
+    await evalCode(`window.__platformNavigate && window.__platformNavigate('hinduism')`);
+    await new Promise((r) => setTimeout(r, 1200));
+    const recoveredToHinduism = await evalCode(`document.body.innerText.includes('Bhagavad') || document.body.innerText.includes('Gita')`);
+    tracker.assert(recoveredToHinduism === true, 'Application smoothly navigates from offline error state to locally cached Hinduism view', 9);
 
     // Restore online condition for subsequent checks
     console.log('  [Action] Restoring online connectivity...');
@@ -593,29 +769,65 @@ async function runPwaAcceptanceSuite() {
     // CRITERION 12: No requests or resources accidentally escape application base path
     // =========================================================================
     tracker.startCriterion(12, 'No requests or resources accidentally escape application base path');
-    const pathEscapeAudit = await evalCode(`
-      (() => {
-        const linksAndScripts = Array.from(document.querySelectorAll('link[href], script[src], img[src]'));
-        const escapingElements = [];
+    const localOrigin = `http://127.0.0.1:${PORT}`;
+    const approvedThirdPartyHosts = new Set([
+      'fonts.googleapis.com',
+      'fonts.gstatic.com',
+      'api.alquran.cloud',
+      'ummahapi.com',
+      'www.ummahapi.com',
+      'api.ummahapi.com',
+      'cdn.islamic.network',
+      'everyayah.com',
+      'bolls.life',
+    ]);
 
-        for (const el of linksAndScripts) {
-          const rawAttr = el.getAttribute('href') || el.getAttribute('src') || '';
-          if (rawAttr.startsWith('/') && !rawAttr.startsWith('/jafri-islamic-resources/')) {
-            escapingElements.push({ tag: el.tagName, attr: rawAttr });
-          }
+    const sameOriginInScope = [];
+    const sameOriginOutOfScope = [];
+    const approvedThirdParty = [];
+    const unexpectedExternal = [];
+
+    for (const req of observedNetworkRequests) {
+      if (!req.url.startsWith('http://') && !req.url.startsWith('https://')) continue;
+      let parsed;
+      try {
+        parsed = new URL(req.url);
+      } catch (_) {
+        continue;
+      }
+      if (parsed.origin === localOrigin) {
+        if (parsed.pathname.startsWith(BASE_PATH)) {
+          sameOriginInScope.push(req);
+        } else {
+          sameOriginOutOfScope.push(req);
         }
-        return escapingElements;
-      })()
-    `);
+      } else if (approvedThirdPartyHosts.has(parsed.hostname)) {
+        approvedThirdParty.push(req);
+      } else {
+        unexpectedExternal.push(req);
+      }
+    }
+
+    console.log(`  [Network Audit] Same-origin in-scope: ${sameOriginInScope.length}, Out-of-scope local: ${sameOriginOutOfScope.length}, Approved 3rd-party: ${approvedThirdParty.length}, Unexpected external: ${unexpectedExternal.length}`);
+    if (sameOriginOutOfScope.length > 0) {
+      console.warn('  Out-of-scope local requests:', sameOriginOutOfScope);
+    }
 
     tracker.assert(
-      pathEscapeAudit?.length === 0,
-      `Zero local elements escape base path /jafri-islamic-resources/ (found: ${pathEscapeAudit?.length})`,
+      sameOriginInScope.length > 0,
+      `Observed ${sameOriginInScope.length} same-origin CDP network requests within ${BASE_PATH}`,
       12
     );
-    if (pathEscapeAudit?.length > 0) {
-      console.warn('Escaping elements:', pathEscapeAudit);
-    }
+    tracker.assert(
+      sameOriginOutOfScope.length === 0,
+      `Zero same-origin network requests escaped base path ${BASE_PATH} (found: ${sameOriginOutOfScope.length})`,
+      12
+    );
+    tracker.assert(
+      unexpectedExternal.length === 0,
+      `Zero unexpected external origins requested (approved 3rd-party requests classified separately: ${approvedThirdParty.length})`,
+      12
+    );
 
     // =========================================================================
     // CRITERION 13: Existing Phase 6.3.5.5 acceptance gates continue passing

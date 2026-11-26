@@ -68,10 +68,15 @@ function pwaPlugin(basePath: string): Plugin {
         ? fs.readdirSync(gitaDir).filter((f) => f.endsWith('.json')).map((f) => `data/gita/${f}`)
         : [];
 
-      // Core shell files
-      const candidateFiles = [
+      // Mandatory application-shell files (install MUST fail if any cannot be cached)
+      const mandatoryFiles = [
         'index.html',
         'manifest.webmanifest',
+        ...assetFiles,
+      ].filter((relPath) => fs.existsSync(path.join(distDir, relPath)));
+
+      // Optional static assets (per-file error resilience)
+      const optionalFiles = [
         'favicon.svg',
         'icons/icon-192x192.png',
         'icons/icon-512x512.png',
@@ -82,26 +87,30 @@ function pwaPlugin(basePath: string): Plugin {
         'data/13-line/surah-index.json',
         'data/15-line/surah-index.json',
         ...gitaFiles,
-        ...assetFiles,
-      ];
+      ].filter((relPath) => fs.existsSync(path.join(distDir, relPath)));
 
-      // Keep only files that actually exist in dist
-      const validFiles = candidateFiles.filter((relPath) =>
-        fs.existsSync(path.join(distDir, relPath))
-      );
+      const validFiles = [...mandatoryFiles, ...optionalFiles];
 
-      // Compute deterministic build hash from asset filenames & sizes
+      // Compute deterministic build hash from SHA-256 of actual file contents and stable relative paths
       const hash = crypto.createHash('sha256');
-      for (const relPath of validFiles) {
-        const stat = fs.statSync(path.join(distDir, relPath));
-        hash.update(`${relPath}:${stat.size}:${stat.mtimeMs}`);
+      for (const relPath of [...validFiles].sort()) {
+        const content = fs.readFileSync(path.join(distDir, relPath));
+        hash.update(`${relPath}\0`);
+        hash.update(content);
       }
-      const buildHash = hash.digest('hex').slice(0, 10);
+      const buildHash = hash.digest('hex').slice(0, 12);
       const cacheName = `jafri-sacred-library-shell-v1-${buildHash}`;
 
+      const mandatoryPrecacheUrls = mandatoryFiles.map(
+        (relPath) => `${normalizedBase}${relPath.replace(/^\//, '')}`
+      );
+      const optionalPrecacheUrls = optionalFiles.map(
+        (relPath) => `${normalizedBase}${relPath.replace(/^\//, '')}`
+      );
       const precacheUrls = [
         normalizedBase,
-        ...validFiles.map((relPath) => `${normalizedBase}${relPath.replace(/^\//, '')}`),
+        ...mandatoryPrecacheUrls,
+        ...optionalPrecacheUrls,
       ];
 
       const swContent = `/**
@@ -109,7 +118,6 @@ function pwaPlugin(basePath: string): Plugin {
  * Phase 6.4: Installable Offline-First PWA Foundation
  *
  * Cache Name: ${cacheName}
- * Generated: ${new Date().toISOString()}
  */
 
 const CACHE_NAME = '${cacheName}';
@@ -117,30 +125,47 @@ const CACHE_PREFIX = 'jafri-sacred-library-shell-';
 const BASE_PATH = '${normalizedBase}';
 const APP_SHELL_ENTRY = '${normalizedBase}index.html';
 
+const MANDATORY_PRECACHE_URLS = ${JSON.stringify(mandatoryPrecacheUrls, null, 2)};
+const OPTIONAL_PRECACHE_URLS = ${JSON.stringify(optionalPrecacheUrls, null, 2)};
 const PRECACHE_URLS = ${JSON.stringify(precacheUrls, null, 2)};
 
-// 1. INSTALL: Precache application shell
+// 1. INSTALL: Fail if any mandatory shell resource cannot be fetched/cached; optional assets use per-file resilience
 self.addEventListener('install', (event) => {
   event.waitUntil(
     (async () => {
       const cache = await caches.open(CACHE_NAME);
-      for (const url of PRECACHE_URLS) {
+
+      try {
+        for (const url of MANDATORY_PRECACHE_URLS) {
+          const response = await fetch(url, { cache: 'no-cache' });
+          if (!response || !response.ok) {
+            throw new Error('[SW] Mandatory precache failed (' + (response ? response.status : 'no response') + '): ' + url);
+          }
+          await cache.put(url, response);
+        }
+
+        const entryResp = await cache.match(APP_SHELL_ENTRY);
+        if (!entryResp) {
+          throw new Error('[SW] Mandatory app shell entry missing after precache: ' + APP_SHELL_ENTRY);
+        }
+        await cache.put(BASE_PATH, entryResp.clone());
+      } catch (err) {
+        // Remove partial cache so failed install cannot leave a misleading offline-ready state
+        await caches.delete(CACHE_NAME);
+        throw err;
+      }
+
+      for (const url of OPTIONAL_PRECACHE_URLS) {
         try {
           const response = await fetch(url, { cache: 'no-cache' });
-          if (response.ok) {
+          if (response && response.ok) {
             await cache.put(url, response);
           }
         } catch (err) {
-          console.warn('[SW] Precache skipped for ' + url + ':', err);
+          console.warn('[SW] Optional precache skipped for ' + url + ':', err);
         }
       }
-      const entryResp = await cache.match(APP_SHELL_ENTRY);
-      if (entryResp) {
-        const hasBase = await cache.match(BASE_PATH);
-        if (!hasBase) {
-          await cache.put(BASE_PATH, entryResp.clone());
-        }
-      }
+
       return self.skipWaiting();
     })()
   );
@@ -184,6 +209,7 @@ self.addEventListener('fetch', (event) => {
     url.pathname.endsWith('.mp3') ||
     url.pathname.endsWith('.m4a') ||
     url.pathname.endsWith('.ogg') ||
+    url.pathname.endsWith('.oga') ||
     url.pathname.endsWith('.wav')
   ) {
     return;

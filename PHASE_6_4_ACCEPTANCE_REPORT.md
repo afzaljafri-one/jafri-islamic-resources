@@ -6,7 +6,7 @@
 - **Accepted Baseline:** `a28905fa72a10b28850c0fb20f16a166b1ba2015` (`origin/main`)
 - **Working Feature Branch:** `phase-6-4-offline-pwa`
 - **Production URL:** `https://afzaljafri-one.github.io/jafri-islamic-resources/`
-- **Status:** **COMPLETE & VERIFIED (60/60 PWA Assertions Passed, 94/94 Phase 6.3.5.5 Regressions Passed)**
+- **Status:** **COMPLETE & VERIFIED (74/74 PWA Assertions Passed, 94/94 Phase 6.3.5.5 Regressions Passed)**
 
 ---
 
@@ -39,16 +39,16 @@ All modifications strictly comply with the milestone constraints: Phase 6.3.5.5 
 ### B. Service Worker Architecture & Build Generator
 - **Generator Plugin (`vite.config.ts`):** Implemented `pwaPlugin(basePath)` which executes during bundle finalization:
   - Detects hashed production JavaScript and CSS chunks (`assets/index-*.js`, `assets/index-*.css`).
-  - Collects core shell assets (`index.html`, `manifest.webmanifest`, `favicon.svg`, brand vectors, font files, and Gita JSON datasets).
-  - Computes a deterministic content hash from asset sizes and timestamps to version the cache name: `jafri-sacred-library-shell-v1-${buildHash}`.
+  - Separates **mandatory** application-shell resources (`index.html`, `manifest.webmanifest`, JS/CSS bundles) from **optional** static assets (`favicon.svg`, icons, brand vectors, font files, Mushaf indices, and Gita JSON datasets).
+  - Computes a deterministic SHA-256 content hash from actual file contents and stable relative paths (without modification timestamps) to version the cache name: `jafri-sacred-library-shell-v1-${buildHash}` (`jafri-sacred-library-shell-v1-ccd7ece17a41`).
   - Generates `dist/sw.js` and synchronizes `public/sw.js`.
 - **Service Worker Lifecycle:**
-  - `install`: Precaches application shell assets with per-file error resilience; invokes `self.skipWaiting()`.
+  - `install`: Precaches mandatory application-shell assets strictly—if any mandatory resource fails to fetch or cache, installation aborts and deletes any partial cache rather than activating a broken offline state. Optional assets use per-file error resilience. Invokes `self.skipWaiting()`.
   - `activate`: Cleans up only obsolete caches matching `jafri-sacred-library-shell-*`; invokes `self.clients.claim()`.
   - `fetch`:
-    - **Scope & Origin Isolation:** Rejects all cross-origin requests immediately (e.g. AlQuran API, UmmahAPI, YouTube, audio streams).
+    - **Scope & Origin Isolation:** Rejects all cross-origin requests immediately (e.g. AlQuran API, UmmahAPI, Bolls.life, YouTube, audio streams).
     - **Path Isolation:** Intercepts only requests starting with `/jafri-islamic-resources/`.
-    - **Audio Quarantine:** Ignores and refuses to cache external or large audio media files (`/audio/`, `.mp3`, `.m4a`, `.ogg`, `.wav`).
+    - **Audio Quarantine:** Ignores and refuses to cache external or large audio media files (`/audio/`, `.mp3`, `.m4a`, `.ogg`, `.oga`, `.wav`).
     - **SPA Navigation:** Employs a network-first strategy for navigation requests (`mode === 'navigate'`) with immediate fallback to cached `index.html`.
     - **Static Assets:** Employs a cache-first strategy with network fallback for same-origin static assets.
 
@@ -69,19 +69,24 @@ Test Execution Environment: Local Vite Preview (`port 4173`, base `/jafri-islami
 | Criterion | Name | Result | Assertions |
 |:---|:---|:---:|:---:|
 | **Criterion 1** | Production build succeeds | **PASSED** | 9 / 9 |
-| **Criterion 2** | Manifest accessible under GitHub Pages base path & valid schema | **PASSED** | 15 / 15 |
-| **Criterion 3** | Service worker registers successfully under correct application scope | **PASSED** | 3 / 3 |
+| **Criterion 2** | Manifest accessible under GitHub Pages base path & valid schema (incl. CDP `getAppManifest` & icon dimensions) | **PASSED** | 19 / 19 |
+| **Criterion 3** | Service worker registers successfully under correct application scope & active state | **PASSED** | 4 / 4 |
 | **Criterion 4** | Initial online visit installs expected application shell cache | **PASSED** | 8 / 8 |
 | **Criterion 5** | Reload works without breaking active application | **PASSED** | 2 / 2 |
 | **Criterion 6** | Offline browser reopening renders cached application shell | **PASSED** | 4 / 4 |
-| **Criterion 7** | Existing supported offline reading datasets remain accessible | **PASSED** | 3 / 3 |
+| **Criterion 7** | Existing supported offline reading datasets & bookmarks remain accessible | **PASSED** | 6 / 6 |
 | **Criterion 8** | Query-parameter navigation continues to work offline | **PASSED** | 4 / 4 |
-| **Criterion 9** | Network failures for uncached external content handled gracefully | **PASSED** | 2 / 2 |
+| **Criterion 9** | Network failures for uncached external content handled gracefully (real `QuranReader` error fallback) | **PASSED** | 4 / 4 |
 | **Criterion 10** | Strict zero-autoplay preserved | **PASSED** | 2 / 2 |
-| **Criterion 11** | Rights restrictions & audio quarantine rules remain enforced | **PASSED** | 5 / 5 |
-| **Criterion 12** | No requests or resources accidentally escape application base path | **PASSED** | 1 / 1 |
+| **Criterion 11** | Rights restrictions & audio quarantine rules remain enforced | **PASSED** | 7 / 7 |
+| **Criterion 12** | No requests or resources accidentally escape application base path (CDP `Network.requestWillBeSent` audit) | **PASSED** | 3 / 3 |
 | **Criterion 13** | Existing Phase 6.3.5.5 acceptance gates continue passing | **PASSED** | 2 / 2 |
-| **Total** | **All 13 Acceptance Criteria** | **PASSED** | **60 / 60 (100.0%)** |
+| **Total** | **All 13 Acceptance Criteria** | **PASSED** | **74 / 74 (100.0%)** |
+
+### Known Limitations
+- **Full Quran Surahs & Remote APIs:** Full 114-surah verse streaming relies on external APIs (UmmahAPI / AlQuran Cloud) and requires network connectivity unless a specific Surah was previously visited online and cached in IndexedDB. Bundled offline Quran support covers the 114-surah Mushaf index (`surah-index.json`) and foundational/thematic Quran passages in Universal Search.
+- **External Streaming Audio & Remote Scripture Providers:** YouTube embeds, external audio streams, and remote Bible/Talmud API fetches are intentionally excluded from Service Worker caching and require online connectivity.
+- **Installability Readiness vs. Device Installation:** Browser-level manifest parsing (`Page.getAppManifest`), icon HTTP 200 & pixel dimensions, and active Service Worker scope verify PWA installability readiness; actual OS/device home-screen installation depends on user interaction with the browser install prompt.
 
 ### Phase 6.3.5.5 Regression Suite
 - Total Assertions: 94

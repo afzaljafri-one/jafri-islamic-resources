@@ -2,19 +2,21 @@
  * Jafri Sacred Library — Service Worker
  * Phase 6.4: Installable Offline-First PWA Foundation
  *
- * Cache Name: jafri-sacred-library-shell-v1-1b5d81ed21
- * Generated: 2026-11-26T10:38:48.235Z
+ * Cache Name: jafri-sacred-library-shell-v1-ccd7ece17a41
  */
 
-const CACHE_NAME = 'jafri-sacred-library-shell-v1-1b5d81ed21';
+const CACHE_NAME = 'jafri-sacred-library-shell-v1-ccd7ece17a41';
 const CACHE_PREFIX = 'jafri-sacred-library-shell-';
 const BASE_PATH = '/jafri-islamic-resources/';
 const APP_SHELL_ENTRY = '/jafri-islamic-resources/index.html';
 
-const PRECACHE_URLS = [
-  "/jafri-islamic-resources/",
+const MANDATORY_PRECACHE_URLS = [
   "/jafri-islamic-resources/index.html",
   "/jafri-islamic-resources/manifest.webmanifest",
+  "/jafri-islamic-resources/assets/index-BrH56JM8.css",
+  "/jafri-islamic-resources/assets/index-By0o-qXH.js"
+];
+const OPTIONAL_PRECACHE_URLS = [
   "/jafri-islamic-resources/favicon.svg",
   "/jafri-islamic-resources/icons/icon-192x192.png",
   "/jafri-islamic-resources/icons/icon-512x512.png",
@@ -41,33 +43,80 @@ const PRECACHE_URLS = [
   "/jafri-islamic-resources/data/gita/chapter_6.json",
   "/jafri-islamic-resources/data/gita/chapter_7.json",
   "/jafri-islamic-resources/data/gita/chapter_8.json",
-  "/jafri-islamic-resources/data/gita/chapter_9.json",
+  "/jafri-islamic-resources/data/gita/chapter_9.json"
+];
+const PRECACHE_URLS = [
+  "/jafri-islamic-resources/",
+  "/jafri-islamic-resources/index.html",
+  "/jafri-islamic-resources/manifest.webmanifest",
   "/jafri-islamic-resources/assets/index-BrH56JM8.css",
-  "/jafri-islamic-resources/assets/index-By0o-qXH.js"
+  "/jafri-islamic-resources/assets/index-By0o-qXH.js",
+  "/jafri-islamic-resources/favicon.svg",
+  "/jafri-islamic-resources/icons/icon-192x192.png",
+  "/jafri-islamic-resources/icons/icon-512x512.png",
+  "/jafri-islamic-resources/icons/icon-maskable-512x512.png",
+  "/jafri-islamic-resources/brand/jafri-logo.svg",
+  "/jafri-islamic-resources/brand/seljuk-star.svg",
+  "/jafri-islamic-resources/fonts/indopak-nastaleeq.woff2",
+  "/jafri-islamic-resources/data/13-line/surah-index.json",
+  "/jafri-islamic-resources/data/15-line/surah-index.json",
+  "/jafri-islamic-resources/data/gita/chapter_1.json",
+  "/jafri-islamic-resources/data/gita/chapter_10.json",
+  "/jafri-islamic-resources/data/gita/chapter_11.json",
+  "/jafri-islamic-resources/data/gita/chapter_12.json",
+  "/jafri-islamic-resources/data/gita/chapter_13.json",
+  "/jafri-islamic-resources/data/gita/chapter_14.json",
+  "/jafri-islamic-resources/data/gita/chapter_15.json",
+  "/jafri-islamic-resources/data/gita/chapter_16.json",
+  "/jafri-islamic-resources/data/gita/chapter_17.json",
+  "/jafri-islamic-resources/data/gita/chapter_18.json",
+  "/jafri-islamic-resources/data/gita/chapter_2.json",
+  "/jafri-islamic-resources/data/gita/chapter_3.json",
+  "/jafri-islamic-resources/data/gita/chapter_4.json",
+  "/jafri-islamic-resources/data/gita/chapter_5.json",
+  "/jafri-islamic-resources/data/gita/chapter_6.json",
+  "/jafri-islamic-resources/data/gita/chapter_7.json",
+  "/jafri-islamic-resources/data/gita/chapter_8.json",
+  "/jafri-islamic-resources/data/gita/chapter_9.json"
 ];
 
-// 1. INSTALL: Precache application shell
+// 1. INSTALL: Fail if any mandatory shell resource cannot be fetched/cached; optional assets use per-file resilience
 self.addEventListener('install', (event) => {
   event.waitUntil(
     (async () => {
       const cache = await caches.open(CACHE_NAME);
-      for (const url of PRECACHE_URLS) {
+
+      try {
+        for (const url of MANDATORY_PRECACHE_URLS) {
+          const response = await fetch(url, { cache: 'no-cache' });
+          if (!response || !response.ok) {
+            throw new Error('[SW] Mandatory precache failed (' + (response ? response.status : 'no response') + '): ' + url);
+          }
+          await cache.put(url, response);
+        }
+
+        const entryResp = await cache.match(APP_SHELL_ENTRY);
+        if (!entryResp) {
+          throw new Error('[SW] Mandatory app shell entry missing after precache: ' + APP_SHELL_ENTRY);
+        }
+        await cache.put(BASE_PATH, entryResp.clone());
+      } catch (err) {
+        // Remove partial cache so failed install cannot leave a misleading offline-ready state
+        await caches.delete(CACHE_NAME);
+        throw err;
+      }
+
+      for (const url of OPTIONAL_PRECACHE_URLS) {
         try {
           const response = await fetch(url, { cache: 'no-cache' });
-          if (response.ok) {
+          if (response && response.ok) {
             await cache.put(url, response);
           }
         } catch (err) {
-          console.warn('[SW] Precache skipped for ' + url + ':', err);
+          console.warn('[SW] Optional precache skipped for ' + url + ':', err);
         }
       }
-      const entryResp = await cache.match(APP_SHELL_ENTRY);
-      if (entryResp) {
-        const hasBase = await cache.match(BASE_PATH);
-        if (!hasBase) {
-          await cache.put(BASE_PATH, entryResp.clone());
-        }
-      }
+
       return self.skipWaiting();
     })()
   );
@@ -111,6 +160,7 @@ self.addEventListener('fetch', (event) => {
     url.pathname.endsWith('.mp3') ||
     url.pathname.endsWith('.m4a') ||
     url.pathname.endsWith('.ogg') ||
+    url.pathname.endsWith('.oga') ||
     url.pathname.endsWith('.wav')
   ) {
     return;
