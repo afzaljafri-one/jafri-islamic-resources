@@ -560,21 +560,41 @@ async function run() {
         const autoAfter = window.__SERVICES__.quranAudioService.getState().autoAdvance;
         autoBtn.click(); // restore
 
-        // 5. Test Next Ayah navigation
+        // 5. Test Next Ayah navigation (nextAyah(true) may initiate playback)
         const ayahBefore = window.__SERVICES__.quranAudioService.getState().currentAyahNumber;
         nextAyahBtn.click();
         await new Promise(r => setTimeout(r, 200));
         const ayahAfter = window.__SERVICES__.quranAudioService.getState().currentAyahNumber;
+        const statusAfterNextAyah = window.__SERVICES__.quranAudioService.getState().status;
 
-        // 6. Test Play through unified player
-        playBtn.click();
-        await new Promise(r => setTimeout(r, 500));
-        const quranStatusDuringPlay = window.__SERVICES__.quranAudioService.getState().status;
+        // Explicitly stop playback after navigation test and wait for idle
+        stopBtn.click();
+        for (let i = 0; i < 20; i++) {
+          if (window.__SERVICES__.quranAudioService.getState().status === 'idle') break;
+          await new Promise(r => setTimeout(r, 50));
+        }
+        const statusBeforePlay = window.__SERVICES__.quranAudioService.getState().status;
+
+        // 6. Re-query Play/Pause button in Play state, click Play once, and poll up to 2s
+        const freshPlayBtn = quranSec.querySelector('[data-testid="audio-play-pause-btn"]');
+        const playBtnReady = Boolean(freshPlayBtn) && statusBeforePlay === 'idle';
+        if (freshPlayBtn) freshPlayBtn.click();
+
+        let statusAfterPlay = window.__SERVICES__.quranAudioService.getState().status;
+        for (let i = 0; i < 20; i++) {
+          statusAfterPlay = window.__SERVICES__.quranAudioService.getState().status;
+          if (statusAfterPlay === 'playing' || statusAfterPlay === 'loading') break;
+          await new Promise(r => setTimeout(r, 100));
+        }
         const quranActiveUrl = window.__SERVICES__.quranAudioService.getState().activeAudioUrl;
 
-        // 7. Stop
-        stopBtn.click();
-        await new Promise(r => setTimeout(r, 200));
+        // 7. Stop playback and verify idle
+        const freshStopBtn = quranSec.querySelector('[data-testid="audio-stop-btn"]');
+        if (freshStopBtn) freshStopBtn.click();
+        for (let i = 0; i < 20; i++) {
+          if (window.__SERVICES__.quranAudioService.getState().status === 'idle') break;
+          await new Promise(r => setTimeout(r, 50));
+        }
         const quranStatusAfterStop = window.__SERVICES__.quranAudioService.getState().status;
 
         return {
@@ -584,9 +604,17 @@ async function run() {
           speedChanged: speedAfter === 1.25,
           autoToggled: autoBefore !== autoAfter,
           ayahAdvanced: ayahAfter > ayahBefore,
-          playbackTriggered: quranStatusDuringPlay === 'playing' || quranStatusDuringPlay === 'loading',
-          hasAudioUrl: Boolean(quranActiveUrl),
+          playBtnReady,
+          playbackTriggered: statusAfterPlay === 'playing' || statusAfterPlay === 'loading',
+          hasAudioUrl: Boolean(quranActiveUrl && String(quranActiveUrl).trim().length > 0),
           stoppedCleanly: quranStatusAfterStop === 'idle',
+          diagnostics: {
+            statusAfterNextAyah,
+            statusBeforePlay,
+            statusAfterPlay,
+            activeAudioUrl: quranActiveUrl,
+            statusAfterStop: quranStatusAfterStop,
+          },
         };
       })()
     `);
@@ -597,7 +625,10 @@ async function run() {
     assert(quranControlsTest?.speedChanged, 'Quran playback speed selector updates playbackSpeed (1.25x)');
     assert(quranControlsTest?.autoToggled, 'Quran auto-advance toggle functions');
     assert(quranControlsTest?.ayahAdvanced, 'Quran Ayah navigation advances currentAyahNumber');
-    assert(quranControlsTest?.playbackTriggered && quranControlsTest?.hasAudioUrl, 'Quran Play button initiates recitation playback through unified player');
+    assert(
+      quranControlsTest?.playBtnReady && quranControlsTest?.playbackTriggered && quranControlsTest?.hasAudioUrl,
+      `Quran Play button initiates recitation playback through unified player (${JSON.stringify(quranControlsTest?.diagnostics)})`
+    );
     assert(quranControlsTest?.stoppedCleanly, 'Quran Stop button cleanly stops playback');
 
     // =========================================================================
