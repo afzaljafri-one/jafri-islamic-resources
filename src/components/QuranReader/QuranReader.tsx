@@ -14,7 +14,6 @@ import { VerseCard } from './VerseCard';
 import { MushafContinuousView } from './MushafContinuousView';
 import { MushafPageViewer } from './MushafPageViewer';
 import { SurahSidebar } from './SurahSidebar';
-import { AudioPlayerBar } from './AudioPlayerBar';
 import { SearchModal } from './SearchModal';
 import { BookmarksDrawer } from './BookmarksDrawer';
 import { RefreshCw, AlertTriangle, CheckCircle2, FileDown, Loader2, Info } from 'lucide-react';
@@ -64,14 +63,10 @@ export const QuranReader: React.FC = () => {
 
   // Audio Playback (Single Source of Truth: QuranAudioService)
   const [audioState, setAudioState] = useState<AudioPlayerState>(() => quranAudioService.getState());
-  const [isAudioPlayerVisible, setIsAudioPlayerVisible] = useState<boolean>(true);
 
   useEffect(() => {
     const unsubscribe = quranAudioService.subscribe((state) => {
       setAudioState(state);
-      if (state.status === 'playing' || state.status === 'loading') {
-        setIsAudioPlayerVisible(true);
-      }
     });
     return () => {
       unsubscribe();
@@ -253,7 +248,6 @@ export const QuranReader: React.FC = () => {
 
   // Audio Playback Handlers
   const handleTogglePlayAudio = () => {
-    setIsAudioPlayerVisible(true);
     if (audioState.status === 'playing') {
       quranAudioService.pause();
     } else {
@@ -262,7 +256,6 @@ export const QuranReader: React.FC = () => {
   };
 
   const handleTogglePlayAyah = (ayahNum: number) => {
-    setIsAudioPlayerVisible(true);
     if (
       audioState.currentSurahNumber === currentSurahNumber &&
       audioState.currentAyahNumber === ayahNum &&
@@ -484,8 +477,8 @@ export const QuranReader: React.FC = () => {
           }}
           onDownloadPdf={handleDownloadPdf}
           isDownloadingPdf={isDownloadingPdf}
-          onToggleAudioPlayer={() => setIsAudioPlayerVisible((v) => !v)}
-          isAudioActive={isAudioPlayerVisible || audioState.status === 'playing'}
+          onToggleAudioPlayer={handleTogglePlayAudio}
+          isAudioActive={audioState.status === 'playing'}
         />
       )}
 
@@ -627,9 +620,43 @@ export const QuranReader: React.FC = () => {
         )}
       </div>
 
-      {/* 3. Main Reading Canvas — Two-Column Reading & Sacred Audio Experience */}
-      <div className="max-w-7xl mx-auto px-4 lg:px-8 pb-24">
-        <TwoColumnReadingLayout context={readingContext}>
+      {/* 3. Main Reading Canvas — Two-Column Reading & Unified Sacred Audio Experience */}
+      <div className="max-w-7xl mx-auto px-4 lg:px-8 pb-8">
+        <TwoColumnReadingLayout
+          context={readingContext}
+          quranControls={{
+            isPlaying: audioState.status === 'playing',
+            isLoading: audioState.status === 'loading',
+            currentSurahNumber: audioState.currentSurahNumber,
+            currentSurahName: audioState.currentSurahName,
+            currentAyahNumber: audioState.currentAyahNumber,
+            totalAyahs: audioState.totalAyahs,
+            reciterId: audioState.reciterId,
+            currentTime: audioState.currentTime,
+            duration: audioState.duration,
+            playbackScope: audioState.playbackScope,
+            onTogglePlaybackScope: () =>
+              quranAudioService.setPlaybackScope(
+                audioState.playbackScope === 'page' ? 'surah' : 'page'
+              ),
+            pageBoundary: audioState.pageBoundary,
+            pageRecitationCompleted: audioState.pageRecitationCompleted,
+            completionMessage: audioState.completionMessage,
+            onSelectReciter: (newReciter) => quranAudioService.setReciter(newReciter),
+            onTogglePlay: handleTogglePlayAudio,
+            onStop: () => quranAudioService.stop(),
+            onSeek: (seconds) => quranAudioService.seek(seconds),
+            onNextAyah: () => quranAudioService.nextAyah(true),
+            onPrevAyah: () => quranAudioService.prevAyah(true),
+            onNextSurah: handleAudioNextSurah,
+            onPrevSurah: handleAudioPrevSurah,
+            autoAdvance: audioState.autoAdvance,
+            onToggleAutoAdvance: () => quranAudioService.setAutoAdvance(!audioState.autoAdvance),
+            playbackSpeed: audioState.playbackSpeed,
+            onChangePlaybackSpeed: (speed) => quranAudioService.setPlaybackSpeed(speed),
+            errorMessage: audioState.errorMessage,
+          }}
+        >
         {viewMode === 'pages' ? (
           <MushafPageViewer
             currentSurahNumber={currentSurahNumber}
@@ -767,44 +794,6 @@ export const QuranReader: React.FC = () => {
         onRemoveBookmark={(id) => setBookmarks((prev) => prev.filter((b) => b.id !== id))}
         onClearAllBookmarks={() => setBookmarks([])}
       />
-
-      {/* 5. Sticky Audio Player Bar (visible during playback or when active) */}
-      {isAudioPlayerVisible && (
-        <AudioPlayerBar
-          isPlaying={audioState.status === 'playing'}
-          isLoading={audioState.status === 'loading'}
-          currentSurahNumber={audioState.currentSurahNumber}
-          currentSurahName={audioState.currentSurahName}
-          currentAyahNumber={audioState.currentAyahNumber}
-          totalAyahs={audioState.totalAyahs}
-          reciterId={audioState.reciterId}
-          currentTime={audioState.currentTime}
-          duration={audioState.duration}
-          playbackScope={audioState.playbackScope}
-          onTogglePlaybackScope={() =>
-            quranAudioService.setPlaybackScope(
-              audioState.playbackScope === 'page' ? 'surah' : 'page'
-            )
-          }
-          pageBoundary={audioState.pageBoundary}
-          pageRecitationCompleted={audioState.pageRecitationCompleted}
-          completionMessage={audioState.completionMessage}
-          onSelectReciter={(newReciter) => quranAudioService.setReciter(newReciter)}
-          onTogglePlay={handleTogglePlayAudio}
-          onStop={() => quranAudioService.stop()}
-          onSeek={(seconds) => quranAudioService.seek(seconds)}
-          onNextAyah={() => quranAudioService.nextAyah(true)}
-          onPrevAyah={() => quranAudioService.prevAyah(true)}
-          onNextSurah={handleAudioNextSurah}
-          onPrevSurah={handleAudioPrevSurah}
-          autoAdvance={audioState.autoAdvance}
-          onToggleAutoAdvance={() => quranAudioService.setAutoAdvance(!audioState.autoAdvance)}
-          playbackSpeed={audioState.playbackSpeed}
-          onChangePlaybackSpeed={(speed) => quranAudioService.setPlaybackSpeed(speed)}
-          errorMessage={audioState.errorMessage}
-          onClosePlayer={() => setIsAudioPlayerVisible(false)}
-        />
-      )}
     </div>
   );
 };

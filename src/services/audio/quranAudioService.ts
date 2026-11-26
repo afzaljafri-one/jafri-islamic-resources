@@ -9,6 +9,7 @@ import { DEFAULT_RECITER_ID, getReciterConfig } from './reciterConfig';
 import { everyAyahProvider } from './providers/everyAyahProvider';
 import { getSurahCanonicalMeta } from './surahMetadata';
 import { getPageAyahBoundary } from './pageAyahBoundaries';
+import { audioCoordinator } from '../../platform/services/audioCoordinator';
 
 export class QuranAudioService {
   private static instance: QuranAudioService | null = null;
@@ -58,6 +59,7 @@ export class QuranAudioService {
         // Fallback to default
       }
     }
+    audioCoordinator.register('quran', () => this.stop());
   }
 
   public static getInstance(): QuranAudioService {
@@ -117,6 +119,10 @@ export class QuranAudioService {
       this.audio.src = '';
       this.audio.load();
       this.audio = null;
+    }
+
+    if (autoPlay) {
+      audioCoordinator.activate('quran');
     }
 
     const audio = new Audio();
@@ -451,6 +457,7 @@ export class QuranAudioService {
   }
 
   public play() {
+    audioCoordinator.activate('quran');
     // If page boundaries are not yet verified, strictly disallow playback
     if (this.state.playbackScope === 'page' && this.state.pageBoundary && !this.state.pageBoundary.isVerified) {
       this.updateState({

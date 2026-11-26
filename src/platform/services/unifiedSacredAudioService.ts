@@ -22,6 +22,7 @@ import {
   getCanonicalRequirementById
 } from '../data/sacredAudioMasterCatalogue';
 import { resolveAudioUrl } from '../utils/audioUrlResolver';
+import { audioCoordinator } from './audioCoordinator';
 
 export function isSafeYouTubeEmbedUrl(url: string): boolean {
   try {
@@ -71,6 +72,7 @@ export class UnifiedSacredAudioService {
 
   private constructor() {
     this.initAudioElement();
+    audioCoordinator.register('sacred', () => this.stop());
   }
 
   public static getInstance(): UnifiedSacredAudioService {
@@ -199,6 +201,7 @@ export class UnifiedSacredAudioService {
    * Primary playback initiator with strict anti-leak verification and canonical catalogue anti-tampering.
    */
   public async playRequirement(requirement: SacredAudioRequirement): Promise<void> {
+    audioCoordinator.activate('sacred');
     // 0. Canonical Lookup & Anti-Tampering: Enforce truth from immutable catalogue
     const canonical = getCanonicalRequirementById(requirement.id);
     if (!canonical) {
