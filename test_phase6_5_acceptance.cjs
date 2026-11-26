@@ -129,9 +129,50 @@ async function run() {
     } catch (_) {}
   }
 
+  const terminateProcess = async (proc, label, timeoutMs = 2500) => {
+    if (!proc) return;
+    const destroyStreams = () => {
+      try { proc.stdin?.destroy(); } catch (_) {}
+      try { proc.stdout?.destroy(); } catch (_) {}
+      try { proc.stderr?.destroy(); } catch (_) {}
+    };
+    if (proc.exitCode !== null || proc.signalCode !== null) {
+      destroyStreams();
+      return;
+    }
+    await new Promise((resolve) => {
+      let settled = false;
+      let killTimer = null;
+      let hardTimer = null;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        if (killTimer) clearTimeout(killTimer);
+        if (hardTimer) clearTimeout(hardTimer);
+        destroyStreams();
+        resolve();
+      };
+      proc.once('close', finish);
+      try {
+        proc.kill('SIGTERM');
+      } catch (_) {
+        finish();
+        return;
+      }
+      killTimer = setTimeout(() => {
+        if (settled) return;
+        try {
+          proc.kill('SIGKILL');
+        } catch (_) {}
+        hardTimer = setTimeout(finish, 1000);
+      }, timeoutMs);
+    });
+  };
+
   if (!wsUrl) {
-    chrome.kill();
-    preview.kill();
+    await terminateProcess(chrome, 'chrome');
+    await terminateProcess(preview, 'preview');
+    try { fs.rmSync(tempProfileDir, { recursive: true, force: true }); } catch (_) {}
     throw new Error('Failed to connect to Chrome CDP');
   }
 
@@ -904,10 +945,45 @@ async function run() {
       );
     }
   } finally {
+    // 1. Gracefully close CDP WebSocket and clear any pending requests
     try {
-      chrome.kill();
-      preview.kill();
+      for (const { reject } of pending.values()) {
+        reject(new Error('CDP WebSocket closed during cleanup'));
+      }
+      pending.clear();
+      if (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING) {
+        await new Promise((resolve) => {
+          let done = false;
+          const finish = () => {
+            if (done) return;
+            done = true;
+            clearTimeout(timer);
+            resolve();
+          };
+          const timer = setTimeout(finish, 1500);
+          ws.addEventListener('close', finish, { once: true });
+          try {
+            ws.close();
+          } catch (_) {
+            finish();
+          }
+        });
+      }
+      ws.onmessage = null;
+      ws.onerror = null;
+      ws.onopen = null;
     } catch (_) {}
+
+    // 2. Terminate Chrome and Vite preview cleanly (SIGTERM -> bounded SIGKILL)
+    await terminateProcess(chrome, 'chrome');
+    await terminateProcess(preview, 'preview');
+
+    // 3. Remove temporary Chrome profile directory
+    try {
+      fs.rmSync(tempProfileDir, { recursive: true, force: true });
+    } catch (_) {}
+
+    console.log('PHASE 6.5 BROWSER AND PROCESS CLEANUP COMPLETE');
   }
 
   // ===========================================================================
