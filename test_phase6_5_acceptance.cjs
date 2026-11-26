@@ -169,8 +169,46 @@ async function run() {
   await send('Page.enable', {}, sessionId);
   await send('Runtime.enable', {}, sessionId);
 
+  // Instrument detached new Audio(), HTMLMediaElement.play(), and speechSynthesis.speak()
+  // to catch any autoplay even when Audio elements are not attached to the DOM.
+  await send('Page.addScriptToEvaluateOnNewDocument', {
+    source: `
+      (() => {
+        window.__AUTOPLAY_AUDIT__ = {
+          audioPlayCalls: [],
+          audioPlayEvents: [],
+          speechCalls: [],
+        };
+        const OrigAudio = window.Audio;
+        window.Audio = function(...args) {
+          const instance = new OrigAudio(...args);
+          instance.addEventListener('play', () => {
+            window.__AUTOPLAY_AUDIT__.audioPlayEvents.push(instance.src || 'new Audio()');
+          });
+          return instance;
+        };
+        window.Audio.prototype = OrigAudio.prototype;
+        const origMediaPlay = HTMLMediaElement.prototype.play;
+        HTMLMediaElement.prototype.play = function(...args) {
+          window.__AUTOPLAY_AUDIT__.audioPlayCalls.push(this.src || this.tagName);
+          return origMediaPlay.apply(this, args);
+        };
+        if (window.speechSynthesis && typeof window.speechSynthesis.speak === 'function') {
+          const origSpeak = window.speechSynthesis.speak.bind(window.speechSynthesis);
+          window.speechSynthesis.speak = function(utterance) {
+            window.__AUTOPLAY_AUDIT__.speechCalls.push(utterance?.text?.slice(0, 40) || 'speech');
+            return origSpeak(utterance);
+          };
+        }
+      })();
+    `,
+  }, sessionId);
+
   const evalCode = async (expression) => {
     const res = await send('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true }, sessionId);
+    if (res.exceptionDetails) {
+      console.error('  [evalCode Exception]', res.exceptionDetails.exception?.description || res.exceptionDetails.text);
+    }
     return res.result ? res.result.value : undefined;
   };
 
@@ -224,9 +262,25 @@ async function run() {
             return st.position === 'fixed' && Math.abs(window.innerHeight - r.bottom) < 10 && r.height > 30 && (el.innerText.includes('Play') || el.querySelector('[data-testid*="audio"]'));
           });
 
-          // 6. No autoplay
+          // 6. No autoplay (DOM media + detached new Audio() + speechSynthesis + YouTube autoplay=1 + service states)
           const media = Array.from(document.querySelectorAll('audio, video'));
-          const autoplayCount = media.filter(m => m.autoplay || m.hasAttribute('autoplay') || (!m.paused && !m.ended && m.currentTime > 0)).length;
+          const domAutoplayCount = media.filter(m => m.autoplay || m.hasAttribute('autoplay') || (!m.paused && !m.ended && m.currentTime > 0)).length;
+          const ytAutoplayCount = Array.from(document.querySelectorAll('iframe')).filter(f => (f.src || '').includes('autoplay=1')).length;
+          const audit = window.__AUTOPLAY_AUDIT__ || { audioPlayCalls: [], audioPlayEvents: [], speechCalls: [] };
+          const qState = window.__SERVICES__?.quranAudioService?.getState()?.status || 'idle';
+          const sState = window.__SERVICES__?.unifiedSacredAudioService?.getState()?.status || 'IDLE';
+          const mState = window.__multilingualAudioEngine?.getState?.()?.playbackState || 'idle';
+          const anyServicePlaying =
+            qState === 'playing' || qState === 'loading' ||
+            sState === 'PLAYING' || sState === 'LOADING' ||
+            mState === 'playing' || mState === 'buffering';
+          const autoplayCount =
+            domAutoplayCount +
+            ytAutoplayCount +
+            audit.audioPlayCalls.length +
+            audit.audioPlayEvents.length +
+            audit.speechCalls.length +
+            (anyServicePlaying ? 1 : 0);
 
           // 8. No nested vertical scrolling in normal reading page
           const audioPanel = panels[0];
@@ -420,28 +474,81 @@ async function run() {
     assert(quranControlsTest?.stoppedCleanly, 'Quran Stop button cleanly stops playback');
 
     // =========================================================================
-    // PART C: MUTUAL EXCLUSION (NO SIMULTANEOUS PLAYBACK) & VIEW ALL MODAL
+    // PART C: COMPLETE AUDIO MUTUAL-EXCLUSION (A, B, C, D) & VIEW ALL MODAL
     // =========================================================================
-    console.log('\n▶ [MUTUAL EXCLUSION & VIEW ALL MODAL VERIFICATION]');
+    console.log('\n▶ [AUDIO MUTUAL EXCLUSION (A: Quran->Sacred, B: Sacred->Quran, C: Multilingual, D: Route Exit)]');
     const mutualExclusionResult = await evalCode(`
       (async () => {
         const panel = document.querySelector('[data-testid="sacred-audio-reading-panel"]');
         const quranPlayBtn = panel.querySelector('[data-testid="audio-play-pause-btn"]');
-        // Start Quran playback
-        quranPlayBtn.click();
-        await new Promise(r => setTimeout(r, 400));
-        const q1 = window.__SERVICES__.quranAudioService.getState().status;
 
-        // Click a Sacred Audio recording in the same panel
+        // A. Quran -> Sacred Audio
+        quranPlayBtn.click();
+        await new Promise(r => setTimeout(r, 450));
+        const q1Status = window.__SERVICES__.quranAudioService.getState().status;
+        const q1PlayerVisible = !!panel.querySelector('[data-testid="quran-unified-player-section"]');
+
         const sacredItem = panel.querySelector('[data-testid^="playlist-item-"]');
         if (sacredItem) sacredItem.click();
-        await new Promise(r => setTimeout(r, 500));
-        const qAfterSacred = window.__SERVICES__.quranAudioService.getState().status;
+        await new Promise(r => setTimeout(r, 600));
+        const qStatusAfterSacred = window.__SERVICES__.quranAudioService.getState().status;
+        const sacredStatusA = window.__SERVICES__.unifiedSacredAudioService.getState().status;
+        const sacredPlayerVisibleA = !!panel.querySelector('[data-testid="sacred-audio-active-player"]');
+        const quranPlayerHiddenA = !panel.querySelector('[data-testid="quran-unified-player-section"]');
 
-        // Now start Quran again and verify Sacred Audio stops
-        quranPlayBtn.click();
-        await new Promise(r => setTimeout(r, 400));
-        window.__SERVICES__.quranAudioService.stop();
+        // B. Sacred Audio -> Quran
+        const switchToQuranBtn = panel.querySelector('[data-testid="switch-to-quran-btn"]');
+        if (switchToQuranBtn) switchToQuranBtn.click();
+        await new Promise(r => setTimeout(r, 500));
+        const sacredStatusAfterQuran = window.__SERVICES__.unifiedSacredAudioService.getState().status;
+        const qStatusB = window.__SERVICES__.quranAudioService.getState().status;
+        const quranPlayerVisibleB = !!panel.querySelector('[data-testid="quran-unified-player-section"]');
+        const sacredPlayerHiddenB = !panel.querySelector('[data-testid="sacred-audio-active-player"]');
+
+        // C. Multilingual Audio -> Quran and Sacred Audio
+        const mEngine = window.__multilingualAudioEngine;
+        let multiToQuranOk = false;
+        let multiToSacredOk = false;
+        if (mEngine && typeof mEngine.loadUnits === 'function') {
+          mEngine.loadUnits('hinduism', [{
+            id: 'test-multi-1',
+            religion: 'hinduism',
+            title: 'Rigveda 10.90 — Purusha Suktam',
+            originalText: 'Om sahasra shirsha purushah',
+            translationText: 'Thousand-headed is the Supreme Being.',
+            translations: { en: 'Thousand-headed is the Supreme Being.' },
+            originalAudioUrl: '/audio/hinduism/hinduism_vedas_purusha_suktam_vedadhayana_gosthi.ogg',
+          }]);
+          mEngine.setMode('original_only');
+          mEngine.play('test-multi-1');
+          await new Promise(r => setTimeout(r, 350));
+          const mState1 = mEngine.getState().playbackState;
+          // Activate Quran -> Multilingual must stop
+          window.__SERVICES__.quranAudioService.play();
+          await new Promise(r => setTimeout(r, 350));
+          const mStateAfterQuran = mEngine.getState().playbackState;
+          const qStateAfterMulti = window.__SERVICES__.quranAudioService.getState().status;
+          multiToQuranOk =
+            (mState1 === 'playing' || mState1 === 'buffering') &&
+            mStateAfterQuran === 'idle' &&
+            !window.speechSynthesis?.speaking &&
+            (qStateAfterMulti === 'playing' || qStateAfterMulti === 'loading');
+
+          // Re-activate Multilingual -> Sacred Audio must stop it
+          mEngine.setMode('original_only');
+          mEngine.play('test-multi-1');
+          await new Promise(r => setTimeout(r, 350));
+          const mState2 = mEngine.getState().playbackState;
+          if (sacredItem) sacredItem.click();
+          await new Promise(r => setTimeout(r, 500));
+          const mStateAfterSacred = mEngine.getState().playbackState;
+          const sStateAfterMulti = window.__SERVICES__.unifiedSacredAudioService.getState().status;
+          multiToSacredOk =
+            (mState2 === 'playing' || mState2 === 'buffering') &&
+            mStateAfterSacred === 'idle' &&
+            !window.speechSynthesis?.speaking &&
+            (sStateAfterMulti === 'PLAYING' || sStateAfterMulti === 'LOADING');
+        }
 
         // Test View All recordings modal
         const viewAllBtn = panel.querySelector('[data-testid="view-all-recordings-btn"]');
@@ -457,20 +564,55 @@ async function run() {
           modalClosed = !document.querySelector('[data-testid="all-recordings-modal"]');
         }
 
+        // Start Quran playback for Route Exit test (D)
+        window.__SERVICES__.quranAudioService.play();
+        await new Promise(r => setTimeout(r, 400));
+        const quranPlayingBeforeRouteExit = window.__SERVICES__.quranAudioService.getState().status;
+
         return {
-          quranStarted: q1 === 'playing' || q1 === 'loading',
-          hadSacredItem: !!sacredItem,
-          quranStoppedWhenSacredActivated: qAfterSacred === 'idle',
+          a_quranStarted: (q1Status === 'playing' || q1Status === 'loading') && q1PlayerVisible,
+          a_sacredActive: sacredStatusA === 'PLAYING' || sacredStatusA === 'LOADING',
+          a_quranStopped: qStatusAfterSacred === 'idle',
+          a_uiSwitchedToSacred: sacredPlayerVisibleA && quranPlayerHiddenA,
+          b_sacredStopped: sacredStatusAfterQuran === 'IDLE',
+          b_quranActive: qStatusB === 'playing' || qStatusB === 'loading',
+          b_uiSwitchedToQuran: quranPlayerVisibleB && sacredPlayerHiddenB,
+          c_multiToQuranOk: multiToQuranOk,
+          c_multiToSacredOk: multiToSacredOk,
           hasViewAllBtn: !!viewAllBtn,
           modalOpened,
           modalClosed,
+          quranPlayingBeforeRouteExit: quranPlayingBeforeRouteExit === 'playing' || quranPlayingBeforeRouteExit === 'loading',
         };
       })()
     `);
 
-    assert(mutualExclusionResult?.quranStarted, 'Quran playback started before source switch');
-    assert(mutualExclusionResult?.hadSacredItem && mutualExclusionResult?.quranStoppedWhenSacredActivated, 'Activating Sacred Audio recording automatically stops QuranAudioService (no simultaneous playback)');
+    assert(mutualExclusionResult?.a_quranStarted, 'A1. Quran playback started and Quran controls visible');
+    assert(mutualExclusionResult?.a_quranStopped && mutualExclusionResult?.a_sacredActive, 'A2. Quran -> Sacred Audio stops Quran and activates Sacred Audio (PLAYING/LOADING)');
+    assert(mutualExclusionResult?.a_uiSwitchedToSacred, 'A3. Visible player switches immediately to Sacred Audio controls on Quran page');
+    assert(mutualExclusionResult?.b_sacredStopped && mutualExclusionResult?.b_quranActive, 'B1. Sacred Audio -> Quran stops Sacred Audio and activates Quran playback');
+    assert(mutualExclusionResult?.b_uiSwitchedToQuran, 'B2. Visible player switches immediately back to Quran controls');
+    assert(mutualExclusionResult?.c_multiToQuranOk, 'C1. Multilingual Audio -> Quran stops Multilingual Audio & speechSynthesis; only Quran active');
+    assert(mutualExclusionResult?.c_multiToSacredOk, 'C2. Multilingual Audio -> Sacred Audio stops Multilingual Audio & speechSynthesis; only Sacred Audio active');
     assert(mutualExclusionResult?.hasViewAllBtn && mutualExclusionResult?.modalOpened && mutualExclusionResult?.modalClosed, 'View all recordings modal opens and closes cleanly');
+
+    // D. Reader navigation / Route exit stops Quran playback and exposes new contextual player
+    assert(mutualExclusionResult?.quranPlayingBeforeRouteExit, 'D1. Quran playback active prior to route exit');
+    await evalCode(`window.__platformNavigate('hinduism')`);
+    await new Promise((r) => setTimeout(r, 1500));
+
+    const routeExitCheck = await evalCode(`
+      (async () => {
+        const qStatusAfterExit = window.__SERVICES__.quranAudioService.getState().status;
+        const coordSource = window.__SERVICES__.audioCoordinator.getActiveSource();
+        const panel = document.querySelector('[data-testid="sacred-audio-reading-panel"]');
+        const hasHinduAudioControls = !!panel?.querySelector('[data-testid="sacred-audio-active-player"]') || !!panel?.querySelector('[data-testid="audio-play-pause-btn"]');
+        const noQuranControls = !panel?.querySelector('[data-testid="quran-unified-player-section"]');
+        return { qStatusAfterExit, coordSource, hasHinduAudioControls, noQuranControls };
+      })()
+    `);
+    assert(routeExitCheck?.qStatusAfterExit === 'idle' && routeExitCheck?.coordSource !== 'quran', 'D2. Leaving Quran reading context stops Quran audio cleanly (not playing invisibly)');
+    assert(routeExitCheck?.hasHinduAudioControls && routeExitCheck?.noQuranControls, 'D3. New tradition contextual player is immediately visible and usable');
   } finally {
     try {
       chrome.kill();

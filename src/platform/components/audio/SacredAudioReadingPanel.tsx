@@ -36,6 +36,10 @@ import {
   SacredAudioPlaybackState,
 } from '../../services/unifiedSacredAudioService';
 import {
+  audioCoordinator,
+  AudioEngineSourceId,
+} from '../../services/audioCoordinator';
+import {
   matchContextualAudio,
   ContextualAudioResult,
   CanonicalReadingContext,
@@ -91,6 +95,9 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
 }) => {
   const [isViewAllOpen, setIsViewAllOpen] = useState(false);
   const [showTextInfo, setShowTextInfo] = useState(false);
+  const [activeCoordinatorSource, setActiveCoordinatorSource] = useState<AudioEngineSourceId | null>(() =>
+    audioCoordinator.getActiveSource()
+  );
   // Global playback state from UnifiedSacredAudioService
   const [playbackState, setPlaybackState] = useState<SacredAudioPlaybackState>(() =>
     unifiedSacredAudioService.getState()
@@ -99,12 +106,18 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
   // Monotonically increasing request counter to prevent asynchronous race conditions
   const syncRequestIdRef = useRef<number>(0);
 
-  // Subscribe to playback changes
+  // Subscribe to playback changes and global audio coordinator active source
   useEffect(() => {
-    const unsubscribe = unifiedSacredAudioService.subscribe((state) => {
+    const unsubSacred = unifiedSacredAudioService.subscribe((state) => {
       setPlaybackState(state);
     });
-    return unsubscribe;
+    const unsubCoordinator = audioCoordinator.subscribe((source) => {
+      setActiveCoordinatorSource(source);
+    });
+    return () => {
+      unsubSacred();
+      unsubCoordinator();
+    };
   }, []);
 
   // Compute canonical contextual audio match result using the Universal Synchronization Engine
@@ -300,6 +313,16 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
     return 'Authentic Sacred Chanting';
   };
 
+  // Determine active player mode: follows active audio source, falls back to reading context
+  const isSacredSourceActive =
+    activeCoordinatorSource === 'sacred' ||
+    (playbackState.currentRequirement !== null &&
+      (playbackState.status === 'PLAYING' ||
+        playbackState.status === 'LOADING' ||
+        playbackState.status === 'PAUSED'));
+  const showQuranPlayer = Boolean(quranControls) && !isSacredSourceActive;
+  const showSacredPlayer = !showQuranPlayer && Boolean(activeReq);
+
   return (
     <aside
       className={`flex flex-col bg-navy-950/95 border border-gold-500/30 rounded-3xl p-4 sm:p-5 shadow-2xl space-y-4 ${className}`}
@@ -396,7 +419,7 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
           Preserves reciter selection, Ayah/Surah nav, Page/Surah scope, seek,
           speed, auto-advance, and page-boundary notices without a fixed dock.
           ----------------------------------------------------------------------- */}
-      {quranControls && (() => {
+      {showQuranPlayer && quranControls && (() => {
         const currentReciter =
           SUPPORTED_RECITERS.find((r) => r.id === quranControls.reciterId) || SUPPORTED_RECITERS[0];
         const progressPercent =
@@ -681,10 +704,28 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
       })()}
 
       {/* -----------------------------------------------------------------------
-          MAIN PLAYER CARD: Current Track Controls & Visualizer (Non-Quran or Contextual)
+          MAIN PLAYER CARD: Current Track Controls & Visualizer (Sacred Audio)
           ----------------------------------------------------------------------- */}
-      {!quranControls && activeReq ? (
-        <div className="p-4 rounded-2xl bg-gradient-to-b from-navy-900 to-navy-950 border border-gold-500/25 space-y-3.5 shadow-lg">
+      {showSacredPlayer && activeReq ? (
+        <div
+          data-testid="sacred-audio-active-player"
+          className="p-4 rounded-2xl bg-gradient-to-b from-navy-900 to-navy-950 border border-gold-500/25 space-y-3.5 shadow-lg"
+        >
+          {quranControls && (
+            <div className="flex items-center justify-between pb-2 border-b border-navy-800/80">
+              <span className="text-[11px] font-medium text-emerald-400">
+                Sacred Audio Active
+              </span>
+              <button
+                type="button"
+                onClick={quranControls.onTogglePlay}
+                data-testid="switch-to-quran-btn"
+                className="text-[11px] font-semibold text-gold-400 hover:text-gold-300 underline"
+              >
+                Switch to Quran Recitation
+              </button>
+            </div>
+          )}
           {/* Header row: ID & Type Badge */}
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
@@ -869,7 +910,7 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
             </button>
           </div>
         </div>
-      ) : !quranControls ? (
+      ) : !showQuranPlayer ? (
         /* ---------------------------------------------------------------------
            LEVEL 5: NO APPROVED MATCH (Strict Graceful Empty State)
            --------------------------------------------------------------------- */

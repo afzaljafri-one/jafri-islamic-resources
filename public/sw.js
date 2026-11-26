@@ -2,10 +2,10 @@
  * Jafri Sacred Library — Service Worker
  * Phase 6.4: Installable Offline-First PWA Foundation
  *
- * Cache Name: jafri-sacred-library-shell-v1-297bbcb5b99e
+ * Cache Name: jafri-sacred-library-shell-v1-009888acfc82
  */
 
-const CACHE_NAME = 'jafri-sacred-library-shell-v1-297bbcb5b99e';
+const CACHE_NAME = 'jafri-sacred-library-shell-v1-009888acfc82';
 const CACHE_PREFIX = 'jafri-sacred-library-shell-';
 const BASE_PATH = '/jafri-islamic-resources/';
 const APP_SHELL_ENTRY = '/jafri-islamic-resources/index.html';
@@ -13,8 +13,8 @@ const APP_SHELL_ENTRY = '/jafri-islamic-resources/index.html';
 const MANDATORY_PRECACHE_URLS = [
   "/jafri-islamic-resources/index.html",
   "/jafri-islamic-resources/manifest.webmanifest",
-  "/jafri-islamic-resources/assets/index-Bwkaao6V.js",
-  "/jafri-islamic-resources/assets/index-C9ptXalo.css"
+  "/jafri-islamic-resources/assets/index-C9ptXalo.css",
+  "/jafri-islamic-resources/assets/index-sbVVGeSB.js"
 ];
 const OPTIONAL_PRECACHE_URLS = [
   "/jafri-islamic-resources/favicon.svg",
@@ -49,8 +49,8 @@ const PRECACHE_URLS = [
   "/jafri-islamic-resources/",
   "/jafri-islamic-resources/index.html",
   "/jafri-islamic-resources/manifest.webmanifest",
-  "/jafri-islamic-resources/assets/index-Bwkaao6V.js",
   "/jafri-islamic-resources/assets/index-C9ptXalo.css",
+  "/jafri-islamic-resources/assets/index-sbVVGeSB.js",
   "/jafri-islamic-resources/favicon.svg",
   "/jafri-islamic-resources/icons/icon-192x192.png",
   "/jafri-islamic-resources/icons/icon-512x512.png",

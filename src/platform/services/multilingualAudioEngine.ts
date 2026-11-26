@@ -413,6 +413,7 @@ export class MultilingualScriptureAudioEngine {
     this.currentTime = 0;
     this.duration = 0;
     this.notifySubscribers();
+    audioCoordinator.deactivate('multilingual');
   }
 
   public nextUnit(): void {

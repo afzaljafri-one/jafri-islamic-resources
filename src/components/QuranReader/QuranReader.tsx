@@ -73,6 +73,13 @@ export const QuranReader: React.FC = () => {
     };
   }, []);
 
+  // Stop Quran playback when leaving Quran reading context (component unmount only)
+  useEffect(() => {
+    return () => {
+      quranAudioService.stop();
+    };
+  }, []);
+
   // Modals & Drawers
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);

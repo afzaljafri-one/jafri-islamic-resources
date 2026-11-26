@@ -504,6 +504,7 @@ export class UnifiedSacredAudioService {
       resolvedMediaUrl: null
     };
     this.notifyListeners();
+    audioCoordinator.deactivate('sacred');
   }
 }
 

@@ -530,6 +530,7 @@ export class QuranAudioService {
       status: 'idle',
       currentTime: 0,
     });
+    audioCoordinator.deactivate('quran');
   }
 
   public seek(targetSeconds: number) {
