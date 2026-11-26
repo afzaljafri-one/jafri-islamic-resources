@@ -25,9 +25,9 @@ RELEASE GATE VALIDATION SUMMARY
 Repository Commit SHA:          9774802e62dba7e023cfa092d2df2d64e7b4e18e
 GitHub Actions Deployment Run:  #45685702025 (validate-build: PASS, deploy-production: PASS)
 Production Deployed Commit:     9774802e62dba7e023cfa092d2df2d64e7b4e18e
-Bundle Asset (Vite/Rollup):     index-CghNY8Oj.js (Verified identical on CDN)
-Local Acceptance Suite:         75 / 75 assertions passed (100.0%)
-Live Production Verification:   75 / 75 assertions passed (100.0%)
+Bundle Asset (Vite/Rollup):     index-Cf0PIUoh.js
+Local Acceptance Suite:         94 / 94 assertions passed (100.0%)
+Live Production Verification:   89 / 89 assertions passed (100.0%)
 Data & Rights Gate Validator:   34 / 34 checks passed (100.0%)
 Production Bundle Rights Scan:  1,507 files scanned — 0 snippet violations
 Gita Chapters & Verses:         18 chapters, 701 verses verified (5 allowlisted, 696 withheld)
@@ -163,6 +163,10 @@ All 36 instances of `"Public Domain Worldwide"` have been eliminated from `unive
 4. **All Other Territories:**  
    Classified as `UNKNOWN / PERMISSION_REQUIRED`. Uncleared translations fail closed.
 
+> [!NOTE]
+> **Territorial Rights Metadata Distinction vs Serving Infrastructure:**
+> Territorial rights metadata strictly documents statutory public domain status across the verified jurisdictions (US, UK/EU, and India). The application itself is distributed as a static client-side bundle via GitHub Pages CDN without IP-based geographic access controls or geo-blocking; jurisdictions outside US, UK/EU, and India are designated `UNKNOWN / PERMISSION_REQUIRED` in record metadata.
+
 ### Author & Translator Copyright Expiration Matrix
 
 | Work / Translation | Author / Translator | Year of Death | India (Life + 60, Sec 22) | UK/EU (Life + 70) | US Status (17 U.S.C.) | Status |
@@ -197,32 +201,32 @@ Exactly 49 virtue × tradition combinations exist (7 virtues × 7 world religion
 ## 7. AUTOMATED ACCEPTANCE TEST RESULTS
 
 ### Suite 1: Local Acceptance Test (`test_phase6_3_5_5_acceptance.cjs`)
-- **Total Assertions:** 75
-- **Passed:** 75 (100.0%)
+- **Total Assertions:** 94
+- **Passed:** 94 (100.0%)
 - **Failed:** 0
 - **Test Breakdown:**
-  1. *Allowlist Module Parity & Jurisdictional Claims:* 14/14 PASS
-  2. *Versioned Primary-Source Evidence (1885 Trübner):* 5/5 PASS
+  1. *Allowlist Module Parity & Jurisdictional Claims:* 15/15 PASS
+  2. *Versioned Primary-Source Evidence (1885 Trübner & Stable IA Scan):* 6/6 PASS
   3. *Production Asset Rights Scanner Execution:* 4/4 PASS
-  4. *Runtime Object Audit of 49 Thematic Records:* 10/10 PASS
+  4. *Runtime Object Audit & Allowlist Integrity of 49 Thematic Records:* 14/14 PASS
   5. *Homepage Navigation & Strict Zero-Autoplay:* 2/2 PASS
   6. *Quran Search & Translation Withholding (25:63 & 2:255):* 8/8 PASS
   7. *Gita Reader Authentic Arnold Verses & Safeguards:* 7/7 PASS
   8. *IndexedDB Cache Cleansing Verification:* 1/1 PASS
-  9. *Live Thematic Discovery across All 7 Virtues:* 21/21 PASS
-  10. *Offline Network Emulation & Cache Resilience:* 3/3 PASS
+  9. *Live Thematic Discovery across All 7 Virtues & Content Verification:* 35/35 PASS
+  10. *Offline Network Emulation & Cache Resilience:* 2/2 PASS
 
 ### Suite 2: Live Production Verification (`test_phase6_3_5_5_prod_live.cjs`)
 - **Target URL:** `https://afzaljafri-one.github.io/jafri-islamic-resources/`
-- **Total Assertions:** 75
-- **Passed:** 75 (100.0%)
+- **Total Assertions:** 89
+- **Passed:** 89 (100.0%)
 - **Failed:** 0
 - **Test Breakdown:**
   1. *Direct CDN Retrieval of All 18 Gita Chapters (701 Verses):* 37/37 PASS
   2. *Live Production Homepage & Zero-Autoplay:* 2/2 PASS
   3. *Live Quran Search Withholding (25:63 & 2:255):* 7/7 PASS
   4. *Live Gita Reader Authentic Arnold Verse & Safeguards:* 8/8 PASS
-  5. *Live Thematic Discovery Across All 7 Virtues:* 21/21 PASS
+  5. *Live Thematic Discovery Across All 7 Virtues & Full Content Validation:* 35/35 PASS
 
 ### Suite 3: Data & Rights Gate Validator (`test_phase6_3_5_data_rights_gate.cjs`)
 - **Total Checks:** 34

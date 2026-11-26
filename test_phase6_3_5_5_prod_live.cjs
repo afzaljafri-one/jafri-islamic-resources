@@ -517,16 +517,33 @@ async function runProductionVerification() {
       const thematicResults = await evalCode(`(() => {
         const cards = document.querySelectorAll('[data-testid="search-result-card"]');
         return Array.from(cards).map(c => {
-          const titleEl = c.querySelector('h4');
+          const titleEl = c.querySelector('[data-testid="result-coordinates-title"]') || c.querySelector('h4');
           const canonBadge = c.querySelector('[data-testid="canonical-rights-badge"]');
           const transBadge = c.querySelector('[data-testid="rights-licence-badge"]');
           const disclaimerEl = c.querySelector('[data-testid="thematic-result-note"]');
+
+          const allP = Array.from(c.querySelectorAll('p'));
+          const origTextEl = c.querySelector('[data-testid="result-original-text"]') ||
+            allP.find(p => p.hasAttribute('dir') || p.classList.contains('text-slate-100'));
+          const transTextEl = c.querySelector('[data-testid="result-translation-text"]') ||
+            allP.find(p => p !== disclaimerEl && p !== origTextEl && !p.hasAttribute('dir'));
+          
+          const attrEl = c.querySelector('[data-testid="result-source-attribution"]') ||
+            c.querySelector('.pt-2 span');
+          const relBadge = c.querySelector('.uppercase');
+
           return {
             title: titleEl ? titleEl.textContent.trim() : '',
             hasCanonBadge: Boolean(canonBadge),
+            canonBadgeText: canonBadge ? canonBadge.textContent.trim() : '',
             hasTransBadge: Boolean(transBadge),
+            transBadgeText: transBadge ? transBadge.textContent.trim() : '',
             hasDisclaimer: Boolean(disclaimerEl),
-            disclaimerText: disclaimerEl ? disclaimerEl.textContent.trim() : ''
+            disclaimerText: disclaimerEl ? disclaimerEl.textContent.trim() : '',
+            originalText: origTextEl ? origTextEl.textContent.trim() : '',
+            translationText: transTextEl ? transTextEl.textContent.trim() : '',
+            attribution: attrEl ? attrEl.textContent.trim() : '',
+            religion: relBadge ? relBadge.textContent.trim().toLowerCase() : ''
           };
         });
       })()`);
@@ -543,6 +560,75 @@ async function runProductionVerification() {
 
       const allHaveBadges = thematicResults && thematicResults.length > 0 && thematicResults.every((r) => r.hasCanonBadge && r.hasTransBadge);
       tracker.assert(allHaveBadges, `Every live returned card for "${virtue}" renders separate canonical and translation rights badges`);
+
+      const allHaveContent = thematicResults && thematicResults.length > 0 && thematicResults.every(
+        (r) => r.title.length > 0 && r.originalText.length > 0 && r.translationText.length > 0 && r.attribution.length > 0
+      );
+      tracker.assert(allHaveContent, `Every live returned card for "${virtue}" renders non-empty coordinates, original text, translation, and attribution`);
+
+      // Content verification for the Hindu scripture passage of this virtue
+      const hinCard = thematicResults.find((r) => r.religion === 'hinduism' || r.title.includes('Gita') || r.title.includes('Brihadaranyaka') || r.title.includes('Shukla'));
+      if (virtue === 'Forgiveness') {
+        const isForgivenessPass =
+          hinCard &&
+          hinCard.title.includes('Bhagavad Gita 16:1–3') &&
+          !hinCard.title.includes('Bhagavad Gita 16:3 —') &&
+          hinCard.originalText.startsWith('अभयं सत्त्वसंशुद्धि') &&
+          !hinCard.originalText.startsWith('तेजः क्षमा') &&
+          hinCard.originalText.includes('तेजः क्षमा धृतिः शौचमद्रोहो नातिमानिता') &&
+          hinCard.translationText.startsWith('Fearlessness, singleness of soul') &&
+          !hinCard.translationText.startsWith('With patience, fortitude') &&
+          hinCard.translationText.includes('an unrevengeful spirit') &&
+          hinCard.attribution.includes('Sir Edwin Arnold');
+        tracker.assert(isForgivenessPass, 'Live Hindu Forgiveness card renders complete verified Bhagavad Gita 16:1–3 passage (both Sanskrit and Arnold blank verse)');
+      } else if (virtue === 'Compassion') {
+        const isCompPass =
+          hinCard &&
+          hinCard.title.includes('Bhagavad Gita 12:13–14') &&
+          hinCard.originalText.includes('अद्वेष्टा सर्वभूतानां') &&
+          hinCard.translationText.includes('Who hateth nought of all which lives') &&
+          hinCard.attribution.includes('Sir Edwin Arnold');
+        tracker.assert(isCompPass, 'Live Hindu Compassion card renders verified Bhagavad Gita 12:13–14 passage');
+      } else if (virtue === 'Peace') {
+        const isPeacePass =
+          hinCard &&
+          (hinCard.title.includes('Brihadaranyaka') || hinCard.title.includes('Shukla Yajur Veda')) &&
+          hinCard.originalText.includes('ॐ द्यौः शान्तिरन्तरिक्षं शान्तिः') &&
+          hinCard.attribution.includes('Vedic Shanti Mantra');
+        tracker.assert(isPeacePass, 'Live Hindu Peace card renders verified Vedic Shanti Liturgy');
+      } else if (virtue === 'Patience') {
+        const isPatiencePass =
+          hinCard &&
+          hinCard.title.includes('Bhagavad Gita 2:14') &&
+          hinCard.originalText.includes('मात्रास्पर्शास्तु कौन्तेय') &&
+          hinCard.translationText.includes('This that irks — thy sense-life') &&
+          hinCard.attribution.includes('Sir Edwin Arnold');
+        tracker.assert(isPatiencePass, 'Live Hindu Patience card renders verified Bhagavad Gita 2:14 passage');
+      } else if (virtue === 'Gratitude') {
+        const isGratitudePass =
+          hinCard &&
+          hinCard.title.includes('Bhagavad Gita 9:27') &&
+          hinCard.originalText.includes('यत्करोषि यदश्नासि') &&
+          hinCard.translationText.includes("Whate'er thou doest, Prince!") &&
+          hinCard.attribution.includes('Sir Edwin Arnold');
+        tracker.assert(isGratitudePass, 'Live Hindu Gratitude card renders verified Bhagavad Gita 9:27 passage');
+      } else if (virtue === 'Charity') {
+        const isCharityPass =
+          hinCard &&
+          hinCard.title.includes('Bhagavad Gita 17:20') &&
+          hinCard.originalText.includes('दातव्यमिति यद्दानं') &&
+          hinCard.translationText.includes('The gift lovingly given') &&
+          hinCard.attribution.includes('Sir Edwin Arnold');
+        tracker.assert(isCharityPass, 'Live Hindu Charity card renders verified Bhagavad Gita 17:20 passage');
+      } else if (virtue === 'Wisdom') {
+        const isWisdomPass =
+          hinCard &&
+          hinCard.title.includes('Bhagavad Gita 4:38') &&
+          hinCard.originalText.includes('न हि ज्ञानेन सदृशं') &&
+          hinCard.translationText.includes('There is no purifier like thereto') &&
+          hinCard.attribution.includes('Sir Edwin Arnold');
+        tracker.assert(isWisdomPass, 'Live Hindu Wisdom card renders verified Bhagavad Gita 4:38 passage');
+      }
 
       await captureScreenshot(`prod_07_thematic_${virtue.toLowerCase()}_all_traditions`);
     }

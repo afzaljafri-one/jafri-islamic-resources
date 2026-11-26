@@ -266,6 +266,25 @@ async function runAcceptanceSuite() {
     'Thematic 16:1–3 verified against 1885 Book XVI p. 144 with complete range'
   );
 
+  const allAllowlistEntries = [
+    ...Object.values(EDWIN_ARNOLD_ALLOWLIST),
+    ...Object.values(EDWIN_ARNOLD_THEMATIC_ALLOWLIST),
+  ];
+  let allSourceUrlsValid = true;
+  for (const entry of allAllowlistEntries) {
+    if (
+      entry.sourceReferenceUrl !== 'https://archive.org/details/songcelestialor01arnogoog' ||
+      entry.sourceReferenceUrl.includes('gutenberg.org')
+    ) {
+      allSourceUrlsValid = false;
+      console.error(`Invalid source reference URL in entry: ${entry.sourceReferenceUrl}`);
+    }
+  }
+  tracker.assert(
+    allSourceUrlsValid,
+    'All allowlist entries cite the stable 1885 Trübner / Internet Archive scan (songcelestialor01arnogoog), zero Gutenberg #2388'
+  );
+
   // ---------------------------------------------------------------------------
   // TEST 3: PRODUCTION ASSET RIGHTS SCANNER EXECUTION
   // ---------------------------------------------------------------------------
@@ -403,6 +422,61 @@ async function runAcceptanceSuite() {
   tracker.assert(allBuddhistValid, 'All 7 Buddhist thematic records enforce CC BY-NC 4.0, Thanissaro Bhikkhu attribution, and NC terms');
   tracker.assert(allHinduValid, 'All 7 Hindu thematic records have verified provenance (Vedic Shanti for Peace, Arnold for Gita)');
   tracker.assert(noWorldwideClaims, 'All 49 thematic records contain zero unsupported "Public Domain Worldwide" claims');
+
+  // Explicit Content-to-Allowlist Integrity for all six Arnold-based Hindu records
+  const arnoldThematicMap = {
+    compassion: '12:13-14',
+    forgiveness: '16:1-3',
+    patience: '2:14',
+    gratitude: '9:27',
+    charity: '17:20',
+    wisdom: '4:38',
+  };
+  let allSixContentMatchesAllowlist = true;
+  for (const [virtueId, coordKey] of Object.entries(arnoldThematicMap)) {
+    const tDef = thematicDefs.find((t) => t.id === virtueId);
+    const hinPassage = tDef.passages.find((p) => p.religion === 'hinduism');
+    const allowlistEntry = EDWIN_ARNOLD_THEMATIC_ALLOWLIST[coordKey];
+    if (
+      !hinPassage ||
+      hinPassage.displayCoordinates !== allowlistEntry.displayCoordinates ||
+      hinPassage.originalText !== allowlistEntry.sanskritPassage ||
+      hinPassage.translationText !== allowlistEntry.text ||
+      !hinPassage.sourceAttribution.includes('Sir Edwin Arnold') ||
+      !hinPassage.sourceAttribution.includes('1885 The Song Celestial') ||
+      hinPassage.primaryTranslationRights?.rightsStatus !== 'VERIFIED' ||
+      hinPassage.primaryTranslationRights?.translatorOrSource !== 'Sir Edwin Arnold'
+    ) {
+      allSixContentMatchesAllowlist = false;
+      console.error(`Mismatch between thematic allowlist and search record for ${virtueId} (${coordKey})`);
+    }
+  }
+  tracker.assert(
+    allSixContentMatchesAllowlist,
+    'All six Arnold-based Hindu thematic records match their thematic allowlist coordinates, Sanskrit text, English translation, and rights metadata'
+  );
+
+  // Dedicated strict verification for the Forgiveness record (theme_hin_forgiveness)
+  const forgivenessHin = thematicDefs.find((t) => t.id === 'forgiveness').passages.find((p) => p.religion === 'hinduism');
+  tracker.assert(
+    forgivenessHin &&
+    forgivenessHin.displayCoordinates === 'Bhagavad Gita 16:1–3' &&
+    forgivenessHin.displayCoordinates !== 'Bhagavad Gita 16:3',
+    'Forgiveness Hindu record coordinates strictly match Bhagavad Gita 16:1–3 (not 16:3)'
+  );
+  tracker.assert(
+    forgivenessHin.originalText === EDWIN_ARNOLD_THEMATIC_ALLOWLIST['16:1-3'].sanskritPassage &&
+    !forgivenessHin.originalText.startsWith('तेजः क्षमा') &&
+    forgivenessHin.originalText.startsWith('अभयं सत्त्वसंशुद्धि') &&
+    forgivenessHin.originalText.includes('तेजः क्षमा धृतिः'),
+    'Forgiveness Hindu record serves full 3-verse Sanskrit passage (16:1-3), not old 16:3 only'
+  );
+  tracker.assert(
+    forgivenessHin.translationText === EDWIN_ARNOLD_THEMATIC_ALLOWLIST['16:1-3'].text &&
+    !forgivenessHin.translationText.startsWith('With patience, fortitude') &&
+    forgivenessHin.translationText.startsWith('Fearlessness, singleness of soul'),
+    'Forgiveness Hindu record serves complete approved Arnold 16:1-3 translation, not old partial translation'
+  );
 
   // ---------------------------------------------------------------------------
   // BROWSER ACCEPTANCE SUITE (CDP)
@@ -793,16 +867,33 @@ async function runAcceptanceSuite() {
       const thematicResults = await evalCode(`(() => {
         const cards = document.querySelectorAll('[data-testid="search-result-card"]');
         return Array.from(cards).map(c => {
-          const titleEl = c.querySelector('h4');
+          const titleEl = c.querySelector('[data-testid="result-coordinates-title"]') || c.querySelector('h4');
           const canonBadge = c.querySelector('[data-testid="canonical-rights-badge"]');
           const transBadge = c.querySelector('[data-testid="rights-licence-badge"]');
           const disclaimerEl = c.querySelector('[data-testid="thematic-result-note"]');
+
+          const allP = Array.from(c.querySelectorAll('p'));
+          const origTextEl = c.querySelector('[data-testid="result-original-text"]') ||
+            allP.find(p => p.hasAttribute('dir') || p.classList.contains('text-slate-100'));
+          const transTextEl = c.querySelector('[data-testid="result-translation-text"]') ||
+            allP.find(p => p !== disclaimerEl && p !== origTextEl && !p.hasAttribute('dir'));
+          
+          const attrEl = c.querySelector('[data-testid="result-source-attribution"]') ||
+            c.querySelector('.pt-2 span');
+          const relBadge = c.querySelector('.uppercase');
+
           return {
             title: titleEl ? titleEl.textContent.trim() : '',
             hasCanonBadge: Boolean(canonBadge),
+            canonBadgeText: canonBadge ? canonBadge.textContent.trim() : '',
             hasTransBadge: Boolean(transBadge),
+            transBadgeText: transBadge ? transBadge.textContent.trim() : '',
             hasDisclaimer: Boolean(disclaimerEl),
-            disclaimerText: disclaimerEl ? disclaimerEl.textContent.trim() : ''
+            disclaimerText: disclaimerEl ? disclaimerEl.textContent.trim() : '',
+            originalText: origTextEl ? origTextEl.textContent.trim() : '',
+            translationText: transTextEl ? transTextEl.textContent.trim() : '',
+            attribution: attrEl ? attrEl.textContent.trim() : '',
+            religion: relBadge ? relBadge.textContent.trim().toLowerCase() : ''
           };
         });
       })()`);
@@ -819,6 +910,75 @@ async function runAcceptanceSuite() {
 
       const allHaveBadges = thematicResults && thematicResults.length > 0 && thematicResults.every((r) => r.hasCanonBadge && r.hasTransBadge);
       tracker.assert(allHaveBadges, `Every returned card for "${virtue}" renders separate canonical and translation rights badges`);
+
+      const allHaveContent = thematicResults && thematicResults.length > 0 && thematicResults.every(
+        (r) => r.title.length > 0 && r.originalText.length > 0 && r.translationText.length > 0 && r.attribution.length > 0
+      );
+      tracker.assert(allHaveContent, `Every returned card for "${virtue}" renders non-empty coordinates, original text, translation, and attribution`);
+
+      // Content verification for the Hindu scripture passage of this virtue
+      const hinCard = thematicResults.find((r) => r.religion === 'hinduism' || r.title.includes('Gita') || r.title.includes('Brihadaranyaka') || r.title.includes('Shukla'));
+      if (virtue === 'Forgiveness') {
+        const isForgivenessPass =
+          hinCard &&
+          hinCard.title.includes('Bhagavad Gita 16:1–3') &&
+          !hinCard.title.includes('Bhagavad Gita 16:3 —') &&
+          hinCard.originalText.startsWith('अभयं सत्त्वसंशुद्धि') &&
+          !hinCard.originalText.startsWith('तेजः क्षमा') &&
+          hinCard.originalText.includes('तेजः क्षमा धृतिः शौचमद्रोहो नातिमानिता') &&
+          hinCard.translationText.startsWith('Fearlessness, singleness of soul') &&
+          !hinCard.translationText.startsWith('With patience, fortitude') &&
+          hinCard.translationText.includes('an unrevengeful spirit') &&
+          hinCard.attribution.includes('Sir Edwin Arnold');
+        tracker.assert(isForgivenessPass, 'Hindu Forgiveness card renders complete verified Bhagavad Gita 16:1–3 passage (both Sanskrit and Arnold blank verse)');
+      } else if (virtue === 'Compassion') {
+        const isCompPass =
+          hinCard &&
+          hinCard.title.includes('Bhagavad Gita 12:13–14') &&
+          hinCard.originalText.includes('अद्वेष्टा सर्वभूतानां') &&
+          hinCard.translationText.includes('Who hateth nought of all which lives') &&
+          hinCard.attribution.includes('Sir Edwin Arnold');
+        tracker.assert(isCompPass, 'Hindu Compassion card renders verified Bhagavad Gita 12:13–14 passage');
+      } else if (virtue === 'Peace') {
+        const isPeacePass =
+          hinCard &&
+          (hinCard.title.includes('Brihadaranyaka') || hinCard.title.includes('Shukla Yajur Veda')) &&
+          hinCard.originalText.includes('ॐ द्यौः शान्तिरन्तरिक्षं शान्तिः') &&
+          hinCard.attribution.includes('Vedic Shanti Mantra');
+        tracker.assert(isPeacePass, 'Hindu Peace card renders verified Vedic Shanti Liturgy');
+      } else if (virtue === 'Patience') {
+        const isPatiencePass =
+          hinCard &&
+          hinCard.title.includes('Bhagavad Gita 2:14') &&
+          hinCard.originalText.includes('मात्रास्पर्शास्तु कौन्तेय') &&
+          hinCard.translationText.includes('This that irks — thy sense-life') &&
+          hinCard.attribution.includes('Sir Edwin Arnold');
+        tracker.assert(isPatiencePass, 'Hindu Patience card renders verified Bhagavad Gita 2:14 passage');
+      } else if (virtue === 'Gratitude') {
+        const isGratitudePass =
+          hinCard &&
+          hinCard.title.includes('Bhagavad Gita 9:27') &&
+          hinCard.originalText.includes('यत्करोषि यदश्नासि') &&
+          hinCard.translationText.includes("Whate'er thou doest, Prince!") &&
+          hinCard.attribution.includes('Sir Edwin Arnold');
+        tracker.assert(isGratitudePass, 'Hindu Gratitude card renders verified Bhagavad Gita 9:27 passage');
+      } else if (virtue === 'Charity') {
+        const isCharityPass =
+          hinCard &&
+          hinCard.title.includes('Bhagavad Gita 17:20') &&
+          hinCard.originalText.includes('दातव्यमिति यद्दानं') &&
+          hinCard.translationText.includes('The gift lovingly given') &&
+          hinCard.attribution.includes('Sir Edwin Arnold');
+        tracker.assert(isCharityPass, 'Hindu Charity card renders verified Bhagavad Gita 17:20 passage');
+      } else if (virtue === 'Wisdom') {
+        const isWisdomPass =
+          hinCard &&
+          hinCard.title.includes('Bhagavad Gita 4:38') &&
+          hinCard.originalText.includes('न हि ज्ञानेन सदृशं') &&
+          hinCard.translationText.includes('There is no purifier like thereto') &&
+          hinCard.attribution.includes('Sir Edwin Arnold');
+        tracker.assert(isWisdomPass, 'Hindu Wisdom card renders verified Bhagavad Gita 4:38 passage');
+      }
 
       await captureScreenshot(`08_thematic_${virtue.toLowerCase()}_all_traditions`);
     }

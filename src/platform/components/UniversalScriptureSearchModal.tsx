@@ -754,7 +754,10 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
 
                     {/* Coordinates & Display Title */}
                     <div>
-                      <h4 className="font-serif text-sm sm:text-base font-bold text-slate-100 group-hover:text-gold-300 transition">
+                      <h4
+                        data-testid="result-coordinates-title"
+                        className="font-serif text-sm sm:text-base font-bold text-slate-100 group-hover:text-gold-300 transition"
+                      >
                         {result.displayCoordinates} — {result.displayTitle}
                       </h4>
                       {result.matchType === 'thematic_result' && (
@@ -795,6 +798,7 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                           <span>Authentic Canonical Script</span>
                         </div>
                         <p
+                          data-testid="result-original-text"
                           dir={['ar', 'he'].includes(result.languageCode) ? 'rtl' : 'ltr'}
                           className={`text-slate-100 leading-relaxed ${
                             result.languageCode === 'ar'
@@ -842,7 +846,10 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                         }
 
                         return (
-                          <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-serif">
+                          <p
+                            data-testid="result-translation-text"
+                            className="text-xs sm:text-sm text-slate-200 leading-relaxed font-serif"
+                          >
                             {result.translationText}
                           </p>
                         );
@@ -972,7 +979,7 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                     <div className="pt-2 border-t border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
                       <div className="space-y-0.5">
                         <div className="text-[11px] text-slate-400 font-mono flex items-center space-x-1.5 flex-wrap">
-                          <span>{result.sourceAttribution}</span>
+                          <span data-testid="result-source-attribution">{result.sourceAttribution}</span>
                           {result.canonicalRecension && (
                             <span className="text-[10px] text-slate-500">
                               • Recension: {result.canonicalRecension}
