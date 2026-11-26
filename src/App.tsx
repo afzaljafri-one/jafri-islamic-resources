@@ -72,6 +72,29 @@ export const App: React.FC = () => {
     return 'home';
   });
 
+  // PWA Offline Connectivity State (Phase 6.4)
+  const [isOnline, setIsOnline] = useState<boolean>(() => {
+    if (typeof window !== 'undefined' && 'onLine' in navigator) {
+      return navigator.onLine;
+    }
+    return true;
+  });
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
   // Islamic Module View State (100% Preserved)
   const [mainView, setMainView] = useState<'reader' | 'tools' | 'lab'>(() => {
     if (typeof window !== 'undefined' && window.location?.search) {
@@ -260,6 +283,19 @@ export const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-navy-950 text-slate-100 islamic-pattern-bg selection:bg-gold-500 selection:text-navy-950 flex flex-col">
+      {/* PWA Offline Status Indicator (Phase 6.4) */}
+      {!isOnline && (
+        <aside
+          data-testid="offline-status-indicator"
+          className="bg-amber-950/95 text-amber-200 border-b border-amber-700/60 px-4 py-2 text-xs md:text-sm font-sans flex items-center justify-center gap-2 sticky top-0 z-50 backdrop-blur-sm shadow-md"
+          role="status"
+          aria-live="polite"
+        >
+          <span className="inline-block w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+          <span>Offline Mode — Cached application shell &amp; locally available scriptures active.</span>
+        </aside>
+      )}
+
       {/* =========================================================================
           VIEW 1: PLATFORM HOMEPAGE (Overview of all 7 Religions)
           ========================================================================= */}

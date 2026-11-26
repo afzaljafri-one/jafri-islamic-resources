@@ -8,6 +8,10 @@ import { alQuranApi } from './services/alQuranApi';
 import { calculateOfflinePrayerTimes } from './services/offlinePrayerCalc';
 import { cacheService } from './services/cacheService';
 import { quranAudioService } from './services/audio';
+import { registerServiceWorker } from './pwa/registerServiceWorker';
+
+// Register PWA Service Worker for offline-first capabilities
+registerServiceWorker();
 
 // Expose services for automated test harness & verification
 if (typeof window !== 'undefined') {

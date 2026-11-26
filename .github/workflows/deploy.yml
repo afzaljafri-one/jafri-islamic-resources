@@ -70,6 +70,11 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
 
+      - name: Run Phase 6.4 PWA Acceptance Suite
+        run: node --experimental-websocket test_phase6_4_pwa_acceptance.cjs
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+
       # upload-pages-artifact creates the static tarball without needing configure-pages
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
