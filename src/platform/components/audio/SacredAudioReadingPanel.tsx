@@ -815,6 +815,7 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
               <div>
                 <h3
                   data-testid="active-track-title"
+                  data-req-id={activeReq.id}
                   className="font-serif text-sm font-bold text-slate-100 leading-snug line-clamp-2"
                 >
                   {titleMeta.primaryTitle}
@@ -1105,6 +1106,7 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
                           <>
                             <div
                               data-testid="primary-match-title"
+                              data-req-id={req.id}
                               className="text-xs font-semibold text-slate-200 truncate group-hover:text-gold-300"
                             >
                               {t.primaryTitle}
@@ -1195,6 +1197,7 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
                           <>
                             <div
                               data-testid="recommended-track-title"
+                              data-req-id={req.id}
                               className="text-xs font-semibold text-slate-200 truncate group-hover:text-gold-300"
                             >
                               {t.primaryTitle}
@@ -1290,6 +1293,7 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
                             <>
                               <div
                                 data-testid="modal-track-title"
+                                data-req-id={req.id}
                                 className="text-xs font-semibold text-slate-100 truncate"
                               >
                                 {t.primaryTitle}

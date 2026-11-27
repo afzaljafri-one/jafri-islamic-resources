@@ -153,6 +153,20 @@ async function run() {
   const unknownIds = registryEntries.filter((e) => !catById.has(e.id)).map((e) => e.id);
   assert(unknownIds.length === 0, `Every registry key exists in canonical catalogue (unknown=${JSON.stringify(unknownIds)})`);
 
+  // Reverse catalogue coverage: every playable catalogue requirement ID must have exactly 1 registry entry
+  const ytBlock = catSrc.slice(catSrc.indexOf('APPROVED_PUBLIC_YOUTUBE_IDS'), catSrc.indexOf('export function isApprovedPublicYouTubeId'));
+  const locBlock = catSrc.slice(catSrc.indexOf('APPROVED_LOCAL_AUDIO_IDS'), catSrc.indexOf('export function isApprovedLocalAudioId'));
+  const ytIds = new Set([...ytBlock.matchAll(/'(REQ-[^']+)'/g)].map((m) => m[1]));
+  const locIds = new Set([...locBlock.matchAll(/'(REQ-[^']+)'/g)].map((m) => m[1]));
+  const playableCatIds = catEntries
+    .filter((e) => ytIds.has(e.id) || (locIds.has(e.id) && e.isPlayable))
+    .map((e) => e.id);
+  const missingPlayableIds = playableCatIds.filter((id) => !registryMap.has(id));
+  assert(
+    playableCatIds.length === 161 && missingPlayableIds.length === 0 && duplicateKeys.length === 0,
+    `Reverse catalogue coverage: all ${playableCatIds.length} playable catalogue IDs have exactly 1 registry entry (missing=${JSON.stringify(missingPlayableIds)})`
+  );
+
   const emptyTitles = registryEntries.filter((e) => !e.displayTitle || e.displayTitle.trim().length === 0).map((e) => e.id);
   assert(emptyTitles.length === 0, `Zero empty displayTitle values in registry (empty=${JSON.stringify(emptyTitles)})`);
 
@@ -406,9 +420,8 @@ async function run() {
     await new Promise((r) => setTimeout(r, 400));
     await capture('p651_hinduism_withheld_mobile.png');
 
-    // 2. Standardized Recording Titles Across All 7 Traditions (4-Path Verification)
-    const expectedDisplaySet = new Set(registryEntries.map((e) => e.displayTitle));
-    const expectedDisplayJson = JSON.stringify(Array.from(expectedDisplaySet));
+    // 2. Standardized Recording Titles Across All 7 Traditions (4-Path Exact ID Verification)
+    const expectedByIdJson = JSON.stringify(Object.fromEntries(registryEntries.map((e) => [e.id, e.displayTitle])));
 
     for (const rel of TRADITIONS) {
       console.log(`\n▶ [RECORDING TITLES (4 PATHS) — ${rel.toUpperCase()}]`);
@@ -420,7 +433,7 @@ async function run() {
         (async () => {
           const panel = document.querySelector('[data-testid="sacred-audio-reading-panel"]');
           if (!panel) return { hasPanel: false };
-          const validDisplaySet = new Set(${expectedDisplayJson});
+          const expectedById = ${expectedByIdJson};
 
           // Activate a recommended item if active-track-title is not initially shown (e.g. Islam Quran default / Christianity Genesis 1)
           if (!panel.querySelector('[data-testid="active-track-title"]')) {
@@ -431,28 +444,29 @@ async function run() {
             }
           }
 
-          // Path 1: Active recording
-          const activeTitle = panel.querySelector('[data-testid="active-track-title"]')?.textContent?.trim() || '';
+          // Path 1: Active recording (matched by exact data-req-id)
+          const activeEl = panel.querySelector('[data-testid="active-track-title"]');
+          const activeReqId = activeEl?.getAttribute('data-req-id') || '';
+          const activeTitle = activeEl?.textContent?.trim() || '';
           const activeCanonical = panel.querySelector('[data-testid="active-track-canonical-title"]')?.textContent?.trim() || '';
           const activeArtist = panel.querySelector('[data-testid="active-track-artist"]')?.textContent?.trim() || '';
-          const activeMatchesRegistry = validDisplaySet.has(activeTitle);
+          const activeMatchesId = Boolean(activeReqId && expectedById[activeReqId] === activeTitle);
           const activeNoDuplicate = !activeCanonical || !activeCanonical.startsWith(activeTitle + ' ·');
           const activeHasLang = Boolean(activeCanonical);
 
-          // Path 2: Primary matches (when present)
+          // Path 2: Primary matches (matched by exact data-req-id)
           const primaryEls = Array.from(panel.querySelectorAll('[data-testid="primary-match-title"]'));
-          const primaryTitles = primaryEls.map(el => el.textContent?.trim() || '');
-          const primaryOk = primaryTitles.every(t => t.length > 0 && validDisplaySet.has(t));
+          const primaryItems = primaryEls.map(el => ({ id: el.getAttribute('data-req-id') || '', title: el.textContent?.trim() || '' }));
+          const primaryOk = primaryItems.every(it => it.id && it.title.length > 0 && expectedById[it.id] === it.title);
 
-          // Path 3: Recommended recordings (when present)
+          // Path 3: Recommended recordings (matched by exact data-req-id)
           const recEls = Array.from(panel.querySelectorAll('[data-testid="recommended-track-title"]'));
-          const recTitles = recEls.map(el => el.textContent?.trim() || '');
-          const recOk = recTitles.every(t => t.length > 0 && validDisplaySet.has(t));
+          const recItems = recEls.map(el => ({ id: el.getAttribute('data-req-id') || '', title: el.textContent?.trim() || '' }));
+          const recOk = recItems.every(it => it.id && it.title.length > 0 && expectedById[it.id] === it.title);
 
-          // Path 4: View All recordings modal (when present)
+          // Path 4: View All recordings modal (matched by exact data-req-id)
           let modalChecked = true;
           let modalTitlesCount = 0;
-          let modalOk = true;
           const viewAllBtn = panel.querySelector('[data-testid="view-all-recordings-btn"]');
           if (viewAllBtn) {
             viewAllBtn.click();
@@ -460,8 +474,8 @@ async function run() {
             const modal = document.querySelector('[data-testid="all-recordings-modal"]');
             const modalEls = modal ? Array.from(modal.querySelectorAll('[data-testid="modal-track-title"]')) : [];
             modalTitlesCount = modalEls.length;
-            const modalTitles = modalEls.map(el => el.textContent?.trim() || '');
-            modalOk = modalTitlesCount > 0 && modalTitles.every(t => t.length > 0 && validDisplaySet.has(t));
+            const modalItems = modalEls.map(el => ({ id: el.getAttribute('data-req-id') || '', title: el.textContent?.trim() || '' }));
+            const modalOk = modalTitlesCount > 0 && modalItems.every(it => it.id && it.title.length > 0 && expectedById[it.id] === it.title);
             modalChecked = Boolean(modal) && modalOk;
             const closeBtn = document.querySelector('[data-testid="close-all-recordings-modal"]');
             if (closeBtn) closeBtn.click();
@@ -474,15 +488,16 @@ async function run() {
 
           return {
             hasPanel: true,
+            activeReqId,
             activeTitle,
             activeCanonical,
             activeArtist,
-            activeMatchesRegistry,
+            activeMatchesId,
             activeNoDuplicate,
             activeHasLang,
-            primaryCount: primaryTitles.length,
+            primaryCount: primaryItems.length,
             primaryOk,
-            recCount: recTitles.length,
+            recCount: recItems.length,
             recOk,
             modalChecked,
             modalTitlesCount,
@@ -491,11 +506,11 @@ async function run() {
         })()
       `);
 
-      assert(titleCheck?.hasPanel && Boolean(titleCheck?.activeTitle) && titleCheck?.activeMatchesRegistry, `${rel} [Path 1 Active]: Title "${titleCheck?.activeTitle}" matches registry`);
+      assert(titleCheck?.hasPanel && Boolean(titleCheck?.activeTitle) && titleCheck?.activeMatchesId, `${rel} [Path 1 Active]: ${titleCheck?.activeReqId} -> "${titleCheck?.activeTitle}" matches registry by ID`);
       assert(titleCheck?.activeNoDuplicate && titleCheck?.activeHasLang && Boolean(titleCheck?.activeArtist), `${rel} [Path 1 Active]: Canonical secondary/lang ("${titleCheck?.activeCanonical}") & separate attribution ("${titleCheck?.activeArtist}")`);
-      assert(titleCheck?.primaryOk, `${rel} [Path 2 Primary Matches]: ${titleCheck?.primaryCount} titles verified against registry`);
-      assert(titleCheck?.recOk, `${rel} [Path 3 Recommended]: ${titleCheck?.recCount} titles verified against registry`);
-      assert(titleCheck?.modalChecked, `${rel} [Path 4 View All Modal]: ${titleCheck?.modalTitlesCount} titles verified against registry`);
+      assert(titleCheck?.primaryOk, `${rel} [Path 2 Primary Matches]: ${titleCheck?.primaryCount} titles verified by exact ID`);
+      assert(titleCheck?.recOk && titleCheck?.recCount > 0, `${rel} [Path 3 Recommended]: ${titleCheck?.recCount} titles verified by exact ID`);
+      assert(titleCheck?.modalChecked, `${rel} [Path 4 View All Modal]: ${titleCheck?.modalTitlesCount} titles verified by exact ID`);
       assert(!titleCheck?.desktopOverflow, `${rel}: Zero desktop horizontal overflow`);
 
       await capture(`p651_${rel}_titles_desktop.png`);

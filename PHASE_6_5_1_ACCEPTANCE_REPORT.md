@@ -5,7 +5,7 @@
 - **Repository:** `afzaljafri-one/jafri-islamic-resources`
 - **Production Baseline (`origin/main`):** `f8b4fcd2178b8a2e7a9787e265e28f22f847036c`
 - **Feature Branch:** `phase-6-5-1-ui-polish`
-- **Local Verification Status:** **COMPLETE & VERIFIED (76/76 Phase 6.5.1, 124/124 Phase 6.5, 74/74 PWA, 94/94 Phase 6.3.5.5)**
+- **Local Verification Status:** **COMPLETE & VERIFIED (77/77 Phase 6.5.1, 124/124 Phase 6.5, 74/74 PWA, 94/94 Phase 6.3.5.5)**
 
 ---
 
@@ -32,7 +32,7 @@ All commands below were executed locally on `phase-6-5-1-ui-polish` and exited w
 |:---|:---|:---:|
 | TypeScript Check | `npx tsc -b` | **PASSED (0 errors)** |
 | Vite Production Build | `VITE_BASE_PATH='/jafri-islamic-resources/' npx vite build` | **PASSED (`sw.js` with 32 assets)** |
-| Phase 6.5.1 Acceptance | `node --experimental-websocket test_phase6_5_1_acceptance.cjs` | **76 / 76 (100.0%) PASSED, 0 failed** |
+| Phase 6.5.1 Acceptance | `node --experimental-websocket test_phase6_5_1_acceptance.cjs` | **77 / 77 (100.0%) PASSED, 0 failed** |
 | Phase 6.5 Acceptance | `node --experimental-websocket test_phase6_5_acceptance.cjs` | **124 / 124 (100.0%) PASSED, 0 failed** |
 | Phase 6.4 PWA Regression | Invoked by `test_phase6_5_acceptance.cjs` (`test_phase6_4_pwa_acceptance.cjs`) | **74 / 74 PASSED, 0 failed** |
 | Phase 6.3.5.5 Rights/Content | Invoked by `test_phase6_4_pwa_acceptance.cjs` (`test_phase6_3_5_5_acceptance.cjs`) | **94 / 94 PASSED, 0 failed** |
