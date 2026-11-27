@@ -255,7 +255,8 @@ export const QuranReader: React.FC = () => {
 
   // Audio Playback Handlers
   const handleTogglePlayAudio = () => {
-    if (audioState.status === 'playing') {
+    const liveStatus = quranAudioService.getState().status;
+    if (liveStatus === 'playing') {
       quranAudioService.pause();
     } else {
       quranAudioService.play();
