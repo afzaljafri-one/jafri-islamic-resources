@@ -620,27 +620,128 @@ async function run() {
         }
         const statusBeforePlay = window.__SERVICES__.quranAudioService.getState().status;
 
-        // 6. Re-query Play/Pause button in Play state, click Play once, and poll up to 2s
+        // 6. Re-query Play/Pause button in Play state, attach real HTMLAudioElement observers,
+        //    click Play once, and poll up to 10s for genuine playback progression
         const freshPlayBtn = quranSec.querySelector('[data-testid="audio-play-pause-btn"]');
         const playBtnReady = Boolean(freshPlayBtn) && statusBeforePlay === 'idle';
-        if (freshPlayBtn) freshPlayBtn.click();
+        const audioEl = window.__SERVICES__.quranAudioService.getAudioElement();
+        const initialCurrentTime = audioEl ? audioEl.currentTime : null;
+        const initialPaused = audioEl ? audioEl.paused : null;
+        const initialReadyState = audioEl ? audioEl.readyState : null;
+        const initialNetworkState = audioEl ? audioEl.networkState : null;
+
+        const observedEvents = [];
+        let rejectedPlayError = null;
+        const eventHandlers = {};
+        const origElPlay = audioEl ? audioEl.play : null;
 
         let statusAfterPlay = window.__SERVICES__.quranAudioService.getState().status;
-        for (let i = 0; i < 20; i++) {
-          statusAfterPlay = window.__SERVICES__.quranAudioService.getState().status;
-          if (statusAfterPlay === 'playing' || statusAfterPlay === 'loading') break;
-          await new Promise(r => setTimeout(r, 100));
-        }
-        const quranActiveUrl = window.__SERVICES__.quranAudioService.getState().activeAudioUrl;
+        let afterPlayCurrentTime = audioEl ? audioEl.currentTime : null;
+        let afterPlayPaused = audioEl ? audioEl.paused : null;
+        let afterPlayReadyState = audioEl ? audioEl.readyState : null;
+        let afterPlayNetworkState = audioEl ? audioEl.networkState : null;
+        let afterPlayDuration = audioEl ? audioEl.duration : null;
+        let quranActiveUrl = window.__SERVICES__.quranAudioService.getState().activeAudioUrl;
+        let serviceErrorMessage = window.__SERVICES__.quranAudioService.getState().errorMessage;
+        let mediaError = null;
+        let playbackVerified = false;
+        let quranStatusAfterStop = null;
+        let audioPausedAfterStop = null;
+        let noBackgroundAdvanceAfterStop = false;
 
-        // 7. Stop playback and verify idle
-        const freshStopBtn = quranSec.querySelector('[data-testid="audio-stop-btn"]');
-        if (freshStopBtn) freshStopBtn.click();
-        for (let i = 0; i < 20; i++) {
-          if (window.__SERVICES__.quranAudioService.getState().status === 'idle') break;
-          await new Promise(r => setTimeout(r, 50));
+        try {
+          if (audioEl) {
+            for (const evName of ['play', 'playing', 'waiting', 'pause', 'error']) {
+              eventHandlers[evName] = () => observedEvents.push(evName);
+              audioEl.addEventListener(evName, eventHandlers[evName]);
+            }
+            audioEl.play = function(...args) {
+              const p = origElPlay.apply(this, args);
+              if (p && typeof p.catch === 'function') {
+                p.catch((err) => {
+                  rejectedPlayError = { name: err?.name || 'Error', message: err?.message || String(err) };
+                });
+              }
+              return p;
+            };
+          }
+
+          if (freshPlayBtn) freshPlayBtn.click();
+
+          for (let i = 0; i < 100; i++) {
+            const st = window.__SERVICES__.quranAudioService.getState();
+            statusAfterPlay = st.status;
+            quranActiveUrl = st.activeAudioUrl;
+            serviceErrorMessage = st.errorMessage;
+            if (audioEl) {
+              afterPlayCurrentTime = audioEl.currentTime;
+              afterPlayPaused = audioEl.paused;
+              afterPlayReadyState = audioEl.readyState;
+              afterPlayNetworkState = audioEl.networkState;
+              afterPlayDuration = audioEl.duration;
+              mediaError = audioEl.error ? { code: audioEl.error.code, message: audioEl.error.message || '' } : null;
+            }
+            const advanced =
+              audioEl !== null &&
+              initialCurrentTime !== null &&
+              afterPlayCurrentTime !== null &&
+              afterPlayCurrentTime > initialCurrentTime;
+            const emittedPlaying = observedEvents.includes('playing');
+            const urlValid = Boolean(quranActiveUrl && String(quranActiveUrl).trim().length > 0);
+            const noError = !serviceErrorMessage && !mediaError && !rejectedPlayError;
+
+            if (
+              statusAfterPlay === 'playing' &&
+              afterPlayPaused === false &&
+              emittedPlaying &&
+              advanced &&
+              urlValid &&
+              noError
+            ) {
+              playbackVerified = true;
+              break;
+            }
+            await new Promise(r => setTimeout(r, 100));
+          }
+
+          // 7. Stop playback and verify clean stop (paused, idle, no background progression)
+          const freshStopBtn = quranSec.querySelector('[data-testid="audio-stop-btn"]');
+          if (freshStopBtn) freshStopBtn.click();
+          for (let i = 0; i < 20; i++) {
+            if (window.__SERVICES__.quranAudioService.getState().status === 'idle') break;
+            await new Promise(r => setTimeout(r, 50));
+          }
+          const timeAtStop = audioEl ? audioEl.currentTime : null;
+          await new Promise(r => setTimeout(r, 250));
+          const timeAfterStopWait = audioEl ? audioEl.currentTime : null;
+          quranStatusAfterStop = window.__SERVICES__.quranAudioService.getState().status;
+          audioPausedAfterStop = audioEl ? audioEl.paused : true;
+          noBackgroundAdvanceAfterStop =
+            audioPausedAfterStop === true &&
+            (timeAtStop === null || timeAfterStopWait === timeAtStop);
+        } finally {
+          if (audioEl) {
+            for (const [evName, handler] of Object.entries(eventHandlers)) {
+              audioEl.removeEventListener(evName, handler);
+            }
+            if (origElPlay) {
+              audioEl.play = origElPlay;
+            }
+          }
         }
-        const quranStatusAfterStop = window.__SERVICES__.quranAudioService.getState().status;
+
+        let failureCategory = null;
+        if (!playbackVerified) {
+          if (rejectedPlayError?.name === 'NotAllowedError') {
+            failureCategory = 'browser_autoplay_restriction';
+          } else if (mediaError || afterPlayNetworkState === 3) {
+            failureCategory = 'audio_provider_network_failure';
+          } else if (!playBtnReady || !audioEl) {
+            failureCategory = 'acceptance_test_timing_or_interaction_failure';
+          } else {
+            failureCategory = 'application_playback_failure';
+          }
+        }
 
         return {
           allControlsFound: true,
@@ -650,15 +751,30 @@ async function run() {
           autoToggled: autoBefore !== autoAfter,
           ayahAdvanced: ayahAfter > ayahBefore,
           playBtnReady,
-          playbackTriggered: statusAfterPlay === 'playing' || statusAfterPlay === 'loading',
+          playbackTriggered: playbackVerified,
           hasAudioUrl: Boolean(quranActiveUrl && String(quranActiveUrl).trim().length > 0),
-          stoppedCleanly: quranStatusAfterStop === 'idle',
+          stoppedCleanly: quranStatusAfterStop === 'idle' && audioPausedAfterStop === true && noBackgroundAdvanceAfterStop,
           diagnostics: {
+            failureCategory,
             statusAfterNextAyah,
             statusBeforePlay,
             statusAfterPlay,
+            initialPaused,
+            afterPlayPaused,
+            initialReadyState,
+            afterPlayReadyState,
+            initialNetworkState,
+            afterPlayNetworkState,
+            initialCurrentTime,
+            afterPlayCurrentTime,
+            duration: afterPlayDuration,
+            mediaError,
+            observedEvents,
             activeAudioUrl: quranActiveUrl,
+            serviceErrorMessage,
+            rejectedPlayError,
             statusAfterStop: quranStatusAfterStop,
+            audioPausedAfterStop,
           },
         };
       })()
