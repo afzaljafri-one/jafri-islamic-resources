@@ -18,6 +18,7 @@ import {
   ArrowRight,
   Filter,
   Layers,
+  Lock,
 } from 'lucide-react';
 import { ReligionId } from '../types/religion';
 import { ALL_RELIGION_IDS, RELIGIONS_REGISTRY } from '../config/religionsRegistry';
@@ -833,12 +834,13 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                           return (
                             <div
                               data-testid="translation-withheld-notice"
-                              className="p-3 rounded-xl bg-rose-950/20 border border-rose-500/30 space-y-1 my-1"
+                              className="p-3 rounded-xl bg-navy-900/70 border border-amber-500/30 space-y-1.5 my-1"
                             >
-                              <div className="flex items-center space-x-1.5 text-xs text-rose-300 font-semibold font-mono">
-                                <span>⚠️ Authorised Translation Withheld</span>
+                              <div className="flex items-center space-x-1.5 text-xs text-amber-300 font-semibold">
+                                <Lock className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />
+                                <span>Authorised Translation Withheld</span>
                               </div>
-                              <p className="text-xs text-rose-200/90 font-serif leading-relaxed">
+                              <p className="text-xs text-slate-300 font-serif leading-relaxed">
                                 {result.primaryTranslationRights?.withheldNotice || result.translationText}
                               </p>
                             </div>
@@ -871,13 +873,14 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                           return (
                             <div
                               data-testid="secondary-translation-withheld-notice"
-                              className="p-2.5 rounded-lg bg-rose-950/20 border border-rose-500/30 space-y-1 mt-2 text-right"
+                              className="p-2.5 rounded-lg bg-navy-900/70 border border-amber-500/30 space-y-1 mt-2 text-right"
                               dir="rtl"
                             >
-                              <div className="flex items-center justify-end space-x-1.5 space-x-reverse text-xs text-rose-300 font-semibold font-mono">
-                                <span>⚠️ مجاز ثانوی ترجمہ موقوف ہے</span>
+                              <div className="flex items-center justify-end space-x-1.5 space-x-reverse text-xs text-amber-300 font-semibold">
+                                <Lock className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />
+                                <span>مجاز ثانوی ترجمہ موقوف ہے</span>
                               </div>
-                              <p className="text-xs text-rose-200/90 font-urdu leading-relaxed">
+                              <p className="text-xs text-slate-300 font-urdu leading-relaxed">
                                 {secRights?.withheldNotice ||
                                   result.secondaryTranslationText ||
                                   'مجاز اردو ترجمہ (علامہ جوادی) کا متن حقوق کی تصدیق تک موقوف ہے۔'}
@@ -919,12 +922,12 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                                 data-testid="parallel-translation-card"
                                 className={`p-2 rounded-lg border text-xs space-y-1 ${
                                   isWithheld
-                                    ? 'bg-rose-950/20 border-rose-500/30 text-rose-200'
+                                    ? 'bg-navy-900/70 border-amber-500/30 text-slate-200'
                                     : 'bg-navy-950/60 border-slate-850 text-slate-200'
                                 }`}
                               >
                                 <div className="flex items-center justify-between text-[10px] font-mono text-slate-400">
-                                  <span className={`font-semibold ${isWithheld ? 'text-rose-300' : 'text-gold-400/90'}`}>
+                                  <span className={`font-semibold ${isWithheld ? 'text-amber-300' : 'text-gold-400/90'}`}>
                                     {tr.translationName} ({tr.language})
                                   </span>
                                   {(() => {
@@ -939,7 +942,7 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                                     }
                                     if (st === 'PERMISSION_REQUIRED' || isWithheld) {
                                       return (
-                                        <span className="text-[9px] text-rose-300 bg-rose-950/40 px-1 py-0.2 rounded border border-rose-500/30">
+                                        <span className="text-[9px] text-amber-300 bg-navy-950/70 px-1.5 py-0.2 rounded border border-amber-500/30">
                                           Permission Required
                                         </span>
                                       );
@@ -961,7 +964,7 @@ export const UniversalScriptureSearchModal: React.FC<UniversalScriptureSearchMod
                                 {isWithheld ? (
                                   <p
                                     data-testid="parallel-translation-withheld-notice"
-                                    className="text-rose-300/80 font-serif italic text-xs leading-relaxed"
+                                    className="text-slate-300 font-serif italic text-xs leading-relaxed"
                                   >
                                     {tr.withheldNotice || tr.text}
                                   </p>

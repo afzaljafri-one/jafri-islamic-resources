@@ -28,6 +28,7 @@ import {
   WifiOff,
   RotateCcw,
   AlertTriangle,
+  Lock,
   BookOpen,
   CheckCircle2,
 } from 'lucide-react';
@@ -1250,12 +1251,13 @@ export const HinduismModule: React.FC<HinduismModuleProps> = ({
                   {isWithheldCommentary ? (
                     <div
                       data-testid="gita-translation-withheld-notice"
-                      className="p-3 rounded-xl bg-rose-950/20 border border-rose-500/30 space-y-1 my-1"
+                      className="p-3.5 rounded-xl bg-navy-900/70 border border-amber-500/30 space-y-1.5 my-1"
                     >
-                      <div className="flex items-center space-x-1.5 text-xs text-rose-300 font-semibold font-mono">
-                        <span>⚠️ Translation Withheld (Permission Required)</span>
+                      <div className="flex items-center space-x-2 text-xs text-amber-300 font-semibold">
+                        <Lock className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />
+                        <span>Translation Withheld (Permission Required)</span>
                       </div>
-                      <p className="text-xs text-rose-200/90 font-serif leading-relaxed italic">
+                      <p className="text-xs text-slate-300 font-serif leading-relaxed italic">
                         {translationText ||
                           'This modern copyrighted translation requires explicit redistribution licensing and is excluded from the client application.'}
                       </p>
