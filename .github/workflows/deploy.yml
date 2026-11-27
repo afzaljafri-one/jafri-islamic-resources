@@ -80,6 +80,19 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/google-chrome
 
+      - name: Run Phase 6.5.1 UI Polish & Recording Title Suite
+        run: node --experimental-websocket test_phase6_5_1_acceptance.cjs
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+
+      - name: Upload Phase 6.5.1 Visual Evidence Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase6-5-1-evidence
+          path: phase6_5_1_evidence/
+          if-no-files-found: warn
+
       # upload-pages-artifact creates the static tarball without needing configure-pages
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3

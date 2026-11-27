@@ -31,6 +31,7 @@ import {
 import { SUPPORTED_RECITERS } from '../../../types/quran';
 import type { PlaybackScope, PageAyahBoundary } from '../../../services/audio/types';
 import type { SacredAudioRequirement } from '../../types/sacredAudio';
+import { getRecordingTitlePresentation } from '../../data/recordingTitlePresentationRegistry';
 import {
   unifiedSacredAudioService,
   SacredAudioPlaybackState,
@@ -808,20 +809,41 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
           </div>
 
           {/* Title & Reciter Metadata */}
-          <div>
-            <h3
-              data-testid="active-track-title"
-              className="font-serif text-sm font-bold text-slate-100 leading-snug line-clamp-2"
-            >
-              {activeReq.requirementTitle}
-            </h3>
-            <p
-              data-testid="active-track-artist"
-              className="text-xs text-gold-400/90 font-serif mt-1 truncate"
-            >
-              {getReciterAttribution(activeReq)}
-            </p>
-          </div>
+          {(() => {
+            const titleMeta = getRecordingTitlePresentation(activeReq);
+            return (
+              <div>
+                <h3
+                  data-testid="active-track-title"
+                  data-req-id={activeReq.id}
+                  className="font-serif text-sm font-bold text-slate-100 leading-snug line-clamp-2"
+                >
+                  {titleMeta.primaryTitle}
+                </h3>
+                {(titleMeta.secondaryCanonicalTitle || titleMeta.languageLabel) && (
+                  <p
+                    data-testid="active-track-canonical-title"
+                    className="text-[11px] text-slate-400 leading-snug mt-0.5 line-clamp-2"
+                  >
+                    {titleMeta.secondaryCanonicalTitle ? (
+                      <>
+                        <span>{titleMeta.secondaryCanonicalTitle}</span>
+                        <span className="text-slate-500"> · {titleMeta.languageLabel}</span>
+                      </>
+                    ) : (
+                      <span className="text-slate-500">{titleMeta.languageLabel}</span>
+                    )}
+                  </p>
+                )}
+                <p
+                  data-testid="active-track-artist"
+                  className="text-xs text-gold-400/90 font-serif mt-1 truncate"
+                >
+                  {getReciterAttribution(activeReq)}
+                </p>
+              </div>
+            );
+          })()}
 
           {/* YouTube Embedded Player Frame (When Active & Playing) */}
           {activeReq.playbackProvider === 'YOUTUBE_EMBED' &&
@@ -833,7 +855,7 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
                       src={`${activeReq.youtubeMetadata.embedUrl}?autoplay=1&enablejsapi=1&rel=0&origin=${encodeURIComponent(
                         typeof window !== 'undefined' ? window.location.origin : ''
                       )}`}
-                      title={activeReq.requirementTitle}
+                      title={getRecordingTitlePresentation(activeReq).primaryTitle}
                       className="w-full h-full border-0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       allowFullScreen
@@ -1078,9 +1100,28 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
                     </div>
 
                     <div className="min-w-0">
-                      <div className="text-xs font-semibold text-slate-200 truncate group-hover:text-gold-300">
-                        {req.requirementTitle}
-                      </div>
+                      {(() => {
+                        const t = getRecordingTitlePresentation(req);
+                        return (
+                          <>
+                            <div
+                              data-testid="primary-match-title"
+                              data-req-id={req.id}
+                              className="text-xs font-semibold text-slate-200 truncate group-hover:text-gold-300"
+                            >
+                              {t.primaryTitle}
+                            </div>
+                            {t.secondaryCanonicalTitle && (
+                              <div
+                                data-testid="primary-match-canonical-title"
+                                className="text-[10px] text-slate-500 truncate"
+                              >
+                                {t.secondaryCanonicalTitle} · {t.languageLabel}
+                              </div>
+                            )}
+                          </>
+                        );
+                      })()}
                       <div className="text-[10px] text-slate-400 truncate">
                         {getReciterAttribution(req)}
                       </div>
@@ -1150,9 +1191,28 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
                     </div>
 
                     <div className="min-w-0">
-                      <div className="text-xs font-semibold text-slate-200 truncate group-hover:text-gold-300">
-                        {req.requirementTitle}
-                      </div>
+                      {(() => {
+                        const t = getRecordingTitlePresentation(req);
+                        return (
+                          <>
+                            <div
+                              data-testid="recommended-track-title"
+                              data-req-id={req.id}
+                              className="text-xs font-semibold text-slate-200 truncate group-hover:text-gold-300"
+                            >
+                              {t.primaryTitle}
+                            </div>
+                            {t.secondaryCanonicalTitle && (
+                              <div
+                                data-testid="recommended-track-canonical-title"
+                                className="text-[10px] text-slate-500 truncate"
+                              >
+                                {t.secondaryCanonicalTitle} · {t.languageLabel}
+                              </div>
+                            )}
+                          </>
+                        );
+                      })()}
                       <div className="text-[10px] text-slate-400 truncate">
                         {getReciterAttribution(req)}
                       </div>
@@ -1227,9 +1287,28 @@ export const SacredAudioReadingPanel: React.FC<SacredAudioReadingPanelProps> = (
                         {isPlayingThis ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
                       </div>
                       <div className="min-w-0">
-                        <div className="text-xs font-semibold text-slate-100 truncate">
-                          {req.requirementTitle}
-                        </div>
+                        {(() => {
+                          const t = getRecordingTitlePresentation(req);
+                          return (
+                            <>
+                              <div
+                                data-testid="modal-track-title"
+                                data-req-id={req.id}
+                                className="text-xs font-semibold text-slate-100 truncate"
+                              >
+                                {t.primaryTitle}
+                              </div>
+                              {t.secondaryCanonicalTitle && (
+                                <div
+                                  data-testid="modal-track-canonical-title"
+                                  className="text-[10px] text-slate-400 truncate"
+                                >
+                                  {t.secondaryCanonicalTitle} · {t.languageLabel}
+                                </div>
+                              )}
+                            </>
+                          );
+                        })()}
                         <div className="text-[11px] text-slate-400 truncate">
                           {getReciterAttribution(req)}
                         </div>

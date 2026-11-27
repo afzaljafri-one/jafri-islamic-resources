@@ -141,10 +141,13 @@ export class QuranAudioService {
     audio.src = url;
 
     audio.onwaiting = () => {
+      if (this.audio !== audio) return;
+      if (this.state.status === 'idle' || this.state.status === 'paused' || this.state.status === 'error') return;
       this.updateState({ status: 'loading' });
     };
 
     audio.onloadedmetadata = () => {
+      if (this.audio !== audio) return;
       const dur = isNaN(audio.duration) ? 0 : audio.duration;
       this.updateState({
         duration: dur,
@@ -153,6 +156,7 @@ export class QuranAudioService {
     };
 
     audio.oncanplay = () => {
+      if (this.audio !== audio) return;
       const dur = isNaN(audio.duration) ? this.state.duration : audio.duration;
       if (!autoPlay && (this.state.status === 'loading' || this.state.status === 'idle')) {
         this.updateState({
@@ -163,14 +167,17 @@ export class QuranAudioService {
     };
 
     audio.onplay = () => {
+      if (this.audio !== audio) return;
       this.updateState({ status: 'playing', errorMessage: null });
     };
 
     audio.onplaying = () => {
+      if (this.audio !== audio) return;
       this.updateState({ status: 'playing' });
     };
 
     audio.onpause = () => {
+      if (this.audio !== audio || !audio.paused) return;
       if (
         this.state.status !== 'loading' &&
         this.state.status !== 'error' &&
@@ -181,6 +188,7 @@ export class QuranAudioService {
     };
 
     audio.ontimeupdate = () => {
+      if (this.audio !== audio) return;
       this.updateState({
         currentTime: audio.currentTime,
         duration: isNaN(audio.duration) ? this.state.duration : audio.duration,
@@ -188,10 +196,12 @@ export class QuranAudioService {
     };
 
     audio.onended = () => {
+      if (this.audio !== audio) return;
       this.handleAyahEnded();
     };
 
     audio.onerror = () => {
+      if (this.audio !== audio) return;
       const reciter = getReciterConfig(this.state.reciterId);
       this.updateState({
         status: 'error',
@@ -206,13 +216,21 @@ export class QuranAudioService {
 
   private executePlay() {
     if (!this.audio) return;
-    const playPromise = this.audio.play();
+    const targetAudio = this.audio;
+    if (this.state.status !== 'playing') {
+      this.updateState({ status: 'loading', errorMessage: null });
+    }
+    const playPromise = targetAudio.play();
     if (playPromise !== undefined) {
       playPromise
         .then(() => {
+          if (this.audio !== targetAudio || targetAudio.paused) return;
           this.updateState({ status: 'playing', errorMessage: null });
         })
         .catch((err) => {
+          if (this.audio !== targetAudio) return;
+          // Ignore AbortError when play() is superseded by pause()/stop()/track switch
+          if (err.name === 'AbortError') return;
           // Handle browser autoplay policy restrictions gracefully
           if (err.name === 'NotAllowedError') {
             this.updateState({
