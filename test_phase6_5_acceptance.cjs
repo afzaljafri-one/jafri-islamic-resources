@@ -26,7 +26,11 @@ if (typeof WebSocket === 'undefined' && typeof globalThis.WebSocket === 'undefin
     ['--experimental-websocket', __filename, ...process.argv.slice(2)],
     { stdio: 'inherit' }
   );
-  process.exit(result.status ?? 0);
+  if (result.error) {
+    console.error('Failed to spawn child process with --experimental-websocket:', result.error);
+    process.exit(1);
+  }
+  process.exit(result.status === null ? 1 : result.status);
 }
 
 const { spawn, spawnSync } = require('child_process');
